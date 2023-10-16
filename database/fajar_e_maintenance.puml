@@ -1,0 +1,99 @@
+@startuml fajar_e_maintenance
+
+entity function_location
+{
+    * id VARCHAR(150) <<PK>>
+    --
+    * emo VARCHAR(9) <<FK>>
+    * tag_name VARCHAR(150)
+}
+
+entity emo
+{
+    * id VARCHAR(9) <<PK>>
+    --
+      material_number VARCHAR(8)
+    * status ENUM(["Installed", "Repair", "Available"])
+    * sort_field VARCHAR(150)
+    * unique_id SMALLINT
+    * qr_code_link VARCHAR(100) 
+    * created_at TIMESTAMP
+    * updated_at TIMESTAMP
+}
+
+entity emo_details {
+    * emo <<FK>>
+    --
+    manufacture VARCHAR(150)
+    serial_number VARCHAR(150)
+    type VARCHAR(150)
+    power_rate VARCHAR(10)
+    power_unit ENUM(["kW", "HP"])
+    voltage SMALLINT
+    current_nominal SMALLINT
+    pole ENUM(["2", "4", "6", "8", "10", "12", "14", "16"])
+    rpm SMALLINT
+    bearing_de VARCHAR("50")
+    bearing_nde VARCHAR("50")
+    frame_type VARCHAR("50")
+    shaft_diameter SMALLINT
+    phase_supply CHAR(1)
+    cos_phi DECIMAL(3,2)
+    efficiency DECIMAL(3,2)
+    ip_rating SMALLINT
+    insulation_class CHAR(1)
+    duty ENUM(["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10"])
+    connection_type VARCHAR(50)
+    nipple_grease ENUM(["Available", "Not Available"])
+    greasing_type VARCHAR(50)
+    greasing_qty_de VARCHAR(50)
+    greasing_qty_nde VARCHAR(50)
+    length SMALLINT
+    width SMALLINT
+    height SMALLINT
+    weight SMALLINT
+    cooling_fan ENUM(["Internal", "External", "Not Available"])
+    mounting VARCHAR(50)
+    frequency TINYINT
+}
+
+entity data_record {
+    * funcloc VARCHAR(150) <<FK>>
+    * emo VARCHAR(9) <<FK>>
+    --
+    * motor_status ENUM(["Running", "Not Running"])
+    * clean_status ENUM(["Clean", "Dirty"])
+    * nipple_grease ENUM(["Available", "Not Available"])
+    * temperature_a CHAR(10)
+    * temperature_b CHAR(10)
+    * temperature_c CHAR(10)
+    * temperature_d CHAR(10)
+    * vibration_de ENUM(["Normal", "Abnormal"])
+    * vibration_nde ENUM(["Normal", "Abnormal"])
+      vibration_value_de CHAR(10)
+      vibration_value_nde CHAR(10)
+      current_phase_r CHAR(10)
+      current_phase_s CHAR(10)
+      current_phase_t CHAR(10)
+      number_of_greasing CHAR(10)
+    * created_at TIMESTAMP
+    * updated_at TIMESTAMP
+    * checked_by VARCHAR(150)
+}
+
+entity users {
+    * nik VARCHAR(8)
+    --
+    * password VARCHAR(50)
+    * fullname VARCHAR(150) UNIQUE
+    * department VARCHAR(150)
+    * phone_number VARCHAR(15)
+}
+ 
+function_location ||--o{ emo : Have
+function_location ||--o{ data_record : Have
+emo ||--|| emo_details : Contain
+data_record ||--|| users : Include
+
+
+@enduml
