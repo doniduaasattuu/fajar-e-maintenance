@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\OnlyGuestMiddleware;
+use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(OnlyGuestMiddleware::class)->group(function () {
+    Route::get("/login", [App\Http\Controllers\UserController::class, "login"])->name("login");
+    Route::post("/login", [App\Http\Controllers\UserController::class, "doLogin"]);
+    Route::get("/registration", [App\Http\Controllers\UserController::class, "registration"]);
+});
+
+Route::middleware(OnlyMemberMiddleware::class)->group(function () {
+    Route::get("/", function () {
+        return view("welcome");
+    });
 });

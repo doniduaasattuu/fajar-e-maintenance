@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string("fullname", 150)->nullable(false);
             $table->string("department", 150)->nullable(false);
             $table->string("phone_number", 15)->nullable(false);
-
-            $table->unique("fullname", "fullname_unique");
         });
     }
 
