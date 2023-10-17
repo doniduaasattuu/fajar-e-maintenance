@@ -1,6 +1,6 @@
 @startuml fajar_e_maintenance
 
-entity function_location
+entity function_locations
 {
     * id VARCHAR(150) <<PK>>
     --
@@ -13,6 +13,7 @@ entity emos
     * id VARCHAR(9) <<PK>>
     --
       material_number VARCHAR(8)
+    * equipment_description VARCHAR(150)
     * status ENUM(["Installed", "Repaired", "Available"])
     * sort_field VARCHAR(100)
     * unique_id VARCHAR(6)
@@ -97,8 +98,8 @@ entity users {
     * phone_number VARCHAR(15)
 }
  
-function_location ||--o{ emos : Have
-function_location ||--o{ data_records : Have
+function_locations ||--o{ emos : Have
+function_locations ||--o{ data_records : Have
 emos ||--|| emo_details : Contain
 data_records ||--|| users : Include
 

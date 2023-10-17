@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Emo extends Model
@@ -17,5 +18,10 @@ class Emo extends Model
     public function emoDetail(): HasOne
     {
         return $this->hasOne(EmoDetail::class, "emo", "id");
+    }
+
+    public function funcLoc(): HasOne
+    {
+        return $this->hasOne(FunctionLocation::class, "emo", "id");
     }
 }

@@ -17,6 +17,7 @@ class EmoSeeder extends Seeder
         $emo = new Emo();
         $emo->id = "EMO000426";
         $emo->material_number = "10010668";
+        $emo->equipment_description = "AC MOTOR;380V,50Hz,75kW,4P,250M,B3";
         $emo->status = "Installed";
         $emo->sort_field = "SP3.P.70/M";
         $emo->unique_id = "1804";

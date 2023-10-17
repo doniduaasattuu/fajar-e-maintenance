@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\FunctionLocation;
 use Database\Seeders\EmoDetailSeeder;
 use Database\Seeders\EmoSeeder;
+use Database\Seeders\FunctionLocationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
@@ -69,5 +71,26 @@ class EmoDetailTest extends TestCase
         self::assertNotNull($emo);
         self::assertEquals($emo->status, "Installed");
         self::assertEquals($emo->id, $emo_detail->emo);
+    }
+
+    public function testFunclocRelations()
+    {
+        $this->seed([EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
+
+        $emo_detail = EmoDetail::query()->where("emo", "=", "EMO000426")->first();
+        self::assertNotNull($emo_detail);
+
+        $funcLoc = $emo_detail->funcLoc;
+        self::assertNotNull($funcLoc);
+        Log::info(json_encode($funcLoc, JSON_PRETTY_PRINT));
+    }
+
+    public function testEmoDetailQueryWith()
+    {
+        $this->seed([EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
+
+        $emo_detail = EmoDetail::query()->with("emoParent", "funcLoc")->where("emo", "=", "EMO000426")->first();
+        self::assertNotNull($emo_detail);
+        Log::info(json_encode($emo_detail, JSON_PRETTY_PRINT));
     }
 }
