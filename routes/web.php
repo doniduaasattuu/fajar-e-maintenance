@@ -33,4 +33,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         $request->session()->flush();
         return redirect("/");
     });
+
+    Route::get('/checking-form', function () {
+        return view("maintenance.checking-form");
+    });
 });

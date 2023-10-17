@@ -8,14 +8,14 @@ entity function_location
     * tag_name VARCHAR(150)
 }
 
-entity emo
+entity emos
 {
     * id VARCHAR(9) <<PK>>
     --
       material_number VARCHAR(8)
-    * status ENUM(["Installed", "Repair", "Available"])
-    * sort_field VARCHAR(150)
-    * unique_id SMALLINT
+    * status ENUM(["Installed", "Repaired", "Available"])
+    * sort_field VARCHAR(100)
+    * unique_id SMALLINT UNIQUE
     * qr_code_link VARCHAR(100) 
     * created_at TIMESTAMP
     * updated_at TIMESTAMP
@@ -57,7 +57,7 @@ entity emo_details {
     frequency TINYINT
 }
 
-entity data_record {
+entity data_records {
     * funcloc VARCHAR(150) <<FK>>
     * emo VARCHAR(9) <<FK>>
     --
@@ -90,10 +90,10 @@ entity users {
     * phone_number VARCHAR(15)
 }
  
-function_location ||--o{ emo : Have
-function_location ||--o{ data_record : Have
-emo ||--|| emo_details : Contain
-data_record ||--|| users : Include
+function_location ||--o{ emos : Have
+function_location ||--o{ data_records : Have
+emos ||--|| emo_details : Contain
+data_records ||--|| users : Include
 
 
 @enduml
