@@ -16,10 +16,10 @@ return new class extends Migration
             $table->string("material_number")->nullable(true);
             $table->enum("status", ["Installed", "Repaired", "Available"])->nullable(false);
             $table->string("sort_field", 100)->nullable(false);
-            $table->unsignedSmallInteger("unique_id")->nullable(false);
+            $table->string("unique_id", 6)->nullable(false);
             $table->string("qr_code_link", 100)->nullable(false);
-            $table->timestamp("created_at")->useCurrent();
-            $table->timestamp("updated_at")->useCurrentOnUpdate();
+            $table->timestamp("created_at")->nullable(false)->useCurrent();
+            $table->timestamp("updated_at")->nullable(true);
 
             $table->unique("unique_id", "emo_unique_id");
         });

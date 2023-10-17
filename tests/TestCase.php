@@ -12,5 +12,6 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         DB::table('users')->delete();
+        DB::table('emos')->delete();
     }
 }

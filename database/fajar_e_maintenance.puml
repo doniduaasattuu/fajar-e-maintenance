@@ -15,10 +15,10 @@ entity emos
       material_number VARCHAR(8)
     * status ENUM(["Installed", "Repaired", "Available"])
     * sort_field VARCHAR(100)
-    * unique_id SMALLINT UNIQUE
+    * unique_id VARCHAR(6)
     * qr_code_link VARCHAR(100) 
-    * created_at TIMESTAMP
-    * updated_at TIMESTAMP
+    * created_at TIMESTAMP CURRENT()
+      updated_at TIMESTAMP NULL
 }
 
 entity emo_details {

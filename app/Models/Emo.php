@@ -11,5 +11,5 @@ class Emo extends Model
     protected $keyType = "string";
     protected $primaryKey = "id";
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps = true;
 }

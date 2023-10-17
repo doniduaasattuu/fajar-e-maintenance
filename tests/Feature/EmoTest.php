@@ -1,18 +1,16 @@
 <?php
 
-namespace Database\Seeders;
+namespace Tests\Feature;
 
 use App\Models\Emo;
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
-class EmoSeeder extends Seeder
+class EmoTest extends TestCase
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function testCreateEmo()
     {
         $emo = new Emo();
         $emo->id = "EMO000426";
@@ -24,5 +22,7 @@ class EmoSeeder extends Seeder
         $emo->created_at = Carbon::now();
         $emo->updated_at = Carbon::now();
         $emo->save();
+
+        self::assertNotNull($emo);
     }
 }
