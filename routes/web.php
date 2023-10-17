@@ -2,6 +2,8 @@
 
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
+use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,5 +27,10 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get("/", function () {
         return view("welcome");
+    });
+
+    Route::get("/logout", function (HttpRequest $request) {
+        $request->session()->flush();
+        return redirect("/");
     });
 });

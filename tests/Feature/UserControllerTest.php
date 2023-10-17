@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-
+    // ======= LOGIN =======
     public function testViewLogin(): void
     {
         $this->seed(UserSeeder::class);
@@ -65,7 +65,22 @@ class UserControllerTest extends TestCase
             ->assertStatus(302);
     }
 
-    // REGISTRATION
+    public function testGetHomeAlreadyLogin()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan",
+            "nik" => "55000154"
+        ])->get("/")
+            ->assertSeeText("Laravel");
+    }
+
+    public function testGetHomeNotYet()
+    {
+        $this->get("/", [])
+            ->assertRedirect("/login");
+    }
+
+    // ======= REGISTRATION =======
     public function testViewRegistration()
     {
         $this->view("user.registration", [
@@ -106,5 +121,13 @@ class UserControllerTest extends TestCase
         ])
             ->assertSeeText("Login")
             ->assertSeeText("Registration Success!");
+    }
+
+    // ======= LOGOUT =======
+    public function testLogout()
+    {
+        $this->get("/logout")
+            ->assertRedirect("/login")
+            ->assertStatus(302);
     }
 }
