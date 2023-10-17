@@ -22,39 +22,46 @@ entity emos
 }
 
 entity emo_details {
-    * emo <<FK>>
+    * id BIGINT AUTO_INCREMENT <<PK>>
+    * emo VARCHAR(9) <<FK>>
     --
     manufacture VARCHAR(150)
     serial_number VARCHAR(150)
     type VARCHAR(150)
-    power_rate VARCHAR(10)
+    power_rate VARCHAR(5)
     power_unit ENUM(["kW", "HP"])
-    voltage SMALLINT
-    current_nominal SMALLINT
+
+    voltage VARCHAR(5)
+    current_nominal VARCHAR(5)
+    frequency VARCHAR(3)
     pole ENUM(["2", "4", "6", "8", "10", "12", "14", "16"])
-    rpm SMALLINT
+    rpm VARCHAR(4)
+
     bearing_de VARCHAR("50")
     bearing_nde VARCHAR("50")
     frame_type VARCHAR("50")
-    shaft_diameter SMALLINT
+    shaft_diameter SMALLINT UNSIGNED
     phase_supply CHAR(1)
-    cos_phi DECIMAL(3,2)
-    efficiency DECIMAL(3,2)
-    ip_rating SMALLINT
+
+    cos_phi VARCHAR(3)
+    efficiency VARCHAR(3)
+    ip_rating CHAR(2)
     insulation_class CHAR(1)
-    duty ENUM(["S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10"])
+    duty CHAR(2)
+
     connection_type VARCHAR(50)
     nipple_grease ENUM(["Available", "Not Available"])
     greasing_type VARCHAR(50)
-    greasing_qty_de VARCHAR(50)
-    greasing_qty_nde VARCHAR(50)
-    length SMALLINT
-    width SMALLINT
-    height SMALLINT
-    weight SMALLINT
+    greasing_qty_de SMALLINT UNSIGNED
+    greasing_qty_nde SMALLINT UNSIGNED
+
+    length SMALLINT UNSIGNED
+    width SMALLINT UNSIGNED
+    height SMALLINT UNSIGNED
+    weight SMALLINT UNSIGNED
     cooling_fan ENUM(["Internal", "External", "Not Available"])
-    mounting VARCHAR(50)
-    frequency TINYINT
+
+    mounting ENUM("Horizontal", "Vertical", "V/H")
 }
 
 entity data_records {

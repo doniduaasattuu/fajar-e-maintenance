@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,8 +13,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('users')->delete();
+        DB::table('emos')->delete();
+
         $this->call([
-            UserSeeder::class
+            UserSeeder::class,
+            EmoSeeder::class
         ]);
     }
 }

@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Emo;
+use App\Models\EmoDetail;
 use Carbon\Carbon;
+use Database\Seeders\EmoDetailSeeder;
+use Database\Seeders\EmoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -24,5 +27,18 @@ class EmoTest extends TestCase
         $emo->save();
 
         self::assertNotNull($emo);
+    }
+
+    public function testEmoDetailRelations()
+    {
+        $this->seed([EmoSeeder::class, EmoDetailSeeder::class]);
+
+        $emo = Emo::query()->find("EMO000426");
+        $emo_detail = $emo->emoDetail;
+
+        self::assertNotNull($emo_detail);
+        self::assertNotNull($emo_detail->power_rate, '75');
+        self::assertNotNull($emo_detail->ip_rating, '55');
+        self::assertNotNull($emo_detail->cooling_fan, 'Internal');
     }
 }

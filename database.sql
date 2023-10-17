@@ -4,5 +4,7 @@ SHOW TABLES;
 SELECT * FROM migrations;
 SELECT * FROM users;
 SELECT * FROM emos;
+SELECT * FROM emo_details;
 SHOW CREATE TABLE users;
 SHOW CREATE TABLE emos;
+SHOW CREATE TABLE emo_details;
