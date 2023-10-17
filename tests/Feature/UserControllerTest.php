@@ -64,4 +64,47 @@ class UserControllerTest extends TestCase
             ->assertRedirect("/")
             ->assertStatus(302);
     }
+
+    // REGISTRATION
+    public function testViewRegistration()
+    {
+        $this->view("user.registration", [
+            "title" => "Registration"
+        ])
+            ->assertSeeText("Registration");
+    }
+
+    public function testRegisterEmpty()
+    {
+        $this->post('/registration', [])
+            ->assertSeeText("All data is required!");
+    }
+
+    public function testRegisterNikDuplicate()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/registration', [
+            "nik" => "55000154",
+            "password" => "1234",
+            "fullname" => "Doni Darmawan",
+            "department" => "EI2",
+            "phone_number" => "08983456945",
+        ])
+            ->assertSeeText("NIK is used!");
+    }
+
+    public function testRegistrationSuccess()
+    {
+
+        $this->post('/registration', [
+            "nik" => "55000155",
+            "password" => "1234",
+            "fullname" => "Doni Darmawan",
+            "department" => "EI2",
+            "phone_number" => "08983456945",
+        ])
+            ->assertSeeText("Login")
+            ->assertSeeText("Registration Success!");
+    }
 }

@@ -19,6 +19,7 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
     Route::get("/login", [App\Http\Controllers\UserController::class, "login"])->name("login");
     Route::post("/login", [App\Http\Controllers\UserController::class, "doLogin"]);
     Route::get("/registration", [App\Http\Controllers\UserController::class, "registration"]);
+    Route::post("/registration", [App\Http\Controllers\UserController::class, "register"]);
 });
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {

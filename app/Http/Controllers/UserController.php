@@ -43,4 +43,66 @@ class UserController extends Controller
             ]);
         }
     }
+
+
+    // REGISTRATION
+    public function registration()
+    {
+        return response()->view("user.registration", [
+            "title" => "Registration"
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $nik = $request->input("nik");
+        $password = $request->input("password");
+        $fullname = $request->input("fullname");
+        $department = $request->input("department");
+        $phone_number = $request->input("phone_number");
+
+        if (
+            empty($nik) ||
+            empty($password) ||
+            empty($fullname) ||
+            empty($department) ||
+            empty($phone_number)
+        ) {
+            return response()->view("user.registration", [
+                "title" => "Registration",
+                "error" => "All data is required! ⚠️"
+            ]);
+        }
+
+        $user = User::query()->find($nik);
+
+        if ($user == null) {
+
+            $user = new User();
+            $user->nik = $nik;
+            $user->password = $password;
+            $user->fullname = $fullname;
+            $user->department = $department;
+            $user->phone_number = $phone_number;
+
+            $registration_success = $user->save();
+
+            if ($registration_success) {
+                return response()->view("user.login", [
+                    "title" => "Login",
+                    "registration_success" => true
+                ]);
+            } else {
+                return response()->view("user.registration", [
+                    "title" => "Registration",
+                    "error" => "Registration error! ⚠️"
+                ]);
+            }
+        } else {
+            return response()->view("user.registration", [
+                "title" => "Registration",
+                "error" => "NIK is used! ⚠️"
+            ]);
+        }
+    }
 }
