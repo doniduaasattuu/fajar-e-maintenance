@@ -66,26 +66,23 @@ entity emo_details {
 }
 
 entity data_records {
+    * id BIGINT AUTO_INCREMENT
     * funcloc VARCHAR(150) <<FK>>
     * emo VARCHAR(9) <<FK>>
     --
     * motor_status ENUM(["Running", "Not Running"])
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
-    * temperature_a CHAR(10)
-    * temperature_b CHAR(10)
-    * temperature_c CHAR(10)
-    * temperature_d CHAR(10)
+      number_of_greasing CHAR(3)
+    * temperature_a SMALLINT UNSIGNED
+    * temperature_b SMALLINT UNSIGNED
+    * temperature_c SMALLINT UNSIGNED
+    * temperature_d SMALLINT UNSIGNED
+      vibration_value_de DECIMAL(4,2)
     * vibration_de ENUM(["Normal", "Abnormal"])
+      vibration_value_nde DECIMAL(4,2)
     * vibration_nde ENUM(["Normal", "Abnormal"])
-      vibration_value_de CHAR(10)
-      vibration_value_nde CHAR(10)
-      current_phase_r CHAR(10)
-      current_phase_s CHAR(10)
-      current_phase_t CHAR(10)
-      number_of_greasing CHAR(10)
     * created_at TIMESTAMP
-    * updated_at TIMESTAMP
     * checked_by VARCHAR(150)
 }
 
