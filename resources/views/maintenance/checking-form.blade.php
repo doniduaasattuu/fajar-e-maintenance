@@ -30,7 +30,7 @@
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        <table class="table">
+                        <table class="table table-hover">
                             <tbody>
                                 <tr>
                                     <th>Function Location</th>

@@ -51,7 +51,7 @@
                 @csrf
                 <div class="mb-3">
                     <label for="NIK" class="form-label -mb-5">NIK</label>
-                    <input type="text" onkeypress="return /[0-9]/i.test(event.key)" id="NIK" name="NIK" class="form-control" id="NIK" aria-describedby="NIKHelp">
+                    <input style="appearance: textField;" type="number" id="NIK" name="NIK" class="form-control" id="NIK" aria-describedby="NIKHelp">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label -mb-5">Password</label>

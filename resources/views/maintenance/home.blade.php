@@ -16,10 +16,9 @@
     <div class="container">
         <div class="text-center">
             <div style="max-width: 500px;" class="py-5 mx-auto">
+                <p class="mb-1">Hello {{ $user }}, welcome to</p>
                 <h1 style="font-weight: 700;">Fajar E-Maintenance</h1>
-                <p class="mb-3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. A quidem quia ducimus ipsam, reprehenderit libero?
-                </p>
+                <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. A quidem quia ducimus ipsam, reprehenderit libero?</p>
                 <svg style="width: 100%; height: auto;" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" width="876.97244" height="744" viewBox="0 0 876.97244 744" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <path d="M676.51378,269h-26a5.00573,5.00573,0,0,1-5-5V238a5.00573,5.00573,0,0,1,5-5h26a5.00573,5.00573,0,0,1,5,5v26A5.00573,5.00573,0,0,1,676.51378,269Zm-26-34a3.00328,3.00328,0,0,0-3,3v26a3.00328,3.00328,0,0,0,3,3h26a3.00328,3.00328,0,0,0,3-3V238a3.00328,3.00328,0,0,0-3-3Z" transform="translate(-161.51378 -78)" fill="#e6e6e6" />
                     <path d="M373.51378,114h-26a5.00573,5.00573,0,0,1-5-5V83a5.00573,5.00573,0,0,1,5-5h26a5.00573,5.00573,0,0,1,5,5v26A5.00573,5.00573,0,0,1,373.51378,114Zm-26-34a3.00328,3.00328,0,0,0-3,3v26a3.00328,3.00328,0,0,0,3,3h26a3.00328,3.00328,0,0,0,3-3V83a3.00328,3.00328,0,0,0-3-3Z" transform="translate(-161.51378 -78)" fill="#e6e6e6" />

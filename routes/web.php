@@ -2,7 +2,6 @@
 
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
-use Illuminate\Http\Client\Request;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -22,18 +21,28 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
     Route::post("/login", [App\Http\Controllers\UserController::class, "doLogin"]);
     Route::get("/registration", [App\Http\Controllers\UserController::class, "registration"]);
     Route::post("/registration", [App\Http\Controllers\UserController::class, "register"]);
+    Route::fallback(function () {
+        return redirect("/");
+    });
 });
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
+    Route::fallback(function () {
+        return view("utility.page-not-found", [
+            "title" => "Oops!"
+        ]);
+    });
+
     Route::get('/scanner', function () {
         return view("maintenance.scanner", [
             "title" => "Scanner"
         ]);
     });
 
-    Route::get('/', function () {
+    Route::get('/', function (HttpRequest $request) {
         return view("maintenance.home", [
-            "title" => "Home"
+            "title" => "Home",
+            "user" => $request->session()->get("user")
         ]);
     });
 

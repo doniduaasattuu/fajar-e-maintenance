@@ -25,7 +25,7 @@ class UserController extends Controller
 
             return response()->view("user.login", [
                 "title" => "Login",
-                "error" => "NIK and password is required! ⚠️ "
+                "error" => "NIK and password is required! ⚠️",
             ]);
         }
 
