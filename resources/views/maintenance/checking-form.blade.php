@@ -7,18 +7,89 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-    <title>Document</title>
+    <title>{{ $title }}</title>
 </head>
 
 <body>
-    <div class="container mt-4">
-        <h2 class="mb-4">FORM CHECKING MOTOR</h2>
+    <nav class="sticky-top navbar absolute navbar-expand-lg bg-dark text-white zindex-fixed shadow-sm">
+        <div class="container">
+            <a class="text-white fw-medium me-xl-5 me-lg-3 navbar-brand" href="#">Fajar E-Maintenance</a>
+            <button class="bg-white navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="text-primary navbar-toggler-icon"></span>
+            </button>
+            <div class="mt-4 mt-lg-0 collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex" role="search">
+                    <input class="search_input form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-primary" type="submit">Search</button>
+                </form>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item me-xl-5 me-lg-3">
+                        <a class="text-white nav-link" aria-current="page" href="/">Scanner</a>
+                    </li>
+                    <li class="nav-item me-xl-5 me-lg-3">
+                        <a class="text-white nav-link" href="#">Data Record</a>
+                    </li>
+                    <li class="nav-item me-xl-5 me-lg-3">
+                        <a class="text-white nav-link" href="#">Logs</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="text-white nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="text-dark dropdown-item" href="/change-name">Change Name</a></li>
+                            <li><a class="text-dark dropdown-item" href="/change-password">Change Password</a></li>
+                            <li><a class="text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 my-5">
+        <h3 class="mb-4">CHECKING FORM {{ $emo->id }}</h3>
         @isset($error)
         <div class="alert alert-danger" role="alert">
             {{ $error }}
         </div>
         @endisset
-        <form action="/checking-motor" method="post">
+
+        <!-- MOTOR DETAILS -->
+        <div class="accordion mb-4" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="bg-primary text-white accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <strong>CLICK FOR MOTOR DETAILS</strong>
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th>Function Location</th>
+                                    <td>{{ $funcLoc["id"] }}</td>
+                                </tr>
+                                @foreach ($emoDetail as $key => $value)
+                                @if ($key == "id")
+                                @continue
+                                @endif
+                                <tr>
+                                    <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
+                                    <td>{{ $value }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CHECKING -->
+        <form action="/checking-form" method="post">
             @csrf
             <div class="mb-3 row">
                 <div class="col">
@@ -39,7 +110,7 @@
                     </select>
                     <div class="mb-4">
                         <label for="number_of_greasing" class="fw-bold form-label">Number of Greasing</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="5" class="form-control" name="number_of_greasing" id="number_of_greasing">
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing" id="number_of_greasing">
                     </div>
 
                     <!-- =========== TEMPERATURE =========== -->
@@ -113,6 +184,7 @@
             if (nipple_grease.value == "Available") {
                 number_of_greasing.removeAttribute("disabled");
             } else {
+                number_of_greasing.value = "";
                 number_of_greasing.setAttribute("disabled", true);
             }
         }

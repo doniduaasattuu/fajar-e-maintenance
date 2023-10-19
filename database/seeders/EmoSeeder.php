@@ -22,8 +22,8 @@ class EmoSeeder extends Seeder
         $emo->sort_field = "SP3.P.70/M";
         $emo->unique_id = "1804";
         $emo->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList1804";
-        $emo->created_at = Carbon::now();
-        $emo->updated_at = Carbon::now();
+        $emo->created_at = Carbon::now()->toDateTimeString();
+        $emo->updated_at = Carbon::now()->toDateTimeString();
         $emo->save();
     }
 }

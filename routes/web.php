@@ -26,7 +26,7 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get("/", function () {
-        return view("welcome");
+        return view("maintenance.scanner");
     });
 
     Route::get("/logout", function (HttpRequest $request) {
@@ -34,7 +34,6 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return redirect("/");
     });
 
-    Route::get('/checking-form', function () {
-        return view("maintenance.checking-form");
-    });
+    Route::get('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "getForm"]);
+    Route::post('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "saveData"]);
 });
