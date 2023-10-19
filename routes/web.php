@@ -25,8 +25,16 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 });
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
-    Route::get("/", function () {
-        return view("maintenance.scanner");
+    Route::get('/scanner', function () {
+        return view("maintenance.scanner", [
+            "title" => "Scanner"
+        ]);
+    });
+
+    Route::get('/', function () {
+        return view("maintenance.home", [
+            "title" => "Home"
+        ]);
     });
 
     Route::get("/logout", function (HttpRequest $request) {

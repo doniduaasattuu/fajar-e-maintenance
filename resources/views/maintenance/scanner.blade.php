@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+@include("utility.head")
+
 <style>
     .container {
         display: flex;
@@ -19,8 +16,10 @@
 </style>
 
 <body>
-    <div class="container">
-        <div id="reader"></div>
+    @include("utility.navbar")
+
+    <div class="container mt-5">
+        <div class="my-auto" id="reader"></div>
     </div>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script type="text/javascript">
@@ -43,6 +42,20 @@
 
             false);
         html5QrcodeScanner.render(onScanSuccess);
+    </script>
+    <script>
+        let buttonRequest = document.getElementById("html5-qrcode-button-camera-permission");
+        let fromFile = document.getElementById("html5-qrcode-anchor-scan-type-change");
+        let reader = document.getElementById("reader");
+
+        buttonRequest.classList.add("btn");
+        buttonRequest.classList.add("btn-primary");
+
+        fromFile.classList.add("btn");
+        fromFile.classList.add("btn-secondary");
+        fromFile.classList.add("mt-3");
+
+        reader.style.border = "none";
     </script>
 </body>
 

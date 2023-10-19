@@ -1,51 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-
-    <title>{{ $title }}</title>
-</head>
+@include("utility.head")
 
 <body>
-    <nav class="sticky-top navbar absolute navbar-expand-lg bg-dark text-white zindex-fixed shadow-sm">
-        <div class="container">
-            <a class="text-white fw-medium me-xl-5 me-lg-3 navbar-brand" href="#">Fajar E-Maintenance</a>
-            <button class="bg-white navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="text-primary navbar-toggler-icon"></span>
-            </button>
-            <div class="mt-4 mt-lg-0 collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex" role="search">
-                    <input class="search_input form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-primary" type="submit">Search</button>
-                </form>
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item me-xl-5 me-lg-3">
-                        <a class="text-white nav-link" aria-current="page" href="/">Scanner</a>
-                    </li>
-                    <li class="nav-item me-xl-5 me-lg-3">
-                        <a class="text-white nav-link" href="#">Data Record</a>
-                    </li>
-                    <li class="nav-item me-xl-5 me-lg-3">
-                        <a class="text-white nav-link" href="#">Logs</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="text-white nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Account
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="text-dark dropdown-item" href="/change-name">Change Name</a></li>
-                            <li><a class="text-dark dropdown-item" href="/change-password">Change Password</a></li>
-                            <li><a class="text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @include("utility.navbar")
 
     <div class="container mt-4 my-5">
         <h3 class="mb-4">CHECKING FORM {{ $emo->id }}</h3>
@@ -60,7 +19,13 @@
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="bg-primary text-white accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <strong>CLICK FOR MOTOR DETAILS</strong>
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                        </svg> -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
+                            <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z" />
+                        </svg>
+                        <strong class="ms-2">MOTOR DETAILS</strong>
                     </button>
                 </h2>
                 <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
