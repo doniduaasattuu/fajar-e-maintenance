@@ -16,7 +16,7 @@
     <div class="container">
         <div class="text-center">
             <div style="max-width: 500px;" class="py-5 mx-auto">
-                <h2 style="font-weight: 600;">Sorry, this page isn't available.</h2>
+                <h2 style="font-weight: 600;">Page not found.</h2>
                 <p class="mb-5">
                     The link you followed may be broken, or the page may have been removed.
                 </p>

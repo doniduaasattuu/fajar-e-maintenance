@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +47,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
             "user" => $request->session()->get("user")
         ]);
     });
+
+    Route::post("/search", [App\Http\Controllers\DataController::class, "search"]);
 
     Route::get("/logout", function (HttpRequest $request) {
         $request->session()->flush();
