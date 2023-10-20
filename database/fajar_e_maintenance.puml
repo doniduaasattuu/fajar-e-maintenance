@@ -32,11 +32,11 @@ entity emo_details {
     power_rate VARCHAR(5)
     power_unit ENUM(["kW", "HP"])
 
-    voltage VARCHAR(5)
-    current_nominal VARCHAR(5)
+    voltage VARCHAR(25)
+    current_nominal VARCHAR(25)
     frequency VARCHAR(3)
     pole ENUM(["2", "4", "6", "8", "10", "12", "14", "16"])
-    rpm VARCHAR(4)
+    rpm VARCHAR(25)
 
     bearing_de VARCHAR("50")
     bearing_nde VARCHAR("50")
@@ -44,8 +44,8 @@ entity emo_details {
     shaft_diameter SMALLINT UNSIGNED
     phase_supply CHAR(1)
 
-    cos_phi VARCHAR(3)
-    efficiency VARCHAR(3)
+    cos_phi CHAR(4)
+    efficiency VARCHAR(4)
     ip_rating CHAR(2)
     insulation_class CHAR(1)
     duty CHAR(2)
@@ -62,7 +62,7 @@ entity emo_details {
     weight SMALLINT UNSIGNED
     cooling_fan ENUM(["Internal", "External", "Not Available"])
 
-    mounting ENUM("Horizontal", "Vertical", "V/H")
+    mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
 }
 
 entity data_records {
@@ -90,8 +90,8 @@ entity users {
     * nik VARCHAR(8)
     --
     * password VARCHAR(50)
-    * fullname VARCHAR(150) UNIQUE
-    * department VARCHAR(150)
+    * fullname VARCHAR(150)
+    * department ENUM("EI1-EI7");
     * phone_number VARCHAR(15)
 }
  

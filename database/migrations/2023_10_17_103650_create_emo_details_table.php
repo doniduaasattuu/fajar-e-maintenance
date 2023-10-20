@@ -21,11 +21,11 @@ return new class extends Migration
             $table->string("power_rate", 5)->nullable(true);
             $table->enum("power_unit", ["kW", "HP"])->nullable(true);
 
-            $table->string("voltage", 5)->nullable(true);
-            $table->string("current_nominal", 5)->nullable(true);
+            $table->string("voltage", 25)->nullable(true);
+            $table->string("current_nominal", 25)->nullable(true);
             $table->string("frequency", 3)->nullable(true);
             $table->enum("pole", ["2", "4", "6", "8", "10", "12", "14", "16"])->nullable(true);
-            $table->string("rpm", 4)->nullable(true);
+            $table->string("rpm", 25)->nullable(true);
 
             $table->string("bearing_de", 50)->nullable(true);
             $table->string("bearing_nde", 50)->nullable(true);
@@ -51,7 +51,7 @@ return new class extends Migration
             $table->unsignedSmallInteger("weight")->nullable(true);
             $table->enum("cooling_fan", (["Internal", "External", "Not Available"]))->nullable(true);
 
-            $table->enum("mounting", ["Horizontal", "Vertical", "V/H"])->nullable(true);
+            $table->enum("mounting", ["Horizontal", "Vertical", "V/H", "MGM"])->nullable(true);
 
             $table->foreign("emo")->references("id")->on("emos");
         });
