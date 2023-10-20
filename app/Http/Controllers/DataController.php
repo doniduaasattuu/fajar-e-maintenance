@@ -14,12 +14,19 @@ class DataController extends Controller
         $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
         $emo = Emo::query()->with("funcLoc", "emoDetail")->where("qr_code_link", "=", $uri)->first();
 
-        return view("maintenance.checking-form", [
-            "title" => "Checking Form",
-            "emo" => $emo,
-            "funcLoc" => $emo->funcLoc->toArray(),
-            "emoDetail" => $emo->emoDetail->toArray(),
-        ]);
+        if (!is_null($emo)) {
+
+            return view("maintenance.checking-form", [
+                "title" => "Checking Form",
+                "emo" => $emo,
+                "funcLoc" => $emo->funcLoc->toArray(),
+                "emoDetail" => $emo->emoDetail->toArray(),
+            ]);
+        } else {
+            return view("utility.page-not-found", [
+                "title" => "Oops!"
+            ]);
+        }
     }
 
     public function saveData()

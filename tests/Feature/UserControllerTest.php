@@ -71,10 +71,11 @@ class UserControllerTest extends TestCase
             "user" => "Doni Darmawan",
             "nik" => "55000154"
         ])->get("/")
-            ->assertSeeText("Laravel");
+            ->assertSeeText("Scan QR Code")
+            ->assertSeeText("Fajar E-Maintenance");
     }
 
-    public function testGetHomeNotYet()
+    public function testGetHomeLoginNotYet()
     {
         $this->get("/", [])
             ->assertRedirect("/login");
