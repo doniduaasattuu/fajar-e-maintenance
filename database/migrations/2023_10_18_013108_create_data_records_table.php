@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string("checked_by", 150)->nullable(false);
 
             $table->foreign("funcloc")->references("id")->on("function_locations");
+            $table->foreign("emo")->references("id")->on("emos");
         });
     }
 

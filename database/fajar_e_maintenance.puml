@@ -4,13 +4,15 @@ entity function_locations
 {
     * id VARCHAR(150) <<PK>>
     --
-    * emo VARCHAR(9) <<FK>>
-    * tag_name VARCHAR(150)
+      tag_name VARCHAR(150)
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
 }
 
 entity emos
 {
     * id VARCHAR(9) <<PK>>
+    * funcloc VARCHAR (150) <<FK>>
     --
       material_number VARCHAR(8)
     * equipment_description VARCHAR(150)

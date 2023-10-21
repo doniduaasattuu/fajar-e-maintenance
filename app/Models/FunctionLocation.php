@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
@@ -14,11 +15,11 @@ class FunctionLocation extends Model
     protected $primaryKey = "id";
     protected $keyType = "string";
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps = true;
 
-    public function emoChild(): BelongsTo
+    public function emo(): HasMany
     {
-        return $this->belongsTo(Emo::class, "emo", "id");
+        return $this->hasMany(Emo::class, "funcloc", "id");
     }
 
     public function emoDetail(): HasOneThrough
