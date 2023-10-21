@@ -54,7 +54,7 @@
                                 @endif
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
-                                    <td>{{ $value }}</td>
+                                    <td id="{{ $key }}">{{ $value  }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -80,14 +80,14 @@
                         <option value="Clean">Clean</option>
                         <option value="Dirty">Dirty</option>
                     </select>
-                    <select name="nipple_grease" id="nipple_grease" class="form-select mb-3" aria-label="Default select example">
+                    <select name="nipple_grease_input" id="nipple_grease_input" class="form-select mb-3" aria-label="Default select example">
                         <option value="">--Nipple Grease--</option>
                         <option value="Available">Available</option>
                         <option value="Not Available">Not Available</option>
                     </select>
                     <div class="mb-4">
-                        <label for="number_of_greasing" class="fw-bold form-label">Number of Greasing</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing" id="number_of_greasing">
+                        <label for="number_of_greasing_input" class="fw-bold form-label">Number of Greasing</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing_input" id="number_of_greasing_input">
                     </div>
 
                     <!-- =========== TEMPERATURE =========== -->
@@ -101,19 +101,19 @@
                     </div>
                     <div class="mb-1">
                         <label for="temperature_a" class="fw-bold form-label">Temperature A</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature" placeholder="°C" name="temperature_a" id="temperature_a">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
                     </div>
                     <div class="mb-1">
                         <label for="temperature_b" class="fw-bold form-label">Temperature B</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature" placeholder="°C" name="temperature_b" id="temperature_b">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
                     </div>
                     <div class="mb-1">
                         <label for="temperature_c" class="fw-bold form-label">Temperature C</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature" placeholder="°C" name="temperature_c" id="temperature_c">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
                     </div>
                     <div class="mb-4">
                         <label for="temperature_d" class="fw-bold form-label">Temperature D</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature" placeholder="°C" name="temperature_d" id="temperature_d">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
                     </div>
 
                     <!-- =========== VIBRATION =========== -->
@@ -152,22 +152,22 @@
     </div>
 
     <script>
-        const nipple_grease = document.getElementById("nipple_grease");
-        const number_of_greasing = document.getElementById("number_of_greasing");
-        const temperatures = document.getElementsByClassName("temperature");
+        const nipple_grease_input = document.getElementById("nipple_grease_input");
+        const number_of_greasing_input = document.getElementById("number_of_greasing_input");
+        const temperatures_input = document.getElementsByClassName("temperature");
 
-        nipple_grease.onchange = () => {
-            if (nipple_grease.value == "Available") {
-                number_of_greasing.removeAttribute("disabled");
+        nipple_grease_input.onchange = () => {
+            if (nipple_grease_input.value == "Available") {
+                number_of_greasing_input.removeAttribute("disabled");
             } else {
-                number_of_greasing.value = "";
-                number_of_greasing.setAttribute("disabled", true);
+                number_of_greasing_input.value = "";
+                number_of_greasing_input.setAttribute("disabled", true);
             }
         }
 
-        number_of_greasing.onchange = () => {
-            if (Number(number_of_greasing.value) > 255) {
-                number_of_greasing.value = 255
+        number_of_greasing_input.onchange = () => {
+            if (Number(number_of_greasing_input.value) > 255) {
+                number_of_greasing_input.value = 255
             }
         }
 
@@ -178,19 +178,67 @@
             return true;
         }
 
-        for (let i = 0; i < temperatures.length; i++) {
-            temperatures[i].onchange = () => {
-                if (temperatures[i].value.length > 3) {
-                    let value_accepted = temperatures[i].value.substring(0, 3)
-                    temperatures[i].value = value_accepted
+        for (let i = 0; i < temperatures_input.length; i++) {
+            temperatures_input[i].onchange = () => {
+                if (temperatures_input[i].value.length > 3) {
+                    let value_accepted = temperatures_input[i].value.substring(0, 3)
+                    temperatures_input[i].value = value_accepted
                 }
 
-                if (Number(temperatures[i].value) > 150) {
+                if (Number(temperatures_input[i].value) > 150) {
                     alert("Temperature should not exceed 150°C")
-                    temperatures[i].value = ""
+                    temperatures_input[i].value = ""
                 }
             }
         }
+
+        // ADD UNIT TO MOTOR DETAILS
+        function changeUnit(id, unit) {
+            if (id.textContent.length > 0) {
+                id.textContent = id.textContent + " " + unit;
+            } else {
+                id.textContent = "";
+            }
+        }
+
+        const power_unit = document.getElementById("power_unit");
+        const power_rate = document.getElementById("power_rate");
+        changeUnit(power_rate, power_unit.textContent);
+
+        power_unit.parentElement.style.display = "none";
+
+        const voltage = document.getElementById("voltage");
+        changeUnit(voltage, "V");
+
+        const current_nominal = document.getElementById("current_nominal");
+        changeUnit(current_nominal, "A");
+
+        const frequency = document.getElementById("frequency");
+        changeUnit(frequency, "Hz");
+
+        const pole = document.getElementById("pole");
+        changeUnit(pole, "P");
+
+        const rpm = document.getElementById("rpm");
+        changeUnit(rpm, "Rpm");
+
+        const shaft_diameter = document.getElementById("shaft_diameter");
+        changeUnit(shaft_diameter, "mm");
+
+        const phase_supply = document.getElementById("phase_supply");
+        changeUnit(phase_supply, "Phase");
+
+        const length = document.getElementById("length");
+        changeUnit(length, "mm");
+
+        const width = document.getElementById("width");
+        changeUnit(width, "mm");
+
+        const height = document.getElementById("height");
+        changeUnit(height, "mm");
+
+        const weight = document.getElementById("weight");
+        changeUnit(weight, "Kg");
     </script>
 </body>
 
