@@ -44,7 +44,6 @@ class UserController extends Controller
         }
     }
 
-
     // REGISTRATION
     public function registration()
     {
@@ -102,6 +101,54 @@ class UserController extends Controller
             return response()->view("user.registration", [
                 "title" => "Registration",
                 "error" => "NIK is used! ⚠️"
+            ]);
+        }
+    }
+
+    // CHANGE NAME
+    public function changeName(Request $request)
+    {
+        return response()->view("user.change-name", [
+            "title" => "Change name",
+        ]);
+    }
+
+    public function doChangeName(Request $request)
+    {
+        $nik = $request->input("nik");
+        $password = $request->input("password");
+        $name = $request->input("name");
+
+        if (empty($nik) || empty($password) || empty($name)) {
+            return response()->view("user.change-name", [
+                "title" => "Change name",
+                "error" => "All data is required! ⚠️"
+            ]);
+        }
+
+        $user = User::query()->find($nik);
+
+        if (!is_null($user)) {
+
+            if ($user->password == $password) {
+
+                $user->fullname = $name;
+                $user->save();
+
+                session(["nik" => $user->nik]);
+                session(["user" => $user->fullname]);
+
+                return redirect("/")->with("message", "Your name has been successfully changed.");
+            } else {
+                return response()->view("user.change-name", [
+                    "title" => "Change name",
+                    "error" => "NIK or password is wrong! ⚠️"
+                ]);
+            }
+        } else {
+            return response()->view("user.change-name", [
+                "title" => "Change name",
+                "error" => "NIK or password is wrong! ⚠️"
             ]);
         }
     }

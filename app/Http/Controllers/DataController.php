@@ -18,14 +18,14 @@ class DataController extends Controller
 
         if (!is_null($emo)) {
 
-            return view("maintenance.checking-form", [
+            return response()->view("maintenance.checking-form", [
                 "title" => "Checking Form",
                 "emo" => $emo,
                 "funcLoc" => $emo->funcLoc->toArray(),
                 "emoDetail" => $emo->emoDetails->toArray(),
             ]);
         } else {
-            return view("utility.page-not-found", [
+            return response()->view("utility.page-not-found", [
                 "title" => "Oops!"
             ]);
         }
@@ -56,7 +56,7 @@ class DataController extends Controller
 
                 return redirect($url);
             } else {
-                return view("utility.page-not-found", [
+                return response()->view("utility.page-not-found", [
                     "title" => "Oops!"
                 ]);
             }
@@ -74,12 +74,12 @@ class DataController extends Controller
 
                 return redirect($url);
             } else {
-                return view("utility.page-not-found", [
+                return response()->view("utility.page-not-found", [
                     "title" => "Oops!"
                 ]);
             }
         } else {
-            return view("utility.page-not-found", [
+            return response()->view("utility.page-not-found", [
                 "title" => "Oops!"
             ]);
         }

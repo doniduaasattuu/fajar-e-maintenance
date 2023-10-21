@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2023 at 07:29 AM
+-- Generation Time: Oct 21, 2023 at 10:21 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -82,7 +82,7 @@ INSERT INTO `emos` (`id`, `funcloc`, `material_number`, `equipment_description`,
 ('EMO000226', 'FP-01-SP3-RJS-T092-P093', '10011099', 'AC MOTOR;380V,50Hz,75kW,4P,280S,B35', 'Installed', 'SP3.P71/M', '1803', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1803', '2023-10-21 05:19:21', NULL),
 ('EMO000229', 'FP-01-PM3-HOO-BL11', '10010807', 'AC MOTOR;380V,50Hz,3.7kW,2P,112M,B3', 'Installed', 'PM3.H-11', '1956', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1956', '2023-10-21 05:19:21', NULL),
 ('EMO000274', 'FP-01-PM3-BRS-T037-P061', '', 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3', 'Installed', 'PM3-BR01/P47/M', '1985', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1985', '2023-10-21 05:19:21', NULL),
-('EMO000426', 'FP-01-SP3-RJS-T092-P092', '10010668', 'AC MOTOR;380V,50Hz,75kW,4P,250M,B3', 'Installed', 'SP3.P.70/M', '1804', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1804', '2023-10-21 04:51:22', '2023-10-21 04:51:22'),
+('EMO000426', 'FP-01-SP3-RJS-T092-P092', '10010668', 'AC MOTOR;380V,50Hz,75kW,4P,250M,B3', 'Installed', 'SP3.P.70/M', '1804', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1804', '2023-10-21 05:19:21', NULL),
 ('EMO000431', 'FP-01-CH3-STA-CN03', '10020815', 'AC MOTOR;380V,50Hz,7.5kW,4P,132S,V1', 'Installed', 'CH3.3CSC01/M', '2005', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2005', '2023-10-21 05:19:21', NULL),
 ('EMO000457', 'FP-01-SP3-OCC-T008-P016', '10010560', 'AC MOTOR;380V,50Hz,30kW,4P,200L,B3', 'Installed', 'SP3.C8/P18/M', '1844', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1844', '2023-10-21 05:19:21', NULL),
 ('EMO000488', 'FP-01-PM3-WRS-T035-P058', '', 'AC MOTOR;380V,50Hz,22kW,4P,180L,B3', 'Installed', 'SP3.C36.P82/M', '1914', 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1914', '2023-10-21 05:19:21', NULL),
@@ -470,7 +470,6 @@ CREATE TABLE `emo_details` (
 --
 
 INSERT INTO `emo_details` (`id`, `emo_detail`, `manufacture`, `serial_number`, `type`, `power_rate`, `power_unit`, `voltage`, `current_nominal`, `frequency`, `pole`, `rpm`, `bearing_de`, `bearing_nde`, `frame_type`, `shaft_diameter`, `phase_supply`, `cos_phi`, `efficiency`, `ip_rating`, `insulation_class`, `duty`, `connection_type`, `nipple_grease`, `greasing_type`, `greasing_qty_de`, `greasing_qty_nde`, `length`, `width`, `height`, `weight`, `cooling_fan`, `mounting`) VALUES
-(1, 'EMO000426', 'TECO', 'P9543291', 'AEEBPA040100YW05T', '75', 'kW', '380', '140', '50', '4', '1475', 'NU216', '6213', '250 M', 75, '3', '0.84', NULL, '55', 'F', 'S1', 'Star-Delta', 'Available', NULL, NULL, NULL, NULL, NULL, 250, NULL, 'Internal', 'Horizontal'),
 (2, 'EMO003495', 'HUADA', '', 'Y2', '90', 'kW', '380', '167', '50', '4', '1481', '6317', '6317', '280 M', 0, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 280, 0, '', 'Horizontal'),
 (3, 'EMO003124', 'ABB', '648472813', 'M2BA', '75', 'kW', '380', '139', '50', '4', '1475', '', '', '250 M', 0, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 250, 0, '', 'Horizontal'),
 (4, 'EMO000226', 'TECO', '3333499', 'AEEB', '75', 'kW', '380', '140', '50', '4', '1481', '6316', '6316', '280 S', 75, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 280, 0, '', 'Horizontal'),
@@ -696,10 +695,10 @@ INSERT INTO `emo_details` (`id`, `emo_detail`, `manufacture`, `serial_number`, `
 (224, 'MGM000945', 'SIEMENS', 'NYU 1902/9990043-004', 'D169 – LES 180 ZL J4E', '22', 'kW', '380', '42', '50', '4', '1480', '', '', '', 0, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'MGM'),
 (225, 'MGM000946', 'SIEMENS', 'NYU 1902/9990044-001', 'Z149 – LE 160 MF 4E', '11', 'kW', '380', '21', '50', '4', '1480', '', '', '', 0, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'MGM'),
 (226, 'MGM000950', 'SIEMENS', 'NYU 1902/9990044-002', 'Z149 – LE 160 MF 4E', '11', 'kW', '380', '21', '50', '4', '1480', '', '', '', 0, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'MGM'),
-(227, 'EMO005072', 'MARATHON', 'WX11007978-2002J', 'LVF 250M -4', '55', 'kW', '380', '104', '50', '4', '1475', '6314', '6314', '', 65, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'External', 'Horizontal');
-INSERT INTO `emo_details` (`id`, `emo_detail`, `manufacture`, `serial_number`, `type`, `power_rate`, `power_unit`, `voltage`, `current_nominal`, `frequency`, `pole`, `rpm`, `bearing_de`, `bearing_nde`, `frame_type`, `shaft_diameter`, `phase_supply`, `cos_phi`, `efficiency`, `ip_rating`, `insulation_class`, `duty`, `connection_type`, `nipple_grease`, `greasing_type`, `greasing_qty_de`, `greasing_qty_nde`, `length`, `width`, `height`, `weight`, `cooling_fan`, `mounting`) VALUES
+(227, 'EMO005072', 'MARATHON', 'WX11007978-2002J', 'LVF 250M -4', '55', 'kW', '380', '104', '50', '4', '1475', '6314', '6314', '', 65, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'External', 'Horizontal'),
 (228, 'EMO005074', 'ECA', '18067025', 'G 250A', '0.55', 'kW', '380', '1', '50', '4', '1480', '', '', '', 0, '3', '', '', '55', 'F', 'S1', '', 'Not Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'Vertical'),
-(229, 'EMO005073', 'MARATHON', 'WX11007978-2001J', 'LVF 250M -4', '55', 'kW', '380', '104', '50', '4', '1475', '6314', '6314', '', 65, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'External', 'Horizontal'),
+(229, 'EMO005073', 'MARATHON', 'WX11007978-2001J', 'LVF 250M -4', '55', 'kW', '380', '104', '50', '4', '1475', '6314', '6314', '', 65, '3', '', '', '55', 'F', 'S1', 'Delta', 'Available', '', 0, 0, 0, 0, 0, 0, 'External', 'Horizontal');
+INSERT INTO `emo_details` (`id`, `emo_detail`, `manufacture`, `serial_number`, `type`, `power_rate`, `power_unit`, `voltage`, `current_nominal`, `frequency`, `pole`, `rpm`, `bearing_de`, `bearing_nde`, `frame_type`, `shaft_diameter`, `phase_supply`, `cos_phi`, `efficiency`, `ip_rating`, `insulation_class`, `duty`, `connection_type`, `nipple_grease`, `greasing_type`, `greasing_qty_de`, `greasing_qty_nde`, `length`, `width`, `height`, `weight`, `cooling_fan`, `mounting`) VALUES
 (230, 'EMO005075', 'ECA', '18067026', 'G 250A', '0.55', 'kW', '380', '1', '50', '4', '1480', '', '', '', 0, '3', '', '', '55', 'F', 'S1', '', 'Not Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'Vertical'),
 (231, 'EMO005076', 'SIEMENS', 'LMN1803/800016963970/001', '1LE0001 – 0EB4', '1.5', 'kW', '380', '3.45', '50', '4', '1480', '6205', '6205', '90L', 0, '3', '', '', '55', 'F', 'S1', 'Start', 'Not Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'Vertical'),
 (232, 'EMO005077', 'SIEMENS', 'LMN1809/800018095944/002', '1LE0001 – 0EB4', '1.5', 'kW', '380', '3.45', '50', '4', '1480', '6205', '6205', '90L', 0, '3', '', '', '55', 'F', 'S1', 'Start', 'Not Available', '', 0, 0, 0, 0, 0, 0, 'Internal', 'Vertical'),
@@ -841,7 +840,6 @@ CREATE TABLE `function_locations` (
 --
 
 INSERT INTO `function_locations` (`id`, `tag_name`, `created_at`, `updated_at`) VALUES
-('Available', 'Available', '2023-10-21 04:51:22', '2023-10-21 04:51:22'),
 ('AVLB', 'SP3.C1/AGT1/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-CH3-ALM-T088-P083', 'CH3.C03/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-CH3-ALM-T089-A027', 'CH3.MC01/M', '2023-10-21 05:19:21', NULL),
@@ -1161,7 +1159,7 @@ INSERT INTO `function_locations` (`id`, `tag_name`, `created_at`, `updated_at`) 
 ('FP-01-SP3-RJS-T019-A015', 'SP3.C20/AGT20/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-SP3-RJS-T019-P033', 'SP3.C20/P41/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-SP3-RJS-T029-P043', 'SP3.C30/P43/M', '2023-10-21 05:19:21', NULL),
-('FP-01-SP3-RJS-T092-P092', 'Pompa P-70', '2023-10-21 04:51:22', '2023-10-21 04:51:22'),
+('FP-01-SP3-RJS-T092-P092', 'SP3.P.70/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-SP3-RJS-T092-P093', 'SP3.P71/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-SP3-RJS-T092-P094', 'SP3.P71A/M', '2023-10-21 05:19:21', NULL),
 ('FP-01-SP3-SPA-CRN1-HST1', 'SP3.CRN.KO.16T.A/M', '2023-10-21 05:19:21', NULL),

@@ -30,23 +30,23 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::fallback(function () {
-        return view("utility.page-not-found", [
+        return response()->view("utility.page-not-found", [
             "title" => "Oops!"
-        ]);
+        ], 404);
     });
 
     Route::get('/scanner', function () {
-        return view("maintenance.scanner", [
+        return response()->view("maintenance.scanner", [
             "title" => "Scanner"
         ]);
     });
 
     Route::get('/', function (HttpRequest $request) {
-        return view("maintenance.home", [
+        return response()->view("maintenance.home", [
             "title" => "Home",
             "user" => $request->session()->get("user")
         ]);
-    });
+    })->name("home");
 
     Route::post("/search", [App\Http\Controllers\DataController::class, "search"]);
 
@@ -57,4 +57,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
 
     Route::get('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "getForm"]);
     Route::post('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "saveData"]);
+
+    Route::get('/change-name', [App\Http\Controllers\UserController::class, "changeName"]);
+    Route::post('/change-name', [App\Http\Controllers\UserController::class, "doChangeName"]);
 });

@@ -131,4 +131,65 @@ class UserControllerTest extends TestCase
             ->assertRedirect("/login")
             ->assertStatus(302);
     }
+
+    public function testChangeName()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->get("/change-name")
+            ->assertSeeText("Change name");
+    }
+
+    public function testDoChangeNameEmpty()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [])
+            ->assertSeeText("All data is required!");
+    }
+
+    public function testDoChangeNameWrongNik()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [
+            "nik" => "55000152",
+            "password" => "1234",
+            "name" => "Doni Baru"
+        ])
+            ->assertSeeText("NIK or password is wrong!");
+    }
+
+    public function testDoChangeNameWrongPassword()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [
+            "nik" => "55000154",
+            "password" => "salah",
+            "name" => "Doni Baru"
+        ])
+            ->assertSeeText("NIK or password is wrong!");
+    }
+
+    public function testDoChangeNameSuccess()
+    {
+
+        $this->seed(UserSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [
+            "nik" => "55000154",
+            "password" => "1234",
+            "name" => "Doni Darmawan"
+        ])
+            ->assertStatus(302)
+            ->assertRedirect("/");
+    }
 }
