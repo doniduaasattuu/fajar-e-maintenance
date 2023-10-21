@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('emo_details', function (Blueprint $table) {
             $table->id();
-            $table->string("emo", 9)->nullable(false);
+            $table->string("emo_detail", 9)->nullable(false);
 
             $table->string("manufacture", 150)->nullable(true);
             $table->string("serial_number", 150)->nullable(true);
@@ -53,7 +53,7 @@ return new class extends Migration
 
             $table->enum("mounting", ["Horizontal", "Vertical", "V/H", "MGM"])->nullable(true);
 
-            $table->foreign("emo")->references("id")->on("emos");
+            $table->foreign("emo_detail")->references("id")->on("emos");
         });
     }
 

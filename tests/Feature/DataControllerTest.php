@@ -18,7 +18,7 @@ class DataControllerTest extends TestCase
         $motorList = "Fajar-MotorList1804";
         $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
 
-        $emo = Emo::query()->with("funcLoc", "emoDetail")->where("qr_code_link", "=", $uri)->first();
+        $emo = Emo::query()->with("funcLoc", "emoDetails")->where("qr_code_link", "=", $uri)->first();
         self::assertNotNull($emo);
         self::assertEquals("EMO000426", $emo->id);
     }
@@ -30,7 +30,7 @@ class DataControllerTest extends TestCase
         $motorList = "Fajar-MotorList9999";
         $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
 
-        $emo = Emo::query()->with("funcLoc", "emoDetail")->where("qr_code_link", "=", $uri)->first();
+        $emo = Emo::query()->with("funcLoc", "emoDetails")->where("qr_code_link", "=", $uri)->first();
         self::assertNull($emo);
     }
 
@@ -79,7 +79,7 @@ class DataControllerTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $emo = Emo::query()->with("funcLoc", "emoDetail")->find("EMO000426");
+        $emo = Emo::query()->with("funcLoc", "emoDetails")->find("EMO000426");
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
         $motorList = substr($emo->qr_code_link, -19);
 
@@ -92,7 +92,7 @@ class DataControllerTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $emo = Emo::query()->with("funcLoc", "emoDetail")->find("EMO000426");
+        $emo = Emo::query()->with("funcLoc", "emoDetails")->find("EMO000426");
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
         $motorList = substr($emo->qr_code_link, -19);
 

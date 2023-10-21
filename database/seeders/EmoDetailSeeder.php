@@ -14,7 +14,7 @@ class EmoDetailSeeder extends Seeder
     public function run(): void
     {
         $emo_detail = new EmoDetail();
-        $emo_detail->emo = "EMO000426";
+        $emo_detail->emo_detail = "EMO000426";
         $emo_detail->manufacture = "TECO";
         $emo_detail->serial_number = "P9543291";
         $emo_detail->type = "AEEBPA040100YW05T";

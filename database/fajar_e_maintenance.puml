@@ -25,8 +25,8 @@ entity emos
 }
 
 entity emo_details {
-    * id BIGINT AUTO_INCREMENT <<PK>>
-    * emo VARCHAR(9) <<FK>>
+    * id BIGINT UNSIGNED AUTO_INCREMENT
+    * emo_details VARCHAR(9) <<FK>>
     --
     manufacture VARCHAR(150)
     serial_number VARCHAR(150)

@@ -9,6 +9,7 @@ use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -16,45 +17,36 @@ class FuncLocTest extends TestCase
 {
     public function testCreateFuncloc()
     {
-        $this->seed([EmoSeeder::class, EmoDetailSeeder::class]);
+        $funcloc = new FunctionLocation();
+        $funcloc->id = "FP-01-SP3-RJS-T092-P092";
+        $funcloc->tag_name = "Pompa P-70";
+        $funcloc->created_at = Carbon::now()->toDateTimeString();
+        $funcloc->updated_at = Carbon::now()->toDateTimeString();
+        $result = $funcloc->save();
 
-        $funloc = new FunctionLocation();
-        $funloc->id = "FP-01-SP3-RJS-T092-P092";
-        $funloc->emo = "EMO000426";
-        $funloc->tag_name = "Pompa P-70";
-        $funloc->save();
-
-        self::assertNotNull($funloc);
+        self::assertTrue($result);
+        self::assertNotNull($funcloc);
+        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
     }
 
     public function testFunclocEmoRelations()
     {
-        $this->seed([EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
-
+        $this->seed([FunctionLocationSeeder::class, EmoSeeder::class]);
         $funcloc = FunctionLocation::query()->find("FP-01-SP3-RJS-T092-P092");
-        $emo = $funcloc->emoChild;
+        $emos = $funcloc->emos;
 
-        self::assertNotNull($emo);
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+        self::assertNotNull($emos);
+        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
     }
 
     public function testFunclocEmoDetailRelations()
     {
-        $this->seed([EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
+        $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
-        $funcloc = FunctionLocation::query()->find("FP-01-SP3-RJS-T092-P092");
+        $funcloc = FunctionLocation::query()->with("emos")->find("FP-01-SP3-RJS-T092-P092");
         $emoDetail = $funcloc->emoDetail;
 
         self::assertNotNull($emoDetail);
-        Log::info(json_encode($emoDetail, JSON_PRETTY_PRINT));
-    }
-
-    public function testFunclocQueryWith()
-    {
-        $this->seed([EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
-
-        $funcloc = FunctionLocation::query()->with(["emoChild", "emoDetail"])->find("FP-01-SP3-RJS-T092-P092");
-        self::assertNotNull($funcloc);
         Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
     }
 }

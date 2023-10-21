@@ -15,13 +15,13 @@ class Emo extends Model
     public $incrementing = false;
     public $timestamps = true;
 
-    public function funcloc(): HasOne
+    public function funcloc(): BelongsTo
     {
-        return $this->hasOne(FunctionLocation::class, "funcloc", "id");
+        return $this->belongsTo(FunctionLocation::class, "funcloc", "id");
     }
 
-    public function emoDetail(): HasOne
+    public function emoDetails(): HasOne
     {
-        return $this->hasOne(EmoDetail::class, "emo", "id");
+        return $this->hasOne(EmoDetail::class, "emo_detail", "id");
     }
 }

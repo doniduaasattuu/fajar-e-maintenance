@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\DataRecord;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\EmoDetailSeeder;
 use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
@@ -19,7 +20,7 @@ class DataRecordTest extends TestCase
 {
     public function testCreateDataRecord()
     {
-        $this->seed([UserSeeder::class, EmoSeeder::class, EmoDetailSeeder::class, FunctionLocationSeeder::class]);
+        $this->seed(DatabaseSeeder::class);
 
         $data_record = new DataRecord();
         $data_record->funcloc = "FP-01-SP3-RJS-T092-P092";

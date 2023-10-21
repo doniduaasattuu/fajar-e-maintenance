@@ -17,13 +17,20 @@ class FunctionLocation extends Model
     public $incrementing = false;
     public $timestamps = true;
 
-    public function emo(): HasMany
+    public function emos(): HasMany
     {
         return $this->hasMany(Emo::class, "funcloc", "id");
     }
 
     public function emoDetail(): HasOneThrough
     {
-        return $this->hasOneThrough(EmoDetail::class, Emo::class, "id", "emo", "emo", "id");
+        return $this->hasOneThrough(
+            EmoDetail::class,
+            Emo::class,
+            "funcloc",
+            "emo_detail",
+            "id",
+            "id",
+        );
     }
 }

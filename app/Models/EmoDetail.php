@@ -15,13 +15,25 @@ class EmoDetail extends Model
     public $incrementing = true;
     public $timestamps = false;
 
-    public function emoParent(): BelongsTo
+    public function funcloc(): HasOneThrough
     {
-        return $this->belongsTo(Emo::class, "emo", "id");
+        return $this->hasOneThrough(
+            FunctionLocation::class,
+            Emo::class,
+            "id",
+            "id",
+            "emo_detail",
+            "funcloc",
+        );
+
+        // "funcloc",
+        // "id",
+        // "emo_detail",
+        // "id"
     }
 
-    public function funcLoc(): HasOneThrough
+    public function emo(): BelongsTo
     {
-        return $this->hasOneThrough(FunctionLocation::class, Emo::class, "id", "emo", "emo", "id");
+        return $this->belongsTo(Emo::class, "emo_detail", "id");
     }
 }

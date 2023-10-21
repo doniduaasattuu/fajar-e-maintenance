@@ -14,7 +14,7 @@ class DataController extends Controller
     {
 
         $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
-        $emo = Emo::query()->with("funcLoc", "emoDetail")->where("qr_code_link", "=", $uri)->first();
+        $emo = Emo::query()->with("funcLoc", "emoDetails")->where("qr_code_link", "=", $uri)->first();
 
         if (!is_null($emo)) {
 
@@ -22,7 +22,7 @@ class DataController extends Controller
                 "title" => "Checking Form",
                 "emo" => $emo,
                 "funcLoc" => $emo->funcLoc->toArray(),
-                "emoDetail" => $emo->emoDetail->toArray(),
+                "emoDetail" => $emo->emoDetails->toArray(),
             ]);
         } else {
             return view("utility.page-not-found", [
@@ -44,7 +44,7 @@ class DataController extends Controller
             return redirect($url);
         } else if (!empty($search_data) && strlen($search_data) == 9 && $search_data[0] == "E") {
             // Search by emo = EMO000426
-            $emo = Emo::query()->with("funcLoc", "emoDetail")->find($search_data);
+            $emo = Emo::query()->with("funcLoc", "emoDetails")->find($search_data);
 
             if (!is_null($emo)) {
                 $motorList = substr($emo->qr_code_link, -19);

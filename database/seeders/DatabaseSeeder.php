@@ -15,16 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('function_locations')->delete();
         DB::table('emo_details')->delete();
         DB::table('emos')->delete();
+        DB::table('function_locations')->delete();
         DB::table('users')->delete();
 
         $this->call([
             UserSeeder::class,
+            FunctionLocationSeeder::class,
             EmoSeeder::class,
             EmoDetailSeeder::class,
-            FunctionLocationSeeder::class,
         ]);
     }
 }
