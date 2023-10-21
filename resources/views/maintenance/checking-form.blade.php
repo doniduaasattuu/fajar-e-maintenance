@@ -49,7 +49,7 @@
                                     <td>{{ $emo->material_number }}</td>
                                 </tr>
                                 @foreach ($emoDetail as $key => $value)
-                                @if ($key == "id")
+                                @if ($key == "id" || $key == "greasing_type" || $key == "greasing_qty_de" || $key == "greasing_qty_nde")
                                 @continue
                                 @endif
                                 <tr>
@@ -143,9 +143,8 @@
                         <option value="Abormal">Abormal</option>
                     </select>
 
-
                     <div class="mb-4">
-                        <input class="btn btn-primary" type="submit" value="Submit">
+                        <input class="btn btn-primary" type="submit" value="Submit" disabled>
                     </div>
                 </div>
             </div>

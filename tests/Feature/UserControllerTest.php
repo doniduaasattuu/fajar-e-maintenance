@@ -132,7 +132,8 @@ class UserControllerTest extends TestCase
             ->assertStatus(302);
     }
 
-    public function testChangeName()
+    // CHANGE NAME
+    public function testGetChangeName()
     {
         $this->withSession([
             "nik" => "55000154",
@@ -191,5 +192,72 @@ class UserControllerTest extends TestCase
         ])
             ->assertStatus(302)
             ->assertRedirect("/");
+    }
+
+    // CHANGE PASSWORD
+    public function testGetChangePassword()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->get("/change-password")
+            ->assertSeeText("Change password");
+    }
+
+    public function testDoChangePasswordEmpty()
+    {
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-password", [])
+            ->assertSeeText("All data is required!");
+    }
+
+    public function testDoChangePasswordWrongNik()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-password", [
+            "nik" => "55000152",
+            "current_password" => "1234",
+            "new_password" => "Password baru",
+            "confirm_new_password" => "Password baru"
+        ])
+            ->assertSeeText("NIK or password is wrong!");
+    }
+
+    public function testDoChangePasswordWrongPassword()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-password", [
+            "nik" => "55000154",
+            "current_password" => "salah",
+            "new_password" => "Password baru",
+            "confirm_new_password" => "Password baru"
+        ])
+            ->assertSeeText("NIK or password is wrong!");
+    }
+
+    public function testDoChangePasswordPasswordNotMatch()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/change-password", [
+            "nik" => "55000154",
+            "current_password" => "1234",
+            "new_password" => "Password baru",
+            "confirm_new_password" => "Password lama"
+        ])
+            ->assertSeeText("Password is not match!");
     }
 }
