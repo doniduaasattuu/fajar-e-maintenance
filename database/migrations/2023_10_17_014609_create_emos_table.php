@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('emos', function (Blueprint $table) {
             $table->string("id", 9)->nullable(false)->primary();
             $table->string("funcloc", 150)->nullable(false);
-            $table->string("material_number")->nullable(true);
+            $table->string("material_number", 8)->nullable(true);
             $table->string("equipment_description", 150)->nullable(false);
             $table->enum("status", ["Installed", "Repaired", "Available"])->nullable(false);
             $table->string("sort_field", 100)->nullable(false);

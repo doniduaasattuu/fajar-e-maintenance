@@ -36,6 +36,18 @@
                                     <th>Function Location</th>
                                     <td>{{ $funcLoc["id"] }}</td>
                                 </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>{{ $emo->status }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Sort field</th>
+                                    <td>{{ $emo->sort_field }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Material number</th>
+                                    <td>{{ $emo->material_number }}</td>
+                                </tr>
                                 @foreach ($emoDetail as $key => $value)
                                 @if ($key == "id")
                                 @continue

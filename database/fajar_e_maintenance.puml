@@ -4,7 +4,7 @@ entity function_locations
 {
     * id VARCHAR(150) <<PK>>
     --
-      tag_name VARCHAR(150)
+      tag_name VARCHAR(100)
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
@@ -18,15 +18,15 @@ entity emos
     * equipment_description VARCHAR(150)
     * status ENUM(["Installed", "Repaired", "Available"])
     * sort_field VARCHAR(100)
-    * unique_id VARCHAR(6)
+    * unique_id VARCHAR(6) UNIQUE
     * qr_code_link VARCHAR(100) 
-    * created_at TIMESTAMP CURRENT()
+      created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
 
 entity emo_details {
     * id BIGINT UNSIGNED AUTO_INCREMENT
-    * emo_details VARCHAR(9) <<FK>>
+    * emo_detail VARCHAR(9) <<FK>>
     --
     manufacture VARCHAR(150)
     serial_number VARCHAR(150)

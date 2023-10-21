@@ -42,8 +42,8 @@ class DataController extends Controller
             ]);
 
             return redirect($url);
-        } else if (!empty($search_data) && strlen($search_data) == 9 && $search_data[0] == "E") {
-            // Search by emo = EMO000426
+        } else if (!empty($search_data) && strlen($search_data) == 9 && $search_data[3] == "0") {
+            // Search by emo or mgm = EMO000426
             $emo = Emo::query()->with("funcLoc", "emoDetails")->find($search_data);
 
             if (!is_null($emo)) {

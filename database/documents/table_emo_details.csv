@@ -1,4 +1,4 @@
-emo;manufacture;serial_number;type;power_rate;power_unit;voltage;current_nominal;frequency;pole;rpm;bearing_de;bearing_nde;frame_type;shaft_diameter;phase_supply;cos_phi;efficiency;ip_rating;insulation_class;duty;connection_type;nipple_grease;greasing_type;greasing_qty_de;greasing_qty_nde;length;width;height;weight;cooling_fan;mounting
+emo_detail;manufacture;serial_number;type;power_rate;power_unit;voltage;current_nominal;frequency;pole;rpm;bearing_de;bearing_nde;frame_type;shaft_diameter;phase_supply;cos_phi;efficiency;ip_rating;insulation_class;duty;connection_type;nipple_grease;greasing_type;greasing_qty_de;greasing_qty_nde;length;width;height;weight;cooling_fan;mounting
 EMO003495;HUADA;;Y2;90;kW;380;167;50;4;1481;6317;6317;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;;Horizontal
 EMO003124;ABB;648472813;M2BA;75;kW;380;139;50;4;1475;;;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;;Horizontal
 EMO000226;TECO;3333499;AEEB;75;kW;380;140;50;4;1481;6316;6316;280 S;75;3;;;55;F;S1;Delta;Available;;;;;;280;;;Horizontal
