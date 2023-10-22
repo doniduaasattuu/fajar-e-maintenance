@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DataRecord;
 use App\Models\Emo;
+use App\Models\EmoDetail;
 use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
@@ -111,6 +112,8 @@ class DataController extends Controller
         $startDate = Carbon::now()->addDays(-30);
 
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+        $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
+        $nipple_grease = $emo_details->nipple_grease;
 
         $date_category = [];
         $temperature_a = [];
@@ -136,7 +139,7 @@ class DataController extends Controller
         }
 
         return view("maintenance.trends", [
-            "title" => "Data",
+            "title" => "Record of $emo",
             "date_category" => $date_category,
             "temperature_a" => $temperature_a,
             "temperature_b" => $temperature_b,
@@ -146,6 +149,7 @@ class DataController extends Controller
             "vibration_value_nde" => $vibration_value_nde,
             "number_of_greasing" => $number_of_greasing,
             "emo" => $emo,
+            "nipple_grease" => $nipple_grease
         ]);
     }
 }

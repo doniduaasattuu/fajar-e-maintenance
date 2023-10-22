@@ -33,12 +33,13 @@
 
     <script>
         // TEMPERATURE
-        let temp_a = @json($temperature_a);
-        let temp_b = @json($temperature_b);
-        let temp_c = @json($temperature_c);
-        let temp_d = @json($temperature_d);
-        let date = @json($date_category);
+        let temp_a = <?php echo json_encode($temperature_a) ?>;
+        let temp_b = <?php echo json_encode($temperature_b) ?>;
+        let temp_c = <?php echo json_encode($temperature_c) ?>;
+        let temp_d = <?php echo json_encode($temperature_d) ?>;
+        let date = <?php echo json_encode($date_category) ?>;
         let emo = document.getElementById("emo").textContent;
+        let nipple_grease = "<?php echo $nipple_grease ?>"
 
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('temperature', {
@@ -78,8 +79,8 @@
         });
 
         // VIBRATION
-        let vibration_value_de = @json($vibration_value_de);
-        let vibration_value_nde = @json($vibration_value_nde);
+        let vibration_value_de = <?php echo json_encode($vibration_value_de) ?>;
+        let vibration_value_nde = <?php echo json_encode($vibration_value_nde) ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('vibration', {
@@ -113,7 +114,7 @@
         });
 
         // NUMBER OF GREASING
-        let number_of_greasing = @json($number_of_greasing);
+        let number_of_greasing = <?php echo json_encode($number_of_greasing) ?>
 
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('number_of_greasing', {
@@ -140,6 +141,12 @@
                 }]
             });
         });
+
+        // HIDDEN NUMBER OF GREASING IF NIPPLE GREASE DOESN'T EXIST
+        let html_number_of_greasing = document.getElementById("number_of_greasing");
+        if (nipple_grease != "Available") {
+            html_number_of_greasing.style.display = "none";
+        }
     </script>
 </body>
 
