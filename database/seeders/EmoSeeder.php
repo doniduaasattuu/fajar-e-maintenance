@@ -26,5 +26,17 @@ class EmoSeeder extends Seeder
         $emo->created_at = Carbon::now()->toDateTimeString();
         $emo->updated_at = Carbon::now()->toDateTimeString();
         $emo->save();
+
+        $emo1 = new Emo();
+        $emo1->id = "MGM000481";
+        $emo1->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
+        $emo1->equipment_description = "GR.MOTOR;5.5kW,i=165,CHHM86195DBB165,CYC";
+        $emo1->status = "Installed";
+        $emo1->sort_field = "PM3.REEL.PRAR/GM";
+        $emo1->unique_id = "2100";
+        $emo1->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList2100";
+        $emo1->created_at = Carbon::now()->toDateTimeString();
+        $emo1->updated_at = Carbon::now()->toDateTimeString();
+        $emo1->save();
     }
 }

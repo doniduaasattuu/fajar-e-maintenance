@@ -22,8 +22,8 @@ class FunctionLocationSeeder extends Seeder
         $funloc->save();
 
         $funloc1 = new FunctionLocation();
-        $funloc1->id = "Available";
-        $funloc1->tag_name = "Available";
+        $funloc1->id = "FP-01-PM3-REL-PPRL-PRAR";
+        $funloc1->tag_name = "PM3.REEL.PRAR/GM";
         $funloc1->created_at = Carbon::now()->toDateTimeString();
         $funloc1->updated_at = Carbon::now()->toDateTimeString();
         $funloc1->save();

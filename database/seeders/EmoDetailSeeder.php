@@ -47,5 +47,39 @@ class EmoDetailSeeder extends Seeder
         $emo_detail->cooling_fan = "Internal";
         $emo_detail->mounting = "Horizontal";
         $emo_detail->save();
+
+        $emo_detail1 = new EmoDetail();
+        $emo_detail1->emo_detail = "MGM000481";
+        $emo_detail1->manufacture = "Sumitomo";
+        $emo_detail1->serial_number = "M5064051";
+        $emo_detail1->type = "IC-F/FB-B8";
+        $emo_detail1->power_rate = "5.5";
+        $emo_detail1->power_unit = "kW";
+        $emo_detail1->voltage = "380";
+        $emo_detail1->current_nominal = "11.5";
+        $emo_detail1->frequency = "50";
+        $emo_detail1->pole = "4";
+        $emo_detail1->rpm = "1410";
+        $emo_detail1->bearing_de = "6206";
+        $emo_detail1->bearing_nde = "6206";
+        $emo_detail1->frame_type = "F132S";
+        $emo_detail1->phase_supply = "3";
+        $emo_detail1->cos_phi = "0.84";
+        $emo_detail1->efficiency = null;
+        $emo_detail1->ip_rating = "44";
+        $emo_detail1->insulation_class = "B";
+        $emo_detail1->duty = "S1";
+        $emo_detail1->connection_type = "Star-Delta";
+        $emo_detail1->nipple_grease = "Not Available";
+        $emo_detail1->greasing_type = null;
+        $emo_detail1->greasing_qty_de = null;
+        $emo_detail1->greasing_qty_nde = null;
+        $emo_detail1->length = null;
+        $emo_detail1->width = null;
+        $emo_detail1->height = 132;
+        $emo_detail1->weight = null;
+        $emo_detail1->cooling_fan = "Internal";
+        $emo_detail1->mounting = "Vertical";
+        $emo_detail1->save();
     }
 }

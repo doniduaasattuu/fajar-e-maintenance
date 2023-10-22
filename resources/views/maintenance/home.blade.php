@@ -131,14 +131,14 @@
         setInterval(() => {
             let placeholder = search_data.getAttribute("placeholder");
 
-            if (placeholder == "EMO000123") {
-                search_data.setAttribute("placeholder", "Fajar-MotorList4444");
-            } else if (placeholder == "Fajar-MotorList4444") {
-                search_data.setAttribute("placeholder", "MGM000321");
-            } else if (placeholder == "MGM000321") {
-                search_data.setAttribute("placeholder", "4444");
-            } else if (placeholder == "4444") {
-                search_data.setAttribute("placeholder", "EMO000123");
+            if (placeholder == "e.g. EMO000426") {
+                search_data.setAttribute("placeholder", "e.g. Fajar-MotorList1804");
+            } else if (placeholder == "e.g. Fajar-MotorList1804") {
+                search_data.setAttribute("placeholder", "e.g. MGM000321");
+            } else if (placeholder == "e.g. MGM000321") {
+                search_data.setAttribute("placeholder", "e.g. 1804");
+            } else if (placeholder == "e.g. 4444") {
+                search_data.setAttribute("placeholder", "e.g. EMO000426");
             }
 
             // console.info("changed");

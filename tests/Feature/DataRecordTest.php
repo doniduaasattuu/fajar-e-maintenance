@@ -44,4 +44,67 @@ class DataRecordTest extends TestCase
         self::assertNotNull($data_record);
         Log::info(json_encode($data_record, JSON_PRETTY_PRINT));
     }
+
+    public function testRandom()
+    {
+        for ($i = 0; $i < 20; $i++) {
+            $random = rand(1, 112) / 100;
+            echo $random . PHP_EOL;
+            self::assertNotNull($random);
+        }
+    }
+
+    public function testGetDataRecord()
+    {
+        $this->seed([DatabaseSeeder::class]);
+
+        $data_record = DataRecord::query()->get();
+        self::assertNotNull($data_record, JSON_PRETTY_PRINT);
+
+        $date_category = [];
+        $temperature_a = [];
+        $temperature_b = [];
+        $temperature_c = [];
+        $temperature_d = [];
+        foreach ($data_record as $data) {
+            $month = substr($data->created_at, 5, 2);
+            $date = substr($data->created_at, 8, 2);
+            // echo $date . "/" . $month . PHP_EOL;
+            array_push($date_category, $date . "/" . $month);
+
+            array_push($temperature_a, $data->temperature_a);
+            array_push($temperature_b, $data->temperature_b);
+            array_push($temperature_c, $data->temperature_c);
+            array_push($temperature_d, $data->temperature_d);
+        }
+
+        // Log::info(json_encode());
+        // var_dump($date_category);
+        // var_dump($temperature_a);
+    }
+
+    public function testWhereBetweenSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->addDays(-30);
+
+        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
+        self::assertNotNull($data_records);
+        self::assertCount(30, $data_records);
+        Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
+    }
+
+    public function testWhereBetweenNotFound()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->addDays(-10);
+
+        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
+        self::assertCount(0, $data_records);
+        Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
+    }
 }

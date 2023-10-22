@@ -239,6 +239,11 @@
 
         const weight = document.getElementById("weight");
         changeUnit(weight, "Kg");
+
+        // CHANGE NAVBAR HREF
+        $navbar_trends = document.getElementById("navbar_trends");
+        $navbar_trends.removeAttribute("href");
+        $navbar_trends.setAttribute("href", "/trends/{{ $emo->id }}");
     </script>
 </body>
 

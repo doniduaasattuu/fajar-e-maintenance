@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DataRecord;
 use App\Models\Emo;
+use Carbon\Carbon;
+use Ghunti\HighchartsPHP\Highchart;
+use Ghunti\HighchartsPHP\HighchartJsExpr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -85,7 +89,63 @@ class DataController extends Controller
         }
     }
 
-    public function saveData()
+    public function saveData(Request $request)
     {
+        $motor_status = $request->input("motor_status");
+        $clean_status = $request->input("clean_status");
+        $nipple_grease_input = $request->input("nipple_grease_input");
+        $number_of_greasing_input = $request->input("number_of_greasing_input");
+        $temperature_a = $request->input("temperature_a");
+        $temperature_b = $request->input("temperature_b");
+        $temperature_c = $request->input("temperature_c");
+        $temperature_d = $request->input("temperature_d");
+        $vibration_value_de = $request->input("vibration_value_de");
+        $vibration_de = $request->input("vibration_de");
+        $vibration_value_nde = $request->input("vibration_value_nde");
+        $vibration_nde = $request->input("vibration_nde");
+    }
+
+    public function trends(Request $request, string $emo)
+    {
+        $endDate = Carbon::now();
+        $startDate = Carbon::now()->addDays(-30);
+
+        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+
+        $date_category = [];
+        $temperature_a = [];
+        $temperature_b = [];
+        $temperature_c = [];
+        $temperature_d = [];
+        $vibration_value_de = [];
+        $vibration_value_nde = [];
+        $number_of_greasing = [];
+        foreach ($data_records as $record) {
+            $month = substr($record->created_at, 5, 2);
+            $date = substr($record->created_at, 8, 2);
+            array_push($date_category, $date . "/" . $month);
+
+            array_push($temperature_a, $record->temperature_a);
+            array_push($temperature_b, $record->temperature_b);
+            array_push($temperature_c, $record->temperature_c);
+            array_push($temperature_d, $record->temperature_d);
+
+            array_push($vibration_value_de, (float) $record->vibration_value_de);
+            array_push($vibration_value_nde, (float) $record->vibration_value_nde);
+            array_push($number_of_greasing, $record->number_of_greasing);
+        }
+
+        return view("maintenance.trends", [
+            "title" => "Data",
+            "date_category" => $date_category,
+            "temperature_a" => $temperature_a,
+            "temperature_b" => $temperature_b,
+            "temperature_c" => $temperature_c,
+            "temperature_d" => $temperature_d,
+            "vibration_value_de" => $vibration_value_de,
+            "vibration_value_nde" => $vibration_value_nde,
+            "number_of_greasing" => $number_of_greasing,
+            "emo" => $emo,
+        ]);
     }
 }
