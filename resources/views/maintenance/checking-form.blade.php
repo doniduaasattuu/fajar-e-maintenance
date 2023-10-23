@@ -105,19 +105,19 @@
                         </div>
                     </div>
                     <div class="mb-1">
-                        <label for="temperature_a" class="fw-bold form-label">Temperature A</label>
+                        <label for="temperature_a" class="fw-bold form-label">Temperature A <span style="font-weight: 400;">(DE)</span></label>
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
                     </div>
                     <div class="mb-1">
-                        <label for="temperature_b" class="fw-bold form-label">Temperature B</label>
+                        <label for="temperature_b" class="fw-bold form-label">Temperature B <span style="font-weight: 400;">(Terminal)</span></label>
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
                     </div>
                     <div class="mb-1">
-                        <label for="temperature_c" class="fw-bold form-label">Temperature C</label>
+                        <label for="temperature_c" class="fw-bold form-label">Temperature C <span style="font-weight: 400;">(Body)</span></label>
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
                     </div>
                     <div class="mb-4">
-                        <label for="temperature_d" class="fw-bold form-label">Temperature D</label>
+                        <label for="temperature_d" class="fw-bold form-label">Temperature D <span style="font-weight: 400;">(NDE)</span></label>
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
                     </div>
 
@@ -151,7 +151,7 @@
                     <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
 
                     <div class="alert alert-danger" style="display: none" id="alert" role="alert">
-                        All data is required! ⚠️
+                        Error occurred! ⚠️
                     </div>
 
                     <div class="mb-4">
@@ -171,39 +171,41 @@
         let buttonku = document.getElementById("buttonsubmit");
         buttonku.onclick = () => {
             let myform = document.getElementById("myform");
-            // for (i = 0; i < myform.length; i++) {
-            //     console.info(myform[i].value);
-            // }
             let ajax = new XMLHttpRequest()
             ajax.open("POST", "/checking-form/{{ $motorList }}");
             ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")
             ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             ajax.onload = () => {
                 if (ajax.readyState == 4) {
-                    if (ajax.responseText == "filled") {
-                        alert.style.display = "none"
-                        console.info(ajax.responseText)
-                    } else {
-                        alert.style.display = "block"
-                        console.info(ajax.responseText)
-                    }
+                    console.info(JSON.parse(ajax.responseText))
+                    // if (ajax.responseType.length > 0) {
+                    //     alert.textContent = ajax.responseText;
+                    //     alert.style.display = "block";
+                    //     console.info(ajax.responseText);
+                    //     console.info(ajax.responseURL);
+                    // } else {
+                    //     alert.style.display = "none";
+                    // }
                 }
             }
-            // ajax.send("clean_status=" + myform[2].value);
+
             ajax.send(
                 "motor_status=" + myform[1].value + "&" +
                 "clean_status=" + myform[2].value + "&" +
                 "nipple_grease_input=" + myform[3].value + "&" +
-                "number_of_greasing_input=" + myform[3].value + "&" +
-                "temperature_a=" + myform[4].value + "&" +
-                "temperature_b=" + myform[5].value + "&" +
-                "temperature_c=" + myform[6].value + "&" +
-                "temperature_d=" + myform[7].value + "&" +
-                "vibration_value_de=" + myform[8].value + "&" +
-                "vibration_de=" + myform[9].value + "&" +
-                "vibration_value_nde=" + myform[10].value + "&" +
-                "vibration_nde=" + myform[11].value + "&" +
-                "motorList=" + myform[12].value
+                "number_of_greasing_input=" + myform[4].value + "&" +
+
+                "temperature_a=" + myform[5].value + "&" +
+                "temperature_b=" + myform[6].value + "&" +
+                "temperature_c=" + myform[7].value + "&" +
+                "temperature_d=" + myform[8].value + "&" +
+
+                "vibration_value_de=" + myform[9].value + "&" +
+                "vibration_de=" + myform[10].value + "&" +
+                "vibration_value_nde=" + myform[11].value + "&" +
+                "vibration_nde=" + myform[12].value + "&" +
+
+                "motorList=" + myform[13].value
             );
         }
 
@@ -245,7 +247,7 @@
 
         // ADD UNIT TO MOTOR DETAILS
         function changeUnit(id, unit) {
-            if (id.textContent.length < 0) {
+            if (id.textContent.length >= 1) {
                 id.textContent = id.textContent + " " + unit;
             } else {
                 id.textContent = "";
