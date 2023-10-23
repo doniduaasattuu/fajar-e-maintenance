@@ -37,9 +37,9 @@
     </script>
     @endif
 
-    <div class="container">
+    <div class="container py-4">
         <div class="text-center">
-            <div style="max-width: 500px;" class="pt-4 pb-3 mx-auto">
+            <div style="max-width: 500px;" class="pb-3 mx-auto">
                 <p class="mb-1">Hello {{ $user }}, welcome to</p>
                 <h1 style="font-weight: 700;">Fajar E-Maintenance</h1>
                 <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. A quidem quia ducimus ipsam, reprehenderit libero?</p>

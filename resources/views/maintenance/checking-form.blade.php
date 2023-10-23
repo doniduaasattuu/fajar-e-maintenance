@@ -23,15 +23,11 @@
             </button>
         </a>
 
-
         <!-- MOTOR DETAILS -->
         <div class="accordion mb-4" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="bg-primary text-white accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                            <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-                        </svg> -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-view-list" viewBox="0 0 16 16">
                             <path d="M3 4.5h10a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3zM1 2a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 2zm0 12a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13A.5.5 0 0 1 1 14z" />
                         </svg>
@@ -75,7 +71,7 @@
         </div>
 
         <!-- CHECKING -->
-        <form action="/checking-form" method="post">
+        <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
             @csrf
             <div class="mb-3 row">
                 <div class="col">
@@ -152,8 +148,14 @@
                         <option value="Abormal">Abormal</option>
                     </select>
 
+                    <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
+
+                    <div class="alert alert-danger" style="display: none" id="alert" role="alert">
+                        All data is required! ⚠️
+                    </div>
+
                     <div class="mb-4">
-                        <input class="btn btn-primary" type="submit" value="Submit" disabled>
+                        <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
                 </div>
             </div>
@@ -164,6 +166,46 @@
         const nipple_grease_input = document.getElementById("nipple_grease_input");
         const number_of_greasing_input = document.getElementById("number_of_greasing_input");
         const temperatures_input = document.getElementsByClassName("temperature");
+        let alert = document.getElementById("alert");
+
+        let buttonku = document.getElementById("buttonsubmit");
+        buttonku.onclick = () => {
+            let myform = document.getElementById("myform");
+            // for (i = 0; i < myform.length; i++) {
+            //     console.info(myform[i].value);
+            // }
+            let ajax = new XMLHttpRequest()
+            ajax.open("POST", "/checking-form/{{ $motorList }}");
+            ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")
+            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            ajax.onload = () => {
+                if (ajax.readyState == 4) {
+                    if (ajax.responseText == "filled") {
+                        alert.style.display = "none"
+                        console.info(ajax.responseText)
+                    } else {
+                        alert.style.display = "block"
+                        console.info(ajax.responseText)
+                    }
+                }
+            }
+            // ajax.send("clean_status=" + myform[2].value);
+            ajax.send(
+                "motor_status=" + myform[1].value + "&" +
+                "clean_status=" + myform[2].value + "&" +
+                "nipple_grease_input=" + myform[3].value + "&" +
+                "number_of_greasing_input=" + myform[3].value + "&" +
+                "temperature_a=" + myform[4].value + "&" +
+                "temperature_b=" + myform[5].value + "&" +
+                "temperature_c=" + myform[6].value + "&" +
+                "temperature_d=" + myform[7].value + "&" +
+                "vibration_value_de=" + myform[8].value + "&" +
+                "vibration_de=" + myform[9].value + "&" +
+                "vibration_value_nde=" + myform[10].value + "&" +
+                "vibration_nde=" + myform[11].value + "&" +
+                "motorList=" + myform[12].value
+            );
+        }
 
         nipple_grease_input.onchange = () => {
             if (nipple_grease_input.value == "Available") {
@@ -203,7 +245,7 @@
 
         // ADD UNIT TO MOTOR DETAILS
         function changeUnit(id, unit) {
-            if (id.textContent.length > 0) {
+            if (id.textContent.length < 0) {
                 id.textContent = id.textContent + " " + unit;
             } else {
                 id.textContent = "";

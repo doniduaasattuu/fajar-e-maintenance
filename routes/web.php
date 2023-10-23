@@ -71,4 +71,6 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     });
 
     Route::get('/trends/{emo}', [App\Http\Controllers\DataController::class, "trends"]);
+
+    Route::post("/test", [App\Http\Controllers\DataController::class, "test"]);
 });

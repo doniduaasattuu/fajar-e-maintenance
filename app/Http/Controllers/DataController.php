@@ -9,7 +9,10 @@ use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Redis;
 
 use function PHPUnit\Framework\returnCallback;
 
@@ -28,6 +31,7 @@ class DataController extends Controller
                 "emo" => $emo,
                 "funcLoc" => $emo->funcLoc->toArray(),
                 "emoDetail" => $emo->emoDetails->toArray(),
+                "motorList" => $motorList,
             ]);
         } else {
             return response()->view("utility.page-not-found", [
@@ -92,6 +96,8 @@ class DataController extends Controller
 
     public function saveData(Request $request)
     {
+
+        // return "response from server " . $request->input("clean_status");
         $motor_status = $request->input("motor_status");
         $clean_status = $request->input("clean_status");
         $nipple_grease_input = $request->input("nipple_grease_input");
@@ -104,6 +110,58 @@ class DataController extends Controller
         $vibration_de = $request->input("vibration_de");
         $vibration_value_nde = $request->input("vibration_value_nde");
         $vibration_nde = $request->input("vibration_nde");
+        $motorList = $request->input("motorList");
+
+        if (
+            empty($motor_status) ||
+            empty($clean_status) ||
+            empty($nipple_grease_input) ||
+            empty($temperature_a) ||
+            empty($temperature_b) ||
+            empty($temperature_c) ||
+            empty($temperature_d) ||
+            empty($vibration_value_de) ||
+            empty($vibration_de) ||
+            empty($vibration_value_nde) ||
+            empty($vibration_nde)
+        ) {
+            return "not filled";
+        } else {
+
+            return "filled";
+            // return json_encode([
+            //     "motor_status" => $motor_status,
+            //     "clean_status" => $clean_status,
+            //     "nipple_grease_input" => $nipple_grease_input,
+            //     "number_of_greasing_input" => $number_of_greasing_input,
+            //     "temperature_a" => $temperature_a,
+            //     "temperature_b" => $temperature_b,
+            //     "temperature_c" => $temperature_c,
+            //     "temperature_d" => $temperature_d,
+            //     "vibration_value_de" => $vibration_value_de,
+            //     "vibration_de" => $vibration_de,
+            //     "vibration_value_nde" => $vibration_value_nde,
+            //     "vibration_nde" => $vibration_nde,
+            //     "motorList" => $motorList
+            // ]);
+        }
+
+
+        // if (
+        //     empty($motor_status) ||
+        //     empty($clean_status) ||
+        //     empty($nipple_grease_input) ||
+        //     empty($temperature_a) ||
+        //     empty($temperature_b) ||
+        //     empty($temperature_c) ||
+        //     empty($temperature_d) ||
+        //     empty($vibration_value_de) ||
+        //     empty($vibration_de) ||
+        //     empty($vibration_value_nde) ||
+        //     empty($vibration_nde)
+        // ) {
+        //     return "response from server " . $motor_status;
+        // }
     }
 
     public function trends(Request $request, string $emo)
@@ -123,6 +181,7 @@ class DataController extends Controller
         $vibration_value_de = [];
         $vibration_value_nde = [];
         $number_of_greasing = [];
+
         foreach ($data_records as $record) {
             $month = substr($record->created_at, 5, 2);
             $date = substr($record->created_at, 8, 2);
