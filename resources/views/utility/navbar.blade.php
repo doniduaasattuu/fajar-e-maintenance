@@ -24,7 +24,7 @@
                         Scanner</a>
                 </li>
                 <li class="nav-item me-xl-5 me-lg-3">
-                    <a id="navbar_trends" class="text-white nav-link" href="#">
+                    <a id="navbar_trends" class="text-white nav-link" href="/trends-picker">
                         <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                             <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
                         </svg>
@@ -37,6 +37,13 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
                         </svg>
                         Logs</a>
+                </li>
+                <li class="nav-item me-xl-5 me-lg-3">
+                    <a id="navbar_logs" class="text-white nav-link" href="#">
+                        <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-bar-graph-fill" viewBox="0 0 16 16">
+                            <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm.5 10v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z" />
+                        </svg>
+                        Summary</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="text-white nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -56,3 +63,20 @@
         </div>
     </div>
 </nav>
+
+<script>
+    // DINAMIC SEARCH PLACEHOLDER
+    setInterval(() => {
+        let placeholder = search_data.getAttribute("placeholder");
+
+        if (placeholder == "e.g. EMO000426") {
+            search_data.setAttribute("placeholder", "e.g. Fajar-MotorList1804");
+        } else if (placeholder == "e.g. Fajar-MotorList1804") {
+            search_data.setAttribute("placeholder", "e.g. MGM000481");
+        } else if (placeholder == "e.g. MGM000481") {
+            search_data.setAttribute("placeholder", "e.g. 1804");
+        } else if (placeholder == "e.g. 1804") {
+            search_data.setAttribute("placeholder", "e.g. EMO000426");
+        }
+    }, 1750);
+</script>

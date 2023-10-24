@@ -49,7 +49,6 @@ class DataRecordTest extends TestCase
     {
         for ($i = 0; $i < 20; $i++) {
             $random = rand(1, 112) / 100;
-            echo $random . PHP_EOL;
             self::assertNotNull($random);
         }
     }
@@ -69,7 +68,6 @@ class DataRecordTest extends TestCase
         foreach ($data_record as $data) {
             $month = substr($data->created_at, 5, 2);
             $date = substr($data->created_at, 8, 2);
-            // echo $date . "/" . $month . PHP_EOL;
             array_push($date_category, $date . "/" . $month);
 
             array_push($temperature_a, $data->temperature_a);
@@ -77,10 +75,6 @@ class DataRecordTest extends TestCase
             array_push($temperature_c, $data->temperature_c);
             array_push($temperature_d, $data->temperature_d);
         }
-
-        // Log::info(json_encode());
-        // var_dump($date_category);
-        // var_dump($temperature_a);
     }
 
     public function testWhereBetweenSuccess()
@@ -88,11 +82,11 @@ class DataRecordTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $endDate = Carbon::now();
-        $startDate = Carbon::now()->addDays(-30);
+        $startDate = Carbon::now()->addYears(-1);
 
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
         self::assertNotNull($data_records);
-        self::assertCount(30, $data_records);
+        self::assertCount(12, $data_records);
         Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
     }
 
@@ -106,5 +100,79 @@ class DataRecordTest extends TestCase
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
         self::assertCount(0, $data_records);
         Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
+    }
+
+    public function testPostFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [])
+            ->assertJson([
+                "error" => "All data is required! ⚠️"
+            ]);
+    }
+
+    public function testPostSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Normal",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Normal",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "Doni Darmawan",
+        ])
+            ->assertJson([
+                "message" => "Saved successfully! ✅"
+            ]);
+    }
+
+    public function testPostSqlError()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Normal",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Tidak ada",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "Doni Darmawan",
+        ])
+            ->assertSeeText("errorInfo")
+            ->assertDontSeeText("message")
+            ->assertDontSeeText("All data is required! ⚠️")
+            ->assertDontSeeText("Saved successfully! ✅");
     }
 }

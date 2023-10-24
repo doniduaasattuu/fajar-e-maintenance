@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\Controller;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Http\Request as HttpRequest;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,13 +62,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/change-password', [App\Http\Controllers\UserController::class, "changePassword"]);
     Route::post('/change-password', [App\Http\Controllers\UserController::class, "doChangePassword"]);
 
-    Route::get('/show-data', function () {
-        return view("maintenance.show-data", [
-            "title" => "Data"
-        ]);
-    });
-
     Route::get('/trends/{emo}', [App\Http\Controllers\DataController::class, "trends"]);
 
-    Route::post("/test", [App\Http\Controllers\DataController::class, "test"]);
+    Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"]);
 });

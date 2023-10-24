@@ -8,6 +8,8 @@ use App\Models\EmoDetail;
 use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
@@ -98,11 +100,12 @@ class DataController extends Controller
     public function saveData(Request $request)
     {
 
-        // return "response from server " . $request->input("clean_status");
+        $funcloc = $request->input("funcloc");
+        $emo = $request->input("emo");
         $motor_status = $request->input("motor_status");
         $clean_status = $request->input("clean_status");
         $nipple_grease_input = $request->input("nipple_grease_input");
-        $number_of_greasing_input = $request->input("number_of_greasing_input", 0);
+        $number_of_greasing_input = ($request->input("number_of_greasing_input") != null) ? $request->input("number_of_greasing_input") : 0;
         $temperature_a = $request->input("temperature_a");
         $temperature_b = $request->input("temperature_b");
         $temperature_c = $request->input("temperature_c");
@@ -111,7 +114,7 @@ class DataController extends Controller
         $vibration_de = $request->input("vibration_de");
         $vibration_value_nde = $request->input("vibration_value_nde");
         $vibration_nde = $request->input("vibration_nde");
-        $motorList = $request->input("motorList");
+        $checked_by = session("user");
 
         if (
             empty($motor_status) ||
@@ -131,16 +134,49 @@ class DataController extends Controller
             ]);
         } else {
 
-            return response()->view("/", [
-                "title" => "Home"
-            ]);
+            try {
+                $data_record = new DataRecord();
+
+                $data_record->funcloc = $funcloc;
+                $data_record->emo = $emo;
+                $data_record->motor_status = $motor_status;
+                $data_record->clean_status = $clean_status;
+                $data_record->nipple_grease = $nipple_grease_input;
+                $data_record->number_of_greasing = $number_of_greasing_input;
+                $data_record->temperature_a = $temperature_a;
+                $data_record->temperature_b = $temperature_b;
+                $data_record->temperature_c = $temperature_c;
+                $data_record->temperature_d = $temperature_d;
+                $data_record->vibration_value_de = $vibration_value_de;
+                $data_record->vibration_de = $vibration_de;
+                $data_record->vibration_value_nde = $vibration_value_nde;
+                $data_record->vibration_nde = $vibration_nde;
+                $data_record->created_at = Carbon::now()->toDateTimeString();
+                $data_record->checked_by = $checked_by;
+                $result = $data_record->save();
+            } catch (QueryException $error) {
+                return response()->json([
+                    "error" => $error
+                ]);
+            }
+
+            if ($result) {
+                return response()->json([
+                    "message" => "Saved successfully! ✅"
+                ]);
+            } else { {
+                    return response()->json([
+                        "error" => "Error occurred! ⚠️"
+                    ]);
+                }
+            }
         }
     }
 
     public function trends(Request $request, string $emo)
     {
         $endDate = Carbon::now();
-        $startDate = Carbon::now()->addDays(-30);
+        $startDate = Carbon::now()->addYears(-1);
 
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
         $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
@@ -156,9 +192,10 @@ class DataController extends Controller
         $number_of_greasing = [];
 
         foreach ($data_records as $record) {
+            $year = substr($record->created_at, 2, 2);
             $month = substr($record->created_at, 5, 2);
             $date = substr($record->created_at, 8, 2);
-            array_push($date_category, $date . "/" . $month);
+            array_push($date_category, $date . "/" . $month . "/" . $year);
 
             array_push($temperature_a, $record->temperature_a);
             array_push($temperature_b, $record->temperature_b);
@@ -171,7 +208,7 @@ class DataController extends Controller
         }
 
         return view("maintenance.trends", [
-            "title" => "Record of $emo",
+            "title" => "Trends",
             "date_category" => $date_category,
             "temperature_a" => $temperature_a,
             "temperature_b" => $temperature_b,
@@ -182,6 +219,13 @@ class DataController extends Controller
             "number_of_greasing" => $number_of_greasing,
             "emo" => $emo,
             "nipple_grease" => $nipple_grease
+        ]);
+    }
+
+    public function trendsPicker()
+    {
+        return response()->view("maintenance.trends-picker", [
+            "title" => "Trends picker"
         ]);
     }
 }

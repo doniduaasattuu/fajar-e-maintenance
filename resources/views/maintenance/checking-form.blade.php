@@ -7,7 +7,7 @@
     @include("utility.navbar")
 
     <div class="container mt-4 my-5">
-        <h3 class="mb-4">CHECKING FORM {{ $emo->id }}</h3>
+        <h3 class="mb-4">{{ $emo->id }}</h3>
         @isset($error)
         <div class="alert alert-danger" role="alert">
             {{ $error }}
@@ -70,6 +70,14 @@
             </div>
         </div>
 
+        <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
+            Error occurred! ⚠️
+        </div>
+
+        <div class="alert alert-success" style="display: none" id="message_response" role="alert">
+            Success! ✅
+        </div>
+
         <!-- CHECKING -->
         <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
             @csrf
@@ -127,20 +135,20 @@
                             <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Front Side">
                         </div>
                     </div>
-                    <!-- SPACE -->
+                    <!-- VIBRATION VALUE DE -->
                     <div class="mb-2">
                         <label for="vibration_value_de" class="fw-bold form-label">Vibration DE</label>
-                        <input type="text" maxlength="5" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
+                        <input type="number" step="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
                     </div>
                     <select name="vibration_de" class="form-select mb-3 " aria-label="Default select example">
                         <option value="">--Status--</option>
                         <option value="Normal">Normal</option>
                         <option value="Abormal">Abormal</option>
                     </select>
-                    <!-- SPACE -->
+                    <!-- VIBRATION VALUE NDE -->
                     <div class="mb-2">
                         <label for="vibration_value_nde" class="fw-bold form-label">Vibration NDE</label>
-                        <input type="text" maxlength="5" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
+                        <input type="number" step="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
                     </div>
                     <select name="vibration_nde" class="form-select mb-4 " aria-label="Default select example">
                         <option value="">--Status--</option>
@@ -149,10 +157,6 @@
                     </select>
 
                     <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
-
-                    <div class="alert alert-danger" style="display: none" id="alert" role="alert">
-                        Error occurred! ⚠️
-                    </div>
 
                     <div class="mb-4">
                         <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
@@ -166,7 +170,8 @@
         const nipple_grease_input = document.getElementById("nipple_grease_input");
         const number_of_greasing_input = document.getElementById("number_of_greasing_input");
         const temperatures_input = document.getElementsByClassName("temperature");
-        let alert = document.getElementById("alert");
+        const alert_response = document.getElementById("alert_response");
+        const message_response = document.getElementById("message_response");
 
         let buttonku = document.getElementById("buttonsubmit");
         buttonku.onclick = () => {
@@ -177,19 +182,36 @@
             ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             ajax.onload = () => {
                 if (ajax.readyState == 4) {
-                    console.info(JSON.parse(ajax.responseText))
-                    // if (ajax.responseType.length > 0) {
-                    //     alert.textContent = ajax.responseText;
-                    //     alert.style.display = "block";
-                    //     console.info(ajax.responseText);
-                    //     console.info(ajax.responseURL);
-                    // } else {
-                    //     alert.style.display = "none";
-                    // }
+
+                    // response from server is format json
+                    let response_object = JSON.parse(ajax.responseText);
+                    // console.info(response_object.error.errorInfo[0] + " " + response_object.error.errorInfo[2]);
+                    if (response_object.error?.errorInfo == undefined) {
+                        // if have object have error will display error message 
+                        if (response_object.hasOwnProperty("error")) {
+                            alert_response.textContent = response_object.error;
+                            message_response.style.display = "none";
+                            alert_response.style.display = "block";
+                            document.documentElement.scrollTop = 0;
+                        } else {
+                            // will display response message success
+                            message_response.textContent = response_object.message;
+                            alert_response.style.display = "none";
+                            message_response.style.display = "block";
+                            document.documentElement.scrollTop = 0;
+                        }
+                    } else {
+                        alert_response.textContent = response_object.error.connectionName + "Error: " + response_object.error.errorInfo[2];
+                        message_response.style.display = "none";
+                        alert_response.style.display = "block";
+                        document.documentElement.scrollTop = 0;
+                    }
                 }
             }
 
             ajax.send(
+                "funcloc=" + '{{ $funcLoc["id"] }}' + "&" +
+                "emo=" + '{{ $emo->id }}' + "&" +
                 "motor_status=" + myform[1].value + "&" +
                 "clean_status=" + myform[2].value + "&" +
                 "nipple_grease_input=" + myform[3].value + "&" +
@@ -209,6 +231,7 @@
             );
         }
 
+        // DISABLED INPUT NUMBER OF GREASING
         nipple_grease_input.onchange = () => {
             if (nipple_grease_input.value == "Available") {
                 number_of_greasing_input.removeAttribute("disabled");
@@ -218,12 +241,14 @@
             }
         }
 
+        // VALIDATE NUMBER OF GREASING NOT EXCEED 255
         number_of_greasing_input.onchange = () => {
             if (Number(number_of_greasing_input.value) > 255) {
                 number_of_greasing_input.value = 255
             }
         }
 
+        // ONLY NUMBER DATA TYPES ALLOWED
         function onlynumber(evt) {
             let ASCIICode = (evt.which) ? evt.which : evt.keyCode
             if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
@@ -231,6 +256,7 @@
             return true;
         }
 
+        // VALIDATE INPUT TEMPERATURE NOT EXCEED 150 DEGREE
         for (let i = 0; i < temperatures_input.length; i++) {
             temperatures_input[i].onchange = () => {
                 if (temperatures_input[i].value.length > 3) {
@@ -292,6 +318,17 @@
 
         const weight = document.getElementById("weight");
         changeUnit(weight, "Kg");
+
+        // VIBRATION VALUE ALERT VALIDATION
+        let vibrations = document.getElementsByClassName("vibration_value");
+        for (let i = 0; i < vibrations.length; i++) {
+            vibrations[i].onchange = () => {
+                if (vibrations[i].value > 45) {
+                    alert("Vibration should not exceed 45 mmm/s");
+                    vibrations[i].value = "";
+                }
+            }
+        }
     </script>
 </body>
 

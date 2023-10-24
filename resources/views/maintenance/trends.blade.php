@@ -50,7 +50,7 @@
                     text: '<b>Temperature of ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Temperature record in one month'
+                    text: 'Temperature record in one year'
                 },
                 yAxis: {
                     title: {
@@ -91,14 +91,14 @@
                     text: '<b>Vibration of ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Vibration record in one month'
+                    text: 'Vibration record in one year'
                 },
                 yAxis: {
                     title: {
                         text: 'Vibration - mm/s'
                     },
-                    min: -3,
-                    max: 3
+                    min: -5,
+                    max: 5
                 },
                 xAxis: {
                     categories: date
@@ -119,13 +119,13 @@
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('number_of_greasing', {
                 chart: {
-                    type: 'spline'
+                    type: 'column'
                 },
                 title: {
                     text: '<b>Number of greasing ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Greasing record in one month'
+                    text: 'Greasing record in one year'
                 },
                 yAxis: {
                     title: {
@@ -141,6 +141,8 @@
                 }]
             });
         });
+
+        Highcharts.setOptions(Highcharts.theme);
 
         // HIDDEN NUMBER OF GREASING IF NIPPLE GREASE DOESN'T EXIST
         let html_number_of_greasing = document.getElementById("number_of_greasing");
