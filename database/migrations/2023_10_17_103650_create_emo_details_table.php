@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string("voltage", 25)->nullable(true);
             $table->string("current_nominal", 25)->nullable(true);
             $table->string("frequency", 3)->nullable(true);
-            $table->enum("pole", ["2", "4", "6", "8", "10", "12", "14", "16"])->nullable(true);
+            $table->string("pole", 25)->nullable(true);
             $table->string("rpm", 25)->nullable(true);
 
             $table->string("bearing_de", 50)->nullable(true);

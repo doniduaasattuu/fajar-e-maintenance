@@ -37,7 +37,7 @@ entity emo_details {
     voltage VARCHAR(25)
     current_nominal VARCHAR(25)
     frequency VARCHAR(3)
-    pole ENUM(["2", "4", "6", "8", "10", "12", "14", "16"])
+    pole VARCHAR(25)
     rpm VARCHAR(25)
 
     bearing_de VARCHAR("50")

@@ -41,10 +41,16 @@
         let emo = document.getElementById("emo").textContent;
         let nipple_grease = "<?php echo $nipple_grease ?>"
 
+        if (temp_a.length < 4) {
+            chart_type = "column"
+        } else {
+            chart_type = "spline"
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('temperature', {
                 chart: {
-                    type: 'spline'
+                    type: chart_type
                 },
                 title: {
                     text: '<b>Temperature of ' + emo + '</b>'
@@ -85,7 +91,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('vibration', {
                 chart: {
-                    type: 'spline'
+                    type: chart_type
                 },
                 title: {
                     text: '<b>Vibration of ' + emo + '</b>'
@@ -141,8 +147,6 @@
                 }]
             });
         });
-
-        Highcharts.setOptions(Highcharts.theme);
 
         // HIDDEN NUMBER OF GREASING IF NIPPLE GREASE DOESN'T EXIST
         let html_number_of_greasing = document.getElementById("number_of_greasing");

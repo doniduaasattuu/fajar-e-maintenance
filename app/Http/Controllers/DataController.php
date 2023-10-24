@@ -175,8 +175,8 @@ class DataController extends Controller
 
     public function trends(Request $request, string $emo)
     {
-        $endDate = Carbon::now();
-        $startDate = Carbon::now()->addYears(-1);
+        $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
+        $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1);
 
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
         $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
@@ -227,5 +227,11 @@ class DataController extends Controller
         return response()->view("maintenance.trends-picker", [
             "title" => "Trends picker"
         ]);
+    }
+
+    public function emoDatalist()
+    {
+        $emo_list = DataRecord::query()->select("emo")->distinct()->get();
+        return response()->json($emo_list);
     }
 }

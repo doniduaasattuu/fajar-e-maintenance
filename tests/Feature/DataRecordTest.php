@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\DataRecord;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\DataRecordSeeder;
 use Database\Seeders\EmoDetailSeeder;
 use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
@@ -174,5 +175,15 @@ class DataRecordTest extends TestCase
             ->assertDontSeeText("message")
             ->assertDontSeeText("All data is required! ⚠️")
             ->assertDontSeeText("Saved successfully! ✅");
+    }
+
+    public function testGetEmoDatalistRecord()
+    {
+
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = DataRecord::query()->select("emo")->distinct()->get();
+        self::assertNotNull($emo);
+        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
     }
 }

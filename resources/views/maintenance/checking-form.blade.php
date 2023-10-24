@@ -169,7 +169,7 @@
     <script>
         const nipple_grease_input = document.getElementById("nipple_grease_input");
         const number_of_greasing_input = document.getElementById("number_of_greasing_input");
-        const temperatures_input = document.getElementsByClassName("temperature");
+        const temperatures_input = document.getElementsByClassName("temperature_input");
         const alert_response = document.getElementById("alert_response");
         const message_response = document.getElementById("message_response");
 

@@ -81,5 +81,36 @@ class EmoDetailSeeder extends Seeder
         $emo_detail1->cooling_fan = "Internal";
         $emo_detail1->mounting = "Vertical";
         $emo_detail1->save();
+
+        $emo_detail2 = new EmoDetail();
+        $emo_detail2->emo_detail = "EMO001056";
+        $emo_detail2->manufacture = "TECO";
+        $emo_detail2->serial_number = "P9524661";
+        $emo_detail2->type = "AEVB";
+        $emo_detail2->power_rate = "3";
+        $emo_detail2->power_unit = "kW";
+        $emo_detail2->voltage = "380";
+        $emo_detail2->current_nominal = "7.1";
+        $emo_detail2->frequency = "50";
+        $emo_detail2->pole = "4";
+        $emo_detail2->rpm = "1400";
+        $emo_detail2->bearing_de = "6206";
+        $emo_detail2->bearing_nde = "6305";
+        $emo_detail2->frame_type = "100L";
+        $emo_detail2->phase_supply = "3";
+        $emo_detail2->ip_rating = "55";
+        $emo_detail2->insulation_class = "F";
+        $emo_detail2->connection_type = "Delta";
+        $emo_detail2->nipple_grease = "Not Available";
+        $emo_detail2->greasing_type = null;
+        $emo_detail2->greasing_qty_de = null;
+        $emo_detail2->greasing_qty_nde = null;
+        $emo_detail2->length = null;
+        $emo_detail2->width = null;
+        $emo_detail2->height = 100;
+        $emo_detail2->weight = null;
+        $emo_detail2->cooling_fan = "Internal";
+        $emo_detail2->mounting = "Vertical";
+        $emo_detail2->save();
     }
 }
