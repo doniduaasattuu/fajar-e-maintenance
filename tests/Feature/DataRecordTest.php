@@ -11,6 +11,7 @@ use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
 use Database\Seeders\UserSeeder;
 use DateTime;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
@@ -185,5 +186,41 @@ class DataRecordTest extends TestCase
         $emo = DataRecord::query()->select("emo")->distinct()->get();
         self::assertNotNull($emo);
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+    }
+
+    public function testGetTopFiveTemp()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $temperature_a = DataRecord::query()
+            ->select(["funcloc", "emo", "temperature_a", "created_at"])
+            ->orderByDesc("temperature_a")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $temperature_a);
+
+        Log::info(json_encode($temperature_a, JSON_PRETTY_PRINT));
+    }
+
+    public function testGetTopFiveVibrationDe()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $vibration_value_de = DataRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
+            ->orderByDesc("vibration_value_de")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $vibration_value_de);
+
+        Log::info(json_encode($vibration_value_de, JSON_PRETTY_PRINT));
     }
 }

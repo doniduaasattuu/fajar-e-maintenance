@@ -235,4 +235,56 @@ class DataController extends Controller
         $emo_list = DataRecord::query()->select("emo")->distinct()->get();
         return response()->json($emo_list);
     }
+
+    // SUMMARY
+    public function summary()
+    {
+        $temperature_a = DataRecord::query()
+            ->select(["funcloc", "emo", "temperature_a", "created_at"])
+            ->orderByDesc("temperature_a")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+            ->limit(5)
+            ->get();
+
+        $temperature_d = DataRecord::query()
+            ->select(["funcloc", "emo", "temperature_d", "created_at"])
+            ->orderByDesc("temperature_d")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+            ->limit(5)
+            ->get();
+
+        $vibration_value_de = DataRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
+            ->orderByDesc("vibration_value_de")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+            ->limit(5)
+            ->get();
+
+        $vibration_value_nde = DataRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
+            ->orderByDesc("vibration_value_nde")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+            ->limit(5)
+            ->get();
+
+        return response()->view("maintenance.summary", [
+            "title" => "Summary",
+            "temperature_a" => $temperature_a->toArray(),
+            "temperature_d" => $temperature_d->toArray(),
+            "vibration_value_de" => $vibration_value_de->toArray(),
+            "vibration_value_nde" => $vibration_value_nde->toArray(),
+        ]);
+    }
 }
