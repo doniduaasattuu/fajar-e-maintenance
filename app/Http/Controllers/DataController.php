@@ -225,7 +225,8 @@ class DataController extends Controller
     public function trendsPicker()
     {
         return response()->view("maintenance.trends-picker", [
-            "title" => "Trends picker"
+            "title" => "Trends picker",
+            "header" => "Equipment trend",
         ]);
     }
 

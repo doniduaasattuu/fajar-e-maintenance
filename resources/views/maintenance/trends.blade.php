@@ -47,6 +47,10 @@
             chart_type = "spline"
         }
 
+        function subText(data) {
+            return data + " record over a certain period of time";
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const chart = Highcharts.chart('temperature', {
                 chart: {
@@ -56,7 +60,7 @@
                     text: '<b>Temperature of ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Temperature record in one year'
+                    text: subText("Temperature")
                 },
                 yAxis: {
                     title: {
@@ -97,7 +101,7 @@
                     text: '<b>Vibration of ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Vibration record in one year'
+                    text: subText("Vibration")
                 },
                 yAxis: {
                     title: {
@@ -131,7 +135,7 @@
                     text: '<b>Number of greasing ' + emo + '</b>'
                 },
                 subtitle: {
-                    text: 'Greasing record in one year'
+                    text: subText("Greasing")
                 },
                 yAxis: {
                     title: {

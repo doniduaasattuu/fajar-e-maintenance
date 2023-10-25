@@ -19,7 +19,8 @@
     @include("utility.navbar")
 
     <div class="container mt-5">
-        <div class="my-auto" id="reader"></div>
+        <div id="reader"></div>
+        <!-- d-flex justify-content-center align-item-center -->
     </div>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script type="text/javascript">

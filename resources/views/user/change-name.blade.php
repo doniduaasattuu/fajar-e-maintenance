@@ -3,13 +3,13 @@
 
 @include("utility.head")
 
-<body>
+<body class="overflow-hidden">
 
 
     @include("utility.navbar")
 
-    <div class="container d-flex absolute mt-5">
-        <div class="my-auto align-items-center mx-auto" style="min-width: 300px;">
+    <div class="container d-flex absolute mt-5 vh-100">
+        <div class="my-auto align-items-center position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
 
             @isset($error)
             <div class="alert alert-danger" role="alert">

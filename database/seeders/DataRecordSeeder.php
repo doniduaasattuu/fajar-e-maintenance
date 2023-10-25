@@ -19,7 +19,7 @@ class DataRecordSeeder extends Seeder
         DB::table("data_records")->truncate();
         $fullname = User::query()->find("55000154")->fullname;
 
-        $year = 60;
+        $year = 30;
 
         for ($i = 0; $i < $year; $i++) {
             $data_record = new DataRecord();
@@ -41,41 +41,41 @@ class DataRecordSeeder extends Seeder
             $data_record->checked_by = $fullname;
             $data_record->save();
 
-            // $data_record1 = new DataRecord();
-            // $data_record1->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
-            // $data_record1->emo = "MGM000481";
-            // $data_record1->motor_status = "Running";
-            // $data_record1->clean_status = "Clean";
-            // $data_record1->nipple_grease = "Not Available";
-            // $data_record1->temperature_a = rand(40, 70);
-            // $data_record1->temperature_b = rand(40, 70);
-            // $data_record1->temperature_c = rand(40, 70);
-            // $data_record1->temperature_d = rand(40, 70);
-            // $data_record1->vibration_value_de = rand(1, 112) / 100;
-            // $data_record1->vibration_de = "Normal";
-            // $data_record1->vibration_value_nde = rand(1, 112) / 100;
-            // $data_record1->vibration_nde = "Normal";
-            // $data_record1->created_at = Carbon::now()->addMonths(- ($year - $i));
-            // $data_record1->checked_by = $fullname;
-            // $data_record1->save();
+            $data_record1 = new DataRecord();
+            $data_record1->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
+            $data_record1->emo = "MGM000481";
+            $data_record1->motor_status = "Running";
+            $data_record1->clean_status = "Clean";
+            $data_record1->nipple_grease = "Not Available";
+            $data_record1->temperature_a = rand(40, 70);
+            $data_record1->temperature_b = rand(40, 70);
+            $data_record1->temperature_c = rand(40, 70);
+            $data_record1->temperature_d = rand(40, 70);
+            $data_record1->vibration_value_de = rand(1, 112) / 100;
+            $data_record1->vibration_de = "Normal";
+            $data_record1->vibration_value_nde = rand(1, 112) / 100;
+            $data_record1->vibration_nde = "Normal";
+            $data_record1->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record1->checked_by = $fullname;
+            $data_record1->save();
 
-            // $data_record2 = new DataRecord();
-            // $data_record2->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
-            // $data_record2->emo = "EMO001056";
-            // $data_record2->motor_status = "Running";
-            // $data_record2->clean_status = "Clean";
-            // $data_record2->nipple_grease = "Not Available";
-            // $data_record2->temperature_a = rand(40, 70);
-            // $data_record2->temperature_b = rand(40, 70);
-            // $data_record2->temperature_c = rand(40, 70);
-            // $data_record2->temperature_d = rand(40, 70);
-            // $data_record2->vibration_value_de = rand(1, 112) / 100;
-            // $data_record2->vibration_de = "Normal";
-            // $data_record2->vibration_value_nde = rand(1, 112) / 100;
-            // $data_record2->vibration_nde = "Normal";
-            // $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
-            // $data_record2->checked_by = $fullname;
-            // $data_record2->save();
+            $data_record2 = new DataRecord();
+            $data_record2->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
+            $data_record2->emo = "EMO001056";
+            $data_record2->motor_status = "Running";
+            $data_record2->clean_status = "Clean";
+            $data_record2->nipple_grease = "Not Available";
+            $data_record2->temperature_a = rand(40, 70);
+            $data_record2->temperature_b = rand(40, 70);
+            $data_record2->temperature_c = rand(40, 70);
+            $data_record2->temperature_d = rand(40, 70);
+            $data_record2->vibration_value_de = rand(1, 112) / 100;
+            $data_record2->vibration_de = "Normal";
+            $data_record2->vibration_value_nde = rand(1, 112) / 100;
+            $data_record2->vibration_nde = "Normal";
+            $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record2->checked_by = $fullname;
+            $data_record2->save();
         }
     }
 }
