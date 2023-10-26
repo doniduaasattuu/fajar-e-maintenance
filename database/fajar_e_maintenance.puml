@@ -68,7 +68,7 @@ entity emo_details {
 }
 
 entity data_records {
-    * id BIGINT AUTO_INCREMENT
+    * id BIGINT UNSIGNED AUTO_INCREMENT
     * funcloc VARCHAR(150) <<FK>>
     * emo VARCHAR(9) <<FK>>
     --

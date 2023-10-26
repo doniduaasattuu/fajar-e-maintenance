@@ -47,7 +47,7 @@ class DataController extends Controller
     {
         $search_data = $request->input("search_data");
 
-        if (!empty($search_data) && strlen($search_data) == 19 && $search_data[0] == "F" && $search_data[6] == "M") {
+        if (!empty($search_data) && $search_data[0] == "F" && $search_data[6] == "M") {
             // Search by list qr_code_link = Fajar-MotorList1804
             $url = action([DataController::class, "getForm"], [
                 "motorList" => $search_data
@@ -59,7 +59,9 @@ class DataController extends Controller
             $emo = Emo::query()->with("funcLoc", "emoDetails")->find($search_data);
 
             if (!is_null($emo)) {
-                $motorList = substr($emo->qr_code_link, -19);
+
+                $qr_code_link = $emo->qr_code_link;
+                $motorList = (explode("=", $qr_code_link))[1];
 
                 // Fajar-MotorList1804
                 $url = action([DataController::class, "getForm"], [
@@ -72,12 +74,14 @@ class DataController extends Controller
                     "title" => "Oops!"
                 ]);
             }
-        } else if (!empty($search_data) && strlen($search_data) == 4) {
+        } else if (!empty($search_data) && (strlen($search_data) >= 2) && (strlen($search_data) <= 4)) {
             // Search by unique_id = 1804
             $unique_id = Emo::query()->where("unique_id", "=", $search_data)->first();
 
             if (!is_null($unique_id)) {
-                $motorList = substr($unique_id->qr_code_link, -19);
+
+                $qr_code_link = $unique_id->qr_code_link;
+                $motorList = (explode("=", $qr_code_link))[1];
 
                 // Fajar-MotorList1804
                 $url = action([DataController::class, "getForm"], [
@@ -175,51 +179,62 @@ class DataController extends Controller
 
     public function trends(Request $request, string $emo)
     {
-        $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
-        $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1);
+        if (strlen($emo) == 9) {
+            $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
+            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1);
 
-        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
-        $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
-        $nipple_grease = $emo_details->nipple_grease;
+            $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+            $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
-        $date_category = [];
-        $temperature_a = [];
-        $temperature_b = [];
-        $temperature_c = [];
-        $temperature_d = [];
-        $vibration_value_de = [];
-        $vibration_value_nde = [];
-        $number_of_greasing = [];
+            if (!is_null($emo_details)) {
 
-        foreach ($data_records as $record) {
-            $year = substr($record->created_at, 2, 2);
-            $month = substr($record->created_at, 5, 2);
-            $date = substr($record->created_at, 8, 2);
-            array_push($date_category, $date . "/" . $month . "/" . $year);
+                $nipple_grease = $emo_details->nipple_grease;
+                $date_category = [];
+                $temperature_a = [];
+                $temperature_b = [];
+                $temperature_c = [];
+                $temperature_d = [];
+                $vibration_value_de = [];
+                $vibration_value_nde = [];
+                $number_of_greasing = [];
 
-            array_push($temperature_a, $record->temperature_a);
-            array_push($temperature_b, $record->temperature_b);
-            array_push($temperature_c, $record->temperature_c);
-            array_push($temperature_d, $record->temperature_d);
+                foreach ($data_records as $record) {
+                    $year = substr($record->created_at, 2, 2);
+                    $month = substr($record->created_at, 5, 2);
+                    $date = substr($record->created_at, 8, 2);
+                    array_push($date_category, $date . "/" . $month . "/" . $year);
 
-            array_push($vibration_value_de, (float) $record->vibration_value_de);
-            array_push($vibration_value_nde, (float) $record->vibration_value_nde);
-            array_push($number_of_greasing, $record->number_of_greasing);
+                    array_push($temperature_a, $record->temperature_a);
+                    array_push($temperature_b, $record->temperature_b);
+                    array_push($temperature_c, $record->temperature_c);
+                    array_push($temperature_d, $record->temperature_d);
+
+                    array_push($vibration_value_de, (float) $record->vibration_value_de);
+                    array_push($vibration_value_nde, (float) $record->vibration_value_nde);
+                    array_push($number_of_greasing, $record->number_of_greasing);
+                }
+
+                return view("maintenance.trends", [
+                    "title" => "Trends",
+                    "date_category" => $date_category,
+                    "temperature_a" => $temperature_a,
+                    "temperature_b" => $temperature_b,
+                    "temperature_c" => $temperature_c,
+                    "temperature_d" => $temperature_d,
+                    "vibration_value_de" => $vibration_value_de,
+                    "vibration_value_nde" => $vibration_value_nde,
+                    "number_of_greasing" => $number_of_greasing,
+                    "emo" => $emo,
+                    "nipple_grease" => $nipple_grease
+                ]);
+            } else {
+
+                return Redirect::back();
+            }
+        } else {
+
+            return Redirect::back();
         }
-
-        return view("maintenance.trends", [
-            "title" => "Trends",
-            "date_category" => $date_category,
-            "temperature_a" => $temperature_a,
-            "temperature_b" => $temperature_b,
-            "temperature_c" => $temperature_c,
-            "temperature_d" => $temperature_d,
-            "vibration_value_de" => $vibration_value_de,
-            "vibration_value_nde" => $vibration_value_nde,
-            "number_of_greasing" => $number_of_greasing,
-            "emo" => $emo,
-            "nipple_grease" => $nipple_grease
-        ]);
     }
 
     public function trendsPicker()
@@ -286,6 +301,16 @@ class DataController extends Controller
             "PM8_TEMP_NDE" => returnData("temperature_d", "8")->toArray(),
             "PM8_VIBRATION_DE" => returnData("vibration_value_de", "8")->toArray(),
             "PM8_VIBRATION_NDE" => returnData("vibration_value_nde", "8")->toArray(),
+
+            "WWT_TEMP_DE" => [],
+            "WWT_TEMP_NDE" => [],
+            "WWT_VIBRATION_DE" => [],
+            "WWT_VIBRATION_NDE" => [],
+
+            "ENC_TEMP_DE" => [],
+            "ENC_TEMP_NDE" => [],
+            "ENC_VIBRATION_DE" => [],
+            "ENC_VIBRATION_NDE" => [],
         ]);
     }
 }

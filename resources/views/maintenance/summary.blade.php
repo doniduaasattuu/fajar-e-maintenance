@@ -13,6 +13,7 @@
 
             <h4 class="mb-4">Summary of all checking data from each Paper Machine</h4>
             <div class="accordion" id="accordionExample">
+
                 <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -1213,8 +1214,408 @@
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseENC" aria-expanded="false" aria-controls="collapseENC">
+                            ENC
+                        </button>
+                    </h2>
+                    <div id="collapseENC" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <h5>Top Five Temperature DE ENC</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Temp</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $ENC_TEMP_DE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
 
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "temperature_a")
+                                        <td>{{ $value }}&deg;C</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Temperature NDE ENC</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Temp</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $ENC_TEMP_NDE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "temperature_d")
+                                        <td>{{ $value }}&deg;C</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Vibration DE ENC</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $ENC_VIBRATION_DE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "vibration_value_de")
+                                        <td>{{ $value }} mm/s</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Vibration NDE ENC</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $ENC_VIBRATION_NDE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "vibration_value_nde")
+                                        <td>{{ $value }} mm/s</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWWT" aria-expanded="false" aria-controls="collapseWWT">
+                            WWT
+                        </button>
+                    </h2>
+                    <div id="collapseWWT" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <h5>Top Five Temperature DE WWT</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Temp</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $WWT_TEMP_DE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "temperature_a")
+                                        <td>{{ $value }}&deg;C</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Temperature NDE WWT</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Temp</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $WWT_TEMP_NDE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "temperature_d")
+                                        <td>{{ $value }}&deg;C</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Vibration DE WWT</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $WWT_VIBRATION_DE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "vibration_value_de")
+                                        <td>{{ $value }} mm/s</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="accordion-body">
+                            <h5>Top Five Vibration NDE WWT</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Funcloc</th>
+                                        <th scope="col">Emo</th>
+                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Checked</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ( $WWT_VIBRATION_NDE as $record )
+                                    <tr>
+                                        @foreach ($record as $key => $value)
+
+                                        <!-- get id of funcloc -->
+                                        @if ($key == "funcloc")
+                                        @php
+                                        $values = explode("-", $value)
+                                        @endphp
+                                        <td title="{{ $value }}">{{ $values[count($values) - 2] . '-' . $values[count($values) - 1] }}</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- add degree celcius -->
+                                        @if ($key == "vibration_value_nde")
+                                        <td>{{ $value }} mm/s</td>
+                                        @continue
+                                        @endif
+
+                                        <!-- get date created_at -->
+                                        @if ($key == "created_at")
+                                        @php
+                                        $dates = explode("-", substr($value, 0, 10))
+                                        @endphp
+                                        <td>{{ $dates[2] . "/" . $dates[1] . "/" . substr($dates[0], 2, 4) }}</td>
+                                        @continue
+                                        @endif
+
+                                        <td>{{ $value }}</td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 
