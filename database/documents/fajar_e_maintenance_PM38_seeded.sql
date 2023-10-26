@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2023 at 06:37 AM
+-- Generation Time: Oct 26, 2023 at 09:29 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -953,7 +953,7 @@ CREATE TABLE `emo_details` (
   `bearing_nde` varchar(50) DEFAULT NULL,
   `frame_type` varchar(50) DEFAULT NULL,
   `shaft_diameter` smallint(5) UNSIGNED DEFAULT NULL,
-  `phase_supply` char(1) DEFAULT NULL,
+  `phase_supply` varchar(3) NOT NULL,
   `cos_phi` char(4) DEFAULT NULL,
   `efficiency` char(4) DEFAULT NULL,
   `ip_rating` char(2) DEFAULT NULL,
@@ -2696,7 +2696,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (3, '2023_10_16_172341_create_function_locations_table', 1),
 (4, '2023_10_17_014609_create_emos_table', 1),
 (5, '2023_10_17_103650_create_emo_details_table', 1),
-(6, '2023_10_18_013108_create_data_records_table', 1);
+(6, '2023_10_18_013108_create_data_records_table', 1),
+(7, '2023_10_26_134553_change_column_phase_supply_emo_details_table', 2);
 
 -- --------------------------------------------------------
 
@@ -2812,7 +2813,7 @@ ALTER TABLE `emo_details`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`

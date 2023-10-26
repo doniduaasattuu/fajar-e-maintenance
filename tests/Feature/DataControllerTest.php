@@ -216,12 +216,4 @@ class DataControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect("/checking-form/Fajar-MotorList6143");
     }
-
-    public function testDeleteDatabase()
-    {
-        DB::table('data_records')->delete();
-        DB::table('emo_details')->delete();
-        DB::table('emos')->delete();
-        DB::table('function_locations')->delete();
-    }
 }

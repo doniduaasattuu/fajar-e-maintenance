@@ -44,7 +44,7 @@ entity emo_details {
     bearing_nde VARCHAR("50")
     frame_type VARCHAR("50")
     shaft_diameter SMALLINT UNSIGNED
-    phase_supply CHAR(1)
+    phase_supply VARCHAR(3)
 
     cos_phi CHAR(4)
     efficiency VARCHAR(4)
@@ -99,6 +99,7 @@ entity users {
  
 function_locations ||--o{ emos : Have
 function_locations ||--o{ data_records : Have
+emos ||--o{ data_records : Have
 emos ||--|| emo_details : Contain
 data_records ||--|| users : Include
 

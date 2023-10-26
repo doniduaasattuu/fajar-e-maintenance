@@ -7,13 +7,16 @@
     @include("utility.navbar")
 
     <div class="container mt-4 my-5">
-        <h3 class="mb-4">{{ $emo->id }}</h3>
-        @isset($error)
-        <div class="alert alert-danger" role="alert">
-            {{ $error }}
-        </div>
-        @endisset
 
+        <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
+            Error occurred! ⚠️
+        </div>
+
+        <div class="alert alert-success" style="display: none" id="message_response" role="alert">
+            Success! ✅
+        </div>
+
+        <h3 class="mb-4">{{ $emo->id }}</h3>
         <a href="/trends/{{ $emo->id }}" title="Record temperature and vibration in one month">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
@@ -70,14 +73,6 @@
             </div>
         </div>
 
-        <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
-            Error occurred! ⚠️
-        </div>
-
-        <div class="alert alert-success" style="display: none" id="message_response" role="alert">
-            Success! ✅
-        </div>
-
         <!-- CHECKING -->
         <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
             @csrf
@@ -114,19 +109,19 @@
                     </div>
                     <div class="mb-1">
                         <label for="temperature_a" class="fw-bold form-label">Temperature A <span style="font-weight: 400;">(DE)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
                     </div>
                     <div class="mb-1">
                         <label for="temperature_b" class="fw-bold form-label">Temperature B <span style="font-weight: 400;">(Terminal)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
                     </div>
                     <div class="mb-1">
                         <label for="temperature_c" class="fw-bold form-label">Temperature C <span style="font-weight: 400;">(Body)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
                     </div>
                     <div class="mb-4">
                         <label for="temperature_d" class="fw-bold form-label">Temperature D <span style="font-weight: 400;">(NDE)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="150" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
                     </div>
 
                     <!-- =========== VIBRATION =========== -->
@@ -256,7 +251,7 @@
             return true;
         }
 
-        // VALIDATE INPUT TEMPERATURE NOT EXCEED 150 DEGREE
+        // VALIDATE INPUT TEMPERATURE NOT EXCEED 200 DEGREE
         for (let i = 0; i < temperatures_input.length; i++) {
             temperatures_input[i].onchange = () => {
                 if (temperatures_input[i].value.length > 3) {
@@ -264,8 +259,8 @@
                     temperatures_input[i].value = value_accepted
                 }
 
-                if (Number(temperatures_input[i].value) > 150) {
-                    alert("Temperature should not exceed 150°C")
+                if (Number(temperatures_input[i].value) > 200) {
+                    alert("Temperature should not exceed 200°C")
                     temperatures_input[i].value = ""
                 }
             }
