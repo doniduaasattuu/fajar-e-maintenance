@@ -34,5 +34,12 @@ class FunctionLocationSeeder extends Seeder
         $funloc2->created_at = Carbon::now()->toDateTimeString();
         $funloc2->updated_at = Carbon::now()->toDateTimeString();
         $funloc2->save();
+
+        $funloc3 = new FunctionLocation();
+        $funloc3->id = "FP-01-PM8-PRS-PRS2-MD05";
+        $funloc3->tag_name = "PM8/PRS-PRS2-MD05";
+        $funloc3->created_at = Carbon::now()->toDateTimeString();
+        $funloc3->updated_at = Carbon::now()->toDateTimeString();
+        $funloc3->save();
     }
 }

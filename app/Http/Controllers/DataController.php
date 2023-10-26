@@ -239,52 +239,53 @@ class DataController extends Controller
     // SUMMARY
     public function summary()
     {
-        $temperature_a = DataRecord::query()
-            ->select(["funcloc", "emo", "temperature_a", "created_at"])
-            ->orderByDesc("temperature_a")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-            ->limit(5)
-            ->get();
+        function returnData(string $temp_a, string $paper_machine)
+        {
+            $data = DataRecord::query()
+                ->select(["funcloc", "emo", $temp_a, "created_at"])
+                ->orderByDesc($temp_a)
+                ->where("funcloc", "LIKE", "%PM$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "%SP$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "%CH$paper_machine%")
+                ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+                ->limit(5)
+                ->get();
 
-        $temperature_d = DataRecord::query()
-            ->select(["funcloc", "emo", "temperature_d", "created_at"])
-            ->orderByDesc("temperature_d")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-            ->limit(5)
-            ->get();
-
-        $vibration_value_de = DataRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
-            ->orderByDesc("vibration_value_de")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-            ->limit(5)
-            ->get();
-
-        $vibration_value_nde = DataRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
-            ->orderByDesc("vibration_value_nde")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-            ->limit(5)
-            ->get();
+            return $data;
+        }
 
         return response()->view("maintenance.summary", [
             "title" => "Summary",
-            "temperature_a" => $temperature_a->toArray(),
-            "temperature_d" => $temperature_d->toArray(),
-            "vibration_value_de" => $vibration_value_de->toArray(),
-            "vibration_value_nde" => $vibration_value_nde->toArray(),
+
+            "PM1_TEMP_DE" => returnData("temperature_a", "1")->toArray(),
+            "PM1_TEMP_NDE" => returnData("temperature_d", "1")->toArray(),
+            "PM1_VIBRATION_DE" => returnData("vibration_value_de", "1")->toArray(),
+            "PM1_VIBRATION_NDE" => returnData("vibration_value_nde", "1")->toArray(),
+
+            "PM2_TEMP_DE" => returnData("temperature_a", "2")->toArray(),
+            "PM2_TEMP_NDE" => returnData("temperature_d", "2")->toArray(),
+            "PM2_VIBRATION_DE" => returnData("vibration_value_de", "2")->toArray(),
+            "PM2_VIBRATION_NDE" => returnData("vibration_value_nde", "2")->toArray(),
+
+            "PM3_TEMP_DE" => returnData("temperature_a", "3")->toArray(),
+            "PM3_TEMP_NDE" => returnData("temperature_d", "3")->toArray(),
+            "PM3_VIBRATION_DE" => returnData("vibration_value_de", "3")->toArray(),
+            "PM3_VIBRATION_NDE" => returnData("vibration_value_nde", "3")->toArray(),
+
+            "PM5_TEMP_DE" => returnData("temperature_a", "5")->toArray(),
+            "PM5_TEMP_NDE" => returnData("temperature_d", "5")->toArray(),
+            "PM5_VIBRATION_DE" => returnData("vibration_value_de", "5")->toArray(),
+            "PM5_VIBRATION_NDE" => returnData("vibration_value_nde", "5")->toArray(),
+
+            "PM7_TEMP_DE" => returnData("temperature_a", "7")->toArray(),
+            "PM7_TEMP_NDE" => returnData("temperature_d", "7")->toArray(),
+            "PM7_VIBRATION_DE" => returnData("vibration_value_de", "7")->toArray(),
+            "PM7_VIBRATION_NDE" => returnData("vibration_value_nde", "7")->toArray(),
+
+            "PM8_TEMP_DE" => returnData("temperature_a", "8")->toArray(),
+            "PM8_TEMP_NDE" => returnData("temperature_d", "8")->toArray(),
+            "PM8_VIBRATION_DE" => returnData("vibration_value_de", "8")->toArray(),
+            "PM8_VIBRATION_NDE" => returnData("vibration_value_nde", "8")->toArray(),
         ]);
     }
 }

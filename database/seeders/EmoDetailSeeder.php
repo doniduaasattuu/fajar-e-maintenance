@@ -112,5 +112,36 @@ class EmoDetailSeeder extends Seeder
         $emo_detail2->cooling_fan = "Internal";
         $emo_detail2->mounting = "Vertical";
         $emo_detail2->save();
+
+        $emo_detail3 = new EmoDetail();
+        $emo_detail3->emo_detail = "EMO004493";
+        $emo_detail3->manufacture = "TMEIC";
+        $emo_detail3->serial_number = "E167050HF";
+        $emo_detail3->type = "IDF-CHKWII";
+        $emo_detail3->power_rate = "750";
+        $emo_detail3->power_unit = "kW";
+        $emo_detail3->voltage = "690";
+        $emo_detail3->current_nominal = "770";
+        $emo_detail3->frequency = "50";
+        $emo_detail3->pole = "6";
+        $emo_detail3->rpm = "1150";
+        $emo_detail3->bearing_de = "6228";
+        $emo_detail3->bearing_nde = "6228";
+        $emo_detail3->frame_type = "450";
+        $emo_detail3->phase_supply = "3";
+        $emo_detail3->ip_rating = "44";
+        $emo_detail3->insulation_class = "F";
+        $emo_detail3->connection_type = "Delta";
+        $emo_detail3->nipple_grease = "Available";
+        $emo_detail3->greasing_type = null;
+        $emo_detail3->greasing_qty_de = null;
+        $emo_detail3->greasing_qty_nde = null;
+        $emo_detail3->length = null;
+        $emo_detail3->width = null;
+        $emo_detail3->height = 450;
+        $emo_detail3->weight = null;
+        $emo_detail3->cooling_fan = "Internal";
+        $emo_detail3->mounting = "Horizontal";
+        $emo_detail3->save();
     }
 }

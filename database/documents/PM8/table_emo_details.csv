@@ -231,7 +231,7 @@ EMO004320;Siemens;;ICV2;18.5;KW;380;35;50;4P;1500;6210;6210;180M;;3;0.84;;55;Cla
 EMO004329;BOMEC;160413941;CM143P4;1.25;KW;400;3.12;50;4P;1500;NJ 2308;6308;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
 EMO004330;BOMEC;;CM143P4;1.25;kw;400;3.12;50;4P;1500;NJ 2308;6308;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
 EMO004332;BOMEC;160313669;CM143P4;1.25;kw;400;3.12;50;4P;1500;NJ 2038;6308;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
-EMO004332;BOMEC;160413836;CM143P4;1.25;KW;400;3.12;50;4P;1425;NJ 2308;6308;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
+EMO003803;BOMEC;160413836;CM143P4;1.25;KW;400;3.12;50;4P;1425;NJ 2308;6308;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
 EMO004439;Marathon;72103204J;HJN1;3;kW;380;6.5;50;4P;1425;6206;6206;100L;;3;0.82;85.5;55;Class F;S1;Star;Not Available;;;;;;100;;Internal;Horizontal
 EMO004440;Marathon;72103203J;HJN1;3;kW;380;6.5;50;4P;1425;6206;6206;100L;;3;0.82;85.5;55;Class F;S1;Star;Not Available;;;;;;100;;Internal;Horizontal
 EMO004441;Marathon;72103206J;HJN1;3;kW;380;6.5;50;4P;1425;6206;6206;100L;;3;0.82;85.5;55;Class F;S1;Star;Not Available;;;;;;100;;Internal;Horizontal
@@ -390,7 +390,6 @@ EMO004557;??;;??;??;;??;??;50;??;??;;;;;3;;;;;;;;;;;Drive;;;;;
 EMO004558;??;;??;??;;??;??;50;??;??;;;;;3;;;;;;;;;;;Drive;;;;;
 EMO004906;TOSHIBA;160027260;TIKK-FCK2;22;kW;420;39.5/39;60/72;4P;1750-2100;6310;6310;180M;;3;;;44;Class F;S1;;;;;;Drive;;;;Internal;
 EMO004410;TECO;2163713406;AEEBKB;1.5;kW;380;3.52;50;4P;1475;6205;6205;90L;;3;;;55;Class F;S1;Start;Not Available;;;;;;90;;Internal;
-;ABB;;M3AA;2.2;kW;400;4.6;50;4P;1460;6306;6205;100L;;3;;;55;Class F;;Start;Not Available;;;;;;100;;Internal;Horizontal
 EMO004381;Stromberg;;HXUR;22;kW;380;43;50;4P;1445;6310;6309;180L;;3;0.86;;54;Class B;S1;Delta;Available;;;;;;180;;Internal;Horizontal
 EMO005123;ABB;;M3BP;3;kW;380;6.3;50;4P;1445;6206;6205;100L;;3;0.82;;55;Class F;;Start;Not Available;;;;;;100;;Internal;Horizontal
 EMO005124;ABB;;M3BP;3;kW;380;6.3;50;4P;1415;6206;6205;100L;;3;0.82;;55;Class F;;Start;Not Available;;;;;;100;;Internal;Horizontal

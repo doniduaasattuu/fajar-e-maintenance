@@ -12,6 +12,7 @@ use Database\Seeders\FunctionLocationSeeder;
 use Database\Seeders\UserSeeder;
 use DateTime;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
@@ -188,7 +189,25 @@ class DataRecordTest extends TestCase
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
     }
 
-    public function testGetTopFiveTemp()
+    public function testGetTopFiveTempNde()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $temperature_d = DataRecord::query()
+            ->select(["funcloc", "emo", "temperature_d", "created_at"])
+            ->orderByDesc("temperature_d")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $temperature_d);
+
+        Log::info(json_encode($temperature_d, JSON_PRETTY_PRINT));
+    }
+
+    public function testGetTopFiveTempDe()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -222,5 +241,48 @@ class DataRecordTest extends TestCase
         self::assertCount(5, $vibration_value_de);
 
         Log::info(json_encode($vibration_value_de, JSON_PRETTY_PRINT));
+    }
+
+    public function testGetTopFiveVibrationNde()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $vibration_value_nde = DataRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
+            ->orderByDesc("vibration_value_nde")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $vibration_value_nde);
+
+        Log::info(json_encode($vibration_value_nde, JSON_PRETTY_PRINT));
+    }
+
+    public function testMethodGetTopFiveTempDe()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        function returnTemperatureDe(string $temp_a, string $paper_machine)
+        {
+            $temperature_a = DataRecord::query()
+                ->select(["funcloc", "emo", $temp_a, "created_at"])
+                ->orderByDesc($temp_a)
+                ->where("funcloc", "LIKE", "%PM$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "%SP$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "%CH$paper_machine%")
+                ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+                ->limit(5)
+                ->get();
+
+            return $temperature_a;
+        }
+
+        $result = returnTemperatureDe("temperature_a", "3");
+        self::assertNotNull($result);
+        self::assertCount(5, $result);
+        Log::info(json_encode($result, JSON_PRETTY_PRINT));
     }
 }

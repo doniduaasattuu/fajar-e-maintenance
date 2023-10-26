@@ -6,6 +6,7 @@ use App\Models\Emo;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -214,5 +215,13 @@ class DataControllerTest extends TestCase
         ])
             ->assertStatus(302)
             ->assertRedirect("/checking-form/Fajar-MotorList6143");
+    }
+
+    public function testDeleteDatabase()
+    {
+        DB::table('data_records')->delete();
+        DB::table('emo_details')->delete();
+        DB::table('emos')->delete();
+        DB::table('function_locations')->delete();
     }
 }

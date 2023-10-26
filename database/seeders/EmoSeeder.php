@@ -50,5 +50,17 @@ class EmoSeeder extends Seeder
         $emo2->created_at = Carbon::now()->toDateTimeString();
         $emo2->updated_at = Carbon::now()->toDateTimeString();
         $emo2->save();
+
+        $emo3 = new Emo();
+        $emo3->id = "EMO004493";
+        $emo3->funcloc = "FP-01-PM8-PRS-PRS2-MD05";
+        $emo3->equipment_description = "MOTOR,AC,ICF-CHKM11 770A,750KW,6P,690V";
+        $emo3->status = "Installed";
+        $emo3->sort_field = "PM8/PRS-PRS2-MD05";
+        $emo3->unique_id = "3719";
+        $emo3->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList3719";
+        $emo3->created_at = Carbon::now()->toDateTimeString();
+        $emo3->updated_at = Carbon::now()->toDateTimeString();
+        $emo3->save();
     }
 }

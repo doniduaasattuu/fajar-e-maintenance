@@ -76,6 +76,25 @@ class DataRecordSeeder extends Seeder
             $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record2->checked_by = $fullname;
             $data_record2->save();
+
+            $data_record3 = new DataRecord();
+            $data_record3->funcloc = "FP-01-PM8-PRS-PRS2-MD05";
+            $data_record3->emo = "EMO004493";
+            $data_record3->motor_status = "Running";
+            $data_record3->clean_status = "Clean";
+            $data_record3->nipple_grease = "Available";
+            $data_record3->number_of_greasing = rand(3, 8) * 10;
+            $data_record3->temperature_a = rand(35, 100);
+            $data_record3->temperature_b = rand(35, 100);
+            $data_record3->temperature_c = rand(35, 100);
+            $data_record3->temperature_d = rand(35, 100);
+            $data_record3->vibration_value_de = rand(1, 112) / 100;
+            $data_record3->vibration_de = "Normal";
+            $data_record3->vibration_value_nde = rand(1, 112) / 100;
+            $data_record3->vibration_nde = "Normal";
+            $data_record3->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record3->checked_by = $fullname;
+            $data_record3->save();
         }
     }
 }
