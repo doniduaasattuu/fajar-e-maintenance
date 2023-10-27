@@ -1,0 +1,1039 @@
+emo_detail;manufacture;serial_number;type;power_rate;power_unit;voltage;current_nominal;frequency;pole;rpm;bearing_de;bearing_nde;frame_type;shaft_diameter;phase_supply;cos_phi;efficiency;ip_rating;insulation_class;duty;connection_type;nipple_grease;greasing_type;greasing_qty_de;greasing_qty_nde;length;width;height;weight;cooling_fan;mounting
+EMO003495;HUADA;;Y2;90;kW;380;167;50;4;1481;6317;6317;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO003124;ABB;648472813;M2BA;75;kW;380;139;50;4;1475;;;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000226;TECO;3333499;AEEB;75;kW;380;140;50;4;1481;6316;6316;280 S;75;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000426;TECO;P9543291;AEEBPA040100YW05T;75;kW;380;140;50;4;1475;NU216;6213;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000922;TECO;H7104507018;AEEB;37;kW;380;28.5;50;4;1470;6313;6213;225 S;;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000908;TECO;;QU;5.5;kW;380;11.6;50;4;1430;;;132S;;3;0.84;;55;F;;Start;Not Available;;;;;;;;Internal;Horizontal
+EMO000907;TECO;11611015;AEEB;22;kW;380;45.9;50;6;975;6312;6212;200 L;;3;;;54;F;S1;Delta;Available;;;;;;200;;Internal;Horizontal
+EMO000906;ABB;3284806;M2BA;75;kW;380;139;50;4;1475;6315;6315;250 S;65;3;0.88;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000905;ABB;C58957122;M2BA;11;kW;380;22;50;4;1448;6209;6209;160 M;;3;0.85;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000903;ABB;;M2BA;37;kW;380;71;50;4;1430;6312;6312;200M;;3;0.85;;55;F;;;Not Available;;;;;;200;;Internal;Horizontal
+EMO000024;TOSHIBA;;;37;kW;380;71;50;4;1455;;;200 L;;3;;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Horizontal
+EMO002712;ABB;;M2BA;55;kW;380;103;50;4;1475;6315;6315;250 S;;3;0.86;;55;F;S1;Delta;Not Available;;;;;;250;;Internal;Horizontal
+EMO002799;ABB;3409739;M2BA;75;kW;380;140;50;4;1481;6316;6316;280S;75;3;0.82;;55;F;;Delta;Available;;;;;;280;;Internal;Vertical
+EMO000998;SEW;B296690;KA86;1.5;kW;380;3.75;50;4;1410;;;90L;;3;;;;;S1;Delta;Not Available;;;;;;90;;Internal;Vertical
+EMO000999;SEW;500978925;KA86;1.5;kW;380;3.75;50;4;1410;;;90L;;3;;;;;S1;Delta;Not Available;;;;;;90;;Internal;Vertical
+EMO000620;ABB;GS6050414-D01;QU;15;kW;380;30.5;50;4;1475;;;160 L;;3;0.86;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000995;TECO;P9508122;AEEB;11;kW;380;21.5;50;4;1455;;;160M;;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000061;ABB;;MBT;11;kW;380;23;50;4;1455;;;132S;;3;;;55;F;;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO000992;TECO;P9545981;AEEB;20;HP;380;29;50;4;1450;6309;6307;160L;;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000993;Tunglee;;;0.37;kW;380;1.2;50;4;1380;;;;;3;;;55;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO000991;TECO;1250360015;A0V;0.37;kW;380;1.3;50;4;1390;6202;6202;71;;3;;;54;E;S1;Start;Not Available;;;;;;71;;Internal;Vertical
+EMO003928;ABB;76322971002;M3BP;37;kW;380;72;50;4;1475;6313;6313;225S;;3;0.84;;55;F;;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO003472;TECO;AC56066-2;AEEBKB;110;kW;380;205;50;4;1480;6316;6318;280mb;;3;;;55;F;;DELTA;Available;;;;;;;;internal;horizontal
+EMO003473;Tunglee;18m17102-10;;0.4;kW;380;1.15;50;4;1493;;;;;3;;;;;;start;Available;;;;;;;;Internal;Horizontal
+EMO003835;TECO;1KH4H287;AEVBAC;15;kW;380;30.7;50;4;1455;6309;6307;160L;;3;;;54;F;S1;Delta;Available;;;;;;160;;Internal;Vertical
+EMO000953;TECO;7061713002;AEEB;45;kW;380;93;50;4;1465;6313;6213;225 M;;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000952;TECO;AC56066-2;AEEB;110;kW;380;205;50;4;1480;6318;6316;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO001641;TECO;;AEEB;37;kW;380;68.5;50;4;1480;6313;6212;225 S;;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000929;TECO;MN50093-1;AEEB;150;HP;380;202;50;2;2955;6314;6314;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO005229;TECO;;AEEB;150;HP;380;202;50;2;2955;6314;6314;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000901;ABB;8956771D02;M2BA;11;kW;380;24;50;6;965;6209;6209;160 L;;3;0.79;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000900;TECO;C56102-6;AEEB;55;kW;380;108;50;6;970;NU318;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000899;ABB;32908763262WM;M2BA;45;kW;380;86;50;4;1477;6313;6313;225 S;60;3;0.85;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000898;TECO;C56102-5;AEEB;55;kW;380;108;50;6;970;NU318;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000897;TECO;75B232007;AEEB;30;kW;380;57;50;4;1460;6312;6212;200L;;3;;;55;F;S1;Delta;Available;;;;;;200;;Internal;Horizontal
+EMO000127;TECO;;AEEB;55;kW;380;108;50;6;970;NU318;6316;280S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000893;ABB;3290877-3262;M2BA;45;kW;380;86;50;4;1477;6313;6313;225S;60;3;0.85;;55;F;S1;Delta;Available;;;;286/311;356;225;;Internal;Horizontal
+EMO000892;ABB;3328062;M2BA;90;kW;380;165;50;4;1481;6316;6316;280S;75;3;0.88;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000891;TECO;D59337-1;AEJE;335;kW;3000;56.6;50;4;1481;NU220;6318;355AB;;3;;;55;F;S1;;Available;;;;;;355;;Internal;Horizontal
+EMO000093;ASEAN;7557281;MBT;18.5;kW;380;38;50;4;1470;;;180 M;;3;;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Horizontal
+EMO000888;ABB;3290875;M2BA;45;kW;380;86;50;4;1477;6313;6313;225S;60;3;0.85;;55;F;S1;Delta;Available;;;;286/311;356;225;;Internal;Horizontal
+EMO003668;TECO;P95221702;AEEB;22;kW;380;46.4;50;6;970;6312;6212;200 L;;3;;;55;F;S1;Delta;Available;;;;;;200;;Internal;Horizontal
+EMO002007;ABB;3292600;M2BA;45;kW;380;86;50;4;1477;6313;6313;225S;60;3;0.85;;55;F;S1;Delta;Available;;;;286/311;356;225;;Internal;Horizontal
+EMO000457;ABB;MK71008-AD;MBT;30;kW;380;61;50;4;1475;6213;6211;200L;;3;;;55;F;S1;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO000884;ABB;31711966-2272;HXR;75;kW;380;144;50;4;1476;6316;6315;280S;75;3;0.85;;55;F;S1;Delta;Not Available;;;;;;280;;Internal;Horizontal
+EMO000882;TECO;D57344-1;AEEB;500;HP;3000;89.3;50;6;987;NU224;6322;450A;;3;;;55;F;;;Available;;;;;;450;;Internal;Horizontal
+EMO000880;ABB;3290619;M2BA;30;kW;380;59;50;4;1468;;;200M;55;3;0.85;;55;F;S1;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO000881;TECO;16617;AEEB;7.5;kW;380;17;50;6;965;6309;6307;160M;42;3;;;55;F;;Delta;Available;;;;210;254;160;;Internal;Horizontal
+EMO003404;ABB;GS6062425D05;M2BA;30;kW;380;59;50;6;985;6313;6313;225 S;;3;0.83;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000878;TECO;C56102-4;AEEB;55;kW;380;108;50;6;970;NU318;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000877;ABB;32324111743;M2BA;90;kW;380;165;50;4;1485;6316;6316;280 S;75;3;0.88;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000865;TECO;P9508184;AEEB;37;kW;380;74;50;6;965;NU216;6213;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000875;HUADA;59251001J;Y2;132;kW;380;241;50;4;1485;;;315 M;;3;0.88;0.94;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO002906;TECO;MN60033-9;AEEB;75;kW;380;129;50;4;1475;6316;6213;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000873;TECO;C56103-8;AEEB;75;kW;380;143;50;6;975;NU318;6316;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000872;TECO;C56103-6;AEEB;75;kW;380;143;50;6;975;NU318;6316;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000874;ABB;3200622/7299VM;HXR;55;kW;380;107;50;4;1475;6313;6312;225 S;60;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000870;TECO;P9524691;AEEB;55;kW;380;108;50;6;970;NU218;6214;280S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000869;TECO;P9524693;AEEB;55;kW;380;108;50;6;970;NU318;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO001941;TECO;MN60073;AEEB;110;kW;380;205;50;4;1460;6318;6316;280S;;3;;;55;F;S1;Delta;Available;;;;;;280M;;Internal;Horizontal
+EMO003966;TECO;1551000856-3;AEEB;37;kW;380;74;50;6;965;NU316;6213;250S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO001629;TECO;;AEEB;110;kW;380;205;50;4;1480;NU218;6214;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO003132;TECO;P9524621;AEEB;5.5;kW;380;12.1;50;4;1450;6308;6306;132S;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO002923;TECO;P9508195;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000977;TECO;P9508194;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000975;TECO;C56106-4;AEEB;110;kW;380;210;50;6;975;NU320;6316;315 M;;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO001011;TECO;C56106-3;AEEB;110;kW;380;210;50;6;975;NU320;6316;315 M;;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO000972;TECO;1551000856;AEEB;55;kW;380;102;50;4;1475;NU316;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO000076;TECO;MN40264-3;AEEB;55;kW;380;105;50;6;975;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO003528;TECO;D063028-1;AEJT;315;kW;3000;77.5;50;6;990;NU224;6322;450 M;;3;;;55;F;S1;Inverter;Available;;;;;;450;;Internal;Horizontal
+EMO001003;TECO;ds7107;AECT;750;kW;3000;200.7;50;12;491;nu230;22224;630A;;3;;;55;F;;;available;;;;;;;;Internal;Horizontal
+EMO000844;ABB;;MBT;5.5;kW;380;11;50;4;1440;;;132 S;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO000863;SEW;3501015847;R102;0.55;kW;380;1.9;50;4;1380;;;;;3;0.71;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO000857;ABB;3290532/3055;M2BA;55;kW;380;105;50;4;1477;6313C3;6313C3;225S;60;3;0.84;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO000861;TECO;C56103 -1;AEEB;75;kW;380;143;50;6;975;NU318;6316;280M;;3;;;55;F;;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000854;TECO;D57311-3;AECT;800;HP;3000;131.5;50;4;1475;NU220;6322;450 C;;3;;;55;F;S1;Delta;Available;;;;;;450;;Internal;Horizontal
+EMO000846;BALDOR;09R45XB;895C;4;HP;380;10.1;50;8;720;6309RS;6203;;;3;;0.80;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO000847;BALDOR;35H849T366;F395;0.55;kW;380;2.2;50;12;475;6203;6203;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO002734;WORD;9418763;IKK;5.5;kW;380;11;50;4;1440;6308;6208;132 S;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO000851;SEW;351913672;R102;0.55;kW;380;1.9;50;4;1380;;;;;3;0.71;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO000848;U.S;;CTE;5;HP;380;8;50;4;1425;6206;6206;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO001063;ABB;;M2AA;5.5;kW;380;11.7;50;4;1470;6208;6206;132M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO003396;ABB;3171964/2272VM;HXR;75;kW;380;144;50;4;1470;6316;6315;280 S;;3;0.85;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO000979;ABB;;;5.5;kW;380;11;50;4;1470;;;132M;;3;;;;;;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO000852;TECO;C56103-2;AEEB;75;kW;380;143;50;6;975;NU318;6316;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO003074;TECO;D105223-1;AECT;600;kW;3000;136;50;4;1485;NU224;6322;450 B;;3;;;55;F;S1;Delta;Available;;;;;;450;;Internal;Horizontal
+EMO000987;TECO;D56331-3;AEJK;250;kW;3000;59.2;50;6;989;NU220;6322;355 C;;3;;;55;F;S1;Delta;Available;;;;;;355;;Internal;Horizontal
+EMO003325;ABB;4548685;HXR 355;250;kW;3000;56;50;6;989;6322;6319;355 C;;3;;;55;F;S1;Inverter;Available;;;;;;355;;Internal;Horizontal
+EMO000856;SEW;;;11;kW;380;28.5;50;4;1470;;;160;;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO000842;SEW;341;;11;kW;380;28.5;50;4;1470;;;160;;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO000585;ABB;;MBT160M;11;kW;380;23;50;4;1450;6309;6307;160 M;;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001002;Tunglee;T13P30101;TL;0.4;kW;380;1;50;4;1400;;;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002878;TECO;MN60050-10;AEAC;7.5;kW;380;15.7;50;4;1445;6309;6306;132M;;3;;;54;B;;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001939;ASGEN;304103;;45;kW;380;83;50;4;1470;;;225M;;3;;;;;;;Available;;;;;;225;;Internal;Horizontal
+EMO000919;STROMBERG;0923MK;HXR;22;kW;380;43;50;4;1470;6310C3;609C3;180L;48;3;0.86;;;B;S1;Delta;Available;;;;;;18;;Internal;Horizontal
+EMO000918;TECO;C56104-1;AEEB;90;kW;380;171;50;6;975;NU320;6316;315S;;3;;;55;F;;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO000917;ABB;;M2BA;55;kW;380;103;50;4;1455;6315;6315;250S;65;3;0.87;;55;F;;Start;Available;;;;349;406;250;;Internal;Horizontal
+EMO000916;TECO;;AEEBPA;22;kW;380;46.4;50;6;970;6312;6212;200L;55;3;;;55;F;;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO000985;TECO;7793080021;AEEBKB;55;kW;380;105;50;4;1470;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO001007;TECO;C56109-1;AEEBKB;150;kW;380;274;50;4;1480;NU320;6316;315 MC;;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO001567;Huada;6088301j;Y2;30;kW;380;57.6;50;4;1470;;;200 L;;3;;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Horizontal
+EMO003425;TECO;9106306003;AEEBKB;132;kW;380;227;50;4;1480;NU320;6316;315;;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO000911;TECO;C56102-3;AEEB;55;kW;380;108;50;6;975;NU318;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO003328;TECO;P650470046;AEEB;15;kW;380;29;50;4;1450;6309;6307;160 L;;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001583;TECO;82254-2;AEEBKB;30;kW;380;58;50;6;975;;;;;3;;;55;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO000909;TECO;P9800591;AEEB;75;kW;380;143;50;6;975;NU318;6316;280 M;;3;;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO001680;TECO;MN301189;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250;70;3;;;55;F;S1;Delta;Available;;;;311;406;250;;Internal;Horizontal
+EMO000969;Sweco;;;5; HP;380;8.8;50;6;1000;;;215;;3;;;;B;;Delta;Available;;;;178;216;215;;Internal;Horizontal
+EMO000968;Sweco;Y08Y180R028;;5;HP;380;8.8;50;6;1000;;;215;;3;;;;B;;Delta;Available;;;;178;216;215;;Internal;Horizontal
+EMO003614;ABB;;MBT;55;kW;380;108;50;4;1475;6214;6214;250;65;3;;;55;F;S1;Delta;Available;;;;349;406;250;;Internal;Horizontal
+EMO000939;ABB;32904052985VM;M2BA;55;kW;380;99;50;2;2962;6315;6315;250;60;3;0.90;;55;F;S1;Delta;Available;;;;310;410;250;;Internal;Horizontal
+EMO000938;ABB;32848072800WM;M2BA;75;kW;380;139;50;4;1475;6315;6315;250;65;3;0.88;;55;F;S1;Delta;Available;;;;311 349;406;250;;Internal;Horizontal
+EMO000488;ASGEN;;ASG 180L;22;kW;380;50;50;4;1450;;;180 L;;3;0.81;;55;F;S1;Delta;Available;;;;305;318;180;;Internal;Horizontal
+EMO004926;STROMBERG;3115896;HXUR;30;kW;380;60;50;4;1465;6312;6311;200 M;;3;;;55;F;S1;Delta;Available;;;;241 279;279;200;;Internal;Horizontal
+EMO003123;ABB;3239833;M2BA;90;kW;380;159;50;2;2970;6316;6316;280S;65;3;0.90;;55;F;;Delta;Available;;;;;457;280;;Internal;Horizontal
+EMO000934;ABB;3259208;M2BA;45;kW;380;86;50;4;1477;6313;6313;225S;60;3;0.85;;55;F;;Delta;Available;;;;;356;225;;Internal;Horizontal
+EMO003956;Siemens;KV3286A;IMB3;110;kW;380;183;50;2;2975;6315;6315;280M;;3;0.91;;55;F;;Delta;Available;;;;;457;280;;Internal;Horizontal
+EMO000932;ABB;3290397;M2BA;75;kW;380;134;50;2;2970;6315;6315;250S;60;3;0.91;;55;F;;Delta;Available;;;;;;;;Internal;Horizontal
+EMO002899;TECO;P9524601;AEEB;45;kW;380;93;50;4;1465;6313;6213;225M;60;3;;;55;F;;Delta;Available;;;;;356;225;;Internal;Horizontal
+EMO001881;TECO;;AEEB;15;kW;380;30;50;6;965;6311;6310;180L;48;3;;;54;F;;Delta;Not Available;;;;279;279;180;;Internal;Horizontal
+EMO001015;TECO;D7A370-1;ACT-VB001;600;kW;3000;146;50;6;986;NU326;6322;500 A;;3;;;55;F;S1;;Available;;;;1120;900;500;;Internal;Horizontal
+EMO001014;TECO;D57312-1;ACT;600;kW;3000;140;50;6;984;NU224;6322;450 C;;3;;;55;F;S1;;Available;;;;1120;900;450;;Internal;Horizontal
+EMO001637;TECO;MN600065-1;AEEB;175;HP;380;250;50;6;975;NU320;6316;315 M;;3;;;55;F;S1;Delta;Available;;;;410;510;315;;Internal;Horizontal
+EMO001012;TECO;C56103-4;AEEB;75;kW;380;143;50;6;975;NU318;6316;280 MC;;3;;;55;F;S1;Delta;Available;;;;419;457;280;;Internal;Horizontal
+EMO003933;Marathon;WX22001915-1000J;HCM;300;kW;3000;74.7;50;6;990;NU326;6326;400 HCM;;3;0.82;0.94;55;F;S1;;Available;;;;1000;700;400;;Internal;Horizontal
+EMO003671;Marathon;32000039180101;HCM400;300;kW;3000;75.4;50;6;990;NU326;6326;400;;3;;;55;F;S1;Start;Available;;;;800;650;400;;Internal;Horizontal
+EMO001009;TECO;D74382;AEJT;410;kW;3000;97.1;50;6;985;NU324;6322;450 M;;3;;;55;F;S1;;Available;;;;;;450;;Internal;Horizontal
+EMO001008;TECO;H7105109049;AEEB;37;kW;380;65.8;50;2;2900;6312;6212;200L;55;3;;;55;F;;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO003113;TECO;;AEEBKB;30;kW;380;53.8;50;4;1468;6312;6212;200 L;;3;0.85;;55;F;S1;Delta;Available;;;;;;200;;Internal;Vertical
+EMO000965;TECO;7791310008;AEEB;30;kW;380;57;50;4;1470;6312;6212;200 L;;3;;;55;F;S1;Delta;Available;;;;;;200;;Internal;Vertical
+EMO002167;ABB;3259204;M2BA;45;kW;380;88;50;4;1470;6313;6313;225 M;60;3;0.84;;55;F;S1;Delta;Available;;;;311;356;225;;Internal;Horizontal
+EMO000963;ABB;;QU;4;kW;380;8.6;50;4;1435;;;112 M;28;3;0.84;;55;F;S1;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO003843;ABB;3175326/3783VM;HXR;55;kW;380;107;50;4;1475;6312;6312;225 S;60;3;0.80;;55;F;S1;Delta;Available;;;;"286 
+311";356;225;;Internal;Horizontal
+EMO005039;ABB;818344;QU;4;kW;380;8.6;50;4;1435;;;112M;28;3;;;55;F;S1;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO001275;HUADA;;Y2;4;kW;380;8.6;50;4;1430;;;112;28;3;;;55;F;S1;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO003995;Marathon;AK15192301J;HJN1;11;kW;380;22;;4;1455;;;160M;;3;0.84;;55;F;;Delta;Available;;;;210;254;225;;Internal;Horizontal
+EMO003288;TECO;H61050443;AEEB;11;kW;380;20.9;50;4;1485;6309;6307;160;42;3;;;55;F;;Delta;Not Available;;;;215;254;160;;Internal;Horizontal
+EMO003099;TECO;243080;AEEB;18.5;kW;380;37;50;4;1455;6311;6310;180 M;48;3;;;55;F;S1;Delta;Not Available;;;;241;279;180;;Internal;Horizontal
+EMO000956;ASEA;;;18.5;kW;380;37;50;4;1450;6310;6309;180 M;48;3;;;55;F;S1;Delta;Available;;;;241;279;180;;Internal;Horizontal
+EMO003368;SEW;;KF76;0.75;kW;380;2.1;50;4;1400;;;;;3;;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO003367;SEW;;KF76;0.75;kW;380;2.1;50;4;1400;;;;;3;;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO002590;TOSHIBA;54031669;IK;2.2;kW;380;5.1;50;6;950;6206;6207;112;;3;;;44;E;;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO002589;TECO;;AEEB;2.2;kW;380;5.1;50;6;970;6207;6206;112;;3;;;;;;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO000026;Asgen;353668;;2.2;kW;380;5.5;50;6;980;6207;6207;112;;3;;;;;;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO002591;TOSHIBA;54031975;IKK;7.5;kW;380;15.4;50;6;960;6310;6208;160;42;3;;;44;B;;Delta;Not Available;;;;310;254;160;;Internal;Horizontal
+EMO002592;TOSHIBA;54031972;IKK;7.5;kW;380;15.4;50;6;960;6310;6208;160;42;3;;;44;B;;Delta;Not Available;;;;310;254;160;;Internal;Horizontal
+EMO002593;TOSHIBA;54031974;IKK;7.5;kW;380;15.4;50;6;960;6310;6208;160M;42;3;;;44;B;;Delta;Not Available;;;;310;254;160;;Internal;Horizontal
+EMO000090;ROTORNI;SA686379;XF;30;kW;380;59;50;4;1485;;;200L;55;3;;;54;F;S1;Delta;Available;;;;315;318;200;;Internal;Horizontal
+EMO002566;TECO;1871001336B046;AEEB;30;kW;380;57;50;4;1460;6312;6212;200L;55;3;;;54;F;S1;Delta;Available;;;;315;318;200;;Internal;Horizontal
+EMO003369;DREHSTORM;684379;;0.4;kW;380;1.7;50;4;1460;6204;6204;80A;;3;;;54;F;;Start;Not Available;;;;;;80;;Internal;Horizontal
+EMO003370;BEVI;1,871E+13;;0.4;kW;380;1.7;50;4;1400;6204;6204;80A;;3;;;55;F;;Start;Not Available;;;;;;80;;Internal;Horizontal
+EMO002565;HITACHI;D705954;TFO;7.5;kW;380;15.5;50;6;960;6309;6307;;;3;;;;B;;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO002564;HITACHI;D705954;TFO;7.5;kW;380;15.5;50;6;9600;6309;6307;;;3;;;;B;;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO002626;TECO;P9508203;AEEB;55;kW;380;105;50;4;1470;NU216;6513;250S;70;3;;;55;F;;Delta;Available;;;;311;318;250;;Internal;Horizontal
+EMO000229;WEG;;;5;HP;380;9.5;50;2;3000;;;;;3;;;55;F;S1;Delta;Not Available;;;;140;216;;;Internal;Horizontal
+EMO002624;WEG;11696;;5;HP;380;9.5;50;2;3000;;;;;3;;;;;;Delta;Not Available;;;;140;216;;;Internal;Horizontal
+EMO000774;TECO;;AEEB;7.5;kW;380;15;50;2;2900;6308;6306;132S;;3;;;55;F;;Delta;Not Available;;;;140;216;132;;Internal;Horizontal
+EMO001944;TECO;P9527553;AEEB;110;kW;380;205;50;4;1480;NU218;6214;280M;;3;;;55;F;;Delta;Available;;;;419;457;280;;Internal;Horizontal
+EMO002620;TECO;C56108-2;AEEB;110;kW;380;205;50;4;1480;NU318;6316;280M;;3;;;55;F;;Delta;Available;;;;411;457;280;;Internal;Horizontal
+EMO002622;TECO;C72043-11;AEEB;110;kW;380;205;50;4;1480;NU318;6316;280MC;;3;;;55;F;;Delta;Available;;;;419;457;280;;Internal;Horizontal
+EMO001855;TECO;MN60032-6;AEEB;55;kW;380;102;50;4;1425;6316;6213;250S;70;3;;;55;F;;Delta;Available;;;;311;406;250;;Internal;Horizontal
+EMO000573;ABB;233;MBT;37;kW;380;74;50;4;1475;;;225S;60;3;;;55;F;;Delta;Available;;;;"311 
+286";356;225;;Internal;Horizontal
+EMO002617;TECO;P9508202;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250S;70;3;;;55;F;;Delta;Available;;;;311;406;250;;Internal;Horizontal
+EMO002616;TECO;P9508204;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250S;70;3;;;55;F;;Delta;Available;;;;311;406;250;;Internal;Horizontal
+EMO000990;TECO;75C340047;AEEB;37;kW;380;72.7;50;4;1465;6313;6213;225S;;3;;;55;F;;Delta;Available;;;;290;356;225;;Internal;Horizontal
+EMO002900;TECO;P9527362;AEEB;45;kW;380;93;50;4;1455;6313;6213;225M;60;3;;;55;F;;Delta;Available;;;;311;356;225;;Internal;Horizontal
+EMO002883;ABB;131;MBT;7.5;kW;380;16;50;4;1440;;;132;38;3;;;55;F;;Delta;Not Available;;;;"178 
+140";216;132;;Internal;Horizontal
+EMO001044;SCROCH;20668400425;KA7250M;55;kW;380;103;50;4;1475;;;250M;65;3;0.86;;54;F;S1;Delta;Available;;;;349;406;250;;Internal;Horizontal
+EMO001043;SCROCH;20465401/12;KA7;55;kW;380;104;50;4;1475;;;250M;65;3;0.85;;54;F;S1;Delta;Available;;;;349;406;250;;Internal;Horizontal
+EMO001042;SCROCH;206817017/10;KA7;100;HP;380;126;50;4;1780;NU316J;6313C3;280S;75;3;;0.95;55;F;;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO001041;SCROCH;20152501/9;KA7;75;kW;380;139;50;4;1485;NU316J;6316C3;280S;75;3;0.86;;54;F;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO001040;SCROCH;20152502/10;KA7;75;kW;380;139;50;4;1475;NU316J;6316;280S;75;3;0.86;;54;F;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO001039;SCROCH;20152502/9;KA7;75;kW;380;139;50;4;1475;NU316J;6316;280S;75;3;0.86;;54;F;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO001038;SCROCH;20152502/6;KA7;75;kW;380;139;50;4;1475;NU316J;6316;280S;75;3;0.86;;54;F;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO000951;ABB;3296809;M2BA;110;kW;380;200;50;4;1486;6319;6316;315S;80;3;0.88;;55;F;;Delta;Available;;;;"457
+404";508;315;;Internal;Horizontal
+EMO003512;TECO;FC143281T1-1;AEJT;300;kW;3000;75.4;50;6;985;NU330;6322;400;;3;;;55;F;;;Available;;;;800;710;400;;Internal;Horizontal
+EMO000949;TECO;P9538201;AEEB;132;kW;380;242;50;4;1480;NU320;6316;315;;3;;;55;F;;Delta;Available;;;;419;508;715;;Internal;Horizontal
+EMO002931;TECO;D56333C-1;AEJT;300;kW;3000;73.6;50;6;982;NU220;6322;400A;;3;;;55;F;;;Available;;;;800;710;400;;Internal;Horizontal
+EMO000947;TECO;P9539841;AEEB;110;kW;380;205;50;4;1486;NU318;6316;280;80;3;;;55;F;;Delta;Available;;;;419;457;280;;Internal;Horizontal
+EMO000946;Siemens;73369;ILA;45;kW;380;88;50;6;975;;;280M;;3;;;55;F;S1;Delta;Available;;;;368;457;280;;Internal;Horizontal
+EMO000945;TECO;C56103-5;AEEB;75;kW;380;143;50;6;975;NU318;6316;;;3;;;55;F;;Delta;Available;;;;;;;;Internal;Horizontal
+EMO000944;ABB;3237086;M2BA;90;kW;380;165;50;4;1481;6316;6316;280;75;3;0.88;;55;F;;Delta;Available;;;;"368 
+419";457;280;;Internal;Horizontal
+EMO000942;TECO;C56103-3;AEEB;75;kW;380;143;50;6;975;NU318;6316;280;80;3;;;55;F;;Delta;Available;;;;419;457;280;;Internal;Horizontal
+EMO000274;TECO;18710005067;AEEBKB;7.5;kW;380;16.2;50;4;1450;6308;6306;132;;3;0.86;;55;F;S1;Delta;Available;;;;;;132;;Internal;Horizontal
+EMO000941;TECO;C56106-4;AEEB;110;kW;380;210;50;6;979;NU320;6316;315;;3;;;55;F;;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO003499;HUADA;58484702J;Y2;18.5;kW;380;35.5;50;4;1470;;;180 M;48;3;0.85;0.90;55;F;S1;Delta;Not Available;;;;241;279;180;;Internal;Horizontal
+EMO002001;TECO;K060092-1;AEEB;22;kW;380;42.9;50;4;1460;6311;6310;200 L;;3;;;55;F;S1;Delta;Available;;;;279;279;200;;Internal;Horizontal
+EMO002648;ABB;5582VM;HXA;7.5;kW;380;16.3;50;4;1440;6308;6307;132 L;;3;0.82;;55;F;S1;Delta;Not Available;;;;"178 
+140";216;132;;Internal;Horizontal
+EMO002518;ABB;MK161005-AD;MBT;15;kW;380;30;50;4;1460;6209;6209;160 L;42;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO000879;ASEA;100141;M2AA;30;kW;380;59;50;6;965;_;_;200;;3;;;55;F;S1;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO002859;ABB;;;3;kW;380;6.5;50;4;1450;;;;;3;;;55;F;;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO001049;TECO;H2069897028;AEEB;22;kW;380;44.3;50;4;1455;6311;6310;180L;;3;;;55;F;;Delta;Not Available;;;;;;180;;Internal;Horizontal
+EMO001048;ABB;GS6024193;QU;11;kW;380;22.5;50;4;1460;;;160M;;3;0.83;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001047;TECO;P65B003201219;AEEB;11;kW;380;21.5;60;4;1455;6309;6307;160M;;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO003366;TECO;P9524641;AEVB;11;kW;380;21.5;50;4;1455;6309;6307;160M;;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO003364;TECO;P9524781;AEVB;4;kW;380;9.1;50;4;1445;6306;6306;112M;;3;;;55;F;;Delta;Not Available;;;;;;112;;Internal;Vertical
+EMO000853;ABB;2234444C;M2BA;5.5;kW;380;11;50;4;1470;6208;6206;132M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO001062;ABB;;M2BA;11;kW;380;22;50;4;1445;;;160;;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO002070;TECO;7787140023;AEEB;45;kW;380;93;50;4;1465;6313;6213;225S;;3;;;55;F;;Delta;Available;;;;;;225;;Internal;V/H
+EMO001058;WAM;5116408;MT;1.1;kW;380;2.6;50;2;2850;;;;;3;0.84;;55;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO001052;NORD;;SK;7.5;kW;380;13.4;50;4;1460;;;132M;;3;0.77;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+MGM000998;Nord;36812781;SK;7.5;kW;380;13.4;50;4;1460;;;132M;;3;0.77;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001059;Siemens;800023172446/001;3-3FA4;7.5;kW;380;16.2;50;4;1435;6208;6208;132M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO000431;SEW;60.01094685.01.0001.06.3.M6;FA87/G DV132S4;7.5;kW;380;13.4;50;4;1460;;;132M;;3;0.77;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001954;ABB;1010309;M2BA;15;kW;380;29.5;50;4;1450;6309;6309;160L;;3;0.85;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001057;SEW;201806000000000000000;RX71D;3;kW;380;6;50;4;1400;;;100L;;3;0.83;;55;F;S1;Delta;Not Available;;;;;;100;;Internal;Horizontal
+EMO001056;TECO;P9524661;AEVB;3;kW;380;7.1;50;4;1400;6206;6305;100L;;3;;;55;F;;Delta;Not Available;;;;;;100;;Internal;Vertical
+EMO001055;ABB;190680450;;5;HP;380;8.1;50;4;1430;6307;6306;112M;;3;;;55;F;;Delta;Not Available;;;;;;112;;Internal;Vertical
+EMO005155;SIEMENS;JKD-3004756247.01.001;1LE0001-1EB4;22;kW;380;43;50;4;1480;6210;6210;180L;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005156;SIEMENS;JKD-3004756247.02.001;1LE0001 – 2BB2;45;kW;380;84;50;4;1480;6213;6213;225M;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005062;ABB;4671979;NMI 400L4A BAS;900;kW;3000;206;50;4;1450;6226;6220;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+EMO005063;ABB;4671980;NMI 400L4A BAS;900;kW;3000;206;50;4;1450;6226;6220;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+EMO005064;WEG;1048266484;W20 – AL 100 L - -04;3;kW;380;6.35;50;4;1400;6206;6205;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+EMO005065;WEG;1045525141;W20 – AL 100 L - -04;3;kW;380;6.35;50;4;1400;6206;6205;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+EMO005066;ABB;3GIC19100700515003;M2BAX 200 MLB 6;22;kW;380;46.7;50;6;985;6212;6209;;55;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+EMO005067;ABB;3GIC19100700515002;M2BAX 200 MLB 6;22;kW;380;46.7;50;6;985;6212;6209;;55;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+EMO005068;ABB;3GIC19110701975002;M3BP 355 LK B 8;315;kW;380;612;50;8;735;6322;6316;;100;3;;;55;F;S1;Delta;Available;;;;;;;;External;HORIZONTAL
+EMO005070;ABB;3GIC191012033760002;M3BP 100LD4;3;kW;380;6.3;50;4;1480;6206;6205;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+EMO005069;ABB;3GIC19110701975001;M3BP 355 LK B 8;315;kW;380;612;50;8;745;6322;6316;;100;3;;;55;F;S1;Delta;Available;;;;;;;;External;HORIZONTAL
+EMO005071;ABB;3GIC191012033760001;M3BP 100LD4;3;kW;380;6.3;50;4;1470;6206;6205;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+MGM000948;SIEMENS;NYU 1902/9990044-003;Z149 – LE 160 MF 4E;11;kW;380;21;50;4;1470;;;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;MGM
+MGM000945;SIEMENS;NYU 1902/9990043-004;D169 – LES 180 ZL J4E;22;kW;380;42;50;4;1480;;;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;MGM
+MGM000946;SIEMENS;NYU 1902/9990044-001;Z149 – LE 160 MF 4E;11;kW;380;21;50;4;1480;;;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;MGM
+MGM000950;SIEMENS;NYU 1902/9990044-002;Z149 – LE 160 MF 4E;11;kW;380;21;50;4;1480;;;;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;MGM
+EMO005072;MARATHON;WX11007978-2002J;LVF 250M -4;55;kW;380;104;50;4;1475;6314;6314;;65;3;;;55;F;S1;Delta;Available;;;;;;;;External;HORIZONTAL
+EMO005074;ECA;18067025;G 250A;0.55;kW;380;1;50;4;1480;;;;;3;;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO005073;MARATHON;WX11007978-2001J;LVF 250M -4;55;kW;380;104;50;4;1475;6314;6314;;65;3;;;55;F;S1;Delta;Available;;;;;;;;External;HORIZONTAL
+EMO005075;ECA;18067026;G 250A;0.55;kW;380;1;50;4;1480;;;;;3;;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO005076;SIEMENS;LMN1803/800016963970/001;1LE0001 – 0EB4;1.5;kW;380;3.45;50;4;1480;6205;6205;90L;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+EMO005077;SIEMENS;LMN1809/800018095944/002;1LE0001 – 0EB4;1.5;kW;380;3.45;50;4;1480;6205;6205;90L;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;VERTICAL
+EMO005078;MARATHON;WX11007978-3005J;SCA 280MA04;90;kW;380;167;50;4;1475;6317;6317;;75;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+EMO005079;MARATHON;WX11007978-3002J;SCA 280MA04;90;kW;380;167;50;4;1475;6317;6317;;75;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+MGM001050;SEW EURODRIVE;B1694665;K86 DV/12;1.2/2.2;kW;380;4.5/5.6;50;8P/4P;7.5/15;;;;;3;;;55;B;S1;Start Delta;Not Available;;;;;;;;Internal;Vertical
+EMO005088;NORD;332111570;SK;0.55;kW;380;1.5;50;4P;1480;;;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;Horizontal
+EMO004955;TECO;P920493100;AEBAO;11;kW;380;22.6;50;4;1460;6309;6307;160 M;;3;;;54;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO003883;ABB;3364738;M2BA 315 SM;132;kW;380;242;50;4;1486;6319;6316;315 S;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO003892;STORMBERG;3165178;HXUR;45;kW;380;90;50;4;1472;6316;6213;225 S;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005154;MARATHON;WX 11008545-4001;SCA 250 MA 04;55;kW;380;103;50;4;1480;6314;6314;250 M;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005083;MARATHON;WX11007928-1007;SCA 225S-04;37;kW;380;69.7;50;4;1475;6313;6213;225 S;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005084;MARATHON;WX11007928-1002;SCA 225S-04;37;kW;380;69.7;50;4;1475;6313;6213;225 S;;3;;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO003540;TECO;D840;AEJT;300;kW;3000;75;50;6;985;NU330;6322;400A;;3;;;55;F;S1;Start;Available;;;;800;710;400;;Internal;Horizontal
+EMO002088;TECO;R 301311;AEEBKB;22;kW;380;45.9;50;6;980;6312;6212;200L;55;3;;;55;F;S1;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO002045;ABB;141005-AB-01;MBT;5.5;kW;380;11;50;4;1420;;;132S;;3;;;55;B;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO003309;JODDAR;33683;;7.5;kW;380;15.5;50;6;950;;;160;42;3;;;54;E;S1;Delta;Not Available;;;;310;254;160;;Internal;Horizontal
+EMO003218;SEW;35.01002209.01;R77;0.8/2.4;kW;380;2.9/5.56;50;4;850/2650;;;100L;;3;0.66;;54;F;S3;;Not Available;;;;;;100;;Internal;Vertical
+EMO002807;"SEW EURODRIVE
+";35.7798244401.0001;RF 17;0.25;kW;380;1.27;50;4;1300;;;;;3;0.81;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO002834;"SEW EURODRIVE
+";35.7798244401.0001;RF 17;0.25;kW;380;1.27;50;4;1300;;;;;3;0.81;;55;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO002938;CGE;19051-267;C 100L 2;3;kW;380;6.4;50;2;2900;;;;;3;;;55;F;S1;Start;Not Available;;;;;;;;Internal;Horizontal
+EMO002918;TECO;C56107-1;AEEB-YM;130;kW;380;250;50;6;970;NU320;6316;315M;;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO004984;STROMBERG;8623 MP;HXUR;22;kW;380;43;50;4;1460;6310;6309;180 L;;3;;;55;F;S1;Delta;Available;;;;279;279;180;;Internal;Horizontal
+EMO003961;TOSHIBA;E207470HF;IDF-CHKW11;450;kW;420;760;50;6;1000/1200;6228;6228;400 H;;3;;;55;B;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001053;TECO;IJ29154;AEEB;11;kW;380;22.1;50;2;2880;6309;6307;160 M;;3;;;54;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO000915;ABB;;MBT 160M;11;kW;380;23;50;4;1475;;;160 M;;3;;;55;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO000904;ABB;;MBT 160M;11;kW;380;23;50;4;1475;;;160 M;;3;;;55;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+MGM000123;ASGEN;358904;225M/4;45;kW;380;83;50;4;1470;;;225M;;3;;;55;F;S1;;Available;;;;;;225;;Internal;Horizontal
+EMO003938;BEVI;AK 054605;391EL90L4;1.5;kW;380;3.3;50;4;1450;;;90L;;3;1.00;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO003937;HOYER;SH5916244622;HMC3 160M-4;11;kW;380;21;50;4;1470;;;160M;;3;1.00;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO003467;TOSHIBA;E128690HF;IDF-CHK11;225;kW;;400/375;50;6;1150/1380;6220;6220;315 H;;3;;;44;F;S1;;Available;;;;;;315;;Internal;Horizontal
+EMO003468;TOSHIBA;E128700HF;IDF-CHK11;225;kW;;400/375;50;6;1150/1380;6220;6220;315 H;;3;;;44;F;S1;;Available;;;;;;315;;Internal;Horizontal
+EMO002672;TOSHIBA;D128210ML;ICD-CHK M11;263;kW;310/350;600/530;50;6;300/1351;6230;6230;;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO002796;TOSHIBA;24152082;IK-FCKLAW21;3.7;kW;380;8.5/6.4;50;4;1410;6207;6305;;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001026;RELIANCE;07KL438027-AL-RX;L36987;150;kW;460;583;50;4;1187;6219;6216;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000800;Tunglee;;R;0.37;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000619;Tunglee;T19616101;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO003459;RELIANCE;30KL438025-ZN;L4034Z;220;kW;460;349;50;2;2000;6219;6316;;;3;;;55;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000653;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000620;Tunglee;T18430101;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000621;Tunglee;T13P3101;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000622;Tunglee;T18M07103;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001028;RELIANCE;IVM438027-AL-RX;P;375;kW;460;583;50;4;1187;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000625;Tunglee;14K06104;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000626;Tunglee;T15K12101;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000888;Tunglee;;Motor Dibongkar;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000627;Tunglee;HN0588058;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000628;Tunglee;T13P3101;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000629;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001029;RELIANCE;GVM438027-AL-RX;P;375;kW;460;583;50;4;1187;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000630;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001032;RELIANCE;GVM438027-AL-RX;L288ZZ;75;kW;460;124;50;4;1160;6311;6311;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO003365;ASEA;282;;11;kW;380;23;50;4;1450;;;;;3;;;54;E;S1;Delta;Available;;;;;;;;Internal;HORIZONTAL
+MGM000632;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001033;RELIANCE;13KL438027-QX;L3698Z;150;kW;460;240;50;4;1175;6219;6216;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000633;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000634;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000635;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001034;RELIANCE;14KL438027-QX;L3698Z;150;kW;460;240;50;4;1175;6219;6216;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000991;Tunglee;;R;0.37;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000637;Tunglee;;R;0.4;kW;380;1.1;;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001035;RELIANCE;15KL438027-QX;L3698Z;150;kW;460;240;;4;1175;6219;6216;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000638;Tunglee;;R;0.4;kW;380;1.1;;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000640;Tunglee;;R;0.4;kW;380;1.1;;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002837;RELIANCE;10KL438027-QX;L216Z;7.5;kW;460;12.6;;2;3560;6206;6208;;;3;;;;F;S1;Inverter;Not Available;;;;;;;;Internal;Horizontal
+EMO001031;RELIANCE;9KL438027-QX;L288ZZ;75;kW;460;124;;4;1160;6311;6311;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001030;RELIANCE;10KL438027-QX;L3203Z;110;kW;460;180;50;4;1170;6314;6313;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000497;Tunglee;;R;0.55;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002969;ABB;576;M2AA;37;kW;380;71;;4;1475;6312;6210;200 L;55;3;;;55;F;S1;Delta;Available;;;;260 305;318;200;;Internal;Horizontal
+EMO001037;RELIANCE;18KL438027-QX;L3203Z;110;kW;460;180;50;4;1170;6314;6313;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO003934;TOSHIBA;43;IKK;11;kW;460;19.5;50;4;1750/2100;6310;6208;;;3;;;44;F;S1;Inverter;Not Available;;;;;;;;Internal;Horizontal
+MGM000481;Sumitomo;M5064051;IC-F/FB-B8;5.5;kW;380;11.5;50;4;1410;6206;6206;F132S;;3;;;44;B;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+MGM000475;Tunglee;;R;0.4;kW;380;1.1;60;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001023;RELIANCE;3VM438027-AL-RX;P;530;kW;460;809;50;4;1186;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001017;RELIANCE;ZVM438027-AL-RX;P;475;kW;409;813;50;4;1577;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001025;RELIANCE;;P;375;kW;460;585;50;4;1187;6220;6220;;;3;;;55;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001019;RELIANCE;08KL438027-QX;L4034Z;220;kW;460;349;50;2;2000;6219;6316;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO000828;RELIANCE;01KL438027-QX;L3698Z;150;kW;460;240;50;4;1175;6219;6216;;;3;;0.85;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MGM000744;Tunglee;;R;0.4;kW;380;1.1;50;4;1400;;;;;3;;;44;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001408;RELIANCE;IVM438027-AL-RX;P;530;kW;460;809;50;4;1186;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001022;RELIANCE;9VM438027-AL-RX;P;375;kW;460;583;50;4;1187;6220;6220;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO000825;RELIANCE;;L288ZZ;75;kW;460;124;50;4;1160;6313;6313;;;3;;;;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+MPU000867;GRUNDFOS;85U155103119240073;MG1 1001LC2;3;kW;380;6.30;50;2;2900;6306;6205;100LC2;;3;;;55;F;;Start;Not Available;;;;;;;;Internal;Vertical
+MPU001299;GRUNDFOS;85U155103113200113;MG1 1001LC2;3;kW;380;6.30;50;2;2900;6306;6205;100LC2;;3;;;55;F;;Start;Not Available;;;;;;;;Internal;Vertical
+MFB000095;Gardner Denver;730-00675/106;G200 2BH1 943 7GC 46;25;kW;380;52;50;2;2930;;;;;3;;;55;;S1;Delta;Not Available;;;;;;;;Internal;Vertical
+EMO004877;KADANT NORDIC;;;0.75;kW;380;1.3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO004876;KADANT NORDIC;;;0.75;kW;380;1.3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO004875;KADANT NORDIC;;;0.75;kW;380;1.3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002601;KONE;846633;MF132F106N;15/2.5;kW;380;31/12;50;2;2750/415;;;;;3;;;;F;;Delta;Not Available;;;;;;;;Internal;Vertical
+EMO003225;KONE;708132;MF13ZA106N;15/2.5;kW;380;31/12;50;2;2750/415;;;;;3;;;;F;;Delta;Not Available;;;;;;;;Internal;Vertical
+MGM000222;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000223;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000221;KONE;;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4/ 20;1350/280;;;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000652;KONE;;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4/ 20;1350/280;;;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO003529;KONE;;MF 162;30/5;kW;380;57/20;50;2;2740/430;6310;6310;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO002604;KONE;;MF 162;30/5;kW;380;57/20;50;2;2740/430;6310;6310;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO003820;kONE;;MF 162;30/5;kW;380;57/20;50;2;2740/430;6310;6310;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO003168;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2740/430;;;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000227;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000228;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000224;KONE;;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4;1350/280;;;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO003874;KONE;;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4-16;1350/280;;;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO002605;KONE;;MF 162;30/5;kW;380;57/20;50;2;2740/430;6310;6310;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO002603;KONE;;MF 162;30/5;kW;380;57/20;50;2;2740/430;6310;6310;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000231;KONE;;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO001703;KONE;457115;MF0720;0.65/0.15;kW;380;1.9/1.4;50;2;2785/535;6005;6004;;;3;1.00;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO003867;KONE;52487907;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4;1350/280;;;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+MGM000324;SEW;74283;DT100LS4BMG;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000326;SEW;;DT100LS4BMG;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000327;SEW;;DT100LS4BMG;1.1;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000328;SEW;;DT100LS4BMG;3;kW;380;6.6;60;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO003955;SEW;;DT100LS4BMG;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;54;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000331;SEW;1110324101000290;FA90DT100L;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000346;SEW;11103241010001.9;FA90DT100L;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO005162;GEFECNE;1.821.140.010;B-S1-IP54;0.118;kW;24;6.5;50;;4500;;;;;1 Phase;;;54;B;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO005163;GEFECNE;;B-S1-IP54;0.118;kW;24;6.5;50;;4500;;;;;1 Phase;;;54;B;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO005164;GEFECNE;;B-S1-IP54;0.118;kW;24;6.5;50;;4500;;;;;1 Phase;;;54;B;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000734;TUNG LEE;T15611703;PL32-0400-200S3;0.4;kW;380;1.1;50;4;1400;;;;;3;;;;;;;Not Available;;;;;;;;Internal;Vertical
+MGM000780;TUNG LEE;;PL32-0400-200S3;0.4;kW;380;1.1;50;4;1400;;;;;3;;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGM000330;SEW;;FA90DT100L;3;kW;380;6.6;50;4;1400;;;;;3;1.00;;;F;S1;;Not Available;;;;;;;;Internal;Vertical
+MGB000450;KONE;52487907;MFLA208;3.7/0.9;kW;380;8.5/6.4;50;4;1350/280;;;;;3;;;;F;;;Not Available;;;;;;;;Internal;Vertical
+EMO005243;TECO;;AEEBKBA112M;4;kW;380;9.1;50;4;1445;;;112M;;3;;;;F;S1;;Not Available;;;;;;;;Internal;Horizontal
+EMO003447;HUADA;65687801J;HK;75;kW;380;140;50;4;1485;6317;6317;280;75;3;;0,93;55;F;S1;Delta;Available;;;;370;450;280;;Internal;Horizontal
+EMO003446;HUADA;65687901J;HK;160;kW;380;288;50;4;1485;6319;6319;315;80;3;0,89;;55;F;S1;Delta;Available;;;;510;510;315;;Internal;Horizontal
+EMO001704;TECO;7061713805;AEEBKB;45;kW;380;93;50;4;1465;6313RS;6213RS;225;60;3;;;55;F;S1;Delta;Available;;;;310;340;225;;Internal;Horizontal
+EMO001790;TECO;65C7420077;AEEBKB;22;kW;380;44,3;50;4;1455;6311RS;6310RS;180;48;3;;;55;F;S1;Delta;Not Available;;;;200;280;180;;Internal;Horizontal
+EMO001768;TECO;P65B0320150;AEEB;11;kW;380;21,5;50;4;1455;6309RS;6307RS;160;42;3;;;55;F;S1;Delta;Not Available;;;;200;250;160;;Internal;Horizontal
+EMO001767;TECO;18710019851097;AEEBKB;5,5;kW;380;12,1;50;4;1450;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;215;132;;Internal;Horizontal
+EMO001766;TECO;1871000818C067;AEEBKB;37;kW;380;72,7;50;4;1465;6313;6213;225S;60;3;;;55;F;S1;Delta;Available;;;;290;355;225;;Internal;Horizontal
+EMO002847;ABB;;MBT160;11;kW;380;23;50;4;1475;;;160L;42;3;;;55;F;S1;Delta;Not Available;;;;250;250;160;;Internal;Horizontal
+EMO000418;ABB;;MBT132M;7,5;kW;380;16,2;50;4;1445;;;132 M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO001765;TECO;MN60033-2;AEEBKB;75;kW;380;129;50;4;1475;6316;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;360;410;250;;Internal;Horizontal
+EMO001763;SUMITOMO;M5006731;F112;3,7;kW;380;7,5;50;4;1440;_;_;112M;;3;;;55;F;S1;Start;Not Available;;;;;;112;;Internal;Vertical
+EMO001775;TECO;P65B0470041;AEEBKB;15;kW;380;29;50;4;1450;6309;6307;160L;;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001549;ABB;8956811;M2BA;18,5;kW;380;24;50;4;1465;6211;6210;180M;;3;;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Horizontal
+EMO004888;TECO;75C5340051;AEEBKB;37;kW;380;70,9;50;4;1465;6313;6213;225S;60;3;;;55;F;S1;Delta;Available;;;;290;355;225;;Internal;Horizontal
+EMO001760;TECO;16C037;AEEBA;7,5;kW;380;18;50;6;965;6309RS;6307RS;160M;42;3;;;55;F;S1;Delta;Not Available;;;;;;;;Internal;Horizontal
+EMO001759;SEW;350107559401000;DRS;2,2;kW;380;4,95;50;4;1400;;;90L;;3;0,81;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO001764;SUMITOMO;;;11;kW;380;21;50;4;1450;_;_;160S;42;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO001685;BEVI;180BV240053;4AL2N;0,75;kW ;400;1,5;50;4;1430;6204;6204;;;3;0,75;;55;F;S1 ;;Not Available;;;;;;;;External;Vertical
+EMO001992;ASGEN;304104;;45;kW;380;83;50;4;1470;_;_;250;60;3;;;55;F;S1;Delta;Available;;;;310;340;250;;Internal;Horizontal
+EMO003334;OLAER;1608BV240053;YXL-80;0,75;kW;380;1,9;50;4;1430;6204;6204;;;3;0,75;0,79;55;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002705;TECO;18710005328013;AEVB;7,5;kW;380;16;50;4;1450;6308;6306;132M;38;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO002690;SIEMENS;1362489001-4;ILA;1,5;kW;380;3,1;50;2;2890;_;_;90S;24;3;0,87;;55;F;S1;Start;Not Available;;;;125;140;90;;Internal;Horizontal
+EMO002687;ABB;;M2QA;1,5;kW;380;2,23;50;2;2866;6205;6205;90S;23;3;;;55;F;S1;Start;Not Available;;;;125;140;90;;Internal;Horizontal
+EMO001672;SIEMENS;2054943001;FDU;11;kW;380;21,5;50;4;1460;_;_;160M;42;3;0,84;;55;F;S1;Start;Not Available;;;;;;160;;Internal;Horizontal
+EMO005012;SIEMENS;1362489001-2;ILA90;1,5;kW;400;3,05;50;2;2890;_;_;90S;;3;0,87;;55;F;S1;Start;Not Available;;;;125;140;90;;Internal;Horizontal
+EMO000451;ABB;305;MBT;11;kW;380;23;50;4;1400;6209;6209;160M;42;3;0,81;;55;F;S1;Delta;Not Available;;;;210;240;160;;Internal;Horizontal
+EMO001603;TECO;1871001235A006;AEEBKB;7,5;kW;380;15,9;50;6;965;6309;6307;160M;42;3;;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Horizontal
+EMO001604;SEW;81170312440310001X11;DRE;1,5;kW;380;3,7;50;6;970;_;_;112;;3;;;55;F;S1;Start;Not Available;;;;;;112;;Internal;Vertical
+EMO005087;MARATHON;WX11007928-1010;SCA;37;kW;380;69,7;50;4;1475;6313;6213;225S;;3;0,87;92.70%;55;F;S1 ;Delta;Not Available;;;;;;225;;Internal;Horizontal
+EMO002097;CGE;21496-2;C;18,5;kW;380;36;50;4;1470;_;_;180M;;3;;;55;B;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO001758;HUADA;60883501J;Y2;45;kW;380;84,5;50;4;1475;_;_;225M;60;3;0,87;;55;F;S1;Delta;Not Available;;;;310;360;225;;Internal;Horizontal
+EMO001757;TECO;C060316-3;AEEBKB;45;kW;380;92,8;50;8;750;NU318;6316;280S;80;3;;;55;F;S1;Delta;Available;;;;370;45;280;;Internal;Horizontal
+EMO001590;TECO;75B3480020;AEEBKB;55;kW;380;105;50;4;1470;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;310;400;250;;Internal;Horizontal
+EMO001788;TECO;1871000818C004;AEEBKB;37;kW;380;72,7;50;4;1465;6313RS;6213RS;225S;60;3;;;55;F;S1;Delta;Available;;;;290;350;225;;Internal;Horizontal
+EMO001588;TECO;75C7200004;AEEBKB;45;kW;380;93;50;4;1465;6313;6213;225;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO000533;ABB;3232147;M2BA;200;kW;380;366;50;4;1485;6319;6316;315;90;3;0,87;;55;F;S1;Delta;Available;;;;460;460;315;;Internal;Horizontal
+EMO001585;TECO;7061713030;AEEBKB;45;kW;380;93;50;4;1465;6313;6213;225 M;60;3;;;55;F;S1;Delta;Available;;;;310;340;225;;Internal;Horizontal
+EMO001578;TECO;750534602;AEEBKB;37;kW;380;72,7;50;4;1465;6313RS;6213RS;225S;60;3;;;55;F;S1;Delta;Available;;;;290;360;225;;Internal;Horizontal
+EMO005013;HUADA;58673301J;Y2;75;kW;380;135;50;2;2965;6314;6314;200;65;3;0,91;0,93;55;F;S1;Delta;Available;;;;375;450;200;;Internal;Horizontal
+EMO001867;TECO;1572001553;AEEBKB;75;kW;380;129;50;4;1475;6316;6213;250MC;70;3;;;55;F;S1;Delta;Available;;;;360;400;250;;Internal;Horizontal
+EMO001083;TECO;C10514-1;AEJH-YB;200;kW;380;46,8;50;4;1475;NU324;6320;315C;110;3;;0,92;55;F;S1;;Available;;;;710;550;315;;Internal;Horizontal
+EMO001692;TECO;AC58005-12;AEEBKB;90;kW;380;174;50;4;1475;6318;6316;280S;80;3;;;55;F;S1;Delta;Available;;;;360;460;280;;Internal;Horizontal
+EMO001573;HUADA;6088400;Y2;110;kW;380;201;50;4;1480;6319;6319;315S;80;3;0,88;0,94;55;F;S1;Delta;Available;;;;510;420;315;;Internal;Horizontal
+EMO001572;HUADA;60883203J;Y2;30;kW;380;57,6;50;4;1475;6312RS;6312RS;200L;55;3;0,87;;55;F;S1;Delta;Not Available;;;;300;310;200;;Internal;Horizontal
+EMO004026;MARATHON;AC15194401J;HJN1;75;kW;380;140;50;4;1480;NU317;6317;280S;75;3;0,87;;55;F;S1;Delta;Available;;;;360;450;280;;Internal;Horizontal
+EMO001570;HUADA;60883001J;Y2;37;kW;380;89;50;4;1475;_;_;225S;60;3;;;55;F;S1;Delta;Not Available;;;;290;350;225;;Internal;Horizontal
+EMO001569;HUADA;608839025;Y2;75;kW;380;140;50;4;1485;_;_;200S;75;3;0,87;;55;F;S1;Delta;Available;;;;365;430;280;;Internal;Horizontal
+EMO001568;HUADA;060180901J;Y2HV;250;kW;3000;62,5;50;6;1000;6326;6326;400;110;3;0,82;;55;F;S1;Start;Available;;;;1000;700;400;;Internal;Horizontal
+EMO001566;TECO;;Y2;160;kW;380;293;50;4;1485;;;315;80;3;0,89;0,94;55;F;S1;Delta;Available;;;;510;510;315;;Internal;Horizontal
+EMO004240;MARATHON;72105610J;HJ NI;110;kW;380;201;50;4;1480;6319;6319;315;80;3;0,88;;55;F;S1;Delta;Available;;;;410;510;315;;Internal;Horizontal
+EMO001694;ASEA;5648089;MBRF;55;kW;380;82;50;6;975;;;280M;75;3;0,88;;55;F;S1;Delta;Available;;;;420;465;206;;Internal;Horizontal
+EMO004239;MARATHON;72105610J;HJNI;110;kW;380;201;50;4;1480;6319;6319;315;80;3;0,88;;55;F;S1;Delta;Available;;;;400;500;315;;Internal;Horizontal
+EMO002884;TECO;7507300002;AEEBKB;45;kW;380;93;50;4;1465;6313;6213;225 M;113,7;3;;;55;F;S1;Delta;Available;;;;290;340;225;;Internal;Horizontal
+EMO001689;SIEMENS;96351;ILA2;55;kW;380;78;50;6;980;;;280M;75;3;0,88;;44;B;S1;Delta;Available;;;;370;455;280;;Internal;Horizontal
+EMO003044;TECO;;AEEBAC;11;kW;380;21,5;50;4;1455;6309;6307;160M;42;3;;;54;F;S1;Delta;Not Available;;;;210;245;160;;Internal;Horizontal
+EMO002091;ABB;MK171011AB;MBT;55;kW;380;108;50;4;1475;;;250;70;3;0,84;;55;F;S1;Delta;Available;;;;320;400;250;;Internal;Horizontal
+EMO001686;TECO;75B2300070;AEEBKB;30;kW;380;57;50;4;1460;6312RS;6212RS;200L;55;3;;;55;F;S1;Delta;Available;;;;200;300;300;;Internal;Horizontal
+EMO004238;MARATHON;72104802J;HJNI;45;kW;380;84,4;50;4;1480;6313;6313;225;60;3;0,87;;55;F;S1;Delta;Not Available;;;;310;350;225;;Internal;Horizontal
+EMO001682;TECO;7334350002;AEEBKB;37;kW;380;78;50;8;720;NU216;6213;225;70;3;;;55;F;S1;Delta;Available;;;;290;340;225;;Internal;Horizontal
+EMO001681;STROMBERG;3126183;HNR;75;kW;380;145;50;4;1485;;;280;75;3;;;55;B;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO002141;TECO;MN304339;AEEBCB;55;kW;380;105;50;4;1470;NU216;6213;250SC;65;3;;;55;F;S1;Delta;Available;;;;310;410;250;;Internal;Horizontal
+EMO002682;TECO;K957388-1;AEEBCB;75;kW;380;138;50;2;2950;6319;6219;250M;60;3;;;55;F;S1;Delta;Available;;;;349;406;250;;Internal;Horizontal
+EMO003951;TECO;H71887121106;AEEBKB;45;kW;380;84,5;50;4;1475;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;310;360;225;;Internal;Horizontal
+EMO002029;US ELECTRIC;693323;TE;30;kW;380;63,2;50;6;975;6313;6212;225M;60;3;;;55;F;S1;Delta;Available;;;;310;330;225;;Internal;Horizontal
+EMO001675;HUADA;608833015;Y2;55;kW;380;102;50;4;1475;6314RS;6314RS;250M;65;3;0,87;0,93;55;F;S1;Delta;Not Available;;;;350;380;250;;Internal;Horizontal
+EMO001673;TECO;73A4380002;AEEBKB;37;kW;380;78;50;8;720;NU216;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;380;350;250;;Internal;Horizontal
+EMO001669;TECO;AC56032-6;AEEBKB;150;kW;380;275;60;4;1480;6320;6316;315M;85;3;;;55;F;S1;Delta;Available;;;;315;500;450;;Internal;Horizontal
+EMO001668;TECO;7061713024;AEEB;45;kW;380;93;50;4;1465;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;320;345;225;;Internal;Horizontal
+EMO001667;TECO;MN40005-9;AEEBCB;90;kW;380;168;50;4;1475;NU218;6214;280S;80;3;;;55;F;S1;Delta;Available;;;;370;470;280;;Internal;Horizontal
+EMO001665;ABB;3GAA222002-ADA;M2AA;45;kW;380;86;50;4;1475;6313;6212;225S;60;3;0,86;;55;F;S1;Delta;Available;;;;190;370;225;;Internal;Horizontal
+EMO003101;TECO;15C5340046;AEEBKB;37;kW;380;72;50;4;1465;6313;6213;225;60;3;;;55;F;S1;Delta;Available;;;;365;445;225;;Internal;Horizontal
+EMO003887;ABB;3511998;MBBP;90;kW;380;160;50;4;1483;;;280SM;;3;0,87;;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO001661;TECO;D119212-1;AECT;400;kW;3000;94,2;50;6;988;NU224;6322;450;113,4;3;;;55;F;S1;Delta;Available;;;;900;700;450;;Internal;Horizontal
+EMO001660;TECO;75B4760009;AEEBKB;75;kW;380;140;50;4;1475;6316;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;350;400;250;;Internal;Horizontal
+EMO000342;TECO;H23B846005;AEEBKB;30;kW;380;57;50;4;1460;6312;6212;200L;61,1;3;;;55;F;S1;Delta;Available;;;;310;38;200;;Internal;Horizontal
+EMO001653;TECO;H1871001212002;AEEBKB;22;kW;380;46,4;50;6;970;6312;6212;200L;55;3;;;55;F;S1;Delta;Available;;;;300;320;200;;Internal;Horizontal
+EMO001649;TECO;C061656-1;AEJH;200;kW;3000;46,8;50;4;1475;6320;6320;315C;110;3;;;55;F;S1;Delta;Available;;;;710;500;315;;Internal;Horizontal
+EMO001648;TECO;C11A616-1;AEJH;200;kW;3000;46,8;50;4;1475;NU324;6320;315C;110;3;;;55;F;S1;Delta;Available;;;;710;500;315;;Internal;Horizontal
+EMO001647;ROTOR-NL;7304913;XF;22;kW;380;46,4;50;6;970;;;200;55;3;;;54;F;S1;Delta;Available;;;;300;310;200;;Internal;Horizontal
+EMO001646;TECO;C063606-4;AEJH;200;kW;3000;46,7;50;4;1480;6320;NU324;315C;110;3;;;55;F;S1;Delta;Available;;;;710;510;315;;Internal;Horizontal
+EMO005086;MARATHON;WX11007928-1009;SCA;37;kW ;380;69,7;50;4;1475;6313;6213;225S;;3;0,87;0,927;55;F;S1 ;Delta;Not Available;;;;;;225;;Internal;Horizontal
+EMO005085;MARATHON;WX11007928-1008;SCA;37;kW ;380;69,7;50;4;1475;6313;6213;225S;;3;0,87;0,927;55;F;S1 ;Delta;Not Available;;;;;;225;;Internal;Horizontal
+EMO004269;MARATHON;AK-15198501J;HJN1;37;kW;380;69;50;4;1480;6313;6313;2255;60;3;0,87;0,92;55;F;S1;Delta;Available;;;;290;390;225;;Internal;Horizontal
+EMO001643;TECO;0M6F005;AEEB;22;kW;380;46,4;50;6;966;6312;6213;200;55;3;;;55;F;S1;Delta;Available;;;;300;310;200;;Internal;Horizontal
+EMO001640;TECO;H1871001377003;AEEBKB;22;kW;380;46,4;50;6;970;6312;6212;200;55;3;;;55;F;S1;Delta;Available;;;;300;320;200;;Internal;Horizontal
+EMO003293;TECO;MN60032-3;AEEB;55;kW;380;102;50;4;1475;6316;6213;250S;71,3;3;;;55;F;S1;Delta;Available;;;;310;390;250;;Internal;Horizontal
+EMO001638;CGE;723479-1;C;30;kW;380;61;50;8;730;;;250;65;3;;;44;E;S1;Delta;Available;;;;350;410;250;;Internal;Horizontal
+EMO003908;TOSHIBA;E167412HM;IDF;250;kW;380;59;50;4;1475;6324;6220;280;100;3;;;44;F;S1;Delta;Available;;;;460;450;280;;Internal;Horizontal
+EMO001635;;AC5A042-2;AEEBKB;160;kW;380;275;60;4;1480;6320;6316;315;85;3;;;55;F;S1;Delta;Available;;;;;;315;;Internal;Horizontal
+EMO002868;HUADA;58486401J;Y2;75;kW;380;142;50;6;996;;;315;80;3;0,86;;55;F;S1;Delta;Available;;;;410;520;315;;Internal;Horizontal
+EMO002615;TECO;P9508171;AEEBPA;37;kW;380;72,7;50;4;1465;6313;6213;225;60;3;;;55;F;S1;Delta;Available;;;;285;330;225;;Internal;Horizontal
+EMO003907;TOSHIBA;E167410HM;IDF;250;kW;3000;59;50;4;1475;6324;6220;280;100;3;;;44;F;S1;Delta;Available;;;;460;450;280;;Internal;Horizontal
+EMO001631;SIEMENS;997809;ILA2;55;kW;380;79;50;6;980;;;280M;75;3;0,87;;44;B;S1;Delta;Available;;;;415;475;6;;Internal;Horizontal
+EMO003052;TECO;P9527384;AEEBPA;90;kW;380;168;50;4;1475;NU318;6316;280F;80;3;;;55;F;S1;Delta;Available;;;;370;450;280;;Internal;Horizontal
+EMO001618;ASEA;902614;RAB;75;kW;380;140;50;4;1485;6317;6317;280S;75;3;0,87;;55;F;S1;Delta;Available;;;;380;450;280;;Internal;Horizontal
+EMO001553;HUADA;60883901S;Y2;75;kW;380;140;50;4;1475;6317;6317;250S;75;3;0,87;0,93;55;F;S1;Delta;Available;;;;380;450;280;;Internal;Horizontal
+EMO003837;ABB;3467714;M2BA;55;kW;380;103;50;4;1476;6315;6315;250M;70;3;0,87;;55;F;S1;Delta;Available;;;;350;410;250;;Internal;Horizontal
+EMO001595;TECO;1871000809B004;AEEBKB;45;kW;380;88;50;6;970;NU216;6213;280;70;3;;;55;F;S1;Delta;;;;;350;400;280;;Internal;Horizontal
+EMO001594;HUADA;608833005;Y2;55;kW;380;102;50;4;1470;;;250M;70;3;0,87;;55;F;S1;Delta;Not Available;;;;350;410;250;;Internal;Horizontal
+EMO001593;TECO;1871000809B009;AEEBKB;45;kW;380;88;50;6;970;NU216;6213;250;70;3;;;55;F;S1;Delta;Available;;;;250;400;250;;Internal;Horizontal
+EMO001592;HUADA;60883204J;Y2;30;kW;380;97,6;50;4;1470;;;200L;55;3;;;55;F;S1;Delta;Not Available;;;;305;320;200;;Internal;Horizontal
+EMO001591;TECO;H1871001377005;AEEBKB;22;kW;380;46,4;50;6;970;6312;6212;200L;55;3;;;55;F;S1;Delta;Available;;;;300;320;200;;Internal;Horizontal
+EMO001582;HUADA;;Y2;30;kW;380;57,6;50;4;1475;;;200L;55;3;;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Horizontal
+EMO000405;TECO;P9727761;AEEB;15;kW;380;30;50;6;965;6311;6311;180;48;3;;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Horizontal
+EMO001580;TECO;P9527382;AEEBPA;125;HP;380;168;50;4;1475;NU318;6316;280S;87,3;3;;;55;F;S1;Delta;Available;;;;380;480;280;;Internal;Horizontal
+EMO001579;TECO;K060316-1;AEEBKB;60;HP;380;92,8;50;8;725;NU318;6316;280F;80;3;;;55;F;S1;Delta;Available;;;;380;435;280;;Internal;Horizontal
+EMO003311;TECO;035039-6;AEEBCK;125;kW;380;160;50;4;1475;NU218;6214;280S;80;3;;;55;F;S1;Delta;Available;;;;370;450;280;;Internal;Horizontal
+EMO001550;TECO;1871000809B001;AEEBKB;45;kW;380;88;50;6;970;NU216;6213;280;70;3;;;55;F;S1;Delta;Available;;;;350;410;280;;Internal;Horizontal
+EMO002098;ABB;G38940491;QU;18,5;kW;380;37;50;4;1460;6210;6210;180M;48;3;;;55;F;S1;Delta;Not Available;;;;240;250;180;;Internal;Horizontal
+EMO002123;TECO;661036;AEEBAC;7,5;kW;380;17;50;6;965;6309;6307;160M;42;3;;;55;F;S1;Delta;Not Available;;;;210;240;160;;Internal;Horizontal
+EMO003322;HUADA;60883701j;Y2;90;kW;380;65;50;4;1485;;;280M;75;3;0,87;0,93;55;F;S1;Delta;Available;;;;470;460;280;;Internal;Horizontal
+EMO001547;HUADA;6088341j;Y2;160;kW;380;290;50;4;1485;;;315;80;3;0,89;;55;F;S1;Delta;Available;;;;500;500;315;;Internal;Horizontal
+EMO004002;MARATHON;AK15192701J;HJN1;132;kW;380;61,1;50;8;740;NU322;7322;355A;100;3;0,82;;55;F;S1;Delta;Available;;;;630;610;355;;Internal;Horizontal
+EMO001754;TECO;9106110001;AEEBKB;55;kW;380;107;50;8;737;NU318;6316;380M;80;3;;;55;F;S1;Delta;Available;;;;420;460;380;;Internal;Horizontal
+EMO001658;TECO;MN60036-1;AEEBKB;110;kW;380;210;50;6;975;NU320;6316;315;85;3;;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO001657;TECO;C063608-2;AEJE;110;kW;380;217;50;8;737;NU324;6320;315A;90;3;;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO001656;TECO;C063608-3;AEJE;110;kW;380;217;50;8;737;NU324;6320;315A;90;3;;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO001655;TECO;C063608-1;AEJE;110;kW;380;217;50;8;737;NU324;6320;315A;90;3;;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO001652;TECO;AC062057-1;AEEBKB;125;HP;380;190;50;8;730;NU320;6316;315A;80;3;;;55;F;S1;Delta;Available;;;;450;500;315;;Internal;Horizontal
+EMO001651;TECO;AC062057-2;AEEBKB;125;HP;380;190;50;8;730;NU320;6316;315M;80;3;;;55;F;S1;Delta;Available;;;;450;500;315;;Internal;Horizontal
+EMO001650;TECO;C063604-3;AEJH;250;kW;3000;64,1;50;8;740;NU326;6322;400;110;3;;;55;F;S1;Delta;Available;;;;800;685;400;;Internal;Horizontal
+EMO001645;TECO;MN60074-1;AEEBKB;132;kW;380;242;50;4;1480;6320;6316;315S;85;3;;;55;F;S1;Delta;Available;;;;406;508;315;;Internal;Horizontal
+EMO001642;TECO;MN60073-4;AEEBKB;110;kW;380;205;50;4;1480;6318;6316;280;80;3;;;55;F;S1;Delta;Available;;;;420;450;280;;Internal;Horizontal
+EMO000984;TECO;P0409564-1;AEEBKB;132;kW;380;252;50;6;975;6320;6316;315;85;3;;;55;F;S1;Delta;Available;;;;450;500;315;;Internal;Horizontal
+EMO001636;TECO;C063605-1;AEJH;250;kW;3000;61,1;50;6;990;NU326;6322;355AC;;3;;;;;;;;;;;;;;;;
+EMO003967;TECO;9106308001;AEEBKB;75;kW;380;145;50;8;727;NU320;6316;315M;85;3;;;55;F;S1;Delta;Available;;;;410;500;315;;Internal;Horizontal
+EMO003801;ABB;9447010675402;M3BP;160;kW;380;310;50;8;743;6322;6316;355;100;3;0,82;;55;F;S1;Delta;Available;;;;500;600;355;;Internal;Horizontal
+EMO001558;ABB;3285429;M2BA;160;kW;380;315;50;8;741;6322;6319;355S;100;3;0,81;;55;F;S1;Delta;Available;;;;560;600;355;;Internal;Horizontal
+EMO001556;TECO;9106306001;AEEBKB;132;kW;380;227;50;4;1480;NU320C3;6316;315S;85;3;;;55;F;S1;Delta;Available;;;;510;500;315;;Internal;Horizontal
+EMO001555;HUADA;060180601J;Y2;55;kW;380;105;50;6;980;;;280M;75;3;0,86;0,92;55;F;S1;Delta;Available;;;;410;410;280;;Internal;Horizontal
+EMO001554;HUADA;060180201J;Y2;110;kW;380;207;50;6;985;NU319;6319;315L;85;3;0,86;0,94;55;F;S1;Delta;Available;;;;500;500;315;;Internal;Horizontal
+EMO001552;HUADA;060180101J;Y2;75;kW;380;151;50;8;740;NU319;6319;315L;80;3;0,81;0,93;55;F;S1;Delta;Available;;;;500;500;315;;Internal;Horizontal
+EMO001544;SUMITOMO;HN0950708;MGM;3;kW;380;6,5;50;4;1420;;;112S;;3;0,82;;55;F;S1;Start;Not Available;;;;;;112;;Internal;Vertical
+EMO001545;SUMITOMO;HN1029346;MGM;3;kW;380;6,5;50;4;1420;;;112S;;3;0,82;;55;F;S1;Start;Not Available;;;;;;112;;Internal;Vertical
+EMO001693;TECO;D82264-1;AECKS2;1000;kW;3000;256;50;12;493;;;710 B;180;3;;;55;F;S1;Delta;Not Available;;;;;;710;;;Horizontal
+EMO001627;INDUCTION;D165655;TFC-KK;11;kW;380;22;50;4;1440;6309;6307;160M;42;3;;;44;B;S1;Delta;Not Available;;;;250;250;160;;Internal;Horizontal
+EMO001623;SUMITOMO;;TC-FX;3,7;kW;380;7,8;50;4;1420;6307RS;6206RS;112M;32;3;;;;;;;Not Available;;;;;;112;;Internal;Vertical
+EMO002664;TECO;MN60065-2;AEEBKB;175;HP;380;250;50;6;975;NU320;6316;315M;85;3;;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO004263;MARATHON;AK15197901J;HJN1;75;kW;380;141;50;6;985;NU319;6319;280F;85;3;0,88;;55;F;S1;Delta;Available;;;;420;420;280;;Internal;Horizontal
+EMO004050;MARATHON;AK15195501J;HJN1;110;kW;380;201;50;4;1480;NU319;6319;315S;80;3;0,88;;55;F;S1;Delta;Available;;;;410;500;315;;Internal;Horizontal
+EMO004266;MARATHON;AK15198201J;HJN1;110;kW;380;201;50;4;1480;NU319;6319C3;315S;80;3;0,88;;55;F;S1;Delta;Available;;;;410;500;315;;Internal;Horizontal
+EMO004235;MARATHON;72104404J;HJN1;30;kW;380;57;50;4;1450;6312RS;6312RS;200L;55;3;0,86;;55;F;S1;Delta;Not Available;;;;310;320;200;;Internal;Horizontal
+EMO002983;ASEA;;MBRF28;132;kW;380;250;50;4;1485;NU219;6219;315;80;3;0,85;;55;B;S1;Delta;Available;;;;450;480;315;;Internal;Horizontal
+EMO001935;TECO;MN60474-2;AEEBKB;110;kW;380;203;50;4;1480;NU318;6316;315S;80;3;;;55;F;S1;Delta;Available;;;;400;530;315;;Internal;Horizontal
+EMO001621;TECO;D063214-1;AECTPA;900;kW;3000;216;50;6;988;NU226;6324;560A;125;3;;;55;F;S1;Delta;Available;;;;1111;1111;560;;Internal;Horizontal
+EMO003294;YASKONCI;7004901;FEQ;2,2;kW;380;5,5;50;6;955;6306;6206;112M;28;3;;;44;E;S1;Delta;Not Available;;;;140;230;112;;Internal;Horizontal
+EMO001541;HUADA;61091401J;Y2;132;kW;380;241;50;4;1485;6319;6319;315;80;3;0,88;;55;F;S1;Delta;Available;;;;460;510;315;;Internal;Horizontal
+EMO002133;ABB;3334698;M2BA;200;kW;380;370;50;6;991;6322;6319;355SMA;100;3;0,86;;55;F;S1;Delta;Available;;;;560;600;355;;Internal;Horizontal
+EMO001540;TECO;D119213-1;AECTPA;600;kW;3000;136;50;4;1485;NU224;6322;450B;110;3;;;55;F;S1;Delta;Available;;;;1110;900;450;;Internal;Horizontal
+EMO001557;TECO;C11A617-1;AEJE;175;HP;380;257;50;8;737;6320;NU324;315A;110;3;;;55;F;S1;Delta;Available;;;;560;510;315;;Internal;Horizontal
+EMO002129;ABB;4439VM;HXA;7,5;kW;380;16,3;50;4;1440;6308;6307;132S;38;3;0,87;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO002992;ABB;680;MT;0,75;kW;380;1,6;50;4;1410;;;80B;;3;;;55;F;S1;Start;Available;;;;;;80;;Internal;Vertical
+EMO003060;ABB;H503023021006;M2QA;1,5;kW;380;3,1;50;2;2850;6205;6205;90;24;3;0,87;;55;F;S1;Start;Not Available;;;;120;140;90;;Internal;Horizontal
+EMO003125;ABB;;M2QA;1,5;kW;380;3,1;50;2;2850;6205;6205;90;24;3;0,87;;55;F;S1;Start;Not Available;;;;120;140;90;;Internal;Horizontal
+EMO000926;ABB;9000360C10;HXA;22;kW;380;45;50;4;1485;;;180L;48;3;0,87;;55;F;S1;Delta;Not Available;;;;280;280;180;;Internal;Horizontal
+EMO001562;TECO;K050719-1;AEEBK;1,5;kW;380;3,1;50;2;2820;6205;6205;90S;24;3;;;55;F;S1;Start;Not Available;;;;120;140;90;;Internal;Horizontal
+EMO001564;ABB;503023021012;M2QA;1,5;kW;380;3,23;50;2;2850;6205;6205;90S;24;3;0,87;;55;F;S1;Start;Not Available;;;;120;140;90;;Internal;Horizontal
+EMO001561;FLENDER;317002/1;K168;11;kW;380;21,5;50;4;1450;;;M160;42;3;0,82;;55;F;S1;Start;Not Available;;;;;;160;;Internal;Vertical
+EMO001565;SUMITOMO;HN040443;TK-FX;22;kW;380;41;50;4;1470;;;180MG;;3;0,87;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Vertical
+EMO001620;NORD;82071375500;SK;30;kW;380;55;50;4;1460;;;200 L;42;3;0,86;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Vertical
+EMO001539;NORD;101008855;SK;15;kW;380;28,5;50;4;1465;;;160 L;;3;0,86;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+MGM000110;FLENDER;705/1807;D88M80M4;0,75;kW ;380;2;50;4;1400;;;;;3;;;54;F;S1;Start;Not Available;;;;140;190;112;;Internal;Vertical
+EMO001740;TECO;7061713012;AEEBKB;45;kW;380;93;50;4;1465;6313;6213;225;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO002926;TECO;7161100008;AEEF;30;kW;380;60;50;6;965;NU313;6212;200;55;3;;;55;F;S1;Delta;Available;;;;320;320;200;;Internal;Horizontal
+EMO001769;TECO;75B3480038;AEEB;55;kW;380;105;50;4;1470;6316;6213;250;80;3;;;55;F;S1;Delta;Available;;;;310;400;250;;Internal;Horizontal
+EMO001132;TECO;C107633-1;AEJH;250;kW;3000;57,7;50;4;1480;NU324;6320;315;190;3;;;54;F;S1;Delta;Available;;;;500;500;315;;Internal;Horizontal
+EMO001736;SIEMENS;964551;1LA2;75;kW;380;143;50;6;985;;;315;80;3;0,88;;44;B;S1;Delta;Available;;;;400;510;315;;Internal;Horizontal
+EMO001734;TECO;7041713028;AEEB;45;kW;380;93;50;4;1463;6313RS;6213RS;225;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO001733;TECO;75B4760024;AEEB;75;kW;380;140;50;4;1475;6316;6213;250;70;3;;;55;F;S1;Delta;Available;;;;350;410;250;;Internal;Horizontal
+EMO001732;SIEMENS;963518;ILA2;55;kW;380;78;50;6;980;;;280;75;3;0,88;;44;B;S1;Delta;Available;;;;420;450;280;;Internal;Horizontal
+EMO003515;ABB;;M2;1,5;kW;380;3,5;50;4;1445;;;90L;28;3;0,79;;55;F;S1;Start;Not Available;;;;100;140;90;;Internal;
+EMO003514;ABB;3GE1044105720;M3AA;3;kW;380;6,3;50;4;1445;6306;6205;100L;28;3;0,79;;55;F;S1;Start;Not Available;;;;140;100;100;;Internal;Horizontal
+EMO003387;GRUNFOS;85U155103114430038;PC1430;3;kW;380;6,3;50;2;2920;6306;6205;100L;28;3;0,87;0,87;55;F;S1;Delta;Not Available;;;;140;190;100;;Internal;Vertical
+EMO003388;GRUNFOS;85U15510314300092;PC1430;3;kW;380;6,3;50;2;2920;6306;6205;100L;28;3;0,87;0,87;55;F;S1;Delta;Not Available;;;;140;190;100;;Internal;Vertical
+EMO001589;ABB;3222728;M2BA;200;kW;380;362;50;4;1485;6319;6316;315M;90;3;0,88;;55;F;S1;Delta;Available;;;;;;;;Internal;Horizontal
+EMO001789;HUADA;61261801;Y2;90;kW;380;165;50;4;1500;6319;6313;280M;75;3;0,87;;55;F;S1;Delta;Available;;;;420;450;280;;Internal;Horizontal
+EMO001787;TECO;75C7230008;AEEBKB;45;kW;380;84;50;2;2940;6312;6212;225M;55;3;;;55;F;S1;Delta;Available;;;;310;340;225;;Internal;Horizontal
+EMO001786;TECO;75C7230009;AEEBKB;45;kW;380;84;50;2;2940;6312;6212;225M;55;3;;;55;F;S1;Delta;Available;;;;320;370;225;;Internal;Horizontal
+EMO001785;TECO;AC114069-2;AEEBK;110;kW;380;191;50;2;2955;6314;6314;250SC;65;3;;;55;F;S1;Delta;Available;;;;420;450;250;;Internal;Horizontal
+EMO001784;TECO;P75A0420017;AEEBK;75;kW;380;138;50;2;2950;6316;6213;250M;65;3;;;55;F;S1;Delta;Available;;;;360;390;250;;Internal;Horizontal
+EMO001783;TECO;187100105220015;AEEB;30;kW;380;63,2;50;6;975;6313;6213;225A;60;3;;;55;F;S1;Delta;Available;;;;310;360;225;;Internal;Horizontal
+EMO001782;TECO;18710010520009;AEEB;30;kW;380;63,2;50;6;975;6313;6213;225A;60;3;;;55;F;S1;Delta;Available;;;;310;360;225;;Internal;Horizontal
+EMO001781;TECO;MN60032-2;AEEBKB;55;kW;380;102;50;4;1475;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;320;380;250;;Internal;Horizontal
+EMO001780;TECO;65C7420076;AEEBKB;22;kW;380;44,3;50;4;1455;6311;6310;180K;48;3;;;55;F;S1;Delta;Available;;;;280;280;180;;Internal;Horizontal
+EMO001779;HUADA;6109100151;Y2;75;kW;380;140;50;4;1485;-;-;280S;75;3;0,87;;55;F;S1;Delta;Available;;;;380;440;280;;Internal;Horizontal
+EMO001778;TECO;A7075512011;AEEB;37;kW;380;70,9;50;4;1500;6313;6213;225;60;3;;;55;F;S1;Delta;Available;;;;290;350;225;;Internal;Horizontal
+EMO001777;HUADA;5980/22061;Y2;45;kW;380;84,5;50;4;1500;-;-;225;60;3;0,87;;55;F;S1;Delta;Not Available;;;;310;360;225;;Internal;Horizontal
+EMO003290;MARATHON;2C725;Y2;15;kW;380;29,9;50;4;1500;6309;6309;160;42;3;0,85;;55;F;S1;Delta;Available;;;;255;255;160;;Internal;Horizontal
+MGM000933;TECO;P4179014038;AENM AS APQV6;5,5;kW;380;12;50;4;1445;6308;6306;;;3;;0,86;55;F;S1;Delta;Not Available;;;;;;;;;
+MGM000932;TECO;P4179014011;AENM AS APQV6;5,5;kW;380;12;50;4;1445;6308;6306;;;3;;0,86;55;F;S1;Delta;Not Available;;;;;;;;;
+EMO001723;TECO;P65130320126;AEEBKB;11;kW;380;21,6;50;4;1500;6309ZZ;6307ZZ;160M;42;3;;;55;F;S1;Delta;Not Available;;;;210;240;160;;Internal;Horizontal
+EMO001724;TECO;75B232005-2;AEEBKB;30;kW;380;57;50;4;1500;6312;6312;200K;55;3;;;55;F;S1;Delta;Available;;;;300;300;200;;Internal;Horizontal
+EMO001729;KUENIE;4005100024;KDG2;30;kW;380;52,3;50;2;2950;;;200L;48;3;;;55;F;S1;Delta;Available;;;;310;300;200;;Internal;Horizontal
+EMO001730;KUENIE;506417031;KDG2;90;kW;380;149;50;2;2970;;;280M;70;3;;;55;F;S1;Delta;Available;;;;430;460;280;;Internal;Horizontal
+EMO003048;TECO;62A1550005;AEEBKB;15;kW;380;27,5;50;2;2910;6309;6307;160L;42;3;;;55;F;S1;Delta;Not Available;;;;250;245;160;;Internal;Horizontal
+EMO003484;TECO;H7142305002;AEEBKB;55;kW;380;102;50;2;2960;6313;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;350;380;250;;Internal;Horizontal
+EMO001725;TECO;75B760025;AEEB;30;kW;380;57,7;50;2;1465;6312;6212;225MC;60;3;;;55;F;S1;Delta;Available;;;;310;310;200;;Internal;Horizontal
+EMO001726;TECO;AC5B028-3;AEEBKB;132;kW;380;242;50;4;1480;6316;6320;315;85;3;;;55;F;S1;Delta;Available;;;;410;490;315;;Internal;Horizontal
+EMO001727;TECO;;AEEBKB;132;kW;380;242;50;4;1500;6316;6320;315SB;85;3;;;;;;;;;;;410;490;315;;Internal;Horizontal
+EMO001771;TECO;65C7420066;AEEBKB;22;kW;380;44,3;50;4;1455;6311ZZ;6310ZZ;180L;48;3;;;55;F;S1;Delta;Not Available;;;;280;280;180;;Internal;Horizontal
+EMO001773;TECO;65C7420067;AEEBKB;22;kW;380;44,3;50;4;1455;6311ZZ;6310ZZ;180L;48;3;;;55;F;S1;Delta;Not Available;;;;280;280;180;;Internal;Horizontal
+EMO000161;TECO;MN60033-6;AEEBKB;75;kW;380;129;50;4;1475;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;390;350;250;;Internal;Horizontal
+EMO001710;TECO;D063014-4;AEJT;350;kW;3000;83,4;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO001711;TECO;D063014-3;AEJT;350;kW;3000;83,4;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO001712;TECO;D063013-2;AEJT;400;kW;3000;94,2;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO001713;TECO;D063013-1;AEJT;400;kW;3000;94,2;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO001714;TECO;D063014-1;AEJT;350;kW;3000;83,4;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO001715;TECO;D063216-1;AECT;500;kW;3000;121;50;6;986;NU226;6322;450B;125;3;;;55;F;S1;Delta;Available;;;;1000;900;450;;Internal;Horizontal
+EMO005047;TECO;WEFD199218T1-1;AECT-VB;600;kW;3000;146;50;6;986;NU326;6322;450B;125;3;;;55;F;S1;Delta;Available;;;;1000;900;450;;Internal;Horizontal
+EMO001717;TECO;D063216-3;AECT-PA;500;kW;3000;121;50;6;986;NU226;6322;450B;125;3;;;55;F;S1;Delta;Available;;;;1000;900;450;;Internal;Horizontal
+EMO001718;TECO;D61048-2;AEJT;350;kW;3000;81,5;50;4;1489;6323;NU224;450M;125;3;;;55;F;S1;Delta;Available;;;;1000;900;450;;Internal;Horizontal
+EMO001719;TECO;D119012-1;AEJT;350;kW;3000;83,4;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO003349;SEW;D510065820.03;DF;1,5;kW;380;3,75;50;4;1410;_;_;90L;25;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO001720;TECO;D119012-2;AEJT;350;kW;3000;83,4;50;4;1485;6322;NU330;450;140;3;;;55;F;S1;Delta;Available;;;;710;750;450;;Internal;Horizontal
+EMO002934;TECO;P95241631;AEVB;1,1;kW;380;4,58;50;4;1435;6205;6205;90L;25;3;;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO008009;STROMBERG;44540060;HXUR;500;KW;3000;114;50;4;1489;6324;6322;400 L;;3;0,88;;55;F;S1;;Available;;;;;;400;;Internal;Horizontal
+EMO005157;SEW;;DRE 90 L4/FE/C;1,5;KW;380;3,5;50;4;1450;;;90 L;;3;;;55;f;S1;;Not Available;;;;;;;;;Vertical
+EMO003382;ABB;;MT;3;kW;380;6;50;2;2890;;;100L;;3;0,83;;55;F;S1;Start;Not Available;;;;140;160;100;;Internal;Horizontal
+EMO001885;TECO;65CC5410092;AEEBKB;18,5;kW;380;37,6;50;4;1500;6311ZZ;6310ZZ;180K;48;3;;;55;F;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO001884;TECO;65C5410097;AEEBKB;18,5;kW;380;37,6;50;4;1500;6311ZZ;6310ZZ;180K;48;3;;;55;F;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO003991;Marathon;AK15192001J;;11;kW;380;21,5;50;4;1450;6309;6307;180;42;3;0,84;;55;F;S1;Delta;Not Available;;;;210;255;180;;Internal;Horizontal
+EMO001882;TECO;18710919851056;AEEBKB;5,5;kW;380;12,1;50;4;1500;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;200;132;;Internal;Horizontal
+EMO003670;TECO;P9508142;AEEB;22;kW;380;45,9;50;6;1000;6312;6212;132S;55;3;;;55;F;S1;Delta;Available;;;;305;318;200;;Internal;Horizontal
+EMO001880;TECO;18710019851094;AEEBKB;5,5;kW;380;9,7;50;4;1500;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;200;132;;Internal;Horizontal
+EMO002457;TECO;18410019851053;AEEBKB;5,5;kW;380;12,1;50;4;1500;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;240;132;;Internal;Horizontal
+EMO003040;HUADA;58484401J;QU;2,2;kW;380;49;50;4;1440;;;100L;28;3;0,84;;55;F;S1;Start;Not Available;;;;210;245;160;;Internal;Horizontal
+EMO002455;TECO;P65B0310086;AEEB;11;kW;380;21,5;50;4;1500;6209;6307;160M;42;3;;;55;F;S1;Delta;Not Available;;;;210;250;160;;Internal;Horizontal
+EMO002454;TECO;MPF80185-1;AEEB;7,5;kW;380;16;50;6;1000;6309;6307ZZ;160M;42;3;;;55;F;S1;Delta;Not Available;;;;210;250;160;;Internal;Horizontal
+EMO002453;TECO;1871001644B01;AEEB;4;kW;380;6,6;50;4;1500;6308ZZ;6306ZZ;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;200;132;;Internal;Horizontal
+EMO002452;HUADA;61481501J;Y2;15;kW;380;29,9;50;4;1500;;;160L;42;3;0,85;;55;F;S1;Delta;Not Available;;;;260;260;160;;Internal;Horizontal
+EMO002240;TECO;P3571350012;AEEBKB;2,2;kW;380;3,8;50;6;1000;6306;6306;112M;28;3;;;55;F;S1;Delta;Not Available;;;;140;190;112;;Internal;Horizontal
+EMO000257;HUADA;61481401J;Y2;11;kW;380;32;50;4;1500;;;160M;45;3;0,85;;55;F;S1;Delta;Not Available;;;;210/ 254;254;160;;Internal;Horizontal
+MGM000344;SEW;6001095530010001063;KA97;3;kW;380;6,5;50;4;1400;;;100 L;;3;0,83;;55;F;S1;Start;Not Available;;;;;;100;;;Vertical
+MGM000343;SEW;6001095530010002063;KA97;3;kW;380;6,5;50;4;1400;;;100 L;;3;0,83;;55;F;S1;Start;Not Available;;;;;;100;;;Vertical
+MGM000342;SEW;601106512010001063;DF;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000355;SEW;;DF;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000341;SEW;6001094683040003063;FA67/G;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000340;SEW;6001095530030002063;FA67/G;1,1;kW;380;2,8;50;4;1400;;;90 L;;3;0,77;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000339;SEW;6001094683020003063;FA77/G;3;kW;380;6,5;50;4;1400;;;100 L;;3;0,83;;55;F;S1;Start;Not Available;;;;;;100;;;Vertical
+MGM000338;SEW;0111325657010001;SA57/T;1,1;kW;380;2,8;50;4;1400;;;90 L;;3;0,77;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000337;SEW;6001094683040004063;FA67;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000336;SEW;;FA67;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000335;SEW;;FA67/G;1,5;kW;380;3,7;50;4;1410;;;;;3;0,78;;55;F;S1;Start;Not Available;;;;;;;;;Vertical
+MGM000334;SEW;;FA77;3;kW;380;6,5;50;4;1400;;;100 L;;3;0,83;;55;F;S1;Start;Not Available;;;;;;100;;;Vertical
+MGM000333;SEW;6001094683040001063;FA67;1,5;kW;380;3,7;50;4;1410;;;90;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+MGM000332;SEW;6001094603020002063;FA77;1,5;kW;380;3,7;50;4;1410;;;90 L;;3;0,78;;55;F;S1;Start;Not Available;;;;;;90;;;Vertical
+EMO002668;HWADA;20110240030101S;Y2;22;kW ;380;43,2;50;4;1470;;;180L;;3;0,85;0,905;55;F;S1 ;Delta;Not Available;;;;;;180;;Internal;Horizontal
+EMO004870;KADANT NORDIC;;;0,75;kW;380;1,3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO004869;KADANT NORDIC;;;0,75;kW;380;1,3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO004868;KADANT NORDIC;;;0,75;kW;380;1,3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002662;KADANT NORDIC;90800006;;0,75;kW;380;1,3;50;4;1500;;;;;3;;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002600;EMK;C3910296;JF;1,1;kW;380;4,76;50;4;1390;;;90S;-;3;0,77;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO002599;EMK;C5000262;JF;1,1;kW;380;4,76;50;4;1390;;;90S;-;3;0,77;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO002598;ABB;A508016040004;M2QA;18,5;kW;380;35,1;50;4;1500;6310;6210;180M;48;3;0,88;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Vertical
+EMO002597;ABB;A508016040001;M2QA;18,5;kW;380;35,1;50;4;1500;6310;6210;180M;48;3;0,88;;55;F;S1;Delta;Not Available;;;;;;180;;Internal;Vertical
+EMO002596;ABB;A506021042001;MZBA;11;kW;380;21,4;50;4;1455;6309;6209;160M;42;3;0,87;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO002595;ABB;A506021042009;MZBA;11;kW;380;21,4;50;4;1455;6309;6209;160M;42;3;0,87;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO003069;SIEMENS;097987701;ILG4;160;kW;380;300;50;4;1486;6319;6319;315L;80;3;0,86;;55;F;S1;Delta;Available;;;;500;500;280;;Internal;Horizontal
+EMO003054;SIEMENS;087987702;ILG4;160;kW;380;300;50;4;1486;6319;6319;315L;80;3;0,86;;55;F;S1;Delta;Available;;;;500;500;315;;Internal;Horizontal
+EMO002587;HICO;918838-1;TBTE;22;kW;380;44;50;4;1500;6311RS;6209RS;180L;48;3;;;55;B;S1;Start;Available;;;;280;280;180;;Internal;Horizontal
+EMO002586;ASGEN;344230;;22;kW;380;48;50;4;1500;6311;6209;180L;48;3;;;55;B;S1;Delta;Available;;;;279;279;180;;Internal;Horizontal
+EMO003038;ABB;MK110061-5;M2AA;1,5;kW;380;3,5;50;4;1420;;;90L;;3;0,75;;55;F;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO002585;SIEMENS;1368087-001-1;;15;kW;380;30,5;50;4;1500;;;160L;42;3;0,84;;55;H;S1;Delta;Not Available;;;;254;254;160;;Internal;Horizontal
+EMO002584;SIEMENS;1368087-001-2;;15;kW;380;30,5;50;4;1500;;;160L;42;3;0,84;;55;H;S1;Delta;Not Available;;;;254;254;160;;Internal;Horizontal
+EMO003380;BUSCK;0509681420;MS;1,5;kW;380;3,45;50;4;1400;;;90L;23;3;0,8;;55;F;S1;Start;Not Available;;;;130;130;90;;Internal;Horizontal
+EMO002583;HUADA;050919007;Y2;22;kW;380;40,6;50;4;1500;;;180L;48;3;0,86;;55;F;S1;Delta;Available;;;;279;279;180;;Internal;Horizontal
+EMO002582;HUADA;050919028;Y2;22;kW;380;40,6;50;4;1500;;;180L;48;3;0,86;;55;F;S1;Delta;Available;;;;279;279;180;;Internal;Horizontal
+EMO003379;TECO;3116539001;AEEF;2,2;kW;380;8,8;50;4;1435;6206;6305;100L;28;3;;;55;F;S1;Start;Not Available;;;;140;160;100;;Internal;Horizontal
+EMO003378;TECO;7117112001;AEEF;37;kW;380;71,6;50;4;1470;6314;6212;200L;65;3;;;55;F;S1;Delta;Not Available;;;;310;310;200;;Internal;Horizontal
+EMO002581;TECO;7117112008;AEEF;37;kW;380;71,6;50;4;1500;6314;6212;200L;55;3;;;55;F;S1;Delta;Not Available;;;;310;310;200;;Internal;Horizontal
+EMO002580;TECO;7117112005;AEEBKB;37;kW;380;71,6;50;4;1500;6314;6212;200L;55;3;;;55;F;S1;Delta;Not Available;;;;310;310;200;;Internal;Horizontal
+EMO002579;ABB;3259187;M2BA;37;kW;380;55;50;4;1500;6313;6313;225S;60;3;0,84;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO002578;ABB;3259188;M2BA;37;kW;380;55;50;4;1500;6313;6313;225S;60;3;0,84;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO003377;TECO;3117505002;AEEF;2,2;kW;380;5,12;50;4;1500;6206;6305;100L;28;3;;;55;B;S1;Start;Not Available;;;;130;160;100;;Internal;Horizontal
+EMO003376;TECO;6116534002;AEEF;22;kW;380;43,9;50;4;1500;6311;6310;180M;48;3;;;55;B;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO002577;TECO;6116534001;AEEF;22;kW;380;43,9;50;4;1500;6300;6310;180M;48;3;;;55;B;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO002576;TECO;6116534003;AEEF;22;kW;380;43,9;50;4;1500;6311;6310;180M;48;3;;;55;B;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO002575;EMK;71002506125;H3S;15;kW;380;28,2;50;4;1500;6309;6309;160L;42;3;0,84;;55;F;S1;Delta;Not Available;;;;254;254;160;;Internal;Vertical
+EMO002574;EMK;71002506119;H3S;15;kW;380;28,2;50;4;1500;6309;6309;160;42;3;0,84;;55;F;S1;Delta;Not Available;;;;254;254;160;;Internal;Vertical
+EMO003320;ABB;36E11606000683;M2AA;3;kW;400;6,5;50;4;1430;6205;6205;100L;23;3;0,78;;55;F;S1;Start;Not Available;;;;;;100;;Internal;Vertical
+EMO002573;ABB;36V101059948003;M3AA;37;kW;400;68;50;4;1500;6313;6212;225;60;3;0,84;;55;F;S1;Delta;Not Available;;;;;;225;;Internal;Vertical
+EMO002572;ABB;36V101059948004;M3AA;37;kW;400;68;50;4;1500;6313;6212;225;60;3;0,84;;55;F;S1;Delta;Not Available;;;;;;225;;Internal;Vertical
+EMO003049;Siemens;087983201;ILG4;90;kW;380;171;50;4;1485;6317;6317;280M;80;3;0,86;;55;F;S1;Delta;Not Available;;;;460;425;280;;Internal;Horizontal
+EMO002571;Siemens;087983202;ILG4;90;kW;380;171;50;4;1485;6317;6317;280M;80;3;0,86;;55;F;S1;Delta;Not Available;;;;460;425;280;;Internal;Horizontal
+EMO002570;Siemens;087983203;ILG4;90;kW;380;171;50;4;1485;6317;6317;280M;80;3;0,86;;55;F;S1;Delta;Not Available;;;;460;425;280;;Internal;Horizontal
+EMO001871;TECO;K060090-3;AEEBKB;7,5;kW;380;14,4;50;2;2900;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;210;132;;Internal;Horizontal
+EMO001869;TECO;K060090-1;AEEBKB;7,5;kW;380;15;50;2;2900;6308;6306;132S;38;3;;;55;F;S1;Delta;Not Available;;;;140;210;132;;Internal;Horizontal
+EMO002137;TECO;P9508205;AEEBPA;55;kW;380;105;50;4;1470;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;;Horizontal
+EMO001978;TECO;N7103715017;AEEBKB;45;kW;380;81,7;50;4;1470;6313;6213;225 MC;;3;;;55;F;S1;Delta;Available;;;;;;225;;;Horizontal
+EMO001868;TECO;P5C5340065;AEEBKB;37;kW;380;72,7;50;4;1465;6313;6213;225S;60;3;;;55;F;S1;Delta;Available;;;;290;360;225;;Internal;Horizontal
+EMO001877;TECO;P9549402;AEEBPA;75;kW;380;149;50;4;1475;NU213;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;590;350;250;;Internal;Horizontal
+EMO001866;TECO;MN60074-3;AEEBKB;132;kW;380;242;50;4;1480;6320;6316;315S;85;3;;;55;F;S1;Delta;Available;;;;400;470;315;;Internal;Horizontal
+EMO001865;TECO;MN60073-6;AEEB;110;kW;380;205;50;4;1480;6318;6316;280M;80;3;;;55;F;S1;Delta;Available;;;;410;410;280;;Internal;Horizontal
+EMO001864;TECO;MN60073-3;AEEBKB;110;kW;380;205;50;4;1480;6318;6316;280M;80;3;;;55;F;S1;Delta;Available;;;;410;410;280;;Internal;Horizontal
+EMO001863;MARELLI;0458847;NV;30;kW;380;50;50;4;1465;;;200L;55;3;;;55;E;S1;Delta;Available;;;;300;290;200;;Internal;Horizontal
+EMO000547;ABB;3299959;M2BA;110;kW;380;200;50;4;1486;6319;6316;315;80;3;0,88;;55;F;S1;Delta;Available;;;;410;490;315;;Internal;Horizontal
+EMO001861;SIEMENS;320423;ILG4;110;kW;380;200;50;4;1486;6319;6316;315;80;3;;;55;F;S1;Delta;Available;;;;420;490;315;;Internal;Horizontal
+EMO001860;TECO;MN60032-4;AEEBKB;55;kW;380;102;50;4;1475;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;350;380;250;;Internal;Horizontal
+EMO001859;TECO;MN60033-8;AEEBKB;75;kW;380;128;50;4;1480;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;390;350;250;;Internal;Horizontal
+EMO002905;TECO;P3958181;AEEBP;75;kW;380;140;50;4;1475;NU216;6213;250;70;3;;;55;F;S1;Delta;Available;;;;590;350;250;;Internal;Horizontal
+EMO001879;TECO;;AEEBKB;75;kW;380;140;50;4;1475;NU216;6213;250M;70;3;;;55;F;S1;Delta;Available;;;;590;350;250;;Internal;Horizontal
+EMO001856;TECO;MN60033-5;AEEBKB;75;kW;380;140;50;4;1475;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;390;350;250;;Internal;Horizontal
+EMO000619;TECO;P9508196;AEEB;55;kW;380;105;50;4;1470;NU216;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;310;360;250;;Internal;Horizontal
+EMO001774;TECO;75B4760036;AEEBKB;75;kW;380;140;50;4;1475;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;310;390;250;;Internal;Horizontal
+EMO001772;TECO;10710093169-1;AEEBKB;55;kW;380;105;50;4;1470;6316;6213;250S;70;3;;;55;F;S1;Delta;Available;;;;310;390;250;;Internal;Horizontal
+EMO003520;WRS;;W100L;2,2;kW ;380;4,9;50;4;1415;6206;6206;100L;;3;;;55;F;S1 ;Start;Not Available;;;;;;;;Internal;Vertical
+EMO003522;CANTONI;167836;IEF;4;kW ;400;8,6;50;6;950;;;;;3;0,79;84,6;55;F;S1 ;Start;Not Available;;;;;;;;Internal;Horizontal
+EMO003521;WRS;90800006;W100L;2,2;kW ;380;4,9;50;4;1415;6206;6206;100L;;3;;;55;F;S1 ;Start;Not Available;;;;;;;;Internal;Vertical
+EMO003327;TECO;H6104524011;AEEBKB;18,5;kW;380;34;50;4;1450;6311;6310;180M;48;3;;;55;F;S1;Delta;Not Available;;;;250;270;180;;Internal;Horizontal
+EMO002562;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002561;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002560;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002559;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002558;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002557;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002556;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002555;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001659;ZIHEL-ABEG;;;0,55;kW;400;1,85;50;2;2830;;;;;3;0,85;;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO002544;TECO;61136-69022;AEEF;18,5;kW;380;37;50;4;1450;6311;6310;180M;50;3;;;54;B;S1;Delta;Not Available;;;;240;270;180;;Internal;Horizontal
+EMO002669;TECO;P953-1461;AEEB;60;HP;380;93;50;4;1465;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO000145;SCHORCH;21003001/2;ILA7;132;kW;380;245;50;4;1485;6317;6317;315M;;3;0,85;;55;F;S1;Delta;Available;;;;;;315;;Internal;V/H
+EMO003385;SIEMENS;070913604;ILC6;132;kW;380/400;205;50;4;1794;;;315L;75;3;0,84;0,95;55;F;S1;Delta;Available;;;;;;315;;Internal;V/H
+EMO003384;SIEMENS;B71332640010001;ILA4;315;kW;3000;76;50;4;1485;;;;;3;;0,86;55;F;S1;Delta;Available;;;;;;;;Internal;V/H
+EMO003383;SIEMENS;B71332640010002;ILA4;315;kW;3000;76;50;4;1485;;;;;3;;0,86;55;F;S1;Delta;;;;;;;;;Internal;V/H
+EMO003390;ABB;;Al;0,75;kW;380;1,8;50;4;1380;6204;6203;80;19;3;0,84;;55;F;S1;Start;Not Available;;;;100;120;80;;Internal;Horizontal
+EMO001728;TECO;6118127001;AEEBPA;15;kW;380;27,7;50;4;2920;6309;6307;160M;42;3;;;55;F;S1;Delta;Not Available;;;;210;250;160;;Internal;Horizontal
+EMO001756;TECO;75B132001;AEEB-PA;30;kW;380;57;50;4;1460;6312;6212;200L;55;3;;;55;F;S1;;Available;;;;310;310;200;;Internal;Horizontal
+EMO001755;TECO;C063606-1;AEJH;200;kW;3000;46,7;50;4;1480;6320;NU324;315C;110;3;;;55;F;S1;;Available;;;;700;550;315;;Internal;Horizontal
+EMO003076;HUADA;60034-1;Y2HV;250;kW;3000;60;50;4;1485;6322;6322;355;100;3;0,84;;55;F;S1;Start;Available;;;;900;700;355;;Internal;Horizontal
+EMO001750;TECO;C109700-1;AEJH-VB;250;kW;3000;62,9;50;8;740;6322;NU330;400A;125;3;;;55;F;S1;;Available;;;;;;;;Internal;Horizontal
+EMO001749;TECO;C1052512;AEJT;300;kW;3000;70,6;50;4;1480;6322;NU330;400A;105;3;;;55;F;S1;;Available;;;;700;800;400;;Internal;Horizontal
+EMO001748;TECO;C063606-3;AEJH;200;kW;380;46,7;50;4;1480;6320;NU324;315C;110;3;;;55;F;S1;;Available;;;;700;560;315;;Internal;Horizontal
+EMO001747;TECO;C063606-1;AEJH;200;kW;380;46,7;50;4;1480;6320;NU324;315;110;3;;;55;F;S1;;Available;;;;700;560;315;;Internal;Horizontal
+EMO001746;HUADA;IE02460102J;Y2HU;250;kW;3000;60;50;4;1485;6322;6322;355;100;3;0,84;;55;F;S1;Start;Available;;;;910;660;355;;Internal;Horizontal
+EMO001745;TECO;C063604-2;AEJH;260;kW;3000;66,2;50;8;750;6322;NU326;335C;125;3;;;55;F;S1;;Available;;;;900;630;355;;Internal;Horizontal
+EMO001744;TECO;C106639-3;AEJH;200;kW;3000;46,8;50;4;1475;6320;NU324;315C;80;3;;;55;F;S1;;Available;;;;700;500;315;;Internal;Horizontal
+EMO001743;TECO;75B563003;AEEB;37;kW;380;70,9;50;4;1465;6313;6213;225S;60;3;;;55;F;S1;Delta;Available;;;;250;350;225;;Internal;Horizontal
+EMO001742;TECO;75C7300030;AEEBKB;45;kW;380;93;50;4;1455;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO000581;TECO;K940168-10;AEEBKB;45;kW;380;85,5;50;4;1455;6313;6213;225M;60;3;;;54;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO001705;HUADA;60883801J;M-4;132;kW;380;241;50;4;1485;;;315M;80;3;0,88;;55;F;S1;Delta;Available;;;;460;500;315;;Internal;Horizontal
+EMO001702;TECO;7061713007;AEEBKB;45;kW;380;93;50;4;1475;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;310;350;225;;Internal;Horizontal
+EMO001701;TECO;75B3480024;AEBKB;55;kW;380;105;50;4;1470;6316;6213;250SC;70;3;;;55;F;S1;Delta;Available;;;;310;410;250;;Internal;Horizontal
+EMO001699;TECO;AC58041-9;AEBKB;90;kW;380;174;50;4;1475;6318;6316;280SC;80;3;;;55;F;S1;Delta;Available;;;;370;460;280;;Internal;Horizontal
+EMO004241;MARATHON;721056224;HJNI;110;kW;380;201;50;4;1480;6319;6319;315;80;3;0,88;;55;F;S1;Delta;Available;;;;400;500;315;;Internal;Horizontal
+EMO001696;STROMBERG;3151526;HXUR;30;kW;380;48;50;6;982;6313;6312;225M;60;3;;;54;F;S1;Delta;Available;;;;310;360;225;;Internal;Horizontal
+EMO003151;TECO;H2072721014;AEEBKB;30;kW;380;57,7;50;2;2930;6312;6212;200LA;55;3;;;55;F;S1;Delta;Available;;;;310;310;200;;Internal;Horizontal
+EMO003332;TECO;N7503715024;AEEBKB;45;kW;380;81,7;50;4;1475;6313;6213;225M;60;3;;;55;F;S1;Delta;Available;;;;310;360;225;;Internal;Horizontal
+EMO001615;TECO;75B232006;AEEBKB;30;kW;380;57;50;4;1460;6312;6212;200Z;55;3;;;55;F;S1;Delta;Available;;;;310;310;200;;Internal;Horizontal
+EMO001614;TECO;PSB2320053;AEEBKB;30;kW;380;57;50;4;1460;6312;6212;200K;55;3;;;55;F;S1;Delta;Available;;;;310;310;200;;Internal;Horizontal
+EMO000507;ASGEN;722862-4;c225;45;kW;380;83;50;4;1470;;;225;60;3;;;;E;S1;Delta;Available;;;;360;350;225;;Internal;Horizontal
+EMO000744;ABB;;M2BA;90;kW;380;165;50;4;1483;6316;6316;280S;75;3;0,86;;55;F;S1;Delta;Available;;;;420;480;280;;Internal;Horizontal
+EMO001606;TECO;D063206-1;AECT;560;kW;3000;135;50;6;990;6322;NU224;450C;110;3;;;;F;S1;;Available;;;;1100;900;450;;Internal;Horizontal
+EMO001709;TECO;AC61115-1;AEEB;125;HP;380;190;50;8;730;6316;NU320;315MC;90;3;;;55;F;S1;Delta;Available;;;;560;500;315;;Internal;Horizontal
+EMO001708;TECO;C063608-5;AEJE;110;kW;380;190;50;8;737;6320;NU324;315AC;110;3;;;55;F;S1;Delta;Available;;;;560;500;315;;Internal;Horizontal
+EMO001707;TECO;C063608-4;AEJE;110;kW;380;217;50;8;737;6320;NU324;315AC;110;3;;;55;F;S1;Delta;Available;;;;560;500;315;;Internal;Horizontal
+EMO001706;HUADA;060180701J;Y2;45;kW;380;94;50;4;1500;6319;6313;280M;80;3;0,79;;55;F;S1;Delta;Available;;;;430;460;280;;Internal;Horizontal
+EMO001610;HUADA;0601803017;Y2;55;kW;380;105;50;6;1000;6319;6313;280M;80;3;;;55;F;S1;Delta;Available;;;;430;430;280;;Internal;Horizontal
+EMO003012;TECO;C106641-1;AEJE;175;HP;380;256;50;8;737;NU324;6320;315AC;120;3;;;55;F;S1;;Available;;;;560;510;315;;Internal;Horizontal
+EMO001427;TECO;P65B0310108;AEEBKB;11;kW;380;21,5;50;4;1455;6309;6307;160M;45;3;;;55;F;S1;Delta;Not Available;;;;210;250;160;;Internal;Horizontal
+EMO002046;TECO;P45B0230119;AEEBKB;7,5;kW;380;16,2;50;4;1450;6308;6306;132M;40;3;;;55;F;S1;Delta;Not Available;;;;180;215;132;;Internal;Horizontal
+EMO001821;HUADA;61522106J;Y2;7,5;kW;380;14,9;50;2;2900;;;132S;38;3;0,88;0,87;55;F;S1;Delta;Not Available;;;;140;215;132;;Internal;Horizontal
+EMO001820;HUADA;61522101J;Y2;7,5;kW;380;14,9;50;2;2900;;;132S;38;3;0,88;0,87;55;F;S1;Delta;Not Available;;;;140;215;132;;Internal;Horizontal
+EMO001819;SUMITOMO;HN0248339;V132/M4;7,5;kW;380;14;50;4;1460;;;132M;38;3;0,84;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO003560;TECO;P2136424247;AEEBKB;1,5;kW;380;3;50;4;1400;6205;6205;90L;23;3;;;55;F;S1;Start;Not Available;;;;130;135;90;;Internal;Horizontal
+EMO001818;SUMITOMO;HN0244065;V132S/4;5,5;kW;380;11;50;4;1420;;;132S;38;3;0,84;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001816;HUADA;615221029;Y2;7,5;kW;380;14;50;2;2900;;;132S;38;3;0,88;0,87;55;F;S1;Delta;Not Available;;;;140;215;132;;Internal;Horizontal
+EMO001815;HUADA;58484001J;Y2;15;kW;380;28;50;2;2930;;;160M;42;3;0,89;0,89;55;F;S1;Delta;Not Available;;;;210;250;160;;Internal;Horizontal
+EMO001811;SUMITOMO;HN0248341;V132/M4;7,5;kW;380;14;50;4;1460;;;132M;38;3;0,84;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001813;NORD;HE4661307110716;SK;7,5;kW;380;14,5;50;4;1440;;;132M;38;3;0,88;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001812;NORD;36812888/14063919;SK;7,5;kW;380;14,5;50;4;1460;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001810;NORD;36812888/14063952;SK;7,5;kW;380;15,7;50;4;1460;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001801;NORD;36812781;SK;7,5;kW;380;15,7;50;4;1450;;;132M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001808;NORD;36812888/14063953;SK;7,5;kW;380;15,7;50;4;1460;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001807;SUMITOMO;HN008590L;V132/M4;7,5;kW;380;14;50;4;1460;;;132M;38;3;0,84;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001806;TECO;P65B0310099;AEEBK;11;kW;380;21,5;50;4;1455;6309;6307;160M;45;3;;;55;F;S1;Delta;Not Available;;;;;250;160;;Internal;Horizontal
+EMO001805;SUMITOMO;HN0244064;V132;5,5;kW;380;11,2;50;4;1420;;;132S;38;3;0,84;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001804;HUADA;61522104J;Y2;7,5;kW;380;9;50;2;2900;;;132S;38;3;0,88;0,87;55;F;S1;Delta;Not Available;;;;140;210;132;;Internal;Horizontal
+MGM000030;NORD;360112089;SK;4;kW;380;13,9;50;4;1420;;;112 MH;;3;;;55;F;S1;Start;Not Available;;;;;;112;;Internal;Vertical
+EMO001803;NORD;3661300V0632;SK;7,5;kW;380;14,5;50;4;1460;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001802;NORD;H5466130740716;SK;7,5;kW;380;14,5;50;4;1460;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001800;NORD;36812888114063948;SK;7,5;kW;380;15,8;50;4;1450;;;132M;38;3;0,81;0,89;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001799;TECO;K060165-1;AEEBKB;5,5;kW;380;12,1;50;4;1445;6308;6306;132S;40;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001793;NORD;3453891;SK;15;kW;380;27;50;4;1465;;;160L;42;3;0,87;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO001448;NORD;9809406519;SK;15;kW;380;27;50;4;1465;;;160L;42;3;0,87;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+EMO001794;NORD;3745689;SK;15;kW;380;27;50;4;1465;;;160L;42;3;0,87;;55;F;S1;Delta;Not Available;;;;;;160;;Internal;Vertical
+MGM000403;TECO;P3570690002;AEVBKB;3;kW;380;;50;4;1440;;;100 L;;3;;;55;F;S1;Delta;Not Available;;;;;;100;;;Vertical
+EMO001426;TECO;K060165-2;AEEBKB;5,5;kW;380;12,1;50;4;1445;6308;6306;132S;40;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001792;NORD;200727195-100;SK;0,55;kW;380;1,52;50;4;1375;;;80S;;3;0,73;0,75;55;F;S1;Start;Not Available;;;;;;80;;Internal;Vertical
+EMO001791;NORD;200727195-100;SK;0,55;kW;380;1,52;50;4;1375;;;80S;;3;0,73;0,75;55;F;S1;Start;Not Available;;;;;;80;;Internal;Vertical
+MGM000412;NORD;16445060;01F;2,2;kW;380;;50;4;1430;;;80;;3;;;55;F;S1;Delta;Not Available;;;;;;80;;;Vertical
+MGM000411;NORD;L106173;NLD300;2,2;kW;380;;50;4;1450;;;;;3;;;55;F;S1;Delta;Not Available;;;;;;;;;Vertical
+EMO000008;FLENDER;3933984-39;AF;7,5;KW;380;16;50;4;1445;;;132 M;;3;;;55;F;S1;Delta;Not Available;;;;;;132;;Internal;Vertical
+EMO001735;HUADA;61262101J;Y2;132;KW;380;241;50;4;1485;;;315 M;;3;0,8;;55;F;S1;;Available;;;;;;315;;Internal;Horizontal
+EMO002890;TECO;H7127408 024;AEEBKB040100FMB;75;KW;380;129;50;4;1480;6316;6213;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO003936;TECO;P9183033007;AESV1S040100FM008;75;KW;380;145;50;4;1480;6318;6316;280M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO003114;TECO;75B348008;AEEB;55;kW;380;105;50;4;1470;6316;6213;250;70;3;;;55;F;S1;Delta;Available;;;;350;400;250;;Internal;Horizontal
+EMO002920;TECO;MN60131-1;AEEBKB;160;KW;380;298;60;4;1480;6320;6316;315;;3;;;55;F;S1;;Available;;;;;;315;;Internal;Horizontal
+EMO005082;MARATHON;WX11007978-3001J;SCA 280MA04;90;KW;380;167;50;4;1485;6317;6317;280 MA;;3;0,87;0,942;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO005081;MARATHON;WX11007978-9002J;SCA 280MA04;90;KW;380;167;50;4;1485;6317;6317;280 MA;;3;0,87;0,942;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO005080;MARATHON;WX11007978-3008J;SCA 280MA04;90;KW;380;167;50;4;1485;6317;6317;280 MA;;3;0,87;0,942;55;F;S1;Delta;Available;;;;;;280;;Internal;Horizontal
+EMO001996;TECO;7673260002;AEEB;37;KW;380;74;50;6;975;NU216;6213;250 S;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO001613;TECO;7061713008;AEEBKB;45;KW;380;93;50;4;1465;6313;6213;225 M;;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO001632;TECO;C106640-2;AEJH-VB;250;KW;3000;57;50;4;1480;NU324;6320;315 M;;3;;;55;F;S1;;Available;;;;;;315;;Internal;Horizontal
+EMO001761;TECO;75C5340051;AEEB;37;KW;380;72,7;50;4;1470;6313;6213;225 S;;3;;;55;F;S1;Delta;Available;;;;;;225;;Internal;Horizontal
+EMO001984;TECO;P9527342;AEEBK;30;KW;380;57;50;4;1460;6312;6212;200 L;;3;;;55;F;S1;Delta;Available;;;;;;200;;Internal;Horizontal
+EMO002568;ABB;MK171007-AD;MBT;22;KW;380;48;50;4;1460;;;180 L;;3;;;55;F;S1;Delta;Available;;;;;;180;;Internal;Horizontal
+EMO002802;ABB;;MBT;11;KW;380;22;50;4;1450;6309;6309;160 M;;3;;;55;F;S1;Delta;Available;;;;;;160;;Internal;Horizontal
+EMO003647;TECO;10830000561-2;AEEBKB;37;KW;380;78;50;8;730;NU316;6313;250 M;;3;;;55;F;S1;Delta;Available;;;;;;250;;Internal;Horizontal
+EMO003944;MARATHON;80594400904;MART;30;KW;380;55;50;4;1470;6312;6312;200 L;;3;;;55;F;S1;Delta;Available;;;;;;200;;Internal;Horizontal
+EMO005168;HUADA;;Y2 132S;7,5;KW;380;14,9;50;2;2900;;;132 S;;3;;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Horizontal
+EMO005169;HUADA;61522105J;Y2 132S;7,5;KW;380;14,9;50;2;2900;;;132 S;;3;;;55;F;S1;Delta;Not Available;;;;;;200;;Internal;Horizontal
+EMO001852;ABB;00 447;MBT 180;22;KW;380;44;50;4;1475;;;180 L;;3;;;55;F;S1;Delta;Not Available;;;;;;180 L;;Internal;Horizontal
+EMO001587;HUADA;110725015;Y2;90;KW;380;160;50;2;2965;6316;6316;280 S;;3;;;55;F;S1;Delta;Available;;;;;;280 S;;Internal;Horizontal
+EMO005089;FLENDER;802/2046;D148M;11;KW;380;21,3;50;4;1460;;;160 M;;3;;;55;F;S1;Delta;Not Available;;;;;;160 M;;Internal;Horizontal
+EMO002689;ABB;A503023021020;M2QA90SV;1,5;KW;380;3,5;50;2;2890;6205;6205;90 S;;3;;;55;F;S1;Start;Not Available;;;;;;90 S;;Internal;Horizontal
+EMO001677;INDUCTION;;;11;KW;380;22;50;4;1435;6306;6208;160 M;;3;;;55;F;S1;Delta;Not Available;;;;;;160 M;;Internal;Horizontal
+EMO001467;ABB;;MBT;18,5;KW;380;36,5;50;4;1475;;;180 M;;3;;;55;F;S1;Delta;Available;;;;;;180 M;;Internal;Horizontal
+EMO001870;TECO;K060090-2;AEEB;7,5;KW;380;15;50;2;2900;6308;6306;132 S;;3;;;55;F;S1;Delta;Not Available;;;;;;132 S;;Internal;Horizontal
+EMO002545;TECO;7118180004;AEEB;37;KW;380;71;50;2;2935;6312;6212;200 M;;3;;;55;F;S1;Delta;Not Available;;;;;;200 M;;Internal;Horizontal
+EMO005171;BALDOR;07H299X451;;11;KW;380;24,8;50;4;1475;;;254 T;;3;;;55;F;S1;Delta;Not Available;;;;;;254 T;;Internal;Horizontal
+MGM000313;MCN;1901N0753029;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000234;SEW;3501014286010018.06.20;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000252;SEW;3501014286010022.06.20;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000253;SEW;35010686030100.08.14;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000254;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000255;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000256;SEW;3501068603010005.14;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000258;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000260;MCN;N07530035;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000261;MCN;N07530032;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000262;MCN;N07530037;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000263;MCN;N07530036;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000264;MCN;N07530038;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000265;MCN;N07530030;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000268;SEW;3501071660100130420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000269;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000270;SEW;35010142860100096020;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000271;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000272;SEW;35010142860100036020;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000273;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000275;SEW;35010071660100180420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000276;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000277;SEW;35010071660200170420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000279;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000281;SEW;350106860301000114;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000282;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000284;SEW;35010071660200014420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000296;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000297;SEW;35010071660600110420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000299;SEW;35010246610100030820;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MDO000327;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000692;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000298;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000302;SEW;35010071660100170420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000303;SEW;35010071660100020420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000304;SEW;011839092001000112;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000305;MCN;N07530031;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000306;MCN;N07530085;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000307;Tatung;13120942;H3FE;0,75;KW;380;2,3;50;6;950;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000309;SEW;35010071660100080420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000752;SEW;017275732401000115;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000312;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000750;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000314;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000315;SEW;35010071660200090420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000316;SEW;35010071660100060420;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000317;SEW;350106860301000314;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000318;SEW;;R67DRS;0,55;KW;380;1,63;50;4;1380;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000319;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000320;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000321;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000322;SEW;;R67DT;0,55;KW;380;1,84;50;4;1360;;;71 M;;3;;;55;H;S1;Start;Not Available;;;;;;;;Internal;Vertical
+MGM000323;MCN;;NL-05;0,75;KW;380;2,06;50;4;1400;;;71 M;;3;;;54;E;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001836;TOSHIBA;OSEVRKB0HM1001;IDF-CHK11;160;KW;420;255/250;"59 
+70";4;1750-2100;6220;6220;280MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001837;TOSHIBA;OSEVRKB4HM1401;IDF-CHK11;75;KW;420;130/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001834;TOSHIBA;E11X243HF;ICF-CHKM11;750;KW;680/695;770/695;"58 
+69";4;1150-1380;6228;6228;450;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001833;TOSHIBA;E11X240HF;ICF-CHKM11;750;KW;680/695;770/695;"58 
+69";4;1150-1380;6228;6228;450;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001831;TOSHIBA;E11X240HF;ICF-CHKM11;750;KW;680/695;770/695;"58 
+69";4;1150-1380;6228;6228;450;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001830;TOSHIBA;E11X240HF;ICF-CHKM11;750;KW;680/695;770/695;"58 
+69";4;1150-1380;6228;6228;450;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO003413;TOSHIBA;E132770HM;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001825;TOSHIBA;52292615M;IDF-CHK11;1450;KW;685/690;1390/1360;"51 
+61";4;1500-1800;6230;6230;"450 
+1400";;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001826;TOSHIBA;52294541M;IDF-CHK11;1450;KW;685/690;1390/1360;"51 
+61";4;1500-1800;6230;6230;"450 
+1400";;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001829;TOSHIBA;OSEVRKAHE0101;IDF-CHK11;500;KW;420;800/780;"58 
+70";4;1750-2100;6224;6224;355H;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001828;TOSHIBA;OSEVRKC8HF0601;IDF-CHK11;500;KW;420;800/780;"58 
+70";4;1750-2100;6224;6224;355H;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO003927;TOSHIBA;52294540M;ICF-CHKM11;630;KW;400;1100/1080;"51 
+61";4;1500-1800;6228;6228;400H;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001839;TOSHIBA;OSEVRKB3HM130;IDF-CHKW11;75;KW;420;130/125;"95 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO001838;TOSHIBA;OSEVRKA6HM0601;IDF-CHK11;220;KW;420;345/340;"59 
+70";4;1750-2100;6220;6220;280L;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO004909;TOSHIBA;E18ZA42HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO004907;TOSHIBA;E18ZA40HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO004910;TOSHIBA;E18ZA44HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO004908;TOSHIBA;E18ZA39HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;;;Internal;Horizontal
+EMO005185;TECO;H1067085050;AEEBKB;7,5;KW;380;15;50;2;2900;6308;6308;132;;3;;;55;F;S1 ;Delta;Not Available;;;;;;132;;Internal;Horizontal
+EMO005184;TECO;H10620642081;AEEBKB;7,5;KW;380;15;50;2;2900;6308;6308;132;;3;;;55;F;S1 ;Delta;Not Available;;;;;;132;;Internal;Horizontal
+MFB000192;GARDNER DENVER;;G-BH;25;KW;380;52;50;2;2930;;;;;3;;;55;F;S1;Delta;Not Available;;;;;;;;Internal;Vertical
+EMO001607;TOSHIBA;D11X110ML;ICFT-CHK11;1000;KW;690;1000;"59 
+70";6;1150-1380;6232;6230;450;;3;;;44;F;S1;Inverter;Available;;;;;;450;;;Horizontal
+EMO001698;TOSHIBA;D11X100ML;ICFT-CHK11;1000;KW;690;1000;"59 
+70";6;1150-1380;6232;6230;450;;3;;;44;F;S1;Inverter;Available;;;;;;450;;;Horizontal
+EMO001700;TOSHIBA;E11X23HP;IDF-CHK11;450;KW;420;705/695;"59 
+70";4;1750-2100;6224;6224;355H;;3;;;44;F;S1;Inverter;Available;;;;;;355;;;Horizontal
+EMO000366;TOSHIBA;O5EVRKA1HF0301;ICFT-CHK11;335;KW;420/420;535/525;"59 
+71";4;1750-2100;6220;6220;315 H;;3;;;44;F;S1;Inverter;Available;;;;;;315;;;Horizontal
+EMO000364;TOSHIBA;50152004;TIKK;30;KW;420/420;53.5/52;60 /72;4;1750-2100;6312;6210;180 L;;3;;;44;F;S1;Inverter;Not Available;;;;;;180;;;Horizontal
+EMO000365;TOSHIBA;05EURKC5HM2501;IDF-CHK11;150;KW;420/420;245/240;59 705;4;1750-2100;6220;6220;280 MD;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO000369;TOSHIBA;50132003;TIKK;15;KW;420;26//25;60 /72;;;6310;6208;;;3;;;44;F;S1;Inverter;Not Available;;;;;;;;;Horizontal
+EMO000060;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000064;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO001991;TECO;MN0175-1;AEEB;75;kW;380;140;50;4;1475;NU216;6213;250;70;3;;;55;F;S1;Delta;Available;;;;350;400;250;;Internal;Horizontal
+EMO000116;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000118;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000119;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000120;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000258;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000263;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000264;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000266;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO000340;ZIHEL-ABEG;;;0,7;KW;500;1,5;50;4;1310;;;;;3;;;54;B;;;;;;;;;;;;
+EMO001851;TOSHIBA;05LZ4701HM0301;IDF-CHK11;280;KW;420;450;59;4;1750;6220;6220;280L;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO001850;TOSHIBA;05LZ4700HM0201;IDF-CHK11;280;KW;420;450;59;4;1750;6220;6220;280L;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO000047;TOSHIBA;54154168;IK;3,7;KW;380;8,2;50;6;930;6308;6306;132S;;3;;;44;B;S1;Inverter;Not Available;;;;;;132;;;Vertical
+EMO002670;TOSHIBA;52292616;IDD-CHKM11;400;KW;390;750;68;6;600-1400;6228;6228;400L;;3;;;22;F;S1;Inverter;Available;;;;;;400;;;Horizontal
+EMO003259;MITSUBISHI;B12494010113;HC-SFS102;1;KW;123;6;;2;2000;;;;;3;;;65;F;;;;;;;;;;;;
+EMO001854;TOSHIBA;E11X280HF;IDF-CHK11;315;KW;420/420;570/535;505 60;4;1750-2100;6220;6220;355 H;;3;;;44;F;S1;Inverter;Available;;;;;;355;;;Horizontal
+EMO002552;TOSHIBA;E11X240HM;IDF-CHK11;90;KW;420/420;165/155;"58 
+69";4;1750-2100;6220;6220;280 MD;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO001853;TOSHIBA;;IDF-CHK11;315;KW;420/420;570/535;505 60;4;1750-2100;6220;6220;355 H;;3;;;44;F;S1;Inverter;Available;;;;;;355;;;Horizontal
+EMO002671;TOSHIBA;D11X130ML;ICD-CHK11;560;KW;360/380;980/970;21 /65;4;1750-2100;6230;6230;450 1250;;3;;;44;F;S1;Inverter;Available;;;;;;450;;;Horizontal
+EMO003258;TOSHIBA;14154332;IKK;5,5;KW;380;12,6;50;6;990;6308;6306;132 M;;3;;;44;B;S1;;;;;;;;;;;
+EMO004911;TOSHIBA;E18ZA30HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004912;TOSHIBA;E18ZA46HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004913;TOSHIBA;E18ZA38HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO004914;TOSHIBA;E18ZA43HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004915;TOSHIBA;E18ZA36HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO004916;TOSHIBA;E18ZA33HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO004917;TOSHIBA;E18ZA32HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO004918;TOSHIBA;E18ZA31HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000373;TOSHIBA;O5EVRKB5HM1501;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000388;TOSHIBA;O5EVRKB6HM160;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000479;TOSHIBA;O5EVRKB7HM1701;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000480;TOSHIBA;;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000597;TOSHIBA;O5EVRKB9;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000670;TOSHIBA;;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000700;TOSHIBA;;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO000732;TOSHIBA;;IDF-CHK11;90;KW;420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;Internal;Horizontal
+EMO003733;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;6310;6310;160L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;Internal;Horizontal
+EMO001846;TOSHIBA;OSEVRKDOHM0201;IDF-CHK11;90;KW;120/420;150/145;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004919;TOSHIBA;E18ZA00HM;IDF-CHKW11;75;KW;420/420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004920;TOSHIBA;E18ZA44HM;IDF-CHKW11;75;KW;420;128/125;"59 
+71";4;1750-2100;6218;6218;250MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO001848;TOSHIBA;05EURKA4HF0501;IDF-CHK11;355;KW;420/420;575/555;"59 
+71";4;1750-2100;6220;6220;315 H;;3;;;44;F;S1;Inverter;Available;;;;;;315;;;Horizontal
+EMO004921;TOSHIBA;E18ZA45HM;IDF-CHKW11;75;KW;420/420;128/125;"59 
+71";4;1750-2100;6218;6218;250 MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004922;TOSHIBA;E18ZA00HM;IDF-CHKW11;75;KW;420/420;128/125;"59 
+71";4;1750-2100;6218;6218;250 MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004923;TOSHIBA;E18ZA48HM;IDF-CHKW11;75;KW;420/420;128/125;"59 
+71";4;1750-2100;6218;6218;250 MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO004924;TOSHIBA;E18ZA49HM;IDF-CHKW11;75;KW;420/420;128/125;"59 
+71";4;1750-2100;6218;6218;250 MD;;3;;;44;F;S1;Inverter;Available;;;;;;250;;;Horizontal
+EMO003469;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;;;160 L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;;Horizontal
+EMO000371;HUADA;;Y2;22;KW;380;43,2;50;4;1470;;;180 L;;3;;;55;F;S1;Delta;Not Available;;;;;;180;;;Horizontal
+EMO000786;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;6310;6310;160L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;Internal;Horizontal
+EMO000787;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;6310;6310;160L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;Internal;Horizontal
+EMO000800;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;6310;6310;160L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;Internal;Horizontal
+EMO001845;TOSHIBA;OSEVRKBIHM1101;IDF-CHK11;150;KW;245/240;255/250;"59 
+70";4;1750-2100;6220;6220;280MD;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO000850;ROSENBERG;;DR56E4;0,75;KW;400;1,63;50;4;1250;;;;;3;;;54;F;;Delta;;;;;;;;;;
+EMO001844;TOSHIBA;OSEVRKCHM2701;IDF-CHK11;160;KW;420;255/250;"59 
+70";4;1750-2100;6220;6220;280MD;;3;;;44;F;S1;Inverter;Available;;;;;;280;;;Horizontal
+EMO000839;ROSENBERG;E10-56053;DR56E4;0,75;KW;400;1,63;50;4;1250;;;;;3;;;54;F;;Delta;;;;;;;;;;
+EMO000864;HUADA;;Y2;22;KW;380;43,2;50;4;1470;;;180 L;;3;;;55;F;S1;Delta;Not Available;;;;;;180;;;Horizontal
+EMO000859;TOSHIBA;;TIKK-FBK21;15;KW;420;30;36;;;;;225 S;;3;;;44;F;S1;Inverter;Not Available;;;;;;225;;;Horizontal
+EMO000858;TOSHIBA;;IKK-FCK8;7,5;KW;420;17,2;52;8;750;;;160 L;;3;;;44;F;S1;Inverter;Not Available;;;;;;160;;;Horizontal
+EMO001849;TOSHIBA;O5EVRKAH0401;IDF-CHK11;300;KW;420/420;500/475;50 705;4;1750-2100;6220;6220;315 H;;3;;;44;F;S1;Inverter;Available;;;;;;315;;;Horizontal
+EMO002702;TECO;Dibongkar;;110;KW;380;205;50;4;1500;6318;6316;280;;3;;;;;;;;;;;410;410;280;;Internal;Horizontal
+EMO003204;AUMA;;Z102457;1,4;KW;380;4,9;50;2;2800;;;;;3;0,6;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003210;AUMA;;Z102457;1,4;KW;380;4,9;50;2;2800;;;;;3;0,6;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003281;AUMA;;Z102485;0,4;KW;380;1,9;50;2;2800;;;;;3;0,53;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003280;AUMA;3918MM87665;Z102485;0,4;KW;380;1,9;50;2;2800;;;;;3;0,53;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003201;AUMA;;Z102457;1,4;KW;380;4,9;50;2;2800;;;;;3;0,6;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003247;AUMA;;Z102457;1,4;KW;380;4,9;50;2;2800;;;;;3;0,6;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003248;AUMA;;Z102457;1,4;KW;380;4,9;50;2;2800;;;;;3;0,6;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO003282;AUMA;;Z102485;0,4;KW;380;1,9;50;2;2800;;;;;3;0,53;;68;F;S2;Start;Not Available;;;;;;;;;Vertical
+EMO002703;TECO;Dibongkar;;110;KW;380;205;50;;;6318;6316;280F;80;3;;;;;;;;;;;420;450;280;;Internal;Horizontal
+MGB000453;DEMAG;41574131;KBA;1,5;KW;380;4,8;50;4;1340;;;80;;3;0,73;;54;F;;Start;Not Available;;;;;;80;;;Vertical
+EMO002608;DEMAG;41574131;KBH140B4;11,4;KW;380;32;50;4;1420;;;140 B;;3;0,72;;54;F;;Start;Not Available;;;;;;140;;;Vertical
+MGB000454;DEMAG;41574001;KBA;1,5;KW;380;4,8;50;4;1340;;;80;;3;0,73;;54;F;;Start;Not Available;;;;;;80;;;Vertical
+EMO002966;DEMAG;70271526;KBH140B4;11,4;KW;380;28,5;50;4;1420;;;140 B;;3;0,72;;54;F;;Start;Not Available;;;;;;140;;;Vertical
+MGM000236;DEMAG;70587457;ZBF;1.20 0.29;KW;380;3.2/2.1;50;2;2760-685;;;100;;3;;;54;F;;Start;Not Available;;;;;;100;;;Vertical
+MGM000237;DEMAG;70587456;ZBF;1.20 0.29;KW;380;3.2/2.1;50;2;2760-685;;;100;;3;;;54;F;;Start;Not Available;;;;;;100;;;Vertical
+MGM000233;DEMAG;7580993;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGM000235;DEMAG;71580994;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGB000455;DEMAG;41574066;KBA;2,3;KW;380;6,8;50;4;1365;;;90;;3;0,74;;54;F;;Start;Not Available;;;;;;90;;;Vertical
+EMO002610;DEMAG;41574066;KBH;17,8;KW;380;46;50;4;1440;;;112;;3;0,78;;54;;;Start;Not Available;;;;;;112;;Internal;Vertical
+MGB000456;DEMAG;41574065;KBA;2,3;KW;380;6,8;50;4;1365;;;90;;3;0,74;;54;F;;Start;Not Available;;;;;;90;;;Vertical
+EMO002611;DEMAG;41574065;KBH;40;KW;380;95;50;6;970;;;225B;;3;0,79;;54;;;Delta;Not Available;;;;;;225;;Internal;Vertical
+MGB000457;DEMAG;41574067;KBA;2,3;KW;380;6,8;50;4;1365;;;90;;3;0,74;;54;F;;Start;Not Available;;;;;;90;;;Vertical
+EMO002612;DEMAG;41574067;KBH;17,8;KW;380;46;50;4;1440;;;112;;3;0,78;;54;;;Start;Not Available;;;;;;112;;Internal;Vertical
+MGM000240;DEMAG;71581314;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGM000241;DEMAG;71581318;ZBF;2.90 0.72;KW;380;6.70/3.10;50;2;2815-700;;;140;;3;"0.91 0.53
+";;54;F;;Start;Not Available;;;;;;140;;;Vertical
+MGM000242;DEMAG;71581313;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+EMO003007;DEMAG;;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGM000239;DEMAG;;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGB000458;DEMAG;41574002;KBA;2,3;KW;380;6,8;50;4;1365;;;90;;3;0,74;;54;F;;Start;Not Available;;;;;;90;;;Vertical
+EMO002613;DEMAG;41574002;KBH;17,8;KW;380;46;50;4;1440;;;160;;3;0,78;;54;;;Start;Not Available;;;;;;90;;Internal;Vertical
+MGB000459;DEMAG;4154003;KBA;2,3;KW;380;6,8;50;4;1365;;;90;;3;0,74;;54;F;;Start;Not Available;;;;;;90;;;Vertical
+EMO002614;DEMAG;4154003;KBH;17,8;KW;380;46;50;4;1440;;;160;;3;0,78;;54;;;Start;Not Available;;;;;;90;;Internal;Vertical
+MGM000245;DEMAG;70593868;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGM000246;DEMAG;70593867;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+MGM000982;DEMAG;50321258;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+EMO003492;DEMAG;43279068;ZBF;1.90 0.46;KW;380;4.30/2.50;50;2;2855-705;;;112;;3;0.85 0.49;;54;F;;Start;Not Available;;;;;;112;;;Vertical
+EMO005152;MARATHON;WX 11008530-4001J;HAA 450-6;355;KW;3000;88,4;50;6;980;6328;6328;450L;130;3;;;55;F;;;Available;;;;;;450;;Internal;Horizontal
+EMO005153;MARATHON;WX11008545 – 5001;SCA 160 LA 02;18,5;KW;380;34,4;50;2;2950;6309;6209;160L;42;3;;;55;F;;Delta;Not Available;;;;;;160;;Internal;Horizontal
+MGM000738;FLENDER;FGU1108/2053392001;K168;11;kW;380;21,5;50;4;1450;;;M160;42;3;0,82;;55;F;S1;Start;Not Available;;;;;;160;;Internal;Vertical
+MGM001051;SUMITOMO;HN0053924;V90L/4 CHHM2-6140-71;1,5;kW;380;3,5;50;4;1420;;;90L;;3;;;55;;S1;Start;Not Available;;;;;;90;;Internal;Vertical
+EMO003013;TECO;;AEVL-AP;0,37;kW ;380;1,3;50;4;1500;;;;;3;;;54;;S1;;Not Available;;;;;;;;Internal;Vertical
+EMO001624;BALDOR;;895C;4;HP;380;10,1;50;8;720;6309RS;6203;;;3;;0,8;54;F;S1;Start;Not Available;;;;;;;;Internal;Vertical
+EMO001625;BALDOR;;F395;0,3;kW ;380;2,2;50;12;475;6203;6203;;;3;;;54;F;S1;Start;Not Available;;;;;;;;;Vertical
+EMO001626;BALDOR;;;3,7;kW;380;8;;4;1410;;;;;3;;;;;S1;;;;;;;;;;;
+MGM000735;SEW-EURODRIVE;;KA37-DV100 M4/BMG;2,2;kW ;380;5,36;50;4;1410;;;100M;;3;;;55;F;S1;Start;Not Available;;;;;;100;;Internal;Vertical
+MGM000736;SEW-EURODRIVE;;KA37-DV100 M4/BMG;2,2;kW ;380;5,36;50;4;1410;;;100M;;3;;;55;F;S1;Start;Not Available;;;;;;100;;Internal;Vertical
+MGM001055;MASTER;;PB;0,75;kW ;380;2;50;4;1400;;;204RC;;3;;;;;;Start;Not Available;;;;;;;;Internal;Vertical
+EMO003475;GEFECNE;1821.140.010;B-S1-IP54;0,12;kW ;24;6,5;;;;;;;;3;;;;;;;Not Available;;;;;;;;;Vertical
+EMO005165;GEFECNE;1821.140.010;B-S1-IP54;0,12;kW ;24;6,5;;;;;;;;3;;;;;;;Not Available;;;;;;;;;Vertical
+EMO005166;GEFECNE;1821.140.010;B-S1-IP54;0,12;kW ;24;6,5;;;;;;;;3;;;;;;;Not Available;;;;;;;;;Vertical
+EMO003940;ATB;;AF 160L/6D-12LS;11;kW ;380;22,6;50;6;;;;160L;;3;;;;;;;Not Available;;;;;;;;Internal;
+EMO003939;ATB;;AF 160L/6D-12LS;11;kW ;380;22,6;50;6;;;;160L;;3;;;;;;;Not Available;;;;;;;;Internal;
+EMO005549;HOYER;SH30807410105;HMC3-200L2-2;37;kW ;400;63;50;2;2970;6312;6312;200L;55;3;0,91;0,937;55;F;S1;Delta;Available;;;;;;;;External;Horizontal
+EMO005550;HOYER;SH30612030056;HMC3-200L2-2;37;kW ;400;63;50;2;2965;6312;6312;200L;55;3;0,88;0,937;55;F;S1;Delta;Available;;;;;;;;;Horizontal
+EMO005551;HOYER;SH30785720264;HMC3-225S-4;37;kW ;400;66.5;50;4;1480;6313;6312;225S;60;3;0,86;0,939;55;F;S1;Delta;Available;;;;;;;;Internal;Vertical
+EMO005552;WISTRO;174892;D49 IL-4-2;0.15;kW ;380;0.31;50;;;;;;;3;;;66;F;;Star;Not Available;;;;;;;;;
+EMO005584;Siemens;UD 2201/2406577-001-004;1LE10031AA434FA4;3;kW;400;5,7;50;2;2910;6206;6206;100L;;3;0,87;0,871;55;F;;Delta;;;;;;;;;Internal;Horizontal
+EMO005586;Siemens;UD 2201/2406577-001-009;1LE10031AA434FA4;3;kW;400;5,7;50;2;2910;6206;6206;100L;;3;0,87;0,871;55;F;;Delta;;;;;;;;;Internal;Horizontal
+EMO005614;ABB;4694030;NM 400LA4A BAFS;1100;kW;690;1080;50;4;1484;6226;6220;400L;;3;;;55;F;;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005615;ABB;4694029;NM 400LA4A BAFS;1100;kW;690;1080;50;4;1484;6226;6220;400L;;3;;;55;F;;Delta;Available;;;;;;;;Internal;Horizontal
+EMO005616;Siemens;UD 2107/2349661-002-024;1LE15031CB234GA4-Z;7,5;kW ;400;14,3;50;4;1470;`;6308;132M;;3;0,84;0,904;55;F;;Delta;;;;;;;;;Internal;Vertical
+EMO005617;Siemens;UD 2107/2349661-002-023;1LE15031CB234GA4-Z;7,5;kW ;400;14,3;50;4;1470;6308;6308;132M;;3;0,84;0,904;55;F;;Delta;;;;;;;;;Internal;Vertical
+EMO005618;Siemens;UD 2107/2349661-002-022;1LE15031CB234GA4-Z;7,5;kW ;400;14,3;50;4;1470;6308;6308;132M;;3;0,84;0,904;55;F;;Delta;;;;;;;;;Internal;Vertical
+EMO005619;Siemens;UD 2107/2349661-002-021;1LE15031CB234GA4-Z;7,5;kW ;400;14,3;50;4;1470;6308;6308;132M;;3;0,84;0,904;55;F;;Delta;;;;;;;;;Internal;Vertical
+EMO005620;Siemens;UD 2107/2349661-002-020;1LE15031CB234GA4-Z;7,5;kW ;400;14,3;50;4;1470;6308;6308;132M;;3;0,84;0,904;55;F;;Delta;;;;;;;;;Internal;Vertical
+MFB000398;Gardner Denver;BN 10453671  005 /0522;G-BH1 2BH1300-1AH07-Z;0,25;kW ;380;1,2;50;2;2810;;;;;3;;;55;F;;Delta;Not Available;;;;;;;;Internal;V/H
+MFB000399;Gardner Denver;BN 10453671  007 /0522;G-BH1 2BH1300-1AH07-Z;0,25;kW ;380;1,2;50;2;2810;;;;;3;;;55;F;;Delta;Not Available;;;;;;;;Internal;V/H

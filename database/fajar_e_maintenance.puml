@@ -4,7 +4,7 @@ entity function_locations
 {
     * id VARCHAR(150) <<PK>>
     --
-      tag_name VARCHAR(100)
+      tag_name VARCHAR(150)
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
@@ -17,9 +17,9 @@ entity emos
       material_number VARCHAR(8)
     * equipment_description VARCHAR(150)
     * status ENUM(["Installed", "Repaired", "Available"])
-    * sort_field VARCHAR(100)
+    * sort_field VARCHAR(150)
     * unique_id VARCHAR(6) UNIQUE
-    * qr_code_link VARCHAR(100) 
+    * qr_code_link VARCHAR(150) 
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
@@ -31,37 +31,37 @@ entity emo_details {
     manufacture VARCHAR(150)
     serial_number VARCHAR(150)
     type VARCHAR(150)
-    power_rate VARCHAR(5)
+    power_rate VARCHAR(25)
     power_unit ENUM(["kW", "HP"])
 
     voltage VARCHAR(25)
     current_nominal VARCHAR(25)
-    frequency VARCHAR(3)
+    frequency VARCHAR(25)
     pole VARCHAR(25)
     rpm VARCHAR(25)
 
-    bearing_de VARCHAR("50")
-    bearing_nde VARCHAR("50")
-    frame_type VARCHAR("50")
-    shaft_diameter SMALLINT UNSIGNED
-    phase_supply VARCHAR(3)
+    bearing_de VARCHAR(50)
+    bearing_nde VARCHAR(50)
+    frame_type VARCHAR(50)
+    shaft_diameter VARCHAR(25)
+    phase_supply VARCHAR(25)
 
-    cos_phi CHAR(4)
-    efficiency VARCHAR(4)
-    ip_rating CHAR(2)
-    insulation_class CHAR(1)
-    duty CHAR(2)
+    cos_phi VARCHAR(25)
+    efficiency VARCHAR(25)
+    ip_rating VARCHAR(25)
+    insulation_class VARCHAR(25)
+    duty VARCHAR(25)
 
     connection_type VARCHAR(50)
     nipple_grease ENUM(["Available", "Not Available"])
     greasing_type VARCHAR(50)
-    greasing_qty_de SMALLINT UNSIGNED
-    greasing_qty_nde SMALLINT UNSIGNED
+    greasing_qty_de VARCHAR(25)
+    greasing_qty_nde VARCHAR(25)
 
-    length SMALLINT UNSIGNED
-    width SMALLINT UNSIGNED
-    height SMALLINT UNSIGNED
-    weight SMALLINT UNSIGNED
+    length VARCHAR(25)
+    width VARCHAR(25)
+    height VARCHAR(25)
+    weight VARCHAR(25)
     cooling_fan ENUM(["Internal", "External", "Not Available"])
 
     mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
@@ -75,7 +75,7 @@ entity data_records {
     * motor_status ENUM(["Running", "Not Running"])
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
-      number_of_greasing CHAR(3)
+      number_of_greasing VARCHAR(3)
     * temperature_a SMALLINT UNSIGNED
     * temperature_b SMALLINT UNSIGNED
     * temperature_c SMALLINT UNSIGNED

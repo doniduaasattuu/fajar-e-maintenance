@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('function_locations', function (Blueprint $table) {
             $table->string("id", 150)->nullable(false)->primary();
-            $table->string("tag_name", 100)->nullable(true);
+            $table->string("tag_name", 150)->nullable(true);
             $table->timestamps();
         });
     }

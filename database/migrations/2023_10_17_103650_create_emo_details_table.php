@@ -18,37 +18,37 @@ return new class extends Migration
             $table->string("manufacture", 150)->nullable(true);
             $table->string("serial_number", 150)->nullable(true);
             $table->string("type", 150)->nullable(true);
-            $table->string("power_rate", 5)->nullable(true);
+            $table->string("power_rate", 25)->nullable(true);
             $table->enum("power_unit", ["kW", "HP"])->nullable(true);
 
             $table->string("voltage", 25)->nullable(true);
             $table->string("current_nominal", 25)->nullable(true);
-            $table->string("frequency", 3)->nullable(true);
+            $table->string("frequency", 25)->nullable(true);
             $table->string("pole", 25)->nullable(true);
             $table->string("rpm", 25)->nullable(true);
 
             $table->string("bearing_de", 50)->nullable(true);
             $table->string("bearing_nde", 50)->nullable(true);
             $table->string("frame_type", 50)->nullable(true);
-            $table->unsignedSmallInteger("shaft_diameter")->nullable(true);
-            $table->char("phase_supply", 1)->nullable(true);
+            $table->string("shaft_diameter", 25)->nullable(true);
+            $table->string("phase_supply", 25)->nullable(true);
 
-            $table->char("cos_phi", 4)->nullable(true);
-            $table->char("efficiency", 4)->nullable(true);
-            $table->char("ip_rating", 2)->nullable(true);
-            $table->char("insulation_class", 1)->nullable(true);
-            $table->char("duty", 2)->nullable(true);
+            $table->string("cos_phi", 25)->nullable(true);
+            $table->string("efficiency", 25)->nullable(true);
+            $table->string("ip_rating", 25)->nullable(true);
+            $table->string("insulation_class", 25)->nullable(true);
+            $table->string("duty", 25)->nullable(true);
 
             $table->string("connection_type", 50)->nullable(true);
             $table->enum("nipple_grease", (["Available", "Not Available"]))->nullable(true);
             $table->string("greasing_type", 50)->nullable(true);
-            $table->unsignedSmallInteger("greasing_qty_de")->nullable(true);
-            $table->unsignedSmallInteger("greasing_qty_nde")->nullable(true);
+            $table->string("greasing_qty_de", 25)->nullable(true);
+            $table->string("greasing_qty_nde", 25)->nullable(true);
 
-            $table->unsignedSmallInteger("length")->nullable(true);
-            $table->unsignedSmallInteger("width")->nullable(true);
-            $table->unsignedSmallInteger("height")->nullable(true);
-            $table->unsignedSmallInteger("weight")->nullable(true);
+            $table->string("length", 25)->nullable(true);
+            $table->string("width", 25)->nullable(true);
+            $table->string("height", 25)->nullable(true);
+            $table->string("weight", 25)->nullable(true);
             $table->enum("cooling_fan", (["Internal", "External", "Not Available"]))->nullable(true);
 
             $table->enum("mounting", ["Horizontal", "Vertical", "V/H", "MGM"])->nullable(true);
