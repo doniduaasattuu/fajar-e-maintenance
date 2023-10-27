@@ -101,10 +101,16 @@
                     <!-- =========== TEMPERATURE =========== -->
                     <div class="row mb-3">
                         <div class="col-md">
-                            <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                            <figure>
+                                <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                                <figcaption class="figure-caption text-center">Left side</figcaption>
+                            </figure>
                         </div>
                         <div class="col-md">
-                            <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                            <figure>
+                                <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                                <figcaption class="figure-caption text-center">Front side</figcaption>
+                            </figure>
                         </div>
                     </div>
                     <div class="mb-1">
@@ -126,9 +132,10 @@
 
                     <!-- =========== VIBRATION =========== -->
                     <div class="row mt-3 mb-2">
-                        <div class="col-md">
-                            <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Front Side">
-                        </div>
+                        <figure>
+                            <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
+                            <figcaption class="figure-caption text-center">Vibration standard</figcaption>
+                        </figure>
                     </div>
                     <!-- VIBRATION VALUE DE -->
                     <div class="mb-2">

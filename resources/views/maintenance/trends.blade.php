@@ -13,17 +13,26 @@
         <div id="temperature"></div>
         <div class="row mb-5">
             <div class="col-md">
-                <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                <figure>
+                    <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                    <figcaption class="figure-caption text-center">Left side</figcaption>
+                </figure>
             </div>
             <div class="col-md">
-                <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                <figure>
+                    <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                    <figcaption class="figure-caption text-center">Front side</figcaption>
+                </figure>
             </div>
         </div>
 
         <div class="mt-5" id="vibration"></div>
         <div class="row">
             <div class="col-md">
-                <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Front Side">
+                <figure>
+                    <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
+                    <figcaption class="figure-caption text-center">Vibration standard</figcaption>
+                </figure>
             </div>
         </div>
         <div class="mt-5" id="number_of_greasing"></div>

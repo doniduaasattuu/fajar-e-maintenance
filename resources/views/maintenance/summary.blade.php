@@ -124,7 +124,7 @@
                                     <tr>
                                         <th scope="col">Funcloc</th>
                                         <th scope="col">Emo</th>
-                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Vib</th>
                                         <th scope="col">Checked</th>
                                     </tr>
                                 </thead>
@@ -172,7 +172,7 @@
                                     <tr>
                                         <th scope="col">Funcloc</th>
                                         <th scope="col">Emo</th>
-                                        <th scope="col">Vibration</th>
+                                        <th scope="col">Vib</th>
                                         <th scope="col">Checked</th>
                                     </tr>
                                 </thead>
