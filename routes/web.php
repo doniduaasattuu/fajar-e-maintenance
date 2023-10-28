@@ -67,4 +67,10 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
 
     Route::get("/summary", [App\Http\Controllers\DataController::class, "summary"]);
+
+    Route::get("/chartjs", function () {
+        return view("maintenance.chartjs", [
+            "title" => "ChartJS"
+        ]);
+    });
 });
