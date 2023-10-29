@@ -59,84 +59,31 @@
                 </div>
             </div>
         </div>
+        <!-- BAR -->
 
-        <div class="row mb-4">
-            <h5 class="text-secondary mb-2">Motor</h5>
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card border-start border-top-0 border-end-0 border-bottom-0 border-opacity-75 border-5 border-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                    State
-                                </div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    Running
-                                </div>
-                            </div>
-                        </div>
+        <!-- CHART -->
+        <h4 class="text-secondary mb-3">Motor</h4>
+        <div class="row">
+            <div class="col-md">
+                <div class="">
+                    <div class="alert alert-success text-secondary d-flex justify-content-between" role="alert">
+                        <div class="d-block">Status</div>
+                        <div>Running</div>
+                    </div>
+                    <div class="alert alert-success text-secondary d-flex justify-content-between" role="alert">
+                        <div class="d-block">Running hours</div>
+                        <div>12 Days</div>
+                    </div>
+
+                    <div>
+                        <!-- GOOGLE -->
+                        <div class="justify-content-center d-flex" id="chart_div" style="height: 120px;"></div>
+                        <!-- GOOGLE -->
                     </div>
                 </div>
             </div>
-
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card border-start border-top-0 border-end-0 border-bottom-0 border-opacity-75 border-5 border-danger shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                    Criticality
-                                </div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    High
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card border-start border-top-0 border-end-0 border-bottom-0 border-opacity-75 border-5 border-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                    Load
-                                </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">
-                                            <span id="load_percent">50</span> %
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm mr-2">
-                                            <div id="load" class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-3">
-                <div class="card border-start border-top-0 border-end-0 border-bottom-0 border-opacity-75 border-5 border-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                    STATUS
-                                </div>
-                                <div class="h6 mb-0 font-weight-bold text-gray-800">
-                                    Unsatisfactory
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md mt-3">
+                <canvas id="voltage"></canvas>
             </div>
         </div>
 
