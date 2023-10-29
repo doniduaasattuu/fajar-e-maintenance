@@ -73,4 +73,10 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
             "title" => "ChartJS"
         ]);
     });
+
+    Route::get("/dashboards", function () {
+        return view("maintenance.dashboards", [
+            "title" => "Dashboard"
+        ]);
+    });
 });
