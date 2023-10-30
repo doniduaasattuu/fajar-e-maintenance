@@ -61,8 +61,8 @@
                 </div>
             </div>
 
-            <div>
-                <div class="mb-3 text-center">
+            <div id="findings">
+                <div class="mt-3 mb-3 text-center">
                     <h4 class="mb-0">Findings Log</h4>
                     <div class="fs-6 text-secondary">The top one is the newest</div>
                 </div>
@@ -95,25 +95,6 @@
                             $i++
                             @endphp
                             @endforeach
-
-                            <!-- <tr>
-                        <th scope="row">1</th>
-                        <td>Cover fan gesek ke kipas</td>
-                        <td>Darminto</td>
-                        <td>30 Juni 2023</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Bearing belakang noise</td>
-                        <td>Sopo</td>
-                        <td>17 Maret 2022</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Plastik terminal meleleh</td>
-                        <td>Edi Supriadi</td>
-                        <td>29 April 2021</td>
-                    </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -278,6 +259,13 @@
             let html_number_of_greasing = document.getElementById("number_of_greasing");
             if (nipple_grease != "Available") {
                 html_number_of_greasing.style.display = "none";
+            }
+
+            // HIDDEN FINDINGS LOG IF EMPTY
+            const findings = document.getElementById("findings");
+            let finding_comments = <?php echo json_encode($comments) ?>;
+            if (finding_comments.length == 0) {
+                findings.style.display = "none";
             }
         </script>
 </body>
