@@ -36,9 +36,21 @@ class DataRecordSeeder extends Seeder
             $data_record->vibration_value_de = rand(1, 112) / 100;
             $data_record->vibration_de = "Normal";
             $data_record->vibration_value_nde = rand(1, 112) / 100;
+            if ($i == 4) {
+                $data_record->comment = "Plastik terminal meleleh";
+                $data_record->checked_by = "Edi Supriadi";
+            } else if ($i == 24) {
+                $data_record->comment = "Bearing belakang noise";
+                $data_record->checked_by = "Sopo";
+            } else if ($i == 53) {
+                $data_record->comment = "Bearing belakang noise";
+                $data_record->checked_by = "Darminto";
+            } else {
+                $data_record->comment = null;
+                $data_record->checked_by = $fullname;
+            }
             $data_record->vibration_nde = "Normal";
             $data_record->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record->checked_by = $fullname;
             $data_record->save();
 
             // $data_record1 = new DataRecord();

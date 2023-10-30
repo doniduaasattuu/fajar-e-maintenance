@@ -118,6 +118,7 @@ class DataController extends Controller
         $vibration_de = $request->input("vibration_de");
         $vibration_value_nde = $request->input("vibration_value_nde");
         $vibration_nde = $request->input("vibration_nde");
+        $comment = $request->input("comment");
         $checked_by = session("user");
 
         if (
@@ -155,6 +156,7 @@ class DataController extends Controller
                 $data_record->vibration_de = $vibration_de;
                 $data_record->vibration_value_nde = $vibration_value_nde;
                 $data_record->vibration_nde = $vibration_nde;
+                $data_record->comment = $comment;
                 $data_record->created_at = Carbon::now()->toDateTimeString();
                 $data_record->checked_by = $checked_by;
                 $result = $data_record->save();
@@ -185,6 +187,12 @@ class DataController extends Controller
 
             $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
+
+            $comments = DataRecord::query()
+                ->select(["comment", "checked_by", "created_at"])->where("comment", "!=", null)
+                ->where("emo", "=", $emo)
+                ->orderBy("created_at", "DESC")
+                ->get();
 
             if (!is_null($emo_details)) {
 
@@ -225,7 +233,8 @@ class DataController extends Controller
                     "vibration_value_nde" => $vibration_value_nde,
                     "number_of_greasing" => $number_of_greasing,
                     "emo" => $emo,
-                    "nipple_grease" => $nipple_grease
+                    "nipple_grease" => $nipple_grease,
+                    "comments" => $comments->toArray(),
                 ]);
             } else {
 

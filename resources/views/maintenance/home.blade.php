@@ -35,7 +35,7 @@
             <div class="text-center mx-auto" style="max-width: 600px;">
                 <p class="mb-1">Hello {{ $user }}, welcome to</p>
                 <h1 style="font-weight: 700;">Fajar E-Maintenance</h1>
-                <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. A quidem quia ducimus ipsam, reprehenderit libero?</p>
+                <p class="mb-3">We make daily inspection checks easier</p>
             </div>
             <div class="mx-auto" style="max-width: 400px;">
                 <svg style="width:100%; height: 100%" xmlns="http://www.w3.org/2000/svg" width="507.99631" height="486.46461" viewBox="0 0 507.99631 486.46461" xmlns:xlink="http://www.w3.org/1999/xlink">

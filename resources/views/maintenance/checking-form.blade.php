@@ -76,7 +76,7 @@
         <!-- CHECKING -->
         <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
             @csrf
-            <div class="mb-3 row">
+            <div class="row">
                 <div class="col">
                     <select name="motor_status" id="motor_status" class="form-select mb-3" aria-label="Default select example">
                         <option value="">--Motor Status--</option>
@@ -113,6 +113,51 @@
                             </figure>
                         </div>
                     </div>
+
+                    <div class="mb-3">
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid mx-auto d-block" src="/images/temp_iso_IEC_60085.png" alt="Temperature">
+                                <figcaption class="figure-caption text-center">IEC 60085</figcaption>
+                            </figure>
+                        </div>
+                        <!-- <table class="table table-bordered border-secondary fs-6">
+                            <thead>
+                                <tr>
+                                    <th class="text-left" scope="col">Insulation Class</th>
+                                    <th class="text-left" scope="col">Max. Ambient Temp.</th>
+                                    <th class="text-left" scope="col">Max. Temp. Rise (1.0 service Factor)</th>
+                                    <th class="text-left" scope="col">Max. Temp. Rise (1.15 Service Factor)</th>
+                                    <th class="text-left" scope="col">Max. Attainable Temp.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">B</th>
+                                    <td>40°C</td>
+                                    <td>80°C</td>
+                                    <td>90°C</td>
+                                    <td>130°C</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">F</th>
+                                    <td>40°C</td>
+                                    <td>105°C</td>
+                                    <td>115°C</td>
+                                    <td>155°C</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">H</th>
+                                    <td>40°C</td>
+                                    <td>125°C</td>
+                                    <td>Not defined</td>
+                                    <td>180°C</td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                        <!-- <p style="font-size: 0.875em;" class="text-center text-secondary">IEC 60085</p> -->
+                    </div>
+
                     <div class="mb-1">
                         <label for="temperature_a" class="fw-bold form-label">Temperature A <span style="font-weight: 400;">(DE)</span></label>
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
@@ -132,10 +177,12 @@
 
                     <!-- =========== VIBRATION =========== -->
                     <div class="row mt-3 mb-2">
-                        <figure>
-                            <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                            <figcaption class="figure-caption text-center">Vibration standard</figcaption>
-                        </figure>
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
+                                <figcaption class="figure-caption text-center">Vibration standard</figcaption>
+                            </figure>
+                        </div>
                     </div>
                     <!-- VIBRATION VALUE DE -->
                     <div class="mb-2">
@@ -152,11 +199,16 @@
                         <label for="vibration_value_nde" class="fw-bold form-label">Vibration NDE</label>
                         <input type="number" step="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
                     </div>
-                    <select name="vibration_nde" class="form-select mb-4 " aria-label="Default select example">
+                    <select name="vibration_nde" class="form-select mb-3 " aria-label="Default select example">
                         <option value="">--Status--</option>
                         <option value="Normal">Normal</option>
                         <option value="Abormal">Abormal</option>
                     </select>
+
+                    <div class="mb-4">
+                        <label for="vibration_value_de" class="fw-bold form-label">Comment</label>
+                        <textarea placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                    </div>
 
                     <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
 
@@ -229,10 +281,12 @@
                 "vibration_value_nde=" + myform[11].value + "&" +
                 "vibration_nde=" + myform[12].value + "&" +
 
-                "motorList=" + myform[13].value
+                "comment=" + myform[13].value + "&" +
+                "motorList=" + myform[14].value
             );
         }
 
+        console.log(myform);
         // DISABLED INPUT NUMBER OF GREASING
         nipple_grease_input.onchange = () => {
             if (nipple_grease_input.value == "Available") {

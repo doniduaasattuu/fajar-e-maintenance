@@ -285,4 +285,18 @@ class DataRecordTest extends TestCase
         self::assertCount(5, $result);
         Log::info(json_encode($result, JSON_PRETTY_PRINT));
     }
+
+    public function testComment()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $comments = DataRecord::query()
+            ->select(["comment", "checked_by", "created_at"])->where("comment", "!=", null)
+            ->where("emo", "=", "EMO000426")
+            ->orderBy("created_at", "DESC")
+            ->get();
+
+        self::assertNotNull($comments);
+        Log::info(json_encode($comments, JSON_PRETTY_PRINT));
+    }
 }

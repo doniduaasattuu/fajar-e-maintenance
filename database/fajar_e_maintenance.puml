@@ -84,6 +84,7 @@ entity data_records {
     * vibration_de ENUM(["Normal", "Abnormal"])
       vibration_value_nde DECIMAL(4,2)
     * vibration_nde ENUM(["Normal", "Abnormal"])
+      comment TEXT
     * created_at TIMESTAMP
     * checked_by VARCHAR(150)
 }
