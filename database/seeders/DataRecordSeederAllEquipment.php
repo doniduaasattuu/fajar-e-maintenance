@@ -34,9 +34,9 @@ class DataRecordSeederAllEquipment extends Seeder
                 $data_record->temperature_c = rand(35, 100);
                 $data_record->temperature_d = rand(35, 100);
                 $data_record->vibration_value_de = rand(1, 112) / 100;
-                $data_record->vibration_de = "Normal";
+                $data_record->vibration_de = "Good";
                 $data_record->vibration_value_nde = rand(1, 112) / 100;
-                $data_record->vibration_nde = "Normal";
+                $data_record->vibration_nde = "Good";
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i));
                 $data_record->checked_by = $fullname;
                 $data_record->save();
