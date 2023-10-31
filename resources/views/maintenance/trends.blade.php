@@ -114,9 +114,52 @@
             let temp_b = <?php echo json_encode($temperature_b) ?>;
             let temp_c = <?php echo json_encode($temperature_c) ?>;
             let temp_d = <?php echo json_encode($temperature_d) ?>;
+
             // VIBRATION
             let vibration_value_de = <?php echo json_encode($vibration_value_de) ?>;
             let vibration_value_nde = <?php echo json_encode($vibration_value_nde) ?>;
+            let vibration_min = -5;
+            let vibration_max = 5;
+            let vibration_step = 1;
+
+            // DYNAMIC MAX RANGE FOR VIBRATION START
+            function moreFive(age) {
+                return age > 5;
+            }
+
+            function moreTen(age) {
+                return age > 10;
+            }
+
+            function moreTwenty(age) {
+                return age > 20;
+            }
+
+            let deFive = vibration_value_de.filter(moreFive)
+            let ndeFive = vibration_value_nde.filter(moreFive)
+
+            let deTen = vibration_value_de.filter(moreTen)
+            let ndeTen = vibration_value_nde.filter(moreTen)
+
+            let deTwenty = vibration_value_de.filter(moreTwenty)
+            let ndeTwenty = vibration_value_nde.filter(moreTwenty)
+
+            if ((deFive.length >= 1) || (ndeFive.length >= 1)) {
+                vibration_max = 10
+                vibration_step = 2
+                vibration_min = -10
+            }
+            if ((deTen.length >= 1) || (ndeTen.length >= 1)) {
+                vibration_step = 5
+                vibration_max = 20
+            }
+            if ((deTwenty.length >= 1) || (ndeTwenty.length >= 1)) {
+                vibration_min = -15
+                vibration_step = 15
+                vibration_max = 45
+            }
+            // DYNAMIC MAX RANGE FOR VIBRATION END
+
             // NUMBER OF GREASING
             let nipple_grease = "<?php echo $nipple_grease ?>"
             let number_of_greasing = <?php echo json_encode($number_of_greasing) ?>;
@@ -141,8 +184,8 @@
                     }, {
                         data: temp_b,
                         label: "Point B",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
+                        borderColor: "rgb(196,88,180)",
+                        backgroundColor: "rgb(196,88,180)",
                         fill: false
                     }, {
                         data: temp_c,
@@ -153,8 +196,9 @@
                     }, {
                         data: temp_d,
                         label: "Point D",
-                        borderColor: "rgb(196,88,180)",
-                        backgroundColor: "rgb(196,88,180)",
+                        borderColor: "rgb(60,186,159)",
+                        backgroundColor: "rgb(60,186,159)",
+
                         fill: false
                     }]
                 },
@@ -204,9 +248,9 @@
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true,
-                                max: 5,
-                                min: -5,
-                                stepSize: 1
+                                min: vibration_min,
+                                max: vibration_max,
+                                stepSize: vibration_step,
                                 // callback: function(value, index, ticks) {
                                 //     return value + " mm/s"
                                 //     // ᵐᵐ/ˢ
