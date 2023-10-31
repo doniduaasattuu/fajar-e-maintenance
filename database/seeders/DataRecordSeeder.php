@@ -34,7 +34,7 @@ class DataRecordSeeder extends Seeder
             $data_record->temperature_c = rand(35, 150);
             $data_record->temperature_d = rand(35, 150);
             $data_record->vibration_value_de = rand(1, 112) / 100;
-            $data_record->vibration_de = "Normal";
+            $data_record->vibration_de = "Good";
             $data_record->vibration_value_nde = rand(1, 112) / 100;
             if ($i == 4) {
                 $data_record->comment = "Plastik terminal meleleh";
@@ -49,7 +49,7 @@ class DataRecordSeeder extends Seeder
                 $data_record->comment = null;
                 $data_record->checked_by = $fullname;
             }
-            $data_record->vibration_nde = "Normal";
+            $data_record->vibration_nde = "Good";
             $data_record->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record->save();
 
@@ -64,9 +64,9 @@ class DataRecordSeeder extends Seeder
             $data_record1->temperature_c = rand(35, 100);
             $data_record1->temperature_d = rand(35, 100);
             $data_record1->vibration_value_de = rand(1, 112) / 100;
-            $data_record1->vibration_de = "Normal";
+            $data_record1->vibration_de = "Good";
             $data_record1->vibration_value_nde = rand(1, 112) / 100;
-            $data_record1->vibration_nde = "Normal";
+            $data_record1->vibration_nde = "Good";
             $data_record1->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record1->checked_by = $fullname;
             $data_record1->save();
@@ -82,9 +82,9 @@ class DataRecordSeeder extends Seeder
             $data_record2->temperature_c = rand(35, 100);
             $data_record2->temperature_d = rand(35, 100);
             $data_record2->vibration_value_de = rand(1, 112) / 100;
-            $data_record2->vibration_de = "Normal";
+            $data_record2->vibration_de = "Good";
             $data_record2->vibration_value_nde = rand(1, 112) / 100;
-            $data_record2->vibration_nde = "Normal";
+            $data_record2->vibration_nde = "Good";
             $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record2->checked_by = $fullname;
             $data_record2->save();
@@ -101,9 +101,9 @@ class DataRecordSeeder extends Seeder
             $data_record3->temperature_c = rand(35, 100);
             $data_record3->temperature_d = rand(35, 100);
             $data_record3->vibration_value_de = rand(1, 112) / 100;
-            $data_record3->vibration_de = "Normal";
+            $data_record3->vibration_de = "Good";
             $data_record3->vibration_value_nde = rand(1, 112) / 100;
-            $data_record3->vibration_nde = "Normal";
+            $data_record3->vibration_nde = "Good";
             $data_record3->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record3->checked_by = $fullname;
             $data_record3->save();

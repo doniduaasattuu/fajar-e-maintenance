@@ -37,9 +37,9 @@ class DataRecordTest extends TestCase
         $data_record->temperature_c = 85;
         $data_record->temperature_d = 65;
         $data_record->vibration_value_de = 0.68;
-        $data_record->vibration_de = "Normal";
+        $data_record->vibration_de = "Good";
         $data_record->vibration_value_nde = 0.58;
-        $data_record->vibration_nde = "Normal";
+        $data_record->vibration_nde = "Good";
         $data_record->created_at = Carbon::now()->toDateTimeString();
         $data_record->checked_by = User::query()->find("55000154")->fullname;
         $data_record->save();
@@ -137,9 +137,9 @@ class DataRecordTest extends TestCase
             "temperature_c" => "50",
             "temperature_d" => "10",
             "vibration_value_de" => "0.83",
-            "vibration_de" => "Normal",
+            "vibration_de" => "Good",
             "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Normal",
+            "vibration_nde" => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "Doni Darmawan",
         ])

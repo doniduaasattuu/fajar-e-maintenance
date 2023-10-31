@@ -24,9 +24,10 @@ return new class extends Migration
             $table->unsignedSmallInteger("temperature_c")->nullable(false);
             $table->unsignedSmallInteger("temperature_d")->nullable(false);
             $table->decimal("vibration_value_de", 4, 2)->nullable(false);
-            $table->enum("vibration_de", ["Normal", "Abnormal"])->nullable(true);
+            $table->enum("vibration_de", ["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])->nullable(true);
             $table->decimal("vibration_value_nde", 4, 2)->nullable(false);
-            $table->enum("vibration_nde", ["Normal", "Abnormal"])->nullable(true);
+            $table->enum("vibration_nde", ["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])->nullable(true);
+            $table->text("comment")->nullable();
             $table->timestamp("created_at")->nullable(false)->useCurrent();
             $table->string("checked_by", 150)->nullable(false);
 
