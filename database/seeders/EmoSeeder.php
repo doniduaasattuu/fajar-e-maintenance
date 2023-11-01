@@ -62,5 +62,29 @@ class EmoSeeder extends Seeder
         $emo3->created_at = Carbon::now()->toDateTimeString();
         $emo3->updated_at = Carbon::now()->toDateTimeString();
         $emo3->save();
+
+        $emo4 = new Emo();
+        $emo4->id = "EMO003963";
+        $emo4->funcloc = "FP-01-SP1-UKP-RF07";
+        $emo4->equipment_description = "AC MOTOR;3000V,50Hz,335kW,10P,8307S,B3";
+        $emo4->status = "Installed";
+        $emo4->sort_field = "SP1.MW.DDR1/M";
+        $emo4->unique_id = "233";
+        $emo4->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList233";
+        $emo4->created_at = Carbon::now()->toDateTimeString();
+        $emo4->updated_at = Carbon::now()->toDateTimeString();
+        $emo4->save();
+
+        $emo5 = new Emo();
+        $emo5->id = "EMO003604";
+        $emo5->funcloc = "FP-01-SP1-MXW-RF04";
+        $emo5->equipment_description = "MOTOR,MASTER PB 1,5-2,2/3,5-5,1A,4P";
+        $emo5->status = "Installed";
+        $emo5->sort_field = "SP1.MXW.RF04.KNF/M";
+        $emo5->unique_id = "188";
+        $emo5->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList188";
+        $emo5->created_at = Carbon::now()->toDateTimeString();
+        $emo5->updated_at = Carbon::now()->toDateTimeString();
+        $emo5->save();
     }
 }

@@ -143,5 +143,45 @@ class EmoDetailSeeder extends Seeder
         $emo_detail3->cooling_fan = "Internal";
         $emo_detail3->mounting = "Horizontal";
         $emo_detail3->save();
+
+        $emo_detail4 = new EmoDetail();
+        $emo_detail4->emo_detail = "EMO003963";
+        $emo_detail4->manufacture = "GE";
+        $emo_detail4->serial_number = "FB8359992";
+        $emo_detail4->type = "K";
+        $emo_detail4->power_rate = "450";
+        $emo_detail4->power_unit = "HP";
+        $emo_detail4->voltage = "3000";
+        $emo_detail4->current_nominal = "87.4";
+        $emo_detail4->frequency = "50";
+        $emo_detail4->pole = "10";
+        $emo_detail4->rpm = "590";
+        $emo_detail4->frame_type = "8307S";
+        $emo_detail4->phase_supply = "3";
+        $emo_detail4->ip_rating = "55";
+        $emo_detail4->insulation_class = "F";
+        $emo_detail4->nipple_grease = "Available";
+        $emo_detail4->cooling_fan = "External";
+        $emo_detail4->mounting = "Horizontal";
+        $emo_detail4->save();
+
+        $emo_detail5 = new EmoDetail();
+        $emo_detail5->emo_detail = "EMO003604";
+        $emo_detail5->manufacture = "MASTER";
+        $emo_detail5->serial_number = "642058 -KM";
+        $emo_detail5->type = "PB";
+        $emo_detail5->power_rate = "1.5/2.2";
+        $emo_detail5->power_unit = "kW";
+        $emo_detail5->voltage = "380";
+        $emo_detail5->current_nominal = "3.5/5.1";
+        $emo_detail5->frequency = "50";
+        $emo_detail5->pole = "4/16";
+        $emo_detail5->rpm = "1460/230";
+        $emo_detail5->phase_supply = "3";
+        $emo_detail5->cos_phi = "0.86";
+        $emo_detail5->nipple_grease = "Not Available";
+        $emo_detail5->cooling_fan = "External";
+        $emo_detail5->mounting = "Vertical";
+        $emo_detail5->save();
     }
 }

@@ -8,13 +8,36 @@
 
     <div class="container mt-4 my-5">
 
+        <!-- FAILED POST ALERT -->
         <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
             Error occurred! ⚠️
         </div>
+        <!-- FAILED POST ALERT -->
 
+        <!-- SUCCESS POST ALERT -->
         <div class="alert alert-success" style="display: none" id="message_response" role="alert">
             Success! ✅
         </div>
+        <!-- SUCCESS POST ALERT -->
+
+        <!-- VIBRATION ALERT-->
+        <div class="modal fade" id="vibration_alert" tabindex="-1" aria-labelledby="vibration_alertLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="bg-light modal-header">
+                        <h1 class=" modal-title fs-5" id="vibration_alertLabel">Invalid input</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Vibration should not exceed 45 mm/s! ⚠️
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- VIBRATION ALERT-->
 
         <h3 class="mb-4">{{ $emo->id }}</h3>
         <a href="/trends/{{ $emo->id }}" title="Record temperature and vibration year to date">
@@ -121,41 +144,6 @@
                                 <figcaption class="figure-caption text-center">IEC 60085</figcaption>
                             </figure>
                         </div>
-                        <!-- <table class="table table-bordered border-secondary fs-6">
-                            <thead>
-                                <tr>
-                                    <th class="text-left" scope="col">Insulation Class</th>
-                                    <th class="text-left" scope="col">Max. Ambient Temp.</th>
-                                    <th class="text-left" scope="col">Max. Temp. Rise (1.0 service Factor)</th>
-                                    <th class="text-left" scope="col">Max. Temp. Rise (1.15 Service Factor)</th>
-                                    <th class="text-left" scope="col">Max. Attainable Temp.</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">B</th>
-                                    <td>40°C</td>
-                                    <td>80°C</td>
-                                    <td>90°C</td>
-                                    <td>130°C</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">F</th>
-                                    <td>40°C</td>
-                                    <td>105°C</td>
-                                    <td>115°C</td>
-                                    <td>155°C</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">H</th>
-                                    <td>40°C</td>
-                                    <td>125°C</td>
-                                    <td>Not defined</td>
-                                    <td>180°C</td>
-                                </tr>
-                            </tbody>
-                        </table> -->
-                        <!-- <p style="font-size: 0.875em;" class="text-center text-secondary">IEC 60085</p> -->
                     </div>
 
                     <div class="mb-1">
@@ -175,44 +163,50 @@
                         <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
                     </div>
 
-                    <!-- =========== VIBRATION =========== -->
+                    <!-- =========== VIBRATION START =========== -->
                     <div class="row mt-3 mb-2">
                         <div class="col-md">
                             <figure>
                                 <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                                <figcaption class="figure-caption text-center">Vibration standard</figcaption>
+                                <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
                             </figure>
                         </div>
                     </div>
+
                     <!-- VIBRATION VALUE DE -->
                     <div class="mb-2">
-                        <label for="vibration_value_de" class="fw-bold form-label">Vibration DE</label>
-                        <input type="number" step="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
+                        <label for="vibration_value_de" class="vibrations_label fw-bold form-label">Vibration DE</label>
+                        <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
                     </div>
-                    <select disabled id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
+                    <select id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
                         <option value="">--Status--</option>
                         <option value="Good">Good</option>
                         <option value="Satisfactory">Satisfactory</option>
                         <option value="Unsatisfactory">Unsatisfactory</option>
                         <option value="Unacceptable">Unacceptable</option>
                     </select>
+                    <!--  -->
+
                     <!-- VIBRATION VALUE NDE -->
                     <div class="mb-2">
-                        <label for="vibration_value_nde" class="fw-bold form-label">Vibration NDE</label>
-                        <input type="number" step="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
+                        <label for="vibration_value_nde" class="vibrations_label fw-bold form-label">Vibration NDE</label>
+                        <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
                     </div>
-                    <select disabled id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
-                        <option value="">--Status--</option>
+                    <select id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
+                        <option selected value="">--Status--</option>
                         <option value="Good">Good</option>
                         <option value="Satisfactory">Satisfactory</option>
                         <option value="Unsatisfactory">Unsatisfactory</option>
                         <option value="Unacceptable">Unacceptable</option>
                     </select>
+                    <!-- =========== VIBRATIONS END=========== -->
 
+                    <!-- =========== COMMENT START=========== -->
                     <div class="mb-4">
                         <label for="vibration_value_de" class="fw-bold form-label">Comment</label>
                         <textarea placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
+                    <!-- =========== COMMENT END =========== -->
 
                     <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
 
@@ -295,212 +289,124 @@
         // VIBRATION VALUE ALERT VALIDATION AND STATUS START
         let vibration_values = document.getElementsByClassName("vibration_value");
         let vibrations = document.getElementsByClassName("vibration");
+        let motor_class = document.getElementById("motor_class");
+        let vibrations_label = document.getElementsByClassName("vibrations_label");
+        let figcaption_vibration = document.getElementById("figcaption_vibration");
+
+        // GOOD
+        function vibrationGood(element) {
+            element.value = "Good";
+            element.classList.remove("text-dark");
+            element.classList.remove("bg-info");
+            element.classList.remove("bg-warning");
+            element.classList.remove("bg-danger");
+            element.classList.add("bg-success");
+            element.classList.add("text-white");
+        }
+
+        // SATISACTORY
+        function vibrationSatisfactory(element) {
+            element.value = "Satisfactory";
+            element.classList.remove("text-white");
+            element.classList.remove("bg-success");
+            element.classList.remove("bg-warning");
+            element.classList.remove("bg-danger");
+            element.classList.add("bg-info");
+            element.classList.add("text-dark");
+        }
+
+        // UNSATISFACTORY
+        function vibrationUnsatisfactory(element) {
+            element.value = "Unsatisfactory";
+            element.classList.remove("text-white");
+            element.classList.remove("bg-success");
+            element.classList.remove("bg-info");
+            element.classList.remove("bg-danger");
+            element.classList.add("bg-warning");
+            element.classList.add("text-dark");
+        }
+
+        // UNACCEPTABLE
+        function vibrationUnacceptable(element) {
+            element.value = "Unacceptable";
+            element.classList.remove("text-dark");
+            element.classList.remove("bg-success");
+            element.classList.remove("bg-warning");
+            element.classList.remove("bg-info");
+            element.classList.add("bg-danger");
+            element.classList.add("text-white");
+        }
 
         for (let i = 0; i < vibration_values.length; i++) {
             vibration_values[i].onchange = () => {
-                if (vibration_values[i].value > 45) {
-                    alert("Vibration should not exceed 45 mm/s");
-                    vibration_values[i].value = "";
+
+                if (vibration_values[i].value > 45 || vibration_values[i].value <= 0) {
+                    let myModal = new bootstrap.Modal(document.getElementById('vibration_alert'), {});
+                    myModal.show();
+                    vibration_values[i].value = "0.01";
                 }
 
-                motor_power_rate = power_rate.textContent.split(" ")[0];
-                motor_power_unit = power_unit.textContent != null ? "kW" : "HP";
+                motor_power_rate = power_rate.textContent.split(" ")[0].split("/")[0]; // MOTOR WHO HAVE 2 WINDINGS
+                motor_power_unit = power_unit.textContent == "kW" ? "kW" : "HP";
 
                 if (motor_power_unit == "HP") {
-                    motor_power_rate = motor_power_rate * 1.34
+                    motor_power_rate = Math.floor(motor_power_rate * 0.7457);
                 }
 
-                // console.info(motor_power_rate + " " + motor_power_unit); 75 kW
-                if (motor_power_rate <= 15 && motor_power_unit == "kW") {
-                    // MOTOR CLASS 1
+                if (motor_power_rate <= 15) {
+                    // MOTOR CLASS 1 == UNDER 15kW
+                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/Class 1)";
+
                     if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 0.71)) {
-                        vibrations[i].value = "Good";
-                        vibrations[i].classList.add("bg-success");
-                        vibrations[i].classList.add("text-white");
-                        vibrations[i].classList.remove("text-dark");
-                        vibrations[i].classList.remove("bg-info");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-danger");
+                        // GOOD
+                        vibrationGood(vibrations[i]);
                     } else if ((vibration_values[i].value > 0.71) && (vibration_values[i].value <= 1.80)) {
-                        vibrations[i].value = "Satisfactory";
-                        vibrations[i].classList.add("bg-info");
-                        vibrations[i].classList.add("text-dark");
-                        vibrations[i].classList.remove("text-white");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-danger");
+                        // SATISFACTORY
+                        vibrationSatisfactory(vibrations[i]);
                     } else if ((vibration_values[i].value > 1.80) && (vibration_values[i].value <= 4.50)) {
-                        vibrations[i].value = "Unsatisfactory";
-                        vibrations[i].classList.add("bg-warning");
-                        vibrations[i].classList.add("text-dark");
-                        vibrations[i].classList.remove("text-white");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-info");
-                        vibrations[i].classList.remove("bg-danger");
+                        // UNSATISFACTORY
+                        vibrationUnsatisfactory(vibrations[i]);
                     } else if ((vibration_values[i].value > 4.50) && (vibration_values[i].value <= 45)) {
-                        vibrations[i].value = "Unacceptable";
-                        vibrations[i].classList.add("bg-danger");
-                        vibrations[i].classList.add("text-white");
-                        vibrations[i].classList.remove("text-dark");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-info");
-                    } else {
-                        vibrations[i].value = "";
-                        vibrations[i].classList.add("bg-danger");
-                        vibrations[i].classList.add("bg-white");
+                        // UNACCEPTABLE
+                        vibrationUnacceptable(vibrations[i]);
+                    }
+                } else if (motor_power_rate < 300) {
+                    // MOTOR CLASS 2 == MORE THAN 15kW UNDER 300k
+                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/Class 2)";
+
+                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 1.12)) {
+                        // GOOD
+                        vibrationGood(vibrations[i]);
+                    } else if ((vibration_values[i].value > 1.12) && (vibration_values[i].value <= 2.80)) {
+                        // SATISFACTORY
+                        vibrationSatisfactory(vibrations[i]);
+                    } else if ((vibration_values[i].value > 2.80) && (vibration_values[i].value <= 7.10)) {
+                        // UNSATISFACTORY
+                        vibrationUnsatisfactory(vibrations[i]);
+                    } else if ((vibration_values[i].value > 7.10) && (vibration_values[i].value <= 45)) {
+                        // UNACCEPTABLE
+                        vibrationUnacceptable(vibrations[i]);
                     }
                 } else {
-                    // MOTOR CLASS 2
-                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 1.12)) {
-                        vibrations[i].value = "Good";
-                        vibrations[i].classList.add("bg-success");
-                        vibrations[i].classList.add("text-white");
-                        vibrations[i].classList.remove("text-dark");
-                        vibrations[i].classList.remove("bg-info");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-danger");
-                    } else if ((vibration_values[i].value > 1.12) && (vibration_values[i].value <= 2.80)) {
-                        vibrations[i].value = "Satisfactory";
-                        vibrations[i].classList.add("bg-info");
-                        vibrations[i].classList.add("text-dark");
-                        vibrations[i].classList.remove("text-white");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-danger");
-                    } else if ((vibration_values[i].value > 2.80) && (vibration_values[i].value <= 7.10)) {
-                        vibrations[i].value = "Unsatisfactory";
-                        vibrations[i].classList.add("bg-warning");
-                        vibrations[i].classList.add("text-dark");
-                        vibrations[i].classList.remove("text-white");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-info");
-                        vibrations[i].classList.remove("bg-danger");
-                    } else if ((vibration_values[i].value > 7.10) && (vibration_values[i].value <= 45)) {
-                        vibrations[i].value = "Unacceptable";
-                        vibrations[i].classList.add("bg-danger");
-                        vibrations[i].classList.add("text-white");
-                        vibrations[i].classList.remove("text-dark");
-                        vibrations[i].classList.remove("bg-success");
-                        vibrations[i].classList.remove("bg-warning");
-                        vibrations[i].classList.remove("bg-info");
-                    } else {
-                        vibrations[i].value = "";
-                        vibrations[i].classList.add("bg-danger");
-                        vibrations[i].classList.add("bg-white");
+                    // MOTOR CLASS 3 == MORE THAN 300kW
+                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/>=Class 3)";
+
+                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 1.80)) {
+                        // GOOD
+                        vibrationGood(vibrations[i]);
+                    } else if ((vibration_values[i].value > 1.80) && (vibration_values[i].value <= 4.50)) {
+                        // SATISFACTORY
+                        vibrationSatisfactory(vibrations[i]);
+                    } else if ((vibration_values[i].value > 4.50) && (vibration_values[i].value <= 11.2)) {
+                        // UNSATISFACTORY
+                        vibrationUnsatisfactory(vibrations[i]);
+                    } else if ((vibration_values[i].value > 11.2) && (vibration_values[i].value <= 45)) {
+                        // UNACCEPTABLE
+                        vibrationUnacceptable(vibrations[i]);
                     }
                 }
             }
         }
-
-        // const vibration_value_de = document.getElementById("vibration_value_de");
-        // const vibration_value_nde = document.getElementById("vibration_value_nde");
-        // const vibration_de = document.getElementById("vibration_de");
-        // const vibration_nde = document.getElementById("vibration_nde");
-
-        // vibration_value_de.onchange = () => {
-        //     motor_power_rate = power_rate.textContent.split(" ")[0];
-        //     motor_power_unit = power_unit.textContent != null ? "kW" : "HP";
-
-        //     if (motor_power_unit == "HP") {
-        //         motor_power_rate = motor_power_rate * 1.34
-        //     }
-        //     // console.info(motor_power_rate + " " + motor_power_unit); 75 kW
-        //     if (motor_power_rate <= 15 && motor_power_unit == "kW") {
-        //         // MOTOR CLASS 1
-        //         if ((vibration_value_de.value >= 0.01) && (vibration_value_de.value <= 0.71)) {
-        //             vibration_de.value = "Good";
-        //             vibration_de.classList.add("bg-success");
-        //             vibration_de.classList.add("text-white");
-        //             vibration_de.classList.remove("text-dark");
-        //             vibration_de.classList.remove("bg-info");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 0.71) && (vibration_value_de.value <= 1.80)) {
-        //             vibration_de.value = "Satisfactory";
-        //             vibration_de.classList.add("bg-info");
-        //             vibration_de.classList.add("text-dark");
-        //             vibration_de.classList.remove("text-white");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 1.80) && (vibration_value_de.value <= 4.50)) {
-        //             vibration_de.value = "Unsatisfactory";
-        //             vibration_de.classList.add("bg-warning");
-        //             vibration_de.classList.add("text-dark");
-        //             vibration_de.classList.remove("text-white");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-info");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 4.50) && (vibration_value_de.value <= 45)) {
-        //             vibration_de.value = "Unacceptable";
-        //             vibration_de.classList.add("bg-danger");
-        //             vibration_de.classList.add("text-white");
-        //             vibration_de.classList.remove("text-dark");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-info");
-        //         } else {
-        //             vibration_de.value = "";
-        //             vibration_de.classList.add("bg-danger");
-        //             vibration_de.classList.add("bg-white");
-        //         }
-        //     } else {
-        //         // MOTOR CLASS 2
-        //         if ((vibration_value_de.value >= 0.01) && (vibration_value_de.value <= 1.12)) {
-        //             vibration_de.value = "Good";
-        //             vibration_de.classList.add("bg-success");
-        //             vibration_de.classList.add("text-white");
-        //             vibration_de.classList.remove("text-dark");
-        //             vibration_de.classList.remove("bg-info");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 1.12) && (vibration_value_de.value <= 2.80)) {
-        //             vibration_de.value = "Satisfactory";
-        //             vibration_de.classList.add("bg-info");
-        //             vibration_de.classList.add("text-dark");
-        //             vibration_de.classList.remove("text-white");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 2.80) && (vibration_value_de.value <= 7.10)) {
-        //             vibration_de.value = "Unsatisfactory";
-        //             vibration_de.classList.add("bg-warning");
-        //             vibration_de.classList.add("text-dark");
-        //             vibration_de.classList.remove("text-white");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-info");
-        //             vibration_de.classList.remove("bg-danger");
-        //         } else if ((vibration_value_de.value > 7.10) && (vibration_value_de.value <= 45)) {
-        //             vibration_de.value = "Unacceptable";
-        //             vibration_de.classList.add("bg-danger");
-        //             vibration_de.classList.add("text-white");
-        //             vibration_de.classList.remove("text-dark");
-        //             vibration_de.classList.remove("bg-success");
-        //             vibration_de.classList.remove("bg-warning");
-        //             vibration_de.classList.remove("bg-info");
-        //         } else {
-        //             vibration_de.value = "";
-        //             vibration_de.classList.add("bg-danger");
-        //             vibration_de.classList.add("bg-white");
-        //         }
-        //     }
-        // }
-
-        // let vibration_values = document.getElementsByClassName("vibration_value");
-        // let vibrations = document.getElementsByClassName("vibration");
-        // console.info(vibration_values)
-        // console.info(vibrations)
-        // console.info(vibration_values.length)
-        // for (let i = 0; i < vibrations.length; i++) {
-        //     vibrations[i].onchange = () => {
-        //         if (vibrations[i].value > 45) {
-        //             alert("Vibration should not exceed 45 mmm/s");
-        //             vibrations[i].value = "";
-        //         }
-        //     }
-        // }
-        // VIBRATION VALUE ALERT VALIDATION AND STATUS START
 
         // DISABLED INPUT NUMBER OF GREASING
         nipple_grease_input.onchange = () => {
