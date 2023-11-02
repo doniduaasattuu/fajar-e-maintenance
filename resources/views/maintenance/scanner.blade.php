@@ -19,15 +19,15 @@
     @include("utility.navbar")
 
     <div class="container mt-5">
-        <div id="reader"></div>
-        <!-- d-flex justify-content-center align-item-center -->
+        <div class="d-none" id="reader"></div>
     </div>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script type="text/javascript">
         function onScanSuccess(decodedText, decodedResult) {
 
-            $motorList = decodedText.substring(37, decodedText.length);
-            window.location = `/checking-form/${$motorList}`;
+            // decodedText => https://www.safesave.info/MIC.php?id=Fajar-MotorList1804
+            let motorList = decodedText.split("=")[1];
+            window.location = `/checking-form/${motorList}`;
 
             html5QrcodeScanner.clear();
         }
@@ -49,14 +49,17 @@
         let fromFile = document.getElementById("html5-qrcode-anchor-scan-type-change");
         let reader = document.getElementById("reader");
 
-        buttonRequest.classList.add("btn");
-        buttonRequest.classList.add("btn-primary");
+        setTimeout(() => {
+            buttonRequest.classList.add("btn");
+            buttonRequest.classList.add("btn-primary");
 
-        fromFile.classList.add("btn");
-        fromFile.classList.add("btn-secondary");
-        fromFile.classList.add("mt-3");
+            fromFile.classList.add("btn");
+            fromFile.classList.add("btn-secondary");
+            fromFile.classList.add("mt-3");
 
-        reader.style.border = "none";
+            reader.style.border = "none";
+            reader.classList.remove("d-none");
+        }, 250)
     </script>
 </body>
 
