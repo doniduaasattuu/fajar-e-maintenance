@@ -285,37 +285,30 @@ class DataController extends Controller
             "PM1_TEMP_NDE" => returnData("temperature_d", "1")->toArray(),
             "PM1_VIBRATION_DE" => returnData("vibration_value_de", "1")->toArray(),
             "PM1_VIBRATION_NDE" => returnData("vibration_value_nde", "1")->toArray(),
-
             "PM2_TEMP_DE" => returnData("temperature_a", "2")->toArray(),
             "PM2_TEMP_NDE" => returnData("temperature_d", "2")->toArray(),
             "PM2_VIBRATION_DE" => returnData("vibration_value_de", "2")->toArray(),
             "PM2_VIBRATION_NDE" => returnData("vibration_value_nde", "2")->toArray(),
-
             "PM3_TEMP_DE" => returnData("temperature_a", "3")->toArray(),
             "PM3_TEMP_NDE" => returnData("temperature_d", "3")->toArray(),
             "PM3_VIBRATION_DE" => returnData("vibration_value_de", "3")->toArray(),
             "PM3_VIBRATION_NDE" => returnData("vibration_value_nde", "3")->toArray(),
-
             "PM5_TEMP_DE" => returnData("temperature_a", "5")->toArray(),
             "PM5_TEMP_NDE" => returnData("temperature_d", "5")->toArray(),
             "PM5_VIBRATION_DE" => returnData("vibration_value_de", "5")->toArray(),
             "PM5_VIBRATION_NDE" => returnData("vibration_value_nde", "5")->toArray(),
-
             "PM7_TEMP_DE" => returnData("temperature_a", "7")->toArray(),
             "PM7_TEMP_NDE" => returnData("temperature_d", "7")->toArray(),
             "PM7_VIBRATION_DE" => returnData("vibration_value_de", "7")->toArray(),
             "PM7_VIBRATION_NDE" => returnData("vibration_value_nde", "7")->toArray(),
-
             "PM8_TEMP_DE" => returnData("temperature_a", "8")->toArray(),
             "PM8_TEMP_NDE" => returnData("temperature_d", "8")->toArray(),
             "PM8_VIBRATION_DE" => returnData("vibration_value_de", "8")->toArray(),
             "PM8_VIBRATION_NDE" => returnData("vibration_value_nde", "8")->toArray(),
-
             "WWT_TEMP_DE" => [],
             "WWT_TEMP_NDE" => [],
             "WWT_VIBRATION_DE" => [],
             "WWT_VIBRATION_NDE" => [],
-
             "ENC_TEMP_DE" => [],
             "ENC_TEMP_NDE" => [],
             "ENC_VIBRATION_DE" => [],

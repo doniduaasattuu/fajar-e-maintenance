@@ -56,6 +56,7 @@ class DataControllerTest extends TestCase
         ])->get("/checking-form/Fajar-MotorList1804")
             ->assertSee("Submit")
             ->assertSeeText("MOTOR DETAIL")
+            ->assertSeeText("TECO")
             ->assertDontSeeText("Page not found")
             ->assertDontSeeText("The link you followed may be broken,")
             ->assertDontSeeText("Back to Home");
@@ -73,6 +74,34 @@ class DataControllerTest extends TestCase
             ->assertSeeText("Back to Home")
             ->assertDontSee("Submit")
             ->assertDontSeeText("MOTOR DETAIL");
+    }
+
+    // TRENDS
+    public function testTrendsSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->session([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])
+            ->get("trends/EMO000426")
+            ->assertSeeText("Temperature of EMO000426")
+            ->assertSeeText("Left side")
+            ->assertSeeText("IEC 60085")
+            ->assertSeeText("Vibration of EMO000426");
+    }
+
+    public function testTrendsFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->session([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])
+            ->get("trends/EMO000000")
+            ->assertStatus(302);
     }
 
     // SEARCH BY EMO

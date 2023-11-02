@@ -85,7 +85,7 @@ class DataRecordTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $endDate = Carbon::now();
-        $startDate = Carbon::now()->addYears(-1);
+        $startDate = Carbon::now()->addYears(-1)->addDays(-1);
 
         $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
         self::assertNotNull($data_records);
@@ -298,5 +298,101 @@ class DataRecordTest extends TestCase
 
         self::assertNotNull($comments);
         Log::info(json_encode($comments, JSON_PRETTY_PRINT));
+    }
+
+
+    // SAVE DATA
+    public function testSaveDataFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => null,
+            "emo" => null,
+            "motor_status" => null,
+            "clean_status" => null,
+            "nipple_grease_input" => null,
+            "number_of_greasing_input" => null,
+            "temperature_a" => null,
+            "temperature_b" => null,
+            "temperature_c" => null,
+            "temperature_d" => null,
+            "vibration_value_de" => null,
+            "vibration_de" => null,
+            "vibration_value_nde" => null,
+            "vibration_nde" => null,
+            "comment" => null,
+        ])
+            ->assertJson([
+                "error" => "All data is required! ⚠️"
+            ]);
+    }
+
+    public function testSaveDataError()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Invalid", // should Available or Not Available
+            "number_of_greasing_input" => "90",
+            "temperature_a" => "90",
+            "temperature_b" => "90",
+            "temperature_c" => "90",
+            "temperature_d" => "90",
+            "vibration_value_de" => "1",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "1",
+            "vibration_nde" => "Good",
+            "comment" => "",
+        ])
+            ->assertJson([
+                "error" => [
+                    "errorInfo" => [
+                        "01000",
+                        "1265",
+                        "Data truncated for column 'nipple_grease' at row 1"
+                    ],
+                    "connectionName" => "mysql"
+                ]
+            ]);
+    }
+
+    public function testSaveDataSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "90",
+            "temperature_a" => "90",
+            "temperature_b" => "90",
+            "temperature_c" => "90",
+            "temperature_d" => "90",
+            "vibration_value_de" => "1",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "1",
+            "vibration_nde" => "Good",
+            "comment" => "",
+        ])
+            ->assertJson([
+                "message" => "Saved successfully! ✅"
+            ]);
     }
 }

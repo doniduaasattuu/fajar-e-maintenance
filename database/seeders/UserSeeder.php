@@ -23,13 +23,5 @@ class UserSeeder extends Seeder
         $user->department = "EI2";
         $user->phone_number = "08983456945";
         $user->save();
-
-        $user1 = new User();
-        $user1->nik = "1234";
-        $user1->password = "1234";
-        $user1->fullname = "Guest";
-        $user1->department = "EI2";
-        $user1->phone_number = "12345678910";
-        $user1->save();
     }
 }
