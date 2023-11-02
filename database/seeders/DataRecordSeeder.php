@@ -107,6 +107,44 @@ class DataRecordSeeder extends Seeder
             $data_record3->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record3->checked_by = $fullname;
             $data_record3->save();
+
+            $data_record4 = new DataRecord();
+            $data_record4->funcloc = "FP-01-SP1-UKP-RF07";
+            $data_record4->emo = "EMO003963";
+            $data_record4->motor_status = "Running";
+            $data_record4->clean_status = "Clean";
+            $data_record4->nipple_grease = "Available";
+            $data_record4->number_of_greasing = rand(3, 8) * 10;
+            $data_record4->temperature_a = rand(35, 100);
+            $data_record4->temperature_b = rand(35, 100);
+            $data_record4->temperature_c = rand(35, 100);
+            $data_record4->temperature_d = rand(35, 100);
+            $data_record4->vibration_value_de = rand(1, 112) / 100;
+            $data_record4->vibration_de = "Good";
+            $data_record4->vibration_value_nde = rand(1, 112) / 100;
+            $data_record4->vibration_nde = "Good";
+            $data_record4->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record4->checked_by = $fullname;
+            $data_record4->save();
+
+            $data_record5 = new DataRecord();
+            $data_record5->funcloc = "FP-01-SP1-MXW-RF04";
+            $data_record5->emo = "EMO003604";
+            $data_record5->motor_status = "Running";
+            $data_record5->clean_status = "Clean";
+            $data_record5->nipple_grease = "Available";
+            $data_record5->number_of_greasing = rand(3, 8) * 10;
+            $data_record5->temperature_a = rand(35, 100);
+            $data_record5->temperature_b = rand(35, 100);
+            $data_record5->temperature_c = rand(35, 100);
+            $data_record5->temperature_d = rand(35, 100);
+            $data_record5->vibration_value_de = rand(1, 112) / 100;
+            $data_record5->vibration_de = "Good";
+            $data_record5->vibration_value_nde = rand(1, 112) / 100;
+            $data_record5->vibration_nde = "Good";
+            $data_record5->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record5->checked_by = $fullname;
+            $data_record5->save();
         }
     }
 }

@@ -20,16 +20,35 @@
         </div>
         <!-- SUCCESS POST ALERT -->
 
+        <!-- TEMPERATURE ALERT-->
+        <div class="modal fade" id="temperature_alert" tabindex="-1" aria-labelledby="temperature_alertLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="bg-light modal-header">
+                        <h1 class=" modal-title fs-5" id="temperature_alertLabel">Invalid input ⚠️</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Temperature should not exceed 200&deg;C!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TEMPERATURE ALERT-->
+
         <!-- VIBRATION ALERT-->
         <div class="modal fade" id="vibration_alert" tabindex="-1" aria-labelledby="vibration_alertLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="bg-light modal-header">
-                        <h1 class=" modal-title fs-5" id="vibration_alertLabel">Invalid input</h1>
+                        <h1 class=" modal-title fs-5" id="vibration_alertLabel">Invalid input ⚠️</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Vibration should not exceed 45 mm/s! ⚠️
+                        Vibration should not exceed 45 mm/s!
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -341,8 +360,8 @@
             vibration_values[i].onchange = () => {
 
                 if (vibration_values[i].value > 45 || vibration_values[i].value <= 0) {
-                    let myModal = new bootstrap.Modal(document.getElementById('vibration_alert'), {});
-                    myModal.show();
+                    let vibrationModal = new bootstrap.Modal(document.getElementById('vibration_alert'), {});
+                    vibrationModal.show();
                     vibration_values[i].value = "0.01";
                 }
 
@@ -436,14 +455,15 @@
         // VALIDATE INPUT TEMPERATURE NOT EXCEED 200 DEGREE
         for (let i = 0; i < temperatures_input.length; i++) {
             temperatures_input[i].onchange = () => {
-                if (temperatures_input[i].value.length > 3) {
-                    let value_accepted = temperatures_input[i].value.substring(0, 3)
-                    temperatures_input[i].value = value_accepted
-                }
+                // if (temperatures_input[i].value.length > 3) {
+                //     let value_accepted = temperatures_input[i].value.substring(0, 3)
+                //     temperatures_input[i].value = value_accepted
+                // }
 
-                if (Number(temperatures_input[i].value) > 200) {
-                    alert("Temperature should not exceed 200°C")
-                    temperatures_input[i].value = ""
+                if (Number(temperatures_input[i].value) > 200 || temperatures_input[i].value.length > 3) {
+                    let temperatureModal = new bootstrap.Modal(document.getElementById('temperature_alert'), {});
+                    temperatureModal.show();
+                    temperatures_input[i].value = "";
                 }
             }
         }
