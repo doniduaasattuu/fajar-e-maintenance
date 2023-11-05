@@ -15,6 +15,11 @@ class EmoDetail extends Model
     public $incrementing = true;
     public $timestamps = false;
 
+    protected $hidden = [
+        "id",
+        "emo_detail"
+    ];
+
     public function funcloc(): HasOneThrough
     {
         return $this->hasOneThrough(

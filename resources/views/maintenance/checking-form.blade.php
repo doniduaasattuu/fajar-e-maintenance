@@ -83,26 +83,28 @@
                     <div class="accordion-body">
                         <table class="table table-hover">
                             <tbody>
-                                <tr>
+                                <tr class="d-none" id="function_location">
                                     <th>Function Location</th>
                                     <td>{{ $funcLoc["id"] }}</td>
                                 </tr>
-                                <tr>
-                                    <th>Status</th>
-                                    <td>{{ $emo->status }}</td>
-                                </tr>
-                                <tr>
+                                <tr class="d-none" id="sort_field">
                                     <th>Sort field</th>
                                     <td>{{ $emo->sort_field }}</td>
                                 </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td id="status">{{ $emo->status }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Updated at</th>
+                                    <td>{{ $emo->updated_at }}</td>
+                                </tr>
+
                                 <tr>
                                     <th>Material number</th>
                                     <td>{{ $emo->material_number }}</td>
                                 </tr>
                                 @foreach ($emoDetail as $key => $value)
-                                @if ($key == "id" || $key == "greasing_type" || $key == "greasing_qty_de" || $key == "greasing_qty_nde")
-                                @continue
-                                @endif
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
                                     <td id="{{ $key }}">{{ $value  }}</td>
@@ -515,6 +517,17 @@
 
         const weight = document.getElementById("weight");
         changeUnit(weight, "Kg");
+
+        // HIDE FUNCLOC WHILE NOT INSTALLED
+        let function_location = document.getElementById("function_location");
+        let sort_field = document.getElementById("sort_field");
+        let status = document.getElementById("status");
+
+        if (status.textContent == "Installed") {
+            function_location.classList.remove("d-none");
+            sort_field.classList.remove("d-none");
+        }
+        // HIDE FUNCLOC WHILE NOT INSTALLED
     </script>
 </body>
 

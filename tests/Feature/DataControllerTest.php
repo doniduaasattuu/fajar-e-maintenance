@@ -245,4 +245,16 @@ class DataControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect("/checking-form/Fajar-MotorList6143");
     }
+
+    public function testSearchEmo()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = Emo::query()->with("emoDetails")
+            ->where("id", "=", "EMO000426")
+            ->first();
+        self::assertNotNull($emo);
+
+        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+    }
 }

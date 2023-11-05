@@ -13,6 +13,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
@@ -222,7 +223,7 @@ class DataController extends Controller
                     array_push($number_of_greasing, $record->number_of_greasing);
                 }
 
-                return view("maintenance.trends", [
+                return response()->view("maintenance.trends", [
                     "title" => "Trends",
                     "date_category" => $date_category,
                     "temperature_a" => $temperature_a,
@@ -314,5 +315,61 @@ class DataController extends Controller
             "ENC_VIBRATION_DE" => [],
             "ENC_VIBRATION_NDE" => [],
         ]);
+    }
+
+    // UPDATE EQUIPMENT
+    public function editEquipment(Request $request, string $equipment)
+    {
+        $emo = Emo::query()->with("emoDetails")
+            ->where("id", "=", $equipment)
+            ->first();
+
+        if ($emo != null) {
+            return response()->view("maintenance.edit-equipment", [
+                "title" => "Edit Equipment",
+                "emo" => $emo->toArray(),
+            ]);
+        } else {
+            return response()->view("utility.page-not-found", [
+                "title" => "Oops!"
+            ]);
+        }
+    }
+
+    public function updateEquipment(Request $request)
+    {
+        $request->merge([
+            "updated_at" => Carbon::now()->toDateTimeString()
+        ]);
+
+        $data = $request->except(['_token']);
+
+        // return response()->json($data);
+
+        foreach ($data as $key => $value) {
+            if (
+                $key == "id" ||
+                $key == "funcloc" ||
+                $key == "material_number" ||
+                $key == "equipment_description" ||
+                $key == "status" ||
+                $key == "sort_field" ||
+                $key == "updated_at"
+            ) {
+                try {
+                    Emo::query()->where("id", $data["id"])->update([$key => $value]);
+                } catch (QueryException $error) {
+                    return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                }
+            } else {
+                try {
+                    EmoDetail::query()->where("emo_detail", $data["id"])->update([$key => $value]);
+                } catch (QueryException $error) {
+                    return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                }
+            }
+        }
+
+        return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
     }
 }

@@ -79,4 +79,13 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
             "title" => "Dashboard"
         ]);
     });
+
+    Route::get("/search-equipment", function () {
+        return view("maintenance.search-equipment", [
+            'title' => "Search equipment"
+        ]);
+    });
+
+    Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
+    Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
 });
