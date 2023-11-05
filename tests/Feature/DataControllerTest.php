@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\Emo;
+use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\FuncCall;
 use Tests\TestCase;
 
 class DataControllerTest extends TestCase
@@ -246,7 +248,7 @@ class DataControllerTest extends TestCase
             ->assertRedirect("/checking-form/Fajar-MotorList6143");
     }
 
-    public function testSearchEmo()
+    public function testSearchEmoDatabase()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -256,5 +258,121 @@ class DataControllerTest extends TestCase
         self::assertNotNull($emo);
 
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+    }
+
+    // SEARCH EQUIPMENT
+    public function testSearchEquipmentSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "user" => "Doni Darmawan",
+            "nik" => "55000154"
+        ])
+            ->get("/edit-equipment/EMO000426", [])
+            ->assertStatus(200)
+            ->assertSeeText("EMO000426")
+            ->assertSeeText("Funcloc")
+            ->assertSeeText("Equipment description")
+            ->assertSeeText("Manufacture")
+            ->assertSeeText("Power rate")
+            ->assertSeeText("Bearing de")
+            ->assertSeeText("Efficiency")
+            ->assertSeeText("Greasing type")
+            ->assertSeeText("Mounting")
+            ->assertSeeText("Save");
+    }
+
+    public function testSearchEquipmentFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "user" => "Doni Darmawan",
+            "nik" => "55000154"
+        ])
+            ->get("/edit-equipment/EMO009999", [])
+            ->assertSeeText("Oops")
+            ->assertSeeText("The link you followed may be broken")
+            ->assertSeeText("Back to Home")
+            ->assertStatus(200);
+    }
+
+    // UPDATE EQUIPMENT
+    public function testUpdateEquipmentFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withHeaders([
+            'X-XSRF-TOKEN' => csrf_token()
+        ])->withSession([
+            "user" => "Doni Darmawan",
+            "nik" => "55000154"
+        ])->post("/update-equipment", [
+            "id" => "EMO000426",
+            "material_number" => "1001066800"
+        ])
+            ->assertStatus(302)
+            ->assertRedirect(session()->previousUrl());
+
+        $emo = Emo::query()->find("EMO000426");
+        self::assertNotNull($emo);
+        self::assertEquals($emo->material_number, "10010668");
+    }
+
+    public function testUpdateEquipmentSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withHeaders([
+            'X-XSRF-TOKEN' => csrf_token()
+        ])->withSession([
+            "user" => "Doni Darmawan",
+            "nik" => "55000154"
+        ])->post("/update-equipment", [
+            "id" => "EMO000426",
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "material_number" => "12345678",
+            "status" => "Installed",
+            "sort_field" => "SP3.P.70/M",
+            "updated_at" => Carbon::now()->toDateTimeString(),
+            "manufacture" => "TECO",
+            "serial_number" => "P9543291",
+            "type" => "AEEBPA040100YW05T",
+            "power_rate" => "75",
+            "power_unit" => "kW",
+            "voltage" => "380",
+            "current_nominal" => "140",
+            "frequency" => "50",
+            "pole" => "4",
+            "rpm" => "1475",
+            "bearing_de" => "NU216",
+            "bearing_nde" => "6213",
+            "frame_type" => "250M",
+            "shaft_diameter" => "75",
+            "phase_supply" => "3",
+            "cos_phi" => "0.84",
+            "efficiency" => "0.80",
+            "ip_rating" => "55",
+            "insulation_class" => "F",
+            "duty" => "S1",
+            "connection_type" => "Delta",
+            "nipple_grease" => "Available",
+            "greasing_type" => null,
+            "greasing_qty_de" => null,
+            "greasing_qty_nde" => null,
+            "length" => null,
+            "width" => null,
+            "height" => "250",
+            "weight" => null,
+            "cooling_fan" => "Internal",
+            "mounting" => "Horizontal",
+        ])
+            ->assertStatus(302)
+            ->assertRedirect(session()->previousUrl());
+
+        $emo = Emo::query()->find("EMO000426");
+        self::assertNotNull($emo);
+        self::assertEquals($emo->material_number, "12345678");
     }
 }

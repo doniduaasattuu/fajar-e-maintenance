@@ -12,8 +12,8 @@
             <form id="form-equipment" method="get">
 
                 <div class="mb-3">
-                    <h2>Equipment name</h2>
-                    <div id="emailHelp" class="mt-2 form-text">Look for the equipment you want to update</div>
+                    <h2>Equipment</h2>
+                    <div class="form-text">Look for the equipment you want to update.</div>
                 </div>
 
                 <div class=" mb-3">

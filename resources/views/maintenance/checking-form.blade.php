@@ -3,6 +3,12 @@
 
 @include("utility.head")
 
+<style>
+    #copy_text:hover {
+        cursor: pointer;
+    }
+</style>
+
 <body>
     @include("utility.navbar")
 
@@ -58,7 +64,9 @@
         </div>
         <!-- VIBRATION ALERT-->
 
-        <h3 class="mb-4">{{ $emo->id }}</h3>
+        <div>
+            <h3 class="mb-4">{{ $emo->id }} </h3>
+        </div>
         <a href="/trends/{{ $emo->id }}" title="Record temperature and vibration year to date">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
@@ -199,7 +207,7 @@
                         <label for="vibration_value_de" class="vibrations_label fw-bold form-label">Vibration DE</label>
                         <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
                     </div>
-                    <select id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
+                    <select disabled id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
                         <option value="">--Status--</option>
                         <option value="Good">Good</option>
                         <option value="Satisfactory">Satisfactory</option>
@@ -213,7 +221,7 @@
                         <label for="vibration_value_nde" class="vibrations_label fw-bold form-label">Vibration NDE</label>
                         <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
                     </div>
-                    <select id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
+                    <select disabled id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
                         <option selected value="">--Status--</option>
                         <option value="Good">Good</option>
                         <option value="Satisfactory">Satisfactory</option>

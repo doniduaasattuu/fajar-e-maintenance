@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Emo;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -139,5 +140,37 @@ class ViewTest extends TestCase
             ->assertSeeText("Phone Number")
             ->assertSeeText("Sign Up")
             ->assertSeeText("Sign in here");
+    }
+
+    public function testViewSearchEquipment()
+    {
+        $this->view("maintenance.search-equipment", [
+            "title" => "Search Equipment"
+        ])
+            ->assertSeeText("Equipment")
+            ->assertSeeText("Look for the equipment you want to update.")
+            ->assertSeeText("Search");
+    }
+
+    public function testViewEditEquipment()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = Emo::query()->with("emoDetails")->find("EMO000426");
+
+        $this->view("maintenance.edit-equipment", [
+            "title" => "Edit Equipment",
+            "emo" => $emo->toArray(),
+        ])
+            ->assertSeeText("EMO000426")
+            ->assertSeeText("Funcloc")
+            ->assertSeeText("Equipment description")
+            ->assertSeeText("Manufacture")
+            ->assertSeeText("Power rate")
+            ->assertSeeText("Bearing de")
+            ->assertSeeText("Efficiency")
+            ->assertSeeText("Greasing type")
+            ->assertSeeText("Mounting")
+            ->assertSeeText("Save");
     }
 }

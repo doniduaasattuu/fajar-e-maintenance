@@ -68,9 +68,9 @@
                         Account
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-top dropdown-item" href="/change-name">Change Name</a></li>
-                        <li><a class="dropdown-item" href="/change-password">Change Password</a></li>
-                        <li><a class="text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/change-name">Change Name</a></li>
+                        <li><a class="border-bottom dropdown-item" href="/change-password">Change Password</a></li>
+                        <li><a class="border-bottom text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>
