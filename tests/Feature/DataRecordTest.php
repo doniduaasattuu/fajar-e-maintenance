@@ -114,7 +114,7 @@ class DataRecordTest extends TestCase
             "user" => "Doni Darmawan"
         ])->post("/checking-form/Fajar-MotorList1804", [])
             ->assertJson([
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
     }
 
@@ -175,7 +175,7 @@ class DataRecordTest extends TestCase
         ])
             ->assertSeeText("errorInfo")
             ->assertDontSeeText("message")
-            ->assertDontSeeText("All data is required! ⚠️")
+            ->assertDontSeeText("All field is required! ⚠️")
             ->assertDontSeeText("Saved successfully! ✅");
     }
 
@@ -327,7 +327,7 @@ class DataRecordTest extends TestCase
             "comment" => null,
         ])
             ->assertJson([
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
     }
 

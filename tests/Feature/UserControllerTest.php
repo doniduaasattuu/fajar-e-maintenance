@@ -93,7 +93,7 @@ class UserControllerTest extends TestCase
     public function testRegisterEmpty()
     {
         $this->post('/registration', [])
-            ->assertSeeText("All data is required!");
+            ->assertSeeText("All field is required!");
     }
 
     public function testRegisterNikDuplicate()
@@ -148,7 +148,7 @@ class UserControllerTest extends TestCase
             "nik" => "55000154",
             "user" => "Doni Darmawan"
         ])->post("/change-name", [])
-            ->assertSeeText("All data is required!");
+            ->assertSeeText("All field is required!");
     }
 
     public function testDoChangeNameWrongNik()
@@ -210,7 +210,7 @@ class UserControllerTest extends TestCase
             "nik" => "55000154",
             "user" => "Doni Darmawan"
         ])->post("/change-password", [])
-            ->assertSeeText("All data is required!");
+            ->assertSeeText("All field is required!");
     }
 
     public function testDoChangePasswordWrongNik()

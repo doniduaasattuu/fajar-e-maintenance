@@ -19,7 +19,7 @@
     @include("utility.navbar")
 
     <div class="container mt-5">
-        <div class="d-none" id="reader"></div>
+        <div id="reader"></div>
     </div>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script type="text/javascript">
@@ -58,8 +58,7 @@
             fromFile.classList.add("mt-3");
 
             reader.style.border = "none";
-            reader.classList.remove("d-none");
-        }, 250)
+        }, 500)
     </script>
 </body>
 

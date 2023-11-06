@@ -70,7 +70,7 @@ class UserController extends Controller
         ) {
             return response()->view("user.registration", [
                 "title" => "Registration",
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
         }
 
@@ -123,7 +123,7 @@ class UserController extends Controller
         if (empty($nik) || empty($password) || empty($name)) {
             return response()->view("user.change-name", [
                 "title" => "Change name",
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
         }
 
@@ -172,7 +172,7 @@ class UserController extends Controller
         if (empty($nik) || empty($current_password) || empty($new_password) || empty($confirm_new_password)) {
             return response()->view("user.change-password", [
                 "title" => "Change name",
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
         }
 

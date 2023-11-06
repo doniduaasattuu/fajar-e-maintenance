@@ -136,7 +136,7 @@ class DataController extends Controller
             empty($vibration_nde)
         ) {
             return response()->json([
-                "error" => "All data is required! ⚠️"
+                "error" => "All field is required! ⚠️"
             ]);
         } else {
 
