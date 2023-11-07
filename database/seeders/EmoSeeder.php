@@ -98,5 +98,17 @@ class EmoSeeder extends Seeder
         $emo6->created_at = Carbon::now()->toDateTimeString();
         $emo6->updated_at = Carbon::now()->toDateTimeString();
         $emo6->save();
+
+        $emo7 = new Emo();
+        $emo7->id = "EMO005614";
+        $emo7->funcloc = "FP-01-PM7-VAS-VP13";
+        $emo7->equipment_description = "AC MOTOR;690V,50Hz,1100kW,4P,400L,B3";
+        $emo7->status = "Installed";
+        $emo7->sort_field = "PM7.VAS/VP-18101000/M";
+        $emo7->unique_id = "4821";
+        $emo7->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList4821";
+        $emo7->created_at = Carbon::now()->toDateTimeString();
+        $emo7->updated_at = Carbon::now()->toDateTimeString();
+        $emo7->save();
     }
 }

@@ -511,8 +511,20 @@
         const shaft_diameter = document.getElementById("shaft_diameter");
         changeUnit(shaft_diameter, "mm");
 
+        const cos_phi = document.getElementById("cos_phi");
+        changeUnit(cos_phi, "φ");
+
+        const efficiency = document.getElementById("efficiency");
+        changeUnit(efficiency, "%");
+
         const phase_supply = document.getElementById("phase_supply");
         changeUnit(phase_supply, "Phase");
+
+        const greasing_qty_de = document.getElementById("greasing_qty_de");
+        changeUnit(greasing_qty_de, "grams");
+
+        const greasing_qty_nde = document.getElementById("greasing_qty_nde");
+        changeUnit(greasing_qty_nde, "grams");
 
         const length = document.getElementById("length");
         changeUnit(length, "mm");
@@ -524,7 +536,7 @@
         changeUnit(height, "mm");
 
         const weight = document.getElementById("weight");
-        changeUnit(weight, "Kg");
+        changeUnit(weight, "kg");
 
         // HIDE FUNCLOC WHILE NOT INSTALLED
         let function_location = document.getElementById("function_location");

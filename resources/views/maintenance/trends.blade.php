@@ -291,6 +291,10 @@
                                 min: 0,
                                 max: 200,
                                 stepSize: 50,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '0.56 ~ 3.10 gram per Pump'
                             }
                         }]
                     }

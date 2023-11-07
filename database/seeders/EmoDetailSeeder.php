@@ -196,9 +196,9 @@ class EmoDetailSeeder extends Seeder
         $emo_detail6->frequency = "50";
         $emo_detail6->pole = "8";
         $emo_detail6->rpm = "735";
-        $emo_detail3->bearing_de = "NU324";
-        $emo_detail3->bearing_nde = "6320";
-        $emo_detail3->frame_type = "315C";
+        $emo_detail6->bearing_de = "NU324";
+        $emo_detail6->bearing_nde = "6320";
+        $emo_detail6->frame_type = "315C";
         $emo_detail6->shaft_diameter = "110";
         $emo_detail6->phase_supply = "3";
         $emo_detail6->efficiency = "0.93";
@@ -212,5 +212,40 @@ class EmoDetailSeeder extends Seeder
         $emo_detail6->cooling_fan = "Internal";
         $emo_detail6->mounting = "Horizontal";
         $emo_detail6->save();
+
+        $emo_detail7 = new EmoDetail();
+        $emo_detail7->emo_detail = "EMO005614";
+        $emo_detail7->manufacture = "ABB";
+        $emo_detail7->serial_number = "4694030";
+        $emo_detail7->type = "NM 400LA4A BAFS";
+        $emo_detail7->power_rate = "1100";
+        $emo_detail7->power_unit = "kW";
+        $emo_detail7->voltage = "690";
+        $emo_detail7->current_nominal = "1080";
+        $emo_detail7->frequency = "50";
+        $emo_detail7->pole = "4";
+        $emo_detail7->rpm = "1484";
+        $emo_detail7->bearing_de = "EBKL 6226/C3";
+        $emo_detail7->bearing_nde = "EBKL 6220/C3";
+        $emo_detail7->frame_type = "400L";
+        $emo_detail7->shaft_diameter = null;
+        $emo_detail7->phase_supply = "3";
+        $emo_detail7->cos_phi = "0.89";
+        $emo_detail7->efficiency = null;
+        $emo_detail7->ip_rating = "55";
+        $emo_detail7->insulation_class = "F";
+        $emo_detail7->duty = "S1";
+        $emo_detail7->connection_type = "Delta";
+        $emo_detail7->nipple_grease = "Available";
+        $emo_detail7->greasing_type = "UNIREX N2";
+        $emo_detail7->greasing_qty_de = "45";
+        $emo_detail7->greasing_qty_nde = "30";
+        $emo_detail7->length = null;
+        $emo_detail7->width = null;
+        $emo_detail7->height = null;
+        $emo_detail7->weight = "3680";
+        $emo_detail7->cooling_fan = "Internal";
+        $emo_detail7->mounting = "Horizontal";
+        $emo_detail7->save();
     }
 }
