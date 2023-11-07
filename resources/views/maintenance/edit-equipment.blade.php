@@ -166,6 +166,11 @@
             }
         }
         // CHANGE VALUE OF SELECT INPUT END
+
+        // HIDE UPDATED_AT COLUMN
+        const updated_at = document.getElementById("updated_at");
+        updated_at.parentElement.parentElement.classList.add("d-none");
+        // HIDE UPDATED_AT COLUMN
     </script>
 </body>
 
