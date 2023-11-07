@@ -20,10 +20,12 @@ class DatabaseSeeder extends Seeder
         DB::table('emo_details')->delete();
         DB::table('emos')->delete();
         DB::table('function_locations')->delete();
+        DB::table('administrators')->delete();
         DB::table('users')->delete();
 
         $this->call([
             UserSeeder::class,
+            AdministratorsSeeder::class,
             FunctionLocationSeeder::class,
             EmoSeeder::class,
             EmoDetailSeeder::class,

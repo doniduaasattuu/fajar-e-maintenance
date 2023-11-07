@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdministratorMiddleware;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Http\Request as HttpRequest;
@@ -80,12 +81,14 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         ]);
     });
 
-    Route::get("/search-equipment", function () {
-        return view("maintenance.search-equipment", [
-            'title' => "Search equipment"
-        ]);
-    });
 
-    Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
-    Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
+    Route::middleware(AdministratorMiddleware::class)->group(function () {
+        Route::get("/search-equipment", function () {
+            return view("maintenance.search-equipment", [
+                'title' => "Search equipment"
+            ]);
+        });
+        Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
+        Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
+    });
 });

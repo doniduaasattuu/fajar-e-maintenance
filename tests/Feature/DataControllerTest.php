@@ -298,6 +298,19 @@ class DataControllerTest extends TestCase
             ->assertStatus(200);
     }
 
+    public function testSearchEquipmentNotAdministrator()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "user" => "Jamal Mirdad",
+            "nik" => "55000153"
+        ])
+            ->get("/edit-equipment/EMO009999", [])
+            ->assertStatus(302)
+            ->assertRedirect("/");
+    }
+
     // UPDATE EQUIPMENT
     public function testUpdateEquipmentFailed()
     {

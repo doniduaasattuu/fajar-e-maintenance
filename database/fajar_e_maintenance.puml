@@ -97,12 +97,18 @@ entity users {
     * department ENUM("EI1-EI7");
     * phone_number VARCHAR(15)
 }
+
+entity administrators {
+    * admin_nik VARCHAR(8) <<FK>>
+    --
+}
  
 function_locations ||--o{ emos : Have
 function_locations ||--o{ data_records : Have
 emos ||--o{ data_records : Have
 emos ||--|| emo_details : Contain
 data_records ||--|| users : Include
+administrators ||--|| users : Registered
 
 
 @enduml

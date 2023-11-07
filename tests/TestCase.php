@@ -15,6 +15,7 @@ abstract class TestCase extends BaseTestCase
         DB::table('emo_details')->delete();
         DB::table('emos')->delete();
         DB::table('function_locations')->delete();
+        DB::table('administrators')->delete();
         DB::table('users')->delete();
     }
 }
