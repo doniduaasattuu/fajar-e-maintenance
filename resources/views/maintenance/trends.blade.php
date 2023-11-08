@@ -72,6 +72,7 @@
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Funcloc</th>
                                 <th scope="col">Reporter</th>
                                 <th class="text-end" scope="col">Date</th>
                             </tr>
@@ -86,6 +87,13 @@
                                 @foreach ($comment as $key => $value )
                                 @if ($key == "created_at")
                                 <td class="text-end">{{ date_format(date_create($value), "d/m/y") }}</td>
+                                @elseif ($key == "funcloc")
+                                @php
+                                $title = $value;
+                                $values = explode("-", $value);
+                                $value = $values[count($values) - 2] . "-" . $values[count($values) - 1];
+                                @endphp
+                                <td title="{{ $title }}">{{ $value }}</td>
                                 @else
                                 <td>{{ $value }}</td>
                                 @endif

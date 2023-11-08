@@ -190,7 +190,7 @@ class DataController extends Controller
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
             $comments = DataRecord::query()
-                ->select(["comment", "checked_by", "created_at"])->where("comment", "!=", null)
+                ->select(["comment", "funcloc", "checked_by", "created_at"])->where("comment", "!=", null)
                 ->where("emo", "=", $emo)
                 ->orderBy("created_at", "DESC")
                 ->get();
@@ -271,6 +271,7 @@ class DataController extends Controller
                 ->orderByDesc($temp_a)
                 ->where("funcloc", "LIKE", "%PM$paper_machine%")
                 ->orWhere("funcloc", "LIKE", "%SP$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "%FN$paper_machine%")
                 ->orWhere("funcloc", "LIKE", "%CH$paper_machine%")
                 ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
                 ->limit(5)

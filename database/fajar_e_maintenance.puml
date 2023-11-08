@@ -80,9 +80,9 @@ entity data_records {
     * temperature_b SMALLINT UNSIGNED
     * temperature_c SMALLINT UNSIGNED
     * temperature_d SMALLINT UNSIGNED
-      vibration_value_de DECIMAL(4,2)
+    * vibration_value_de DECIMAL(4,2)
     * vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
-      vibration_value_nde DECIMAL(4,2)
+    * vibration_value_nde DECIMAL(4,2)
     * vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
       comment TEXT
     * created_at TIMESTAMP

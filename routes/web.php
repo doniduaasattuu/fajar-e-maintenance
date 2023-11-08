@@ -4,6 +4,8 @@ use App\Http\Middleware\AdministratorMiddleware;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,6 +81,10 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return view("maintenance.dashboards", [
             "title" => "Dashboard"
         ]);
+    });
+
+    Route::get("/wiring-render", function () {
+        return response()->file("wiring/INVERTER_ACS580.pdf");
     });
 
 
