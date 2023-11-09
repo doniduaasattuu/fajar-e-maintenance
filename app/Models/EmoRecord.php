@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DataRecord extends Model
+class EmoRecord extends Model
 {
-    protected $table = "data_records";
+    protected $table = "emo_records";
     protected $primaryKey = "id";
     protected $keyType = "int";
     public $incrementing = true;

@@ -302,7 +302,7 @@
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: '0.56 ~ 3.10 gram per Pump'
+                                labelString: '0.56 ~ 3.10 grams per Pump'
                             }
                         }]
                     }

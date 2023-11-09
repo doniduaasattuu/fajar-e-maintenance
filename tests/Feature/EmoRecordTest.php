@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Models\DataRecord;
+use App\Models\EmoRecord;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
-use Database\Seeders\DataRecordSeeder;
+use Database\Seeders\EmoRecordSeeder;
 use Database\Seeders\EmoDetailSeeder;
 use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
@@ -19,33 +19,33 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
-class DataRecordTest extends TestCase
+class EmoRecordTest extends TestCase
 {
-    public function testCreateDataRecord()
+    public function testCreateEmoRecord()
     {
         $this->seed(DatabaseSeeder::class);
 
-        $data_record = new DataRecord();
-        $data_record->funcloc = "FP-01-SP3-RJS-T092-P092";
-        $data_record->emo = "EMO000426";
-        $data_record->motor_status = "Running";
-        $data_record->clean_status = "Clean";
-        $data_record->nipple_grease = "Available";
-        $data_record->number_of_greasing = 80;
-        $data_record->temperature_a = 69;
-        $data_record->temperature_b = 71;
-        $data_record->temperature_c = 85;
-        $data_record->temperature_d = 65;
-        $data_record->vibration_value_de = 0.68;
-        $data_record->vibration_de = "Good";
-        $data_record->vibration_value_nde = 0.58;
-        $data_record->vibration_nde = "Good";
-        $data_record->created_at = Carbon::now()->toDateTimeString();
-        $data_record->checked_by = User::query()->find("55000154")->fullname;
-        $data_record->save();
+        $emo_record = new EmoRecord();
+        $emo_record->funcloc = "FP-01-SP3-RJS-T092-P092";
+        $emo_record->emo = "EMO000426";
+        $emo_record->motor_status = "Running";
+        $emo_record->clean_status = "Clean";
+        $emo_record->nipple_grease = "Available";
+        $emo_record->number_of_greasing = 80;
+        $emo_record->temperature_a = 69;
+        $emo_record->temperature_b = 71;
+        $emo_record->temperature_c = 85;
+        $emo_record->temperature_d = 65;
+        $emo_record->vibration_value_de = 0.68;
+        $emo_record->vibration_de = "Good";
+        $emo_record->vibration_value_nde = 0.58;
+        $emo_record->vibration_nde = "Good";
+        $emo_record->created_at = Carbon::now()->toDateTimeString();
+        $emo_record->checked_by = User::query()->find("55000154")->fullname;
+        $emo_record->save();
 
-        self::assertNotNull($data_record);
-        Log::info(json_encode($data_record, JSON_PRETTY_PRINT));
+        self::assertNotNull($emo_record);
+        Log::info(json_encode($emo_record, JSON_PRETTY_PRINT));
     }
 
     public function testRandom()
@@ -56,19 +56,19 @@ class DataRecordTest extends TestCase
         }
     }
 
-    public function testGetDataRecord()
+    public function testGetEmoRecord()
     {
         $this->seed([DatabaseSeeder::class]);
 
-        $data_record = DataRecord::query()->get();
-        self::assertNotNull($data_record, JSON_PRETTY_PRINT);
+        $emo_record = EmoRecord::query()->get();
+        self::assertNotNull($emo_record, JSON_PRETTY_PRINT);
 
         $date_category = [];
         $temperature_a = [];
         $temperature_b = [];
         $temperature_c = [];
         $temperature_d = [];
-        foreach ($data_record as $data) {
+        foreach ($emo_record as $data) {
             $month = substr($data->created_at, 5, 2);
             $date = substr($data->created_at, 8, 2);
             array_push($date_category, $date . "/" . $month);
@@ -87,7 +87,7 @@ class DataRecordTest extends TestCase
         $endDate = Carbon::now();
         $startDate = Carbon::now()->addYears(-1)->addDays(-1);
 
-        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
+        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
         self::assertNotNull($data_records);
         self::assertCount(12, $data_records);
         Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
@@ -100,7 +100,7 @@ class DataRecordTest extends TestCase
         $endDate = Carbon::now();
         $startDate = Carbon::now()->addDays(-10);
 
-        $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
+        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
         self::assertCount(0, $data_records);
         Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
     }
@@ -184,7 +184,7 @@ class DataRecordTest extends TestCase
 
         $this->seed(DatabaseSeeder::class);
 
-        $emo = DataRecord::query()->select("emo")->distinct()->get();
+        $emo = EmoRecord::query()->select("emo")->distinct()->get();
         self::assertNotNull($emo);
         Log::info(json_encode($emo, JSON_PRETTY_PRINT));
     }
@@ -193,7 +193,7 @@ class DataRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $temperature_d = DataRecord::query()
+        $temperature_d = EmoRecord::query()
             ->select(["funcloc", "emo", "temperature_d", "created_at"])
             ->orderByDesc("temperature_d")
             ->where("funcloc", "LIKE", "%PM3%")
@@ -211,7 +211,7 @@ class DataRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $temperature_a = DataRecord::query()
+        $temperature_a = EmoRecord::query()
             ->select(["funcloc", "emo", "temperature_a", "created_at"])
             ->orderByDesc("temperature_a")
             ->where("funcloc", "LIKE", "%PM3%")
@@ -229,7 +229,7 @@ class DataRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $vibration_value_de = DataRecord::query()
+        $vibration_value_de = EmoRecord::query()
             ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
             ->orderByDesc("vibration_value_de")
             ->where("funcloc", "LIKE", "%PM3%")
@@ -247,7 +247,7 @@ class DataRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $vibration_value_nde = DataRecord::query()
+        $vibration_value_nde = EmoRecord::query()
             ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
             ->orderByDesc("vibration_value_nde")
             ->where("funcloc", "LIKE", "%PM3%")
@@ -267,7 +267,7 @@ class DataRecordTest extends TestCase
 
         function returnTemperatureDe(string $temp_a, string $paper_machine)
         {
-            $temperature_a = DataRecord::query()
+            $temperature_a = EmoRecord::query()
                 ->select(["funcloc", "emo", $temp_a, "created_at"])
                 ->orderByDesc($temp_a)
                 ->where("funcloc", "LIKE", "%PM$paper_machine%")
@@ -290,7 +290,7 @@ class DataRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $comments = DataRecord::query()
+        $comments = EmoRecord::query()
             ->select(["comment", "checked_by", "created_at"])->where("comment", "!=", null)
             ->where("emo", "=", "EMO000426")
             ->orderBy("created_at", "DESC")

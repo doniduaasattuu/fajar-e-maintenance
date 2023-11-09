@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DataRecord;
+use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
 use Carbon\Carbon;
@@ -111,13 +111,13 @@ class DataController extends Controller
         $clean_status = $request->input("clean_status");
         $nipple_grease_input = $request->input("nipple_grease_input");
         $number_of_greasing_input = ($request->input("number_of_greasing_input") != null) ? $request->input("number_of_greasing_input") : 0;
-        $temperature_a = $request->input("temperature_a");
-        $temperature_b = $request->input("temperature_b");
-        $temperature_c = $request->input("temperature_c");
-        $temperature_d = $request->input("temperature_d");
-        $vibration_value_de = $request->input("vibration_value_de");
+        $temperature_a = ($request->input("temperature_a") != null) ? $request->input("temperature_a") : 0;
+        $temperature_b = ($request->input("temperature_b") != null) ? $request->input("temperature_b") : 0;
+        $temperature_c = ($request->input("temperature_c") != null) ? $request->input("temperature_c") : 0;
+        $temperature_d = ($request->input("temperature_d") != null) ? $request->input("temperature_d") : 0;
+        $vibration_value_de = ($request->input("vibration_value_de") != null) ? $request->input("vibration_value_de") : 0;
         $vibration_de = $request->input("vibration_de");
-        $vibration_value_nde = $request->input("vibration_value_nde");
+        $vibration_value_nde = ($request->input("vibration_value_nde") != null) ? $request->input("vibration_value_nde") : 0;
         $vibration_nde = $request->input("vibration_nde");
         $comment = $request->input("comment");
         $checked_by = session("user");
@@ -125,15 +125,15 @@ class DataController extends Controller
         if (
             empty($motor_status) ||
             empty($clean_status) ||
-            empty($nipple_grease_input) ||
-            empty($temperature_a) ||
-            empty($temperature_b) ||
-            empty($temperature_c) ||
-            empty($temperature_d) ||
-            empty($vibration_value_de) ||
-            empty($vibration_de) ||
-            empty($vibration_value_nde) ||
-            empty($vibration_nde)
+            empty($nipple_grease_input)
+            // empty($temperature_a) ||
+            // empty($temperature_b) ||
+            // empty($temperature_c) ||
+            // empty($temperature_d) ||
+            // empty($vibration_value_de) ||
+            // empty($vibration_de) ||
+            // empty($vibration_value_nde) ||
+            // empty($vibration_nde)
         ) {
             return response()->json([
                 "error" => "All field is required! ⚠️"
@@ -141,7 +141,7 @@ class DataController extends Controller
         } else {
 
             try {
-                $data_record = new DataRecord();
+                $data_record = new EmoRecord();
 
                 $data_record->funcloc = $funcloc;
                 $data_record->emo = $emo;
@@ -186,10 +186,10 @@ class DataController extends Controller
             $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
             $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1);
 
-            $data_records = DataRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+            $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
-            $comments = DataRecord::query()
+            $comments = EmoRecord::query()
                 ->select(["comment", "funcloc", "checked_by", "created_at"])->where("comment", "!=", null)
                 ->where("emo", "=", $emo)
                 ->orderBy("created_at", "DESC")
@@ -257,7 +257,7 @@ class DataController extends Controller
 
     public function emoDatalist()
     {
-        $emo_list = DataRecord::query()->select("emo")->distinct()->get();
+        $emo_list = EmoRecord::query()->select("emo")->distinct()->get();
         return response()->json($emo_list);
     }
 
@@ -266,7 +266,7 @@ class DataController extends Controller
     {
         function returnData(string $temp_a, string $paper_machine)
         {
-            $data = DataRecord::query()
+            $data = EmoRecord::query()
                 ->select(["funcloc", "emo", $temp_a, "created_at"])
                 ->orderByDesc($temp_a)
                 ->where("funcloc", "LIKE", "%PM$paper_machine%")

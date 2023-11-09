@@ -14,19 +14,19 @@
 
     <div class="container mt-4 my-5">
 
-        <!-- FAILED POST ALERT -->
+        <!-- FAILED POST ALERT START -->
         <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
             Error occurred! ⚠️
         </div>
-        <!-- FAILED POST ALERT -->
+        <!-- FAILED POST ALERT END -->
 
-        <!-- SUCCESS POST ALERT -->
+        <!-- SUCCESS POST ALERT START -->
         <div class="alert alert-success" style="display: none" id="message_response" role="alert">
             Success! ✅
         </div>
-        <!-- SUCCESS POST ALERT -->
+        <!-- SUCCESS POST ALERT END -->
 
-        <!-- TEMPERATURE ALERT-->
+        <!-- TEMPERATURE ALERT START -->
         <div class="modal fade" id="temperature_alert" tabindex="-1" aria-labelledby="temperature_alertLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -43,9 +43,9 @@
                 </div>
             </div>
         </div>
-        <!-- TEMPERATURE ALERT-->
+        <!-- TEMPERATURE ALERT END -->
 
-        <!-- VIBRATION ALERT-->
+        <!-- VIBRATION ALERT START -->
         <div class="modal fade" id="vibration_alert" tabindex="-1" aria-labelledby="vibration_alertLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -62,8 +62,9 @@
                 </div>
             </div>
         </div>
-        <!-- VIBRATION ALERT-->
+        <!-- VIBRATION ALERT END -->
 
+        <!-- EMO ID AND TRENDS START  -->
         <div>
             <h3 class="mb-4">{{ $emo->id }} </h3>
         </div>
@@ -75,8 +76,9 @@
                 TRENDS
             </button>
         </a>
+        <!-- EMO ID AND TRENDS END -->
 
-        <!-- MOTOR DETAILS -->
+        <!-- MOTOR DETAILS START -->
         <div class="accordion mb-4" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header">
@@ -124,8 +126,9 @@
                 </div>
             </div>
         </div>
+        <!-- MOTOR DETAILS END -->
 
-        <!-- CHECKING -->
+        <!-- CHECKING FORM START -->
         <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
             @csrf
             <div class="row">
@@ -150,90 +153,96 @@
                         <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing_input" id="number_of_greasing_input">
                     </div>
 
-                    <!-- =========== TEMPERATURE =========== -->
-                    <div class="row mb-3">
-                        <div class="col-md">
-                            <figure>
-                                <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
-                                <figcaption class="figure-caption text-center">Left side</figcaption>
-                            </figure>
+                    <!-- =========== TEMPERATURE START =========== -->
+                    <div>
+                        <div class="row mb-3">
+                            <div class="col-md">
+                                <figure>
+                                    <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                                    <figcaption class="figure-caption text-center">Left side</figcaption>
+                                </figure>
+                            </div>
+                            <div class="col-md">
+                                <figure>
+                                    <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                                    <figcaption class="figure-caption text-center">Front side</figcaption>
+                                </figure>
+                            </div>
                         </div>
-                        <div class="col-md">
-                            <figure>
-                                <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
-                                <figcaption class="figure-caption text-center">Front side</figcaption>
-                            </figure>
-                        </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <div class="col-md">
-                            <figure>
-                                <img class="img-fluid mx-auto d-block" src="/images/temp_iso_IEC_60085.png" alt="Temperature">
-                                <figcaption class="figure-caption text-center">IEC 60085</figcaption>
-                            </figure>
+                        <div class="mb-3">
+                            <div class="col-md">
+                                <figure>
+                                    <img class="img-fluid mx-auto d-block" src="/images/temp_iso_IEC_60085.png" alt="Temperature">
+                                    <figcaption class="figure-caption text-center">IEC 60085</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+
+                        <div class="mb-1">
+                            <label for="temperature_a" class="fw-bold form-label">Temperature A <span style="font-weight: 400;">(DE)</span></label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
+                        </div>
+                        <div class="mb-1">
+                            <label for="temperature_b" class="fw-bold form-label">Temperature B <span style="font-weight: 400;">(Terminal)</span></label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
+                        </div>
+                        <div class="mb-1">
+                            <label for="temperature_c" class="fw-bold form-label">Temperature C <span style="font-weight: 400;">(Body)</span></label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
+                        </div>
+                        <div class="mb-4">
+                            <label for="temperature_d" class="fw-bold form-label">Temperature D <span style="font-weight: 400;">(NDE)</span></label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
                         </div>
                     </div>
-
-                    <div class="mb-1">
-                        <label for="temperature_a" class="fw-bold form-label">Temperature A <span style="font-weight: 400;">(DE)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_a" id="temperature_a">
-                    </div>
-                    <div class="mb-1">
-                        <label for="temperature_b" class="fw-bold form-label">Temperature B <span style="font-weight: 400;">(Terminal)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_b" id="temperature_b">
-                    </div>
-                    <div class="mb-1">
-                        <label for="temperature_c" class="fw-bold form-label">Temperature C <span style="font-weight: 400;">(Body)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_c" id="temperature_c">
-                    </div>
-                    <div class="mb-4">
-                        <label for="temperature_d" class="fw-bold form-label">Temperature D <span style="font-weight: 400;">(NDE)</span></label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
-                    </div>
+                    <!-- =========== TEMPERATURE END =========== -->
 
                     <!-- =========== VIBRATION START =========== -->
-                    <div class="row mt-3 mb-2">
-                        <div class="col-md">
-                            <figure>
-                                <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                                <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
-                            </figure>
+                    <div>
+                        <div class="row mt-3 mb-2">
+                            <div class="col-md">
+                                <figure>
+                                    <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
+                                    <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
+                                </figure>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- VIBRATION VALUE DE -->
-                    <div class="mb-2">
-                        <label for="vibration_value_de" class="vibrations_label fw-bold form-label">Vibration DE</label>
-                        <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
-                    </div>
-                    <select disabled id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
-                        <option value="">--Status--</option>
-                        <option value="Good">Good</option>
-                        <option value="Satisfactory">Satisfactory</option>
-                        <option value="Unsatisfactory">Unsatisfactory</option>
-                        <option value="Unacceptable">Unacceptable</option>
-                    </select>
-                    <!--  -->
+                        <!-- VIBRATION VALUE DE START -->
+                        <div class="mb-2">
+                            <label for="vibration_value_de" class="vibrations_label fw-bold form-label">Vibration DE</label>
+                            <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de" id="vibration_value_de">
+                        </div>
+                        <select disabled id="vibration_de" name="vibration_de" class="vibration form-select mb-3 " aria-label="Default select example">
+                            <option value="">--Status--</option>
+                            <option value="Good">Good</option>
+                            <option value="Satisfactory">Satisfactory</option>
+                            <option value="Unsatisfactory">Unsatisfactory</option>
+                            <option value="Unacceptable">Unacceptable</option>
+                        </select>
+                        <!-- VIBRATION VALUE DE END -->
 
-                    <!-- VIBRATION VALUE NDE -->
-                    <div class="mb-2">
-                        <label for="vibration_value_nde" class="vibrations_label fw-bold form-label">Vibration NDE</label>
-                        <input type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
+                        <!-- VIBRATION VALUE NDE START -->
+                        <div class="mb-2">
+                            <label for="vibration_value_nde" class="vibrations_label fw-bold form-label">Vibration NDE</label>
+                            <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
+                        </div>
+                        <select disabled id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
+                            <option selected value="">--Status--</option>
+                            <option value="Good">Good</option>
+                            <option value="Satisfactory">Satisfactory</option>
+                            <option value="Unsatisfactory">Unsatisfactory</option>
+                            <option value="Unacceptable">Unacceptable</option>
+                        </select>
+                        <!-- VIBRATION VALUE NDE END -->
                     </div>
-                    <select disabled id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
-                        <option selected value="">--Status--</option>
-                        <option value="Good">Good</option>
-                        <option value="Satisfactory">Satisfactory</option>
-                        <option value="Unsatisfactory">Unsatisfactory</option>
-                        <option value="Unacceptable">Unacceptable</option>
-                    </select>
                     <!-- =========== VIBRATIONS END=========== -->
 
                     <!-- =========== COMMENT START=========== -->
                     <div class="mb-4">
                         <label for="vibration_value_de" class="fw-bold form-label">Comment</label>
-                        <textarea placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                        <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
                     <!-- =========== COMMENT END =========== -->
 
@@ -245,6 +254,8 @@
                 </div>
             </div>
         </form>
+        <!-- CHECKING FORM END -->
+
     </div>
 
     <script>
@@ -316,11 +327,12 @@
         // AJAX END
 
         // VIBRATION VALUE ALERT VALIDATION AND STATUS START
-        let vibration_values = document.getElementsByClassName("vibration_value");
-        let vibrations = document.getElementsByClassName("vibration");
-        let motor_class = document.getElementById("motor_class");
-        let vibrations_label = document.getElementsByClassName("vibrations_label");
-        let figcaption_vibration = document.getElementById("figcaption_vibration");
+        const vibration_values = document.getElementsByClassName("vibration_value");
+        const vibrations = document.getElementsByClassName("vibration");
+        const motor_class = document.getElementById("motor_class");
+        const vibrations_label = document.getElementsByClassName("vibrations_label");
+        const figcaption_vibration = document.getElementById("figcaption_vibration");
+        const comment = document.getElementById("comment");
 
         // GOOD
         function vibrationGood(element) {
@@ -437,7 +449,7 @@
             }
         }
 
-        // DISABLED INPUT NUMBER OF GREASING
+        // ENABLED INPUT NUMBER OF GREASING
         nipple_grease_input.onchange = () => {
             if (nipple_grease_input.value == "Available") {
                 number_of_greasing_input.removeAttribute("disabled");
@@ -446,6 +458,47 @@
                 number_of_greasing_input.setAttribute("disabled", true);
             }
         }
+
+        // ENABLED TEMPERATURE AND VIBRATION VALUE
+        motor_status.onchange = () => {
+            if (motor_status.value == "Running") {
+                for (let i = 0; i < temperatures_input.length; i++) {
+                    temperatures_input[i].removeAttribute("disabled");
+                }
+                for (let j = 0; j < vibration_values.length; j++) {
+                    vibration_values[j].removeAttribute("disabled");
+                }
+
+            } else {
+
+                for (let i = 0; i < temperatures_input.length; i++) {
+                    temperatures_input[i].setAttribute("disabled", true);
+                    temperatures_input[i].value = "";
+                }
+                for (let j = 0; j < vibration_values.length; j++) {
+                    vibration_values[j].setAttribute("disabled", true);
+                    vibration_values[j].value = "";
+                }
+                for (let k = 0; k < vibrations.length; k++) {
+                    vibrations[k].value = "";
+                    vibrations[k].classList.remove("bg-success");
+                    vibrations[k].classList.remove("bg-info");
+                    vibrations[k].classList.remove("bg-warning");
+                    vibrations[k].classList.remove("bg-danger");
+                    vibrations[k].classList.remove("text-white");
+                }
+            }
+
+            // ENABLE COMMENT
+            if (motor_status.value != "") {
+                comment.removeAttribute("disabled", true);
+                comment.value = "";
+            } else {
+                comment.setAttribute("disabled", true);
+                comment.value = "";
+            }
+        }
+
 
         // VALIDATE NUMBER OF GREASING NOT EXCEED 255
         number_of_greasing_input.onchange = () => {

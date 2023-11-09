@@ -67,7 +67,7 @@ entity emo_details {
     mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
 }
 
-entity data_records {
+entity emo_records {
     * id BIGINT UNSIGNED AUTO_INCREMENT
     * funcloc VARCHAR(150) <<FK>>
     * emo VARCHAR(9) <<FK>>
@@ -76,14 +76,14 @@ entity data_records {
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
       number_of_greasing VARCHAR(3)
-    * temperature_a SMALLINT UNSIGNED
-    * temperature_b SMALLINT UNSIGNED
-    * temperature_c SMALLINT UNSIGNED
-    * temperature_d SMALLINT UNSIGNED
-    * vibration_value_de DECIMAL(4,2)
-    * vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
-    * vibration_value_nde DECIMAL(4,2)
-    * vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
+      temperature_a SMALLINT UNSIGNED
+      temperature_b SMALLINT UNSIGNED
+      temperature_c SMALLINT UNSIGNED
+      temperature_d SMALLINT UNSIGNED
+      vibration_value_de DECIMAL(4,2)
+      vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
+      vibration_value_nde DECIMAL(4,2)
+      vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
       comment TEXT
     * created_at TIMESTAMP
     * checked_by VARCHAR(150)
@@ -104,10 +104,10 @@ entity administrators {
 }
  
 function_locations ||--o{ emos : Have
-function_locations ||--o{ data_records : Have
-emos ||--o{ data_records : Have
+function_locations ||--o{ emo_records : Have
+emos ||--o{ emo_records : Have
 emos ||--|| emo_details : Contain
-data_records ||--|| users : Include
+emo_records ||--|| users : Include
 administrators ||--|| users : Registered
 
 
