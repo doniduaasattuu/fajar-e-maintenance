@@ -184,9 +184,9 @@ class DataController extends Controller
     {
         if (strlen($emo) == 9) {
             $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
-            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1);
+            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
 
-            $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+            $emo_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
             $comments = EmoRecord::query()
@@ -199,19 +199,24 @@ class DataController extends Controller
 
                 $nipple_grease = $emo_details->nipple_grease;
                 $date_category = [];
+                $motor_status = [];
                 $temperature_a = [];
                 $temperature_b = [];
                 $temperature_c = [];
                 $temperature_d = [];
                 $vibration_value_de = [];
+                $vibration_de = [];
                 $vibration_value_nde = [];
+                $vibration_nde = [];
                 $number_of_greasing = [];
 
-                foreach ($data_records as $record) {
+                foreach ($emo_records as $record) {
                     $year = substr($record->created_at, 2, 2);
                     $month = substr($record->created_at, 5, 2);
                     $date = substr($record->created_at, 8, 2);
                     array_push($date_category, $date . "/" . $month . "/" . $year);
+
+                    array_push($motor_status, $record->motor_status);
 
                     array_push($temperature_a, $record->temperature_a);
                     array_push($temperature_b, $record->temperature_b);
@@ -220,18 +225,25 @@ class DataController extends Controller
 
                     array_push($vibration_value_de, (float) $record->vibration_value_de);
                     array_push($vibration_value_nde, (float) $record->vibration_value_nde);
+
+                    array_push($vibration_de, $record->vibration_de);
+                    array_push($vibration_nde, $record->vibration_nde);
+
                     array_push($number_of_greasing, $record->number_of_greasing);
                 }
 
                 return response()->view("maintenance.trends", [
                     "title" => "Trends",
                     "date_category" => $date_category,
+                    "motor_status" => $motor_status,
                     "temperature_a" => $temperature_a,
                     "temperature_b" => $temperature_b,
                     "temperature_c" => $temperature_c,
                     "temperature_d" => $temperature_d,
                     "vibration_value_de" => $vibration_value_de,
+                    "vibration_de" => $vibration_de,
                     "vibration_value_nde" => $vibration_value_nde,
+                    "vibration_nde" => $vibration_nde,
                     "number_of_greasing" => $number_of_greasing,
                     "emo" => $emo,
                     "nipple_grease" => $nipple_grease,
