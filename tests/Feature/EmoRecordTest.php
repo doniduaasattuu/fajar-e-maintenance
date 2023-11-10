@@ -395,4 +395,29 @@ class EmoRecordTest extends TestCase
                 "message" => "Saved successfully! ✅"
             ]);
     }
+
+    public function testReturnData()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        function returnData(string $temp_a, string $paper_machine)
+        {
+            $data = EmoRecord::query()
+                ->select(["funcloc", "emo", $temp_a, "created_at"])
+                ->orderByDesc($temp_a)
+                ->where("funcloc", "LIKE", "FP-01-PM$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "FP-01-SP$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "FP-01-FN$paper_machine%")
+                ->orWhere("funcloc", "LIKE", "FP-01-CH$paper_machine%")
+                ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
+                ->limit(5)
+                ->get();
+
+            return $data;
+        }
+
+        $TEMP_DE_PM2 = returnData("temperature_a", "2");
+        self::assertCount(0, $TEMP_DE_PM2);
+        Log::info(json_encode($TEMP_DE_PM2, JSON_PRETTY_PRINT));
+    }
 }
