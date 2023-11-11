@@ -209,6 +209,7 @@ class DataController extends Controller
                 $vibration_value_nde = [];
                 $vibration_nde = [];
                 $number_of_greasing = [];
+                $checked_by = [];
 
                 foreach ($emo_records as $record) {
                     $year = substr($record->created_at, 2, 2);
@@ -230,6 +231,8 @@ class DataController extends Controller
                     array_push($vibration_nde, $record->vibration_nde);
 
                     array_push($number_of_greasing, $record->number_of_greasing);
+
+                    array_push($checked_by, $record->checked_by);
                 }
 
                 return response()->view("maintenance.trends", [
@@ -248,6 +251,7 @@ class DataController extends Controller
                     "emo" => $emo,
                     "nipple_grease" => $nipple_grease,
                     "comments" => $comments->toArray(),
+                    "checked_by" => $checked_by,
                 ]);
             } else {
 

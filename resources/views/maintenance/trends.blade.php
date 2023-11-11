@@ -13,10 +13,6 @@
         <div class="text-center">
             <h4>Temperature of {{ $emo }}</h4>
 
-            <!-- <div class="chart-container" style="position: relative;">
-                <canvas id="motor_status_chart"></canvas>
-            </div> -->
-
             <div class="chart-container" style="position: relative;">
                 <canvas id="temperature"></canvas>
             </div>
@@ -119,7 +115,8 @@
             let emo = document.getElementById("emo").textContent;
             let date = <?php echo json_encode($date_category) ?>;
             let motor_status = <?php echo json_encode($motor_status) ?>;
-            console.info(motor_status);
+            let checked_by = <?php echo json_encode($checked_by) ?>;
+            console.info(checked_by);
 
             // TEMPERATURE
             let temp_a = <?php echo json_encode($temperature_a) ?>;
@@ -135,9 +132,6 @@
             let vibration_min = -5;
             let vibration_max = 5;
             let vibration_step = 1;
-
-            console.info(vibration_de);
-            console.info(vibration_nde);
 
             //  LINE CHARTS TYPES
             let chart_types = "line";
@@ -192,87 +186,83 @@
                 number_of_greasing_display.style.display = "block"
             }
 
-            // CHARTJS MOTOR STATUS
-            // var ctxm = document.getElementById('motor_status_chart').getContext('2d');
-            // var motor_status_chart = new Chart(ctxm, {
-            //     type: 'line',
-            //     data: {
-            //         labels: date,
-            //         datasets: [{
-            //             data: motor_status,
-            //             label: "Motor Status",
-            //             borderColor: "rgb(62,149,205)",
-            //             backgroundColor: "rgb(62,149,205)",
-            //             fill: false
-            //         }]
-            //     },
-            //     options: {
-            //         maintainAspectRatio: false,
-            //         scales: {
-            //             y: {
-            //                 type: 'category',
-            //                 labels: ['Running', 'Not Running'],
-            //                 offset: true,
-            //                 position: 'left',
-            //                 stack: 'demo',
-            //                 stackWeight: 1,
-            //             }
-            //         }
-            //     }
-            // });
-            // console.info(motor_status_chart);
-
-            // CHARTJS TEMPERATURE
+            // CHARTJS MOTOR_STATUS AND TEMPERATURE
             var ctxt = document.getElementById('temperature').getContext('2d');
             var temperature = new Chart(ctxt, {
                 type: chart_types,
                 data: {
                     labels: date,
                     datasets: [{
-                        data: temp_a,
-                        label: "Point A",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
-                        fill: false
-                    }, {
-                        data: temp_b,
-                        label: "Point B",
-                        borderColor: "rgb(196,88,180)",
-                        backgroundColor: "rgb(196,88,180)",
-                        fill: false
-                    }, {
-                        data: temp_c,
-                        label: "Point C",
-                        borderColor: "rgb(80,80,80)",
-                        backgroundColor: "rgb(80,80,80)",
-                        fill: false
-                    }, {
-                        data: temp_d,
-                        label: "Point D",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
-                        fill: false
-                    }]
+                            data: temp_a,
+                            label: "Point A",
+                            borderColor: "rgb(62,149,205)",
+                            backgroundColor: "rgb(62,149,205)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: temp_b,
+                            label: "Point B",
+                            borderColor: "rgb(196,88,180)",
+                            backgroundColor: "rgb(196,88,180)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: temp_c,
+                            label: "Point C",
+                            borderColor: "rgb(80,80,80)",
+                            backgroundColor: "rgb(80,80,80)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: temp_d,
+                            label: "Point D",
+                            borderColor: "rgb(60,186,159)",
+                            backgroundColor: "rgb(60,186,159)",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            data: motor_status,
+                            label: "Motor Status",
+                            // borderColor: "rgb(175, 208, 191)",
+                            // backgroundColor: "rgb(175, 208, 191)",
+                            borderColor: "rgb(171, 210, 182)",
+                            backgroundColor: "rgb(171, 210, 182, 0.5)",
+                            stepped: 'middle',
+                            yAxisID: 'y2',
+                        }
+                    ]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        yAxes: [{
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            stack: 'demo',
+                            max: 200,
                             ticks: {
-                                beginAtZero: true,
-                                max: 200,
                                 stepSize: 50,
                                 callback: function(value, index, ticks) {
                                     return value + " °C";
                                 }
                             }
-                        }],
-                    }
-                }
+                        },
+                        y2: {
+                            type: 'category',
+                            labels: ['Running', 'Not Running'],
+                            offset: true,
+                            position: 'left',
+                            stack: 'demo',
+                            stackWeight: 1,
+                        }
+                    },
+                },
             });
             temperature.canvas.parentNode.style.height = '300px';
-            temperature.options.legend.position = "bottom";
-            // CHARTJS TEMPERATURE
+            temperature.options.plugins.legend.position = "bottom";
+            console.info(temperature.options.plugins.tooltip);
+            // CHARTJS MOTOR_STATUS AND TEMPERATURE
 
             // CHARTJS VIBRATION
             var ctxv = document.getElementById('vibration').getContext('2d');
@@ -281,45 +271,69 @@
                 data: {
                     labels: date,
                     datasets: [{
-                        data: vibration_value_de,
-                        label: "Vibration DE",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
-                        fill: false,
-                        tension: 0
-                    }, {
-                        data: vibration_value_nde,
-                        label: "Vibration NDE",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
-                        fill: false,
-                        tension: 0
-                    }]
+                            data: vibration_value_de,
+                            label: "Vibration DE",
+                            borderColor: "rgb(62,149,205)",
+                            backgroundColor: "rgb(62,149,205)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_value_nde,
+                            label: "Vibration NDE",
+                            borderColor: "rgb(60,186,159)",
+                            backgroundColor: "rgb(60,186,159)",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        // {
+                        //     data: vibration_de,
+                        //     label: "Vibration Desc DE",
+                        //     borderColor: "rgb(62,149,205)",
+                        //     backgroundColor: "rgb(62,149,205,0.5)",
+                        //     stepped: true,
+                        //     fill: true,
+                        //     yAxisID: 'y2',
+                        // }, {
+                        //     data: vibration_nde,
+                        //     label: "Vibration Desc NDE",
+                        //     borderColor: "rgb(60,186,159)",
+                        //     backgroundColor: "rgb(60,186,159,0.5)",
+                        //     stepped: true,
+                        //     fill: true,
+                        //     yAxisID: 'y2',
+                        // }
+                    ]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true,
-                                min: vibration_min,
-                                max: vibration_max,
-                                stepSize: vibration_step,
-                                // callback: function(value, index, ticks) {
-                                //     return value + " mm/s"
-                                //     // ᵐᵐ/ˢ
-                                // }
-                            },
-                            scaleLabel: {
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            stack: 'demo',
+                            title: {
                                 display: true,
-                                labelString: 'mm/s'
-                            }
-                        }],
+                                text: 'mm/s',
+                            },
+                            min: vibration_min,
+                            max: vibration_max,
+                            ticks: {
+                                stepSize: vibration_step,
+                            },
+                        },
+                        // y2: {
+                        //     type: 'category',
+                        //     labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
+                        //     offset: true,
+                        //     position: 'left',
+                        //     stack: 'demo',
+                        //     stackWeight: 1,
+                        // },
                     },
                 }
             });
             vibration.canvas.parentNode.style.height = '300px';
-            vibration.options.legend.position = "bottom";
+            vibration.options.plugins.legend.position = "bottom";
             // CHARTJS VIBRATION
 
             // CHARTJS GREASING
@@ -339,18 +353,18 @@
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        yAxes: [{
+                        y: {
+                            title: {
+                                display: true,
+                                text: '0.56 ~ 3.10 grams per Pump',
+                            },
+                            min: 0,
+                            max: 200,
                             ticks: {
-                                beginAtZero: true,
-                                min: 0,
-                                max: 200,
+
                                 stepSize: 50,
                             },
-                            scaleLabel: {
-                                display: true,
-                                labelString: '0.56 ~ 3.10 grams per Pump'
-                            }
-                        }]
+                        }
                     }
                 }
             });

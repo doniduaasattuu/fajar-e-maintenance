@@ -87,7 +87,6 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return response()->file("wiring/INVERTER_ACS580.pdf");
     });
 
-
     Route::middleware(AdministratorMiddleware::class)->group(function () {
         Route::get("/search-equipment", function () {
             return view("maintenance.search-equipment", [
@@ -96,5 +95,11 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         });
         Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
         Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
+    });
+
+    Route::get("/chart", function () {
+        return view("maintenance.chart", [
+            "title" => "Stepped Chart"
+        ]);
     });
 });

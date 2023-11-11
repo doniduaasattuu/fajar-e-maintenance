@@ -25,13 +25,15 @@ class EmoRecordSeeder extends Seeder
             $data_record = new EmoRecord();
             $data_record->funcloc = "FP-01-SP3-RJS-T092-P092";
             $data_record->emo = "EMO000426";
-            $data_record->motor_status = "Running";
+            $data_record->motor_status = array(0 => "Running", 1 => "Not Running")[rand(0, 1)];
             $data_record->clean_status = "Clean";
             $data_record->nipple_grease = "Available";
             $data_record->number_of_greasing = rand(3, 8) * 10;
             $data_record->vibration_value_de = rand(1, 112) / 100;
-            $data_record->vibration_de = "Good";
             $data_record->vibration_value_nde = rand(1, 112) / 100;
+
+            $data_record->vibration_de = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record->vibration_nde = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             if ($i == 4) {
                 $data_record->comment = "Plastik terminal perlu diganti";
                 $data_record->checked_by = "Edi Supriadi";
@@ -40,7 +42,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->temperature_b = rand(35, 150);
                 $data_record->temperature_c = rand(35, 150);
                 $data_record->temperature_d = rand(35, 150);
-            } else if ($i == 20) {
+            } else if ($i == 45) {
                 $data_record->comment = "Fan gesek cover";
                 $data_record->checked_by = "Sopo";
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i))->addDays($i - 5);
@@ -48,7 +50,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->temperature_b = rand(35, 150);
                 $data_record->temperature_c = rand(35, 150);
                 $data_record->temperature_d = rand(35, 150);
-            } else if ($i == 32) {
+            } else if ($i == 50) {
                 $data_record->comment = "Bearing belakang noise";
                 $data_record->checked_by = "Darminto";
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i))->addDays($i - 3);
@@ -73,7 +75,6 @@ class EmoRecordSeeder extends Seeder
                 $data_record->temperature_c = rand(35, 150);
                 $data_record->temperature_d = rand(35, 150);
             }
-            $data_record->vibration_nde = "Good";
             $data_record->save();
 
             // $data_record1 = new EmoRecord();
