@@ -9,7 +9,7 @@
 
     <p class="d-none" id="emo">{{ $emo }}</p>
 
-    <div class="container-xl py-5">
+    <div class="container-xl py-4">
         <div class="text-center">
             <h4>Temperature of {{ $emo }}</h4>
 
@@ -114,9 +114,18 @@
         <script>
             let emo = document.getElementById("emo").textContent;
             let date = <?php echo json_encode($date_category) ?>;
-            let motor_status = <?php echo json_encode($motor_status) ?>;
             let checked_by = <?php echo json_encode($checked_by) ?>;
-            console.info(checked_by);
+            let motor_status = <?php echo json_encode($motor_status) ?>;
+            motor_status = motor_status.map(changeNotRunnningToStop);
+
+            function changeNotRunnningToStop(status) {
+                if (status == "Not Running") {
+                    return "Stop";
+                } else if (status == "Running") {
+                    return "Run"
+                };
+            }
+            // console.info(motor_status);
 
             // TEMPERATURE
             let temp_a = <?php echo json_encode($temperature_a) ?>;
@@ -186,6 +195,14 @@
                 number_of_greasing_display.style.display = "block"
             }
 
+            const footer = (tooltipItems) => {
+
+                for (let i = 0; i < checked_by.length; i++) {
+                    return 'By: ' + checked_by[i];
+                }
+
+            };
+
             // CHARTJS MOTOR_STATUS AND TEMPERATURE
             var ctxt = document.getElementById('temperature').getContext('2d');
             var temperature = new Chart(ctxt, {
@@ -222,10 +239,9 @@
                             tension: 0.3,
                         },
                         {
+                            type: 'line',
                             data: motor_status,
                             label: "Motor Status",
-                            // borderColor: "rgb(175, 208, 191)",
-                            // backgroundColor: "rgb(175, 208, 191)",
                             borderColor: "rgb(171, 210, 182)",
                             backgroundColor: "rgb(171, 210, 182, 0.5)",
                             stepped: 'middle',
@@ -234,23 +250,30 @@
                     ]
                 },
                 options: {
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer
+                            },
+                        },
+                    },
                     maintainAspectRatio: false,
                     scales: {
                         y: {
                             type: 'linear',
                             position: 'left',
                             stack: 'demo',
-                            max: 200,
+                            max: 150,
                             ticks: {
                                 stepSize: 50,
                                 callback: function(value, index, ticks) {
-                                    return value + " °C";
+                                    return value + "°C";
                                 }
                             }
                         },
                         y2: {
                             type: 'category',
-                            labels: ['Running', 'Not Running'],
+                            labels: ['Run', 'Stop'],
                             offset: true,
                             position: 'left',
                             stack: 'demo',
@@ -259,9 +282,8 @@
                     },
                 },
             });
-            temperature.canvas.parentNode.style.height = '300px';
+            temperature.canvas.parentNode.style.height = '350px';
             temperature.options.plugins.legend.position = "bottom";
-            console.info(temperature.options.plugins.tooltip);
             // CHARTJS MOTOR_STATUS AND TEMPERATURE
 
             // CHARTJS VIBRATION
@@ -305,6 +327,13 @@
                     ]
                 },
                 options: {
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer
+                            },
+                        },
+                    },
                     maintainAspectRatio: false,
                     scales: {
                         y: {
@@ -351,6 +380,13 @@
                     }]
                 },
                 options: {
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer
+                            },
+                        },
+                    },
                     maintainAspectRatio: false,
                     scales: {
                         y: {
@@ -361,7 +397,6 @@
                             min: 0,
                             max: 200,
                             ticks: {
-
                                 stepSize: 50,
                             },
                         }
