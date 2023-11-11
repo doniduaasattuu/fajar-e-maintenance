@@ -378,13 +378,27 @@
             element.classList.add("text-white");
         }
 
+        // NORMALIZE COLOR
+        function normalizeInput(element) {
+            element.value = "";
+            element.classList.remove("text-white");
+            element.classList.remove("bg-success");
+            element.classList.remove("bg-warning");
+            element.classList.remove("bg-info");
+            element.classList.remove("bg-danger");
+        }
+
         for (let i = 0; i < vibration_values.length; i++) {
             vibration_values[i].onchange = () => {
 
-                if (vibration_values[i].value > 45 || vibration_values[i].value <= 0) {
+                if (vibration_values[i].value > 45 || vibration_values[i].value < 0) {
                     let vibrationModal = new bootstrap.Modal(document.getElementById('vibration_alert'), {});
                     vibrationModal.show();
                     vibration_values[i].value = "0.01";
+                }
+
+                if (vibration_values[i].value == "") {
+                    normalizeInput(vibrations[i]);
                 }
 
                 motor_power_rate = power_rate.textContent.split(" ")[0].split("/")[0]; // MOTOR WHO HAVE 2 WINDINGS
@@ -480,12 +494,7 @@
                     vibration_values[j].value = "";
                 }
                 for (let k = 0; k < vibrations.length; k++) {
-                    vibrations[k].value = "";
-                    vibrations[k].classList.remove("bg-success");
-                    vibrations[k].classList.remove("bg-info");
-                    vibrations[k].classList.remove("bg-warning");
-                    vibrations[k].classList.remove("bg-danger");
-                    vibrations[k].classList.remove("text-white");
+                    normalizeInput(vibrations[k]);
                 }
             }
 
@@ -498,7 +507,6 @@
                 comment.value = "";
             }
         }
-
 
         // VALIDATE NUMBER OF GREASING NOT EXCEED 255
         number_of_greasing_input.onchange = () => {
