@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string("funcloc", 150)->nullable(false);
             $table->string("emo", 9)->nullable(false);
+            $table->string("sort_field", 150)->nullable(false);
             $table->enum("motor_status", ["Running", "Not Running"])->nullable(false);
             $table->enum("clean_status", ["Clean", "Dirty"])->nullable(false);
             $table->enum("nipple_grease", ["Available", "Not Available"])->nullable(false);
-            $table->unsignedTinyInteger("number_of_greasing")->nullable(true);
+            $table->unsignedTinyInteger("number_of_greasing")->nullable(true)->default(0);
             $table->unsignedSmallInteger("temperature_a")->nullable(false)->default(0);
             $table->unsignedSmallInteger("temperature_b")->nullable(false)->default(0);
             $table->unsignedSmallInteger("temperature_c")->nullable(false)->default(0);
@@ -29,10 +30,11 @@ return new class extends Migration
             $table->enum("vibration_nde", ["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])->nullable(true);
             $table->text("comment")->nullable(true);
             $table->timestamp("created_at")->nullable(false)->useCurrent();
-            $table->string("checked_by", 150)->nullable(false);
+            $table->string("nik", 8)->nullable(false);
 
             $table->foreign("funcloc")->references("id")->on("function_locations");
             $table->foreign("emo")->references("id")->on("emos");
+            $table->foreign("nik")->references("nik")->on("users");
         });
     }
 

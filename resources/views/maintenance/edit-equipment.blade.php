@@ -35,7 +35,7 @@
 
     <div class="container py-4">
         <h4 class="text-secondary">{{ $emo["id"] }}</h4>
-        <form action="/update-equipment" method="post">
+        <form id="edit_form" action="/update-equipment" method="post">
             @csrf
             @foreach ($emo as $key => $value )
             @if ($key != "emo_details")
@@ -171,6 +171,18 @@
         const updated_at = document.getElementById("updated_at");
         updated_at.parentElement.parentElement.classList.add("d-none");
         // HIDE UPDATED_AT COLUMN
+
+        // DELETE FUNCLOC AND SORTFIELD WHEN NOT INSTALLED
+        const status = document.getElementById("status");
+        const funcloc = document.getElementById("funcloc");
+        const sort_field = document.getElementById("sort_field");
+
+        status.onchange = () => {
+            if (status.value != "Installed") {
+                funcloc.value = "";
+                sort_field.value = "";
+            }
+        }
     </script>
 </body>
 

@@ -12,12 +12,12 @@ entity function_locations
 entity emos
 {
     * id VARCHAR(9) <<PK>>
-    * funcloc VARCHAR (150) <<FK>>
+    * status ENUM(["Installed", "Repaired", "Available"])
+      funcloc VARCHAR (150) <<FK>>
+      sort_field VARCHAR(150)
     --
       material_number VARCHAR(8)
     * equipment_description VARCHAR(150)
-    * status ENUM(["Installed", "Repaired", "Available"])
-    * sort_field VARCHAR(150)
     * unique_id VARCHAR(6) UNIQUE
     * qr_code_link VARCHAR(150) 
       created_at TIMESTAMP NULL
@@ -71,22 +71,23 @@ entity emo_records {
     * id BIGINT UNSIGNED AUTO_INCREMENT
     * funcloc VARCHAR(150) <<FK>>
     * emo VARCHAR(9) <<FK>>
+    * sort_field VARCHAR(150)
     --
     * motor_status ENUM(["Running", "Not Running"])
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
-      number_of_greasing VARCHAR(3)
-      temperature_a SMALLINT UNSIGNED
-      temperature_b SMALLINT UNSIGNED
-      temperature_c SMALLINT UNSIGNED
-      temperature_d SMALLINT UNSIGNED
-      vibration_value_de DECIMAL(4,2)
-      vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
-      vibration_value_nde DECIMAL(4,2)
-      vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
-      comment TEXT
+      number_of_greasing VARCHAR(3) 0
+      temperature_a SMALLINT UNSIGNED 0
+      temperature_b SMALLINT UNSIGNED 0
+      temperature_c SMALLINT UNSIGNED 0
+      temperature_d SMALLINT UNSIGNED 0
+      vibration_value_de DECIMAL(4,2) 0.00
+      vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      vibration_value_nde DECIMAL(4,2) 0.00
+      vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      comment TEXT NULL
     * created_at TIMESTAMP
-    * checked_by VARCHAR(150)
+    * nik VARCHAR(8) <<FK>>
 }
 
 entity users {

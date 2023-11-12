@@ -66,16 +66,22 @@
 
         <!-- EMO ID AND TRENDS START  -->
         <div>
-            <h3 class="mb-4">{{ $emo->id }} </h3>
+            <h3 id="sort_field_information" class="mb-0">{{ $emo->sort_field }}</h3>
+            <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ ($emo->funcLoc != null ) ? $emo->funcLoc->id : "" }}</p>
+            <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
         </div>
-        <a href="/trends/{{ $emo->id }}" title="Record temperature and vibration year to date">
+
+        <form action="/sortfield-trends" method="post">
+            @csrf
+            <input id="sort_field" name="sort_field" type="hidden" value="{{ $emo->sort_field }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
                 </svg>
                 TRENDS
             </button>
-        </a>
+
+        </form>
         <!-- EMO ID AND TRENDS END -->
 
         <!-- MOTOR DETAILS START -->
@@ -93,11 +99,11 @@
                     <div class="accordion-body">
                         <table class="table table-hover">
                             <tbody>
-                                <tr class="d-none" id="function_location">
+                                <tr class="d-none" id="emo_function_location">
                                     <th>Function Location</th>
-                                    <td>{{ $funcLoc["id"] }}</td>
+                                    <td>{{ ($emo->funcLoc != null) ? $emo->funcLoc->id : "" }}</td>
                                 </tr>
-                                <tr class="d-none" id="sort_field">
+                                <tr class="d-none" id="emo_sort_field">
                                     <th>Sort field</th>
                                     <td>{{ $emo->sort_field }}</td>
                                 </tr>
@@ -266,8 +272,8 @@
         const message_response = document.getElementById("message_response");
 
         // AJAX START
-        let buttonku = document.getElementById("buttonsubmit");
-        buttonku.onclick = () => {
+        let buttonSubmit = document.getElementById("buttonsubmit");
+        buttonSubmit.onclick = () => {
             let myform = document.getElementById("myform");
             let ajax = new XMLHttpRequest()
             ajax.open("POST", "/checking-form/{{ $motorList }}");
@@ -303,8 +309,9 @@
             }
 
             ajax.send(
-                "funcloc=" + '{{ $funcLoc["id"] }}' + "&" +
+                "funcloc=" + '{{ ($funcLoc != null) ? $funcLoc["id"] : "" }}' + "&" +
                 "emo=" + '{{ $emo->id }}' + "&" +
+                "sort_field=" + '{{ $emo->sort_field }}' + "&" +
                 "motor_status=" + myform[1].value + "&" +
                 "clean_status=" + myform[2].value + "&" +
                 "nipple_grease_input=" + myform[3].value + "&" +
@@ -600,15 +607,29 @@
         changeUnit(weight, "kg");
 
         // HIDE FUNCLOC WHILE NOT INSTALLED
-        let function_location = document.getElementById("function_location");
-        let sort_field = document.getElementById("sort_field");
+        let function_location = document.getElementById("emo_function_location");
+        let sort_field = document.getElementById("emo_sort_field");
         let status = document.getElementById("status");
 
         if (status.textContent == "Installed") {
             function_location.classList.remove("d-none");
             sort_field.classList.remove("d-none");
         }
-        // HIDE FUNCLOC WHILE NOT INSTALLED
+
+        // DISABLED INPUT WHEN EQUIPMENT IS NOT INSTALLED (AVAILABLE / REPAIRED)
+        const funcloc_information = document.getElementById("funcloc_information");
+        const sort_field_information = document.getElementById("sort_field_information");
+        if (funcloc_information.textContent == "" && sort_field_information.textContent == "") {
+            buttonSubmit.setAttribute("disabled", true);
+            motor_status.setAttribute("disabled", true);
+            clean_status.setAttribute("disabled", true);
+            nipple_grease_input.setAttribute("disabled", true);
+        } else {
+            buttonSubmit.removeAttribute("disabled");
+            motor_status.removeAttribute("disabled");
+            clean_status.removeAttribute("disabled");
+            nipple_grease_input.removeAttribute("disabled");
+        }
     </script>
 </body>
 

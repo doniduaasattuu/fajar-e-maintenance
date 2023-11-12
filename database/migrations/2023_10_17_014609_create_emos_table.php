@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('emos', function (Blueprint $table) {
             $table->string("id", 9)->nullable(false)->primary();
-            $table->string("funcloc", 150)->nullable(false);
+            $table->enum("status", ["Installed", "Repaired", "Available"])->nullable(false);
+            $table->string("funcloc", 150)->nullable(true);
+            $table->string("sort_field", 150)->nullable(true);
             $table->string("material_number", 8)->nullable(true);
             $table->string("equipment_description", 150)->nullable(false);
-            $table->enum("status", ["Installed", "Repaired", "Available"])->nullable(false);
-            $table->string("sort_field", 150)->nullable(false);
             $table->string("unique_id", 6)->nullable(false);
             $table->string("qr_code_link", 150)->nullable(false);
             $table->timestamps();
 
             $table->foreign("funcloc")->on("function_locations")->references("id");
-            $table->unique("unique_id", "emo_unique_id");
         });
     }
 

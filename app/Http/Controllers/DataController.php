@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\User;
 use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
@@ -22,7 +23,7 @@ use function PHPUnit\Framework\returnCallback;
 
 class DataController extends Controller
 {
-    public function getForm(Request $request, string $motorList)
+    public function getCheckingForm(Request $request, string $motorList)
     {
 
         $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
@@ -33,7 +34,7 @@ class DataController extends Controller
             return response()->view("maintenance.checking-form", [
                 "title" => "Checking Form",
                 "emo" => $emo,
-                "funcLoc" => $emo->funcLoc->toArray(),
+                "funcLoc" => ($emo->funcLoc != null) ? $emo->funcLoc->toArray() : [],
                 "emoDetail" => $emo->emoDetails->toArray(),
                 "motorList" => $motorList,
             ]);
@@ -50,7 +51,7 @@ class DataController extends Controller
 
         if (!empty($search_data) && $search_data[0] == "F" && $search_data[6] == "M") {
             // Search by list qr_code_link = Fajar-MotorList1804
-            $url = action([DataController::class, "getForm"], [
+            $url = action([DataController::class, "getCheckingForm"], [
                 "motorList" => $search_data
             ]);
 
@@ -65,7 +66,7 @@ class DataController extends Controller
                 $motorList = (explode("=", $qr_code_link))[1];
 
                 // Fajar-MotorList1804
-                $url = action([DataController::class, "getForm"], [
+                $url = action([DataController::class, "getCheckingForm"], [
                     "motorList" => $motorList
                 ]);
 
@@ -85,7 +86,7 @@ class DataController extends Controller
                 $motorList = (explode("=", $qr_code_link))[1];
 
                 // Fajar-MotorList1804
-                $url = action([DataController::class, "getForm"], [
+                $url = action([DataController::class, "getCheckingForm"], [
                     "motorList" => $motorList
                 ]);
 
@@ -107,6 +108,7 @@ class DataController extends Controller
 
         $funcloc = $request->input("funcloc");
         $emo = $request->input("emo");
+        $sort_field = $request->input("sort_field");
         $motor_status = $request->input("motor_status");
         $clean_status = $request->input("clean_status");
         $nipple_grease_input = $request->input("nipple_grease_input");
@@ -120,13 +122,13 @@ class DataController extends Controller
         $vibration_value_nde = ($request->input("vibration_value_nde") != null) ? $request->input("vibration_value_nde") : 0;
         $vibration_nde = $request->input("vibration_nde");
         $comment = $request->input("comment");
-        $checked_by = session("user");
+        $nik = session("nik");
 
         if (
             empty($motor_status) ||
             empty($clean_status) ||
-            empty($nipple_grease_input)
-            // empty($temperature_a) ||
+            empty($nipple_grease_input) ||
+            empty($sort_field)
             // empty($temperature_b) ||
             // empty($temperature_c) ||
             // empty($temperature_d) ||
@@ -145,6 +147,7 @@ class DataController extends Controller
 
                 $data_record->funcloc = $funcloc;
                 $data_record->emo = $emo;
+                $data_record->sort_field = $sort_field;
                 $data_record->motor_status = $motor_status;
                 $data_record->clean_status = $clean_status;
                 $data_record->nipple_grease = $nipple_grease_input;
@@ -159,7 +162,7 @@ class DataController extends Controller
                 $data_record->vibration_nde = $vibration_nde;
                 $data_record->comment = $comment;
                 $data_record->created_at = Carbon::now()->toDateTimeString();
-                $data_record->checked_by = $checked_by;
+                $data_record->nik = $nik;
                 $result = $data_record->save();
             } catch (QueryException $error) {
                 return response()->json([
@@ -180,6 +183,82 @@ class DataController extends Controller
         }
     }
 
+    public function sortFieldTrends(Request $request)
+    {
+        $sort_field = $request->input("sort_field");
+
+        if (!is_null($sort_field)) {
+            $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
+            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
+
+            $emo_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("sort_field", "=", $sort_field)->get();
+            $comments = EmoRecord::query()->with(['user' => function ($query) {
+                $query->select('nik', 'fullname');
+            }])
+                ->select(["comment", "emo", "created_at", "nik"])
+                ->where("sort_field", "=", $sort_field)
+                ->where("comment", "!=", null)
+                ->whereBetween("created_at", [$startDate, $endDate])
+                ->orderBy("created_at", "DESC")
+                ->get();
+
+            // return response()->json(json_encode($comments));
+
+            if (!is_null($emo_records)) {
+
+                $date_category = [];
+                $motor_status = [];
+                $number_of_greasing = [];
+                $temperature_a = [];
+                $temperature_b = [];
+                $temperature_c = [];
+                $temperature_d = [];
+                $vibration_value_de = [];
+                $vibration_de = [];
+                $vibration_value_nde = [];
+                $vibration_nde = [];
+                $checked_by = [];
+
+                foreach ($emo_records as $record) {
+                    array_push($date_category, date_format(date_create($record->created_at), "d/m/y"));
+                    array_push($motor_status, $record->motor_status);
+                    array_push($number_of_greasing, $record->number_of_greasing);
+                    array_push($temperature_a, $record->temperature_a);
+                    array_push($temperature_b, $record->temperature_b);
+                    array_push($temperature_c, $record->temperature_c);
+                    array_push($temperature_d, $record->temperature_d);
+                    array_push($vibration_value_de, $record->vibration_value_de);
+                    array_push($vibration_de, $record->vibration_de);
+                    array_push($vibration_value_nde, $record->vibration_value_nde);
+                    array_push($vibration_nde, $record->vibration_nde);
+                    array_push($checked_by, User::query()->find($record->nik)->fullname);
+                }
+
+                return response()->view("maintenance.sortfield-trends", [
+                    "title" => "Sort Field",
+                    "sort_field" => $sort_field,
+                    "date_category" => $date_category,
+                    "motor_status" => $motor_status,
+                    "number_of_greasing" => $number_of_greasing,
+                    "temperature_a" => $temperature_a,
+                    "temperature_b" => $temperature_b,
+                    "temperature_c" => $temperature_c,
+                    "temperature_d" => $temperature_d,
+                    "vibration_value_de" => $vibration_value_de,
+                    "vibration_de" => $vibration_de,
+                    "vibration_value_nde" => $vibration_value_nde,
+                    "vibration_nde" => $vibration_nde,
+                    "comments" => $comments->toArray(),
+                    "checked_by" => $checked_by,
+                ]);
+            } else {
+                return Redirect::back();
+            }
+        } else {
+            return Redirect::back();
+        }
+    }
+
     public function trends(Request $request, string $emo)
     {
         if (strlen($emo) == 9) {
@@ -190,7 +269,8 @@ class DataController extends Controller
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
             $comments = EmoRecord::query()
-                ->select(["comment", "funcloc", "checked_by", "created_at"])->where("comment", "!=", null)
+                ->select(["comment", "funcloc", "nik", "created_at"])->where("comment", "!=", null)
+                ->whereBetween("created_at", [$startDate, $endDate])
                 ->where("emo", "=", $emo)
                 ->orderBy("created_at", "DESC")
                 ->get();
@@ -232,7 +312,7 @@ class DataController extends Controller
 
                     array_push($number_of_greasing, $record->number_of_greasing);
 
-                    array_push($checked_by, $record->checked_by);
+                    array_push($checked_by, User::query()->find($record->nik)->fullname);
                 }
 
                 return response()->view("maintenance.trends", [

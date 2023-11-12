@@ -420,4 +420,22 @@ class EmoRecordTest extends TestCase
         self::assertCount(0, $TEMP_DE_PM2);
         Log::info(json_encode($TEMP_DE_PM2, JSON_PRETTY_PRINT));
     }
+
+    public function testEmoRecordUser()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $comments = EmoRecord::query()
+            ->select(["comment", "emo", "created_at", "nik"])
+            ->where("emo", "=", "EMO000426")
+            ->where("comment", "!=", null)
+            ->orderBy("created_at", "DESC")
+            ->with(['user' => function ($query) {
+                $query->select('nik', 'fullname');
+            }])
+            ->get();
+
+        self::assertNotNull($comments);
+        Log::info(json_encode($comments, JSON_PRETTY_PRINT));
+    }
 }

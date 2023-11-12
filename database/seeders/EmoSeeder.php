@@ -110,5 +110,17 @@ class EmoSeeder extends Seeder
         $emo7->created_at = Carbon::now()->toDateTimeString();
         $emo7->updated_at = Carbon::now()->toDateTimeString();
         $emo7->save();
+
+        // $emo8 = new Emo();
+        // $emo8->id = "EMO000000";
+        // $emo8->funcloc = null;
+        // $emo8->equipment_description = null;
+        // $emo8->status = "Available";
+        // $emo8->sort_field = null;
+        // $emo8->unique_id = null;
+        // $emo8->qr_code_link = null;
+        // $emo8->created_at = Carbon::now()->toDateTimeString();
+        // $emo8->updated_at = Carbon::now()->toDateTimeString();
+        // $emo8->save();
     }
 }

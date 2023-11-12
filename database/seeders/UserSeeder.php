@@ -63,5 +63,29 @@ class UserSeeder extends Seeder
         $yuan->department = "EI5";
         $yuan->phone_number = "081383294790";
         $yuan->save();
+
+        $darminto = new User();
+        $darminto->nik = "31100171";
+        $darminto->password = "1234";
+        $darminto->fullname = "Darminto";
+        $darminto->department = "EI2";
+        $darminto->phone_number = "085811043635";
+        $darminto->save();
+
+        $edi = new User();
+        $edi->nik = "55000135";
+        $edi->password = "1234";
+        $edi->fullname = "Edi Supriadi";
+        $edi->department = "EI2";
+        $edi->phone_number = "082112424780";
+        $edi->save();
+
+        $suryanto = new User();
+        $suryanto->nik = "31100156";
+        $suryanto->password = "1234";
+        $suryanto->fullname = "Suryanto";
+        $suryanto->department = "EI2";
+        $suryanto->phone_number = "085711412097";
+        $suryanto->save();
     }
 }
