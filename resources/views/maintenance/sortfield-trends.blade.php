@@ -4,9 +4,8 @@
 @include("utility.head")
 
 <style>
-    .custom-tooltip {
-        --bs-tooltip-bg: var(--bd-violet-bg);
-        --bs-tooltip-color: var(--bs-white);
+    .comment_row {
+        font-family: 'Roboto Mono', monospace;
     }
 </style>
 
@@ -17,7 +16,6 @@
     <div class="container-xl py-4">
         <div class="text-center">
             <h4>Temperature of {{ $sort_field }}</h4>
-            <p></p>
 
             <div class="chart-container" style="position: relative;">
                 <canvas id="temperature"></canvas>
@@ -98,7 +96,7 @@
 
                                 @elseif ($key == "created_at")
                                 <td>
-                                    <div class="text-break" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ $value }}">{{ date_format(date_create($value), "d-M-y") }}</div>
+                                    <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ $value }}">{{ date_format(date_create($value), "d-M-y") }}</div>
                                 </td>
 
                                 @elseif ($key == "user")
@@ -130,6 +128,7 @@
 
         <script>
             let date = <?php echo json_encode($date_category) ?>;
+            let length_of_data = <?php echo count($date_category) ?>;
             let checked_by = <?php echo json_encode($checked_by) ?>;
             let motor_status = <?php echo json_encode($motor_status) ?>;
             motor_status = motor_status.map(changeNotRunnningToStop);
@@ -313,23 +312,23 @@
                             fill: false,
                             tension: 0.3,
                         },
-                        // {
-                        //     data: vibration_de,
-                        //     label: "Vibration Desc DE",
-                        //     borderColor: "rgb(62,149,205)",
-                        //     backgroundColor: "rgb(62,149,205,0.5)",
-                        //     stepped: true,
-                        //     fill: true,
-                        //     yAxisID: 'y2',
-                        // }, {
-                        //     data: vibration_nde,
-                        //     label: "Vibration Desc NDE",
-                        //     borderColor: "rgb(60,186,159)",
-                        //     backgroundColor: "rgb(60,186,159,0.5)",
-                        //     stepped: true,
-                        //     fill: true,
-                        //     yAxisID: 'y2',
-                        // }
+                        {
+                            data: vibration_de,
+                            label: "Vibration Desc DE",
+                            borderColor: "rgb(62,149,205)",
+                            backgroundColor: "rgba(62,149,205,0.7)",
+                            // stepped: true,
+                            fill: true,
+                            yAxisID: 'y2',
+                        }, {
+                            data: vibration_nde,
+                            label: "Vibration Desc NDE",
+                            borderColor: "rgb(60,186,159)",
+                            backgroundColor: "rgba(60,186,159,0.7)",
+                            // stepped: true,
+                            fill: true,
+                            yAxisID: 'y2',
+                        }
                     ]
                 },
                 options: {
@@ -356,14 +355,14 @@
                                 stepSize: vibration_step,
                             },
                         },
-                        // y2: {
-                        //     type: 'category',
-                        //     labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
-                        //     offset: true,
-                        //     position: 'left',
-                        //     stack: 'demo',
-                        //     stackWeight: 1,
-                        // },
+                        y2: {
+                            type: 'category',
+                            labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
+                            offset: true,
+                            position: 'left',
+                            stack: 'demo',
+                            stackWeight: 1,
+                        },
                     },
                 }
             });

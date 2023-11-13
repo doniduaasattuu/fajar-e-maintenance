@@ -28,6 +28,7 @@ class EmoRecordTest extends TestCase
         $emo_record = new EmoRecord();
         $emo_record->funcloc = "FP-01-SP3-RJS-T092-P092";
         $emo_record->emo = "EMO000426";
+        $emo_record->sort_field = "SP3.P.70/M";
         $emo_record->motor_status = "Running";
         $emo_record->clean_status = "Clean";
         $emo_record->nipple_grease = "Available";
@@ -41,7 +42,7 @@ class EmoRecordTest extends TestCase
         $emo_record->vibration_value_nde = 0.58;
         $emo_record->vibration_nde = "Good";
         $emo_record->created_at = Carbon::now()->toDateTimeString();
-        $emo_record->checked_by = User::query()->find("55000154")->fullname;
+        $emo_record->nik = User::query()->find("55000154")->nik;
         $emo_record->save();
 
         self::assertNotNull($emo_record);
@@ -128,6 +129,7 @@ class EmoRecordTest extends TestCase
         ])->post("/checking-form/Fajar-MotorList1804", [
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease_input" => "Available",
@@ -158,6 +160,7 @@ class EmoRecordTest extends TestCase
         ])->post("/checking-form/Fajar-MotorList1804", [
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease_input" => "Available",
@@ -291,7 +294,7 @@ class EmoRecordTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $comments = EmoRecord::query()
-            ->select(["comment", "checked_by", "created_at"])->where("comment", "!=", null)
+            ->select(["comment", "nik", "created_at"])->where("comment", "!=", null)
             ->where("emo", "=", "EMO000426")
             ->orderBy("created_at", "DESC")
             ->get();
@@ -299,7 +302,6 @@ class EmoRecordTest extends TestCase
         self::assertNotNull($comments);
         Log::info(json_encode($comments, JSON_PRETTY_PRINT));
     }
-
 
     // SAVE DATA
     public function testSaveDataFailed()
@@ -341,6 +343,7 @@ class EmoRecordTest extends TestCase
         ])->post("/checking-form/Fajar-MotorList1804", [
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease_input" => "Invalid", // should Available or Not Available
@@ -377,6 +380,7 @@ class EmoRecordTest extends TestCase
         ])->post("/checking-form/Fajar-MotorList1804", [
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease_input" => "Available",

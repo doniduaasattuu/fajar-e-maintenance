@@ -9,6 +9,13 @@
 
     <div class="container d-flex absolute mt-5 vh-100">
         <div class="my-4 py-5 position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
+
+            @isset($message)
+            <div class="alert alert-info" role="alert">
+                {{ $message }}
+            </div>
+            @endisset
+
             <form id="form-equipment" method="get">
 
                 <div class="mb-3">

@@ -56,8 +56,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return redirect("/");
     });
 
-    Route::get('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "getCheckingForm"]);
-    Route::post('/checking-form/{motorList}', [App\Http\Controllers\DataController::class, "saveData"]);
+    Route::get('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "getCheckingForm"]);
+    Route::post('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "saveDataMotor"]);
 
     Route::get('/change-name', [App\Http\Controllers\UserController::class, "changeName"]);
     Route::post('/change-name', [App\Http\Controllers\UserController::class, "doChangeName"]);
@@ -68,7 +68,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/trends/{emo}', [App\Http\Controllers\DataController::class, "trends"]);
     Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"]);
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
-    Route::post('/sortfield-trends', [App\Http\Controllers\DataController::class, "sortFieldTrends"]);
+    Route::post('/sortfield-trends', [App\Http\Controllers\DataController::class, "sortFieldMotorTrends"]);
 
     Route::get("/summary", [App\Http\Controllers\DataController::class, "summary"]);
 

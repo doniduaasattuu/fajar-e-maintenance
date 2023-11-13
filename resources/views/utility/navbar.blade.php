@@ -8,7 +8,7 @@
         <div class="mt-4 mt-lg-0 collapse navbar-collapse" id="navbarSupportedContent">
             <form action="/search" method="post" class="mb-3 mb-lg-0 d-flex" role="search">
                 @csrf
-                <input id="search_data" name="search_data" class="search_input form-control me-2" type="search" placeholder="e.g. EMO000426" aria-label="Search">
+                <input id="search_data" name="search_data" class="search_input form-control me-2" type="search" placeholder="Search by Equipment" aria-label="Search">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -54,7 +54,7 @@
                         Database
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-bottom border-top dropdown-item" href="/search-equipment">Update Equipment</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/search-equipment">Edit Equipment</a></li>
                         <li><a class="border-bottom dropdown-item" href="#">Update Funcloc</a></li>
                         <li><a class="border-bottom dropdown-item" href="#">Instal Dismantle</a></li>
                     </ul>
@@ -83,17 +83,17 @@
 
 <script>
     // DINAMIC SEARCH PLACEHOLDER
-    setInterval(() => {
-        let placeholder = search_data.getAttribute("placeholder");
+    // setInterval(() => {
+    //     let placeholder = search_data.getAttribute("placeholder");
 
-        if (placeholder == "e.g. EMO000426") {
-            search_data.setAttribute("placeholder", "e.g. Fajar-MotorList1804");
-        } else if (placeholder == "e.g. Fajar-MotorList1804") {
-            search_data.setAttribute("placeholder", "e.g. MGM000481");
-        } else if (placeholder == "e.g. MGM000481") {
-            search_data.setAttribute("placeholder", "e.g. 1804");
-        } else if (placeholder == "e.g. 1804") {
-            search_data.setAttribute("placeholder", "e.g. EMO000426");
-        }
-    }, 1750);
+    //     if (placeholder == "e.g. EMO000426") {
+    //         search_data.setAttribute("placeholder", "e.g. Fajar-MotorList1804");
+    //     } else if (placeholder == "e.g. Fajar-MotorList1804") {
+    //         search_data.setAttribute("placeholder", "e.g. MGM000481");
+    //     } else if (placeholder == "e.g. MGM000481") {
+    //         search_data.setAttribute("placeholder", "e.g. 1804");
+    //     } else if (placeholder == "e.g. 1804") {
+    //         search_data.setAttribute("placeholder", "e.g. EMO000426");
+    //     }
+    // }, 1750);
 </script>

@@ -67,13 +67,13 @@
         <!-- EMO ID AND TRENDS START  -->
         <div>
             <h3 id="sort_field_information" class="mb-0">{{ $emo->sort_field }}</h3>
-            <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ ($emo->funcLoc != null ) ? $emo->funcLoc->id : "" }}</p>
+            <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
             <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
         </div>
 
         <form action="/sortfield-trends" method="post">
             @csrf
-            <input id="sort_field" name="sort_field" type="hidden" value="{{ $emo->sort_field }}">
+            <input type="hidden" id="sort_field" name="sort_field" value="{{ $emo->sort_field }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
@@ -101,7 +101,7 @@
                             <tbody>
                                 <tr class="d-none" id="emo_function_location">
                                     <th>Function Location</th>
-                                    <td>{{ ($emo->funcLoc != null) ? $emo->funcLoc->id : "" }}</td>
+                                    <td>{{ $emo->funcloc }}</td>
                                 </tr>
                                 <tr class="d-none" id="emo_sort_field">
                                     <th>Sort field</th>
@@ -252,8 +252,6 @@
                     </div>
                     <!-- =========== COMMENT END =========== -->
 
-                    <input type="hidden" id="motorList" name="motorList" value="{{ $motorList }}">
-
                     <div class="mb-4">
                         <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
@@ -309,9 +307,10 @@
             }
 
             ajax.send(
-                "funcloc=" + '{{ ($funcLoc != null) ? $funcLoc["id"] : "" }}' + "&" +
+                "funcloc=" + '{{ $emo->funcloc }}' + "&" +
                 "emo=" + '{{ $emo->id }}' + "&" +
                 "sort_field=" + '{{ $emo->sort_field }}' + "&" +
+
                 "motor_status=" + myform[1].value + "&" +
                 "clean_status=" + myform[2].value + "&" +
                 "nipple_grease_input=" + myform[3].value + "&" +
@@ -327,8 +326,7 @@
                 "vibration_value_nde=" + myform[11].value + "&" +
                 "vibration_nde=" + myform[12].value + "&" +
 
-                "comment=" + myform[13].value + "&" +
-                "motorList=" + myform[14].value
+                "comment=" + myform[13].value
             );
         }
         // AJAX END

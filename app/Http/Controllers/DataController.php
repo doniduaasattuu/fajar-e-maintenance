@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -23,21 +24,38 @@ use function PHPUnit\Framework\returnCallback;
 
 class DataController extends Controller
 {
-    public function getCheckingForm(Request $request, string $motorList)
+    // ===============================================
+    // ================ CHECKING FORM ================
+    // ===============================================
+    public function getCheckingForm(Request $request, string $equipment)
     {
+        // EQUIPMENT CHECK (EMO / ELP / ETF / etc)
+        $equipment_code = substr($equipment, 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
 
-        $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
-        $emo = Emo::query()->with("funcLoc", "emoDetails")->where("qr_code_link", "=", $uri)->first();
+        if ($equipment_code === "Fajar-MotorList") {
+            $motorList = $equipment;
+            $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
+            $emo = Emo::query()->with("emoDetails")->where("qr_code_link", "=", $uri)->first();
 
-        if (!is_null($emo)) {
+            if (!is_null($emo)) {
 
-            return response()->view("maintenance.checking-form", [
-                "title" => "Checking Form",
-                "emo" => $emo,
-                "funcLoc" => ($emo->funcLoc != null) ? $emo->funcLoc->toArray() : [],
-                "emoDetail" => $emo->emoDetails->toArray(),
-                "motorList" => $motorList,
-            ]);
+                return response()->view("maintenance.checking-form-emo", [
+                    "title" => "Checking Form",
+                    "emo" => $emo,
+                    "emoDetail" => $emo->emoDetails->toArray(),
+                    "motorList" => $motorList,
+                ]);
+            } else {
+                return response()->view("utility.page-not-found", [
+                    "title" => "Oops!"
+                ]);
+            }
+        } else if ($equipment_code === "Fajar-PanelList") {
+            // Fajar-PanelList
+            $panelList = $equipment;
+        } else if ($equipment_code === "Fajar-TrafoList") {
+            // Fajar-TrafoList
+            $trafoList = $equipment;
         } else {
             return response()->view("utility.page-not-found", [
                 "title" => "Oops!"
@@ -45,52 +63,33 @@ class DataController extends Controller
         }
     }
 
+    // ========================================
+    // ================ SEARCH ================
+    // ========================================
     public function search(Request $request)
     {
         $search_data = $request->input("search_data");
 
-        if (!empty($search_data) && $search_data[0] == "F" && $search_data[6] == "M") {
-            // Search by list qr_code_link = Fajar-MotorList1804
-            $url = action([DataController::class, "getCheckingForm"], [
-                "motorList" => $search_data
+        if (!empty($search_data) && !is_null($search_data) && strlen($search_data) > 9 && substr($search_data, 0, 5) === "Fajar") {
+            // Fajar-XXXList
+            $redirected = action([DataController::class, "getCheckingForm"], [
+                "equipment" => $search_data
             ]);
 
-            return redirect($url);
-        } else if (!empty($search_data) && strlen($search_data) == 9 && $search_data[3] == "0") {
-            // Search by emo or mgm = EMO000426
-            $emo = Emo::query()->with("funcLoc", "emoDetails")->find($search_data);
-
+            return redirect($redirected);
+        } else if (!empty($search_data) && !is_null($search_data) && strlen($search_data) == 9) {
+            // Equimpent format
+            $emo = Emo::query()->find($search_data);
             if (!is_null($emo)) {
 
                 $qr_code_link = $emo->qr_code_link;
                 $motorList = (explode("=", $qr_code_link))[1];
 
-                // Fajar-MotorList1804
-                $url = action([DataController::class, "getCheckingForm"], [
-                    "motorList" => $motorList
+                $redirected = action([DataController::class, "getCheckingForm"], [
+                    "equipment" => $motorList
                 ]);
 
-                return redirect($url);
-            } else {
-                return response()->view("utility.page-not-found", [
-                    "title" => "Oops!"
-                ]);
-            }
-        } else if (!empty($search_data) && (strlen($search_data) >= 2) && (strlen($search_data) <= 4)) {
-            // Search by unique_id = 1804
-            $unique_id = Emo::query()->where("unique_id", "=", $search_data)->first();
-
-            if (!is_null($unique_id)) {
-
-                $qr_code_link = $unique_id->qr_code_link;
-                $motorList = (explode("=", $qr_code_link))[1];
-
-                // Fajar-MotorList1804
-                $url = action([DataController::class, "getCheckingForm"], [
-                    "motorList" => $motorList
-                ]);
-
-                return redirect($url);
+                return redirect($redirected);
             } else {
                 return response()->view("utility.page-not-found", [
                     "title" => "Oops!"
@@ -103,9 +102,79 @@ class DataController extends Controller
         }
     }
 
-    public function saveData(Request $request)
+    // ==================================================
+    // ================ SORTFIELD TRENDS ================
+    // ==================================================
+    private function returnColumnDataRecords(string $columnName, Collection $emo_records)
     {
+        $result = [];
+        if ($columnName == "nik") {
+            foreach ($emo_records as $record) {
+                array_push($result, User::query()->find($record->$columnName)->fullname);
+            }
+        } else if ($columnName == "created_at") {
+            foreach ($emo_records as $record) {
+                array_push($result, date_format(date_create($record->$columnName), "d/m/y"));
+            }
+        } else {
+            foreach ($emo_records as $record) {
+                array_push($result, $record->$columnName);
+            }
+        }
+        return $result;
+    }
 
+    public function sortFieldMotorTrends(Request $request)
+    {
+        $sort_field = $request->input("sort_field");
+
+        if (!is_null($sort_field) && !empty($sort_field)) {
+            $end_date = Carbon::now()->addDays(1);
+            $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+
+            $emo_records = EmoRecord::query()->whereBetween("created_at", [$start_date, $end_date])->where("sort_field", "=", $sort_field)->get();
+            $comments = EmoRecord::query()->with(['user' => function ($query) {
+                $query->select('nik', 'fullname');
+            }])
+                ->select(["comment", "emo", "created_at", "nik"])
+                ->where("sort_field", "=", $sort_field)
+                ->where("comment", "!=", null)
+                ->whereBetween("created_at", [$start_date, $end_date])
+                ->orderBy("created_at", "DESC")
+                ->get();
+
+            if (!is_null($emo_records)) {
+
+                return response()->view("maintenance.sortfield-trends", [
+                    "title" => "Sort Field",
+                    "sort_field" => $sort_field,
+                    "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
+                    "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
+                    "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
+                    "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
+                    "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
+                    "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
+                    "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
+                    "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
+                    "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
+                    "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
+                    "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
+                    "comments" => $comments->toArray(),
+                    "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
+                ]);
+            } else {
+                return Redirect::back();
+            }
+        } else {
+            return Redirect::back();
+        }
+    }
+
+    // =================================================
+    // ================ SAVE DATA MOTOR ================
+    // =================================================
+    public function saveDataMotor(Request $request)
+    {
         $funcloc = $request->input("funcloc");
         $emo = $request->input("emo");
         $sort_field = $request->input("sort_field");
@@ -125,17 +194,12 @@ class DataController extends Controller
         $nik = session("nik");
 
         if (
+            empty($funcloc) ||
+            empty($emo) ||
+            empty($sort_field) ||
             empty($motor_status) ||
             empty($clean_status) ||
-            empty($nipple_grease_input) ||
-            empty($sort_field)
-            // empty($temperature_b) ||
-            // empty($temperature_c) ||
-            // empty($temperature_d) ||
-            // empty($vibration_value_de) ||
-            // empty($vibration_de) ||
-            // empty($vibration_value_nde) ||
-            // empty($vibration_nde)
+            empty($nipple_grease_input)
         ) {
             return response()->json([
                 "error" => "All field is required! ⚠️"
@@ -144,7 +208,6 @@ class DataController extends Controller
 
             try {
                 $data_record = new EmoRecord();
-
                 $data_record->funcloc = $funcloc;
                 $data_record->emo = $emo;
                 $data_record->sort_field = $sort_field;
@@ -183,94 +246,24 @@ class DataController extends Controller
         }
     }
 
-    public function sortFieldTrends(Request $request)
-    {
-        $sort_field = $request->input("sort_field");
-
-        if (!is_null($sort_field)) {
-            $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
-            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
-
-            $emo_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("sort_field", "=", $sort_field)->get();
-            $comments = EmoRecord::query()->with(['user' => function ($query) {
-                $query->select('nik', 'fullname');
-            }])
-                ->select(["comment", "emo", "created_at", "nik"])
-                ->where("sort_field", "=", $sort_field)
-                ->where("comment", "!=", null)
-                ->whereBetween("created_at", [$startDate, $endDate])
-                ->orderBy("created_at", "DESC")
-                ->get();
-
-            // return response()->json(json_encode($comments));
-
-            if (!is_null($emo_records)) {
-
-                $date_category = [];
-                $motor_status = [];
-                $number_of_greasing = [];
-                $temperature_a = [];
-                $temperature_b = [];
-                $temperature_c = [];
-                $temperature_d = [];
-                $vibration_value_de = [];
-                $vibration_de = [];
-                $vibration_value_nde = [];
-                $vibration_nde = [];
-                $checked_by = [];
-
-                foreach ($emo_records as $record) {
-                    array_push($date_category, date_format(date_create($record->created_at), "d/m/y"));
-                    array_push($motor_status, $record->motor_status);
-                    array_push($number_of_greasing, $record->number_of_greasing);
-                    array_push($temperature_a, $record->temperature_a);
-                    array_push($temperature_b, $record->temperature_b);
-                    array_push($temperature_c, $record->temperature_c);
-                    array_push($temperature_d, $record->temperature_d);
-                    array_push($vibration_value_de, $record->vibration_value_de);
-                    array_push($vibration_de, $record->vibration_de);
-                    array_push($vibration_value_nde, $record->vibration_value_nde);
-                    array_push($vibration_nde, $record->vibration_nde);
-                    array_push($checked_by, User::query()->find($record->nik)->fullname);
-                }
-
-                return response()->view("maintenance.sortfield-trends", [
-                    "title" => "Sort Field",
-                    "sort_field" => $sort_field,
-                    "date_category" => $date_category,
-                    "motor_status" => $motor_status,
-                    "number_of_greasing" => $number_of_greasing,
-                    "temperature_a" => $temperature_a,
-                    "temperature_b" => $temperature_b,
-                    "temperature_c" => $temperature_c,
-                    "temperature_d" => $temperature_d,
-                    "vibration_value_de" => $vibration_value_de,
-                    "vibration_de" => $vibration_de,
-                    "vibration_value_nde" => $vibration_value_nde,
-                    "vibration_nde" => $vibration_nde,
-                    "comments" => $comments->toArray(),
-                    "checked_by" => $checked_by,
-                ]);
-            } else {
-                return Redirect::back();
-            }
-        } else {
-            return Redirect::back();
-        }
-    }
-
+    // ============================================
+    // ================ EMO TRENDS ================
+    // ============================================
     public function trends(Request $request, string $emo)
     {
         if (strlen($emo) == 9) {
-            $endDate = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now();
-            $startDate = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
+            $end_date = !is_null($request->input("end_date")) || !empty($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(2);
+            $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
 
-            $emo_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", $emo)->get();
+            $end_date = date_format(date_create($end_date), "Y-m-d");
+            $start_date = date_format(date_create($start_date), "Y-m-d");
+
+            $emo_records = EmoRecord::query()->whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $emo)->get();
             $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
 
             $comments = EmoRecord::query()
                 ->select(["comment", "funcloc", "nik", "created_at"])->where("comment", "!=", null)
-                ->whereBetween("created_at", [$startDate, $endDate])
+                ->whereBetween("created_at", [$start_date, $end_date])
                 ->where("emo", "=", $emo)
                 ->orderBy("created_at", "DESC")
                 ->get();
@@ -343,6 +336,9 @@ class DataController extends Controller
         }
     }
 
+    // ===================================================
+    // ================ EMO TRENDS PICKER ================
+    // ===================================================
     public function trendsPicker()
     {
         return response()->view("maintenance.trends-picker", [
@@ -351,13 +347,9 @@ class DataController extends Controller
         ]);
     }
 
-    public function emoDatalist()
-    {
-        $emo_list = EmoRecord::query()->select("emo")->distinct()->get();
-        return response()->json($emo_list);
-    }
-
-    // SUMMARY
+    // ===================================================
+    // =============== SUMMARY TOP OF FIVE ===============
+    // ===================================================
     public function summary()
     {
         function returnData(string $temp_a, string $paper_machine)
@@ -414,7 +406,9 @@ class DataController extends Controller
         ]);
     }
 
-    // UPDATE EQUIPMENT
+    // ==============================================
+    // =============== EDIT EQUIPMENT ===============
+    // ==============================================
     public function editEquipment(Request $request, string $equipment)
     {
         $emo = Emo::query()->with("emoDetails")
@@ -427,8 +421,9 @@ class DataController extends Controller
                 "emo" => $emo->toArray(),
             ]);
         } else {
-            return response()->view("utility.page-not-found", [
-                "title" => "Oops!"
+            return response()->view("maintenance.search-equipment", [
+                'title' => "Search equipment",
+                'message' => "Equipment not found."
             ]);
         }
     }
