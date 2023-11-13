@@ -57,7 +57,7 @@
             @endif
 
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($key)) }}</label>
+                <label for="{{ $key }}" class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($key)) }}</label>
                 <div class="col-xl-10">
                     <input name="{{ $key }}" id="{{ $key }}" type="text" class="form-control" value="{{ $value }}">
                 </div>

@@ -157,6 +157,8 @@ class DataControllerTest extends TestCase
             ->assertSeeText("Temperature of SP3.P.70/M")
             ->assertSeeText("Vibration of SP3.P.70/M")
             ->assertSeeText("Number of Greasing SP3.P.70/M")
+            ->assertSeeText("Plastik terminal perlu di ganti")
+            ->assertSee("EMO000426")
             ->assertSee("Edi Supriadi")
             ->assertSee("let length_of_data = 12");
     }

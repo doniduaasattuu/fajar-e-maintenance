@@ -24,7 +24,8 @@
 
                 <div class=" mb-3">
                     <div>
-                        <input placeholder="Equipment is required" id="equipment" class="form-control" aria-describedby="listHelp">
+                        <input list="emo_datalist" placeholder="Equipment is required" id="equipment" class="form-control" aria-describedby="listHelp">
+                        <datalist id="emo_datalist">
                     </div>
                     <div class="form-check mt-2">
                         <input class="form-check-input" type="checkbox" value="true" name="emo_details" id="emo_details">
@@ -52,6 +53,26 @@
                 button_submit.setAttribute("disabled", true);
             }
         }
+
+        let emo_datalist = document.getElementById("emo_datalist");
+
+        // GET EMO LIST IN DATA RECORD
+        const ajax = new XMLHttpRequest();
+        ajax.open("GET", "/emo-datalist")
+        ajax.onload = () => {
+            if (ajax.readyState == 4) {
+
+                let emo_datalist_length = JSON.parse(ajax.response).length;
+                for (let i = 0; i < emo_datalist_length; i++) {
+                    let emo_value = JSON.parse(ajax.response)[i].emo
+                    let emo_option = document.createElement("option");
+                    emo_option.value = emo_value;
+                    emo_option.textContent = emo_value;
+                    emo_datalist.appendChild(emo_option);
+                }
+            }
+        }
+        ajax.send();
     </script>
 </body>
 

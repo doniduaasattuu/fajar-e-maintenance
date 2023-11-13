@@ -46,8 +46,6 @@
     <script>
         const emo_datalist = document.getElementById("emo_datalist");
         const emo_input = document.getElementById("emo_input");
-        const ajax = new XMLHttpRequest();
-
         const end_date = document.getElementById("end_date");
 
         function addZero(value) {
@@ -65,6 +63,7 @@
         end_date.value = tahun + "-" + bulan + "-" + tanggal
 
         // GET EMO LIST IN DATA RECORD
+        const ajax = new XMLHttpRequest();
         ajax.open("GET", "/emo-datalist")
         ajax.onload = () => {
             if (ajax.readyState == 4) {
