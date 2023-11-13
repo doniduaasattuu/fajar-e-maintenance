@@ -59,38 +59,16 @@
         }
 
         let date = new Date()
-        let tanggal = addZero(date.getDate())
+        let tanggal = addZero(date.getDate() + 1)
         let bulan = addZero(date.getMonth() + 1)
         let tahun = date.getFullYear()
-        // end_date.value = date
-        // end_date.value = "2023-10-15"
         end_date.value = tahun + "-" + bulan + "-" + tanggal
-        console.info(end_date.value)
-        console.info(end_date)
-
-        // end_date.onchange = () => {
-        //     console.info(end_date.value)
-        //     let nowadays = Date.now()
-        //     let date = new Date(nowadays)
-
-        //     let tanggal = date.getDate()
-        //     let bulan = date.getMonth()
-        //     let tahun = date.getFullYear()
-
-        //     console.info(tahun + "-" + bulan + "-" + tanggal);
-        // }
-
-        // let emo_option = document.createElement("option");
-        // emo_option.value = "Emo Option";
-        // emo_option.textContent = "Emo Option Value";
-        // emo_datalist.appendChild(emo_option);
 
         // GET EMO LIST IN DATA RECORD
         ajax.open("GET", "/emo-datalist")
         ajax.onload = () => {
             if (ajax.readyState == 4) {
-                // console.log(JSON.parse(ajax.response).length); // 3
-                // console.log(JSON.parse(ajax.response)[0].emo); // EMO000426
+
                 let emo_datalist_length = JSON.parse(ajax.response).length;
                 for (let i = 0; i < emo_datalist_length; i++) {
                     emo_value = JSON.parse(ajax.response)[i].emo

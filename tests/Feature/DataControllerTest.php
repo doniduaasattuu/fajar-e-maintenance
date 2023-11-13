@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Administrators;
 use App\Models\Emo;
 use Carbon\Carbon;
+use Database\Seeders\AdministratorsSeeder;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,7 +29,22 @@ class DataControllerTest extends TestCase
                 'title' => 'Checking Form'
             ])
             ->assertStatus(200)
+            ->assertSeeText("MOTOR DETAILS")
+            ->assertSeeText("Manufacture")
+            ->assertSeeText("Mounting")
+            ->assertSeeText("Horizontal")
             ->assertSeeText("FP-01-SP3-RJS-T092-P092")
+            ->assertSeeText("Motor Status")
+            ->assertSeeText("Cleanliness")
+            ->assertSeeText("Nipple Grease")
+            ->assertSeeText("Number of Greasing")
+            ->assertSeeText("Temperature A")
+            ->assertSeeText("Temperature B")
+            ->assertSeeText("Temperature C")
+            ->assertSeeText("Temperature D")
+            ->assertSeeText("Vibration DE")
+            ->assertSeeText("Vibration NDE")
+            ->assertSeeText("Comment")
             ->assertSeeText("Submit");
     }
 
@@ -257,5 +274,30 @@ class DataControllerTest extends TestCase
         $emo = Emo::query()->find("EMO000426");
         self::assertNotNull($emo);
         self::assertEquals($emo->material_number, "10010668");
+    }
+
+    // EDIT EQUIPMENT (ADMINISTRATOR ONLY)
+    public function testGetSearchEquipmentSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->get("/search-equipment")
+            ->assertStatus(200)
+            ->assertSeeText("Look for the equipment you want to update.");
+    }
+
+    public function testGetSearchEquipmentFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000093",
+            "user" => "Saiful Bahri",
+        ])->get("/search-equipment")
+            ->assertStatus(302)
+            ->assertRedirect("/");
     }
 }

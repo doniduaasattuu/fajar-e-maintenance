@@ -312,23 +312,25 @@
                             fill: false,
                             tension: 0.3,
                         },
-                        {
-                            data: vibration_de,
-                            label: "Vibration Desc DE",
-                            borderColor: "rgb(62,149,205)",
-                            backgroundColor: "rgba(62,149,205,0.7)",
-                            // stepped: true,
-                            fill: true,
-                            yAxisID: 'y2',
-                        }, {
-                            data: vibration_nde,
-                            label: "Vibration Desc NDE",
-                            borderColor: "rgb(60,186,159)",
-                            backgroundColor: "rgba(60,186,159,0.7)",
-                            // stepped: true,
-                            fill: true,
-                            yAxisID: 'y2',
-                        }
+                        // {
+                        //     type: 'line',
+                        //     data: vibration_de,
+                        //     label: "Vibration Desc DE",
+                        //     borderColor: "rgb(62,149,205)",
+                        //     backgroundColor: "rgba(62,149,205,0.7)",
+                        //     // stepped: true,
+                        //     fill: true,
+                        //     yAxisID: 'y2',
+                        // }, {
+                        //     type: 'line',
+                        //     data: vibration_nde,
+                        //     label: "Vibration Desc NDE",
+                        //     borderColor: "rgb(60,186,159)",
+                        //     backgroundColor: "rgba(60,186,159,0.7)",
+                        //     // stepped: true,
+                        //     fill: true,
+                        //     yAxisID: 'y2',
+                        // }
                     ]
                 },
                 options: {
@@ -355,14 +357,14 @@
                                 stepSize: vibration_step,
                             },
                         },
-                        y2: {
-                            type: 'category',
-                            labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
-                            offset: true,
-                            position: 'left',
-                            stack: 'demo',
-                            stackWeight: 1,
-                        },
+                        // y2: {
+                        //     type: 'category',
+                        //     labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
+                        //     offset: true,
+                        //     position: 'left',
+                        //     stack: 'demo',
+                        //     stackWeight: 1,
+                        // },
                     },
                 }
             });

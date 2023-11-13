@@ -10,20 +10,7 @@ use Tests\TestCase;
 class UserControllerTest extends TestCase
 {
     // ======= LOGIN =======
-    public function testViewLogin(): void
-    {
-        $this->seed(UserSeeder::class);
-
-        $registration = "Don't have an account ?, Register here";
-
-        $this->view("user.login", [
-            "title" => "Login"
-        ])->assertSeeText("Login")
-            ->assertSeeText("NIK")
-            ->assertSeeText($registration);
-    }
-
-    public function testLogin(): void
+    public function testGetLogin(): void
     {
         $this->seed(UserSeeder::class);
 
@@ -75,7 +62,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText("Fajar E-Maintenance");
     }
 
-    public function testGetHomeLoginNotYet()
+    public function testGetHomeNotYetLogin()
     {
         $this->get("/", [])
             ->assertRedirect("/login");

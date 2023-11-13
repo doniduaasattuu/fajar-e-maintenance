@@ -36,32 +36,32 @@ class EmoTest extends TestCase
 
         self::assertTrue($result);
         self::assertNotNull($emo);
+        self::assertEquals("EMO000426", $emo->id);
     }
 
-    public function testEmoDetailRelations()
+    public function testEmoToEmoDetailRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
-        $emo = Emo::query()->find("EMO000426");
+        $emo = Emo::query()->with("emoDetails")->find("EMO000426");
         $emo_detail = $emo->emoDetails;
 
         self::assertNotNull($emo_detail);
         self::assertNotNull($emo_detail->power_rate, '75');
         self::assertNotNull($emo_detail->ip_rating, '55');
         self::assertNotNull($emo_detail->cooling_fan, 'Internal');
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
     }
 
-    public function testEmoFunclocRelations()
+    public function testEmoToFunclocRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
-        $emo = Emo::query()->find("EMO000426");
+        $emo = Emo::query()->with('funcloc')->find("EMO000426");
         self::assertNotNull($emo);
-        $funcLoc = $emo->funcLoc;
+        $funcloc = $emo->funcLoc;
 
-        self::assertNotNull($funcLoc);
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+        self::assertNotNull($funcloc);
+        self::assertEquals("FP-01-SP3-RJS-T092-P092", $funcloc->id);
     }
 
     public function testEmoQueryWith()
@@ -70,6 +70,8 @@ class EmoTest extends TestCase
 
         $emo = Emo::query()->with("funcloc", "emoDetails")->find("EMO000426");
         self::assertNotNull($emo);
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+
+        self::assertEquals("FP-01-SP3-RJS-T092-P092", $emo->funcLoc->id);
+        self::assertEquals("Horizontal", $emo->emoDetails->mounting);
     }
 }

@@ -20,7 +20,6 @@ class EmoDetailTest extends TestCase
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class]);
 
         $emo = Emo::query()->find("EMO000426");
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
 
         $emo_details = new EmoDetail();
         $emo_details->emo_detail = "EMO000426";
@@ -60,33 +59,33 @@ class EmoDetailTest extends TestCase
         self::assertTrue($result);
         self::assertNotNull($emo_details);
         self::assertEquals($emo_details->emo_detail, $emo->id);
-        Log::info(json_encode($emo_details, JSON_PRETTY_PRINT));
+        self::assertEquals($emo->funcLoc->id, $emo_details->funcLoc->id);
     }
 
-    public function testEmoDetailsEmoRelations()
+    public function testEmoDetailsToEmoRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
         $emo_details = EmoDetail::query()->where("emo_detail", "=", "EMO000426")->first();
         self::assertNotNull($emo_details);
-        Log::info(json_encode($emo_details, JSON_PRETTY_PRINT));
 
         $emo = $emo_details->emo;
+        self::assertNotNull($emo);
         self::assertEquals($emo->status, "Installed");
         self::assertEquals($emo->id, $emo_details->emo_detail);
     }
 
-    public function testEmoDetailsFunclocRelations()
+    public function testEmoDetailsToFunclocRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
         $emo_details = EmoDetail::query()->with("funcloc", "emo")->where("emo_detail", "=", "EMO000426")->first();
         self::assertNotNull($emo_details);
-        Log::info(json_encode($emo_details, JSON_PRETTY_PRINT));
 
         $funcloc = $emo_details->funcloc;
+        self::assertNotNull($funcloc);
         self::assertEquals("Pompa P-70", $funcloc->tag_name);
-        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
+        self::assertEquals("FP-01-SP3-RJS-T092-P092", $emo_details->funcloc->id);
     }
 
     public function testEmoDetailQueryWith()
@@ -95,6 +94,7 @@ class EmoDetailTest extends TestCase
 
         $emo_details = EmoDetail::query()->with("funcloc", "emo")->where("emo_detail", "=", "EMO000426")->first();
         self::assertNotNull($emo_details);
-        Log::info(json_encode($emo_details, JSON_PRETTY_PRINT));
+        self::assertNotNull($emo_details->funcLoc->id);
+        self::assertNotNull($emo_details->emo->id);
     }
 }

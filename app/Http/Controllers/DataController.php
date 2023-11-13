@@ -251,9 +251,10 @@ class DataController extends Controller
     // ============================================
     public function trends(Request $request, string $emo)
     {
+        $end_date = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(1);
+        $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
+
         if (strlen($emo) == 9) {
-            $end_date = !is_null($request->input("end_date")) || !empty($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(2);
-            $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
 
             $end_date = date_format(date_create($end_date), "Y-m-d");
             $start_date = date_format(date_create($start_date), "Y-m-d");
@@ -411,15 +412,27 @@ class DataController extends Controller
     // ==============================================
     public function editEquipment(Request $request, string $equipment)
     {
-        $emo = Emo::query()->with("emoDetails")
-            ->where("id", "=", $equipment)
-            ->first();
+        if (!is_null($equipment)) {
 
-        if ($emo != null) {
-            return response()->view("maintenance.edit-equipment", [
-                "title" => "Edit Equipment",
-                "emo" => $emo->toArray(),
-            ]);
+            $with_emo_details = $request->input("emo_details");
+
+            if ($with_emo_details) {
+                $emo = Emo::query()->with("emoDetails")->find($equipment);
+            } else {
+                $emo = Emo::query()->find($equipment);
+            }
+
+            if (!is_null($emo)) {
+                return response()->view("maintenance.edit-equipment", [
+                    "title" => "Edit Equipment",
+                    "emo" => $emo->toArray(),
+                ]);
+            } else {
+                return response()->view("maintenance.search-equipment", [
+                    'title' => "Search equipment",
+                    'message' => "Equipment not found."
+                ]);
+            }
         } else {
             return response()->view("maintenance.search-equipment", [
                 'title' => "Search equipment",
@@ -463,5 +476,14 @@ class DataController extends Controller
         }
 
         return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
+    }
+
+    // ============================================
+    // =============== EMO DATALIST ===============
+    // ============================================
+    public function emoDatalist()
+    {
+        $emo_list = EmoRecord::query()->select("emo")->distinct()->get();
+        return response()->json($emo_list);
     }
 }

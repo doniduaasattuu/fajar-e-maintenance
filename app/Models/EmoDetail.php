@@ -30,11 +30,6 @@ class EmoDetail extends Model
             "emo_detail",
             "funcloc",
         );
-
-        // "funcloc",
-        // "id",
-        // "emo_detail",
-        // "id"
     }
 
     public function emo(): BelongsTo

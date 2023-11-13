@@ -19,27 +19,28 @@ class FuncLocTest extends TestCase
     {
         $funcloc = new FunctionLocation();
         $funcloc->id = "FP-01-SP3-RJS-T092-P092";
-        $funcloc->tag_name = "Pompa P-70";
+        $funcloc->tag_name = "SP3.P.70/M";
         $funcloc->created_at = Carbon::now()->toDateTimeString();
         $funcloc->updated_at = Carbon::now()->toDateTimeString();
         $result = $funcloc->save();
 
         self::assertTrue($result);
         self::assertNotNull($funcloc);
-        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
+        self::assertEquals("SP3.P.70/M", $funcloc->tag_name);
     }
 
-    public function testFunclocEmoRelations()
+    public function testFunclocToEmoRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class]);
+
         $funcloc = FunctionLocation::query()->find("FP-01-SP3-RJS-T092-P092");
         $emos = $funcloc->emos;
 
         self::assertNotNull($emos);
-        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
+        self::assertCount(1, $emos);
     }
 
-    public function testFunclocEmoDetailRelations()
+    public function testFunclocToEmoDetailRelations()
     {
         $this->seed([FunctionLocationSeeder::class, EmoSeeder::class, EmoDetailSeeder::class]);
 
@@ -47,6 +48,6 @@ class FuncLocTest extends TestCase
         $emoDetail = $funcloc->emoDetail;
 
         self::assertNotNull($emoDetail);
-        Log::info(json_encode($funcloc, JSON_PRETTY_PRINT));
+        self::assertEquals("Horizontal", $emoDetail->mounting);
     }
 }

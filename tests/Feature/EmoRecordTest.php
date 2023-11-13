@@ -43,83 +43,16 @@ class EmoRecordTest extends TestCase
         $emo_record->vibration_nde = "Good";
         $emo_record->created_at = Carbon::now()->toDateTimeString();
         $emo_record->nik = User::query()->find("55000154")->nik;
-        $emo_record->save();
+        $result = $emo_record->save();
 
+        self::assertTrue($result);
         self::assertNotNull($emo_record);
-        Log::info(json_encode($emo_record, JSON_PRETTY_PRINT));
+        self::assertNotNull($emo_record->vibration_de);
+        self::assertEquals("Good", $emo_record->vibration_de);
+        self::assertEquals("SP3.P.70/M", $emo_record->sort_field);
     }
 
-    public function testRandom()
-    {
-        for ($i = 0; $i < 20; $i++) {
-            $random = rand(1, 112) / 100;
-            self::assertNotNull($random);
-        }
-    }
-
-    public function testGetEmoRecord()
-    {
-        $this->seed([DatabaseSeeder::class]);
-
-        $emo_record = EmoRecord::query()->get();
-        self::assertNotNull($emo_record, JSON_PRETTY_PRINT);
-
-        $date_category = [];
-        $temperature_a = [];
-        $temperature_b = [];
-        $temperature_c = [];
-        $temperature_d = [];
-        foreach ($emo_record as $data) {
-            $month = substr($data->created_at, 5, 2);
-            $date = substr($data->created_at, 8, 2);
-            array_push($date_category, $date . "/" . $month);
-
-            array_push($temperature_a, $data->temperature_a);
-            array_push($temperature_b, $data->temperature_b);
-            array_push($temperature_c, $data->temperature_c);
-            array_push($temperature_d, $data->temperature_d);
-        }
-    }
-
-    public function testWhereBetweenSuccess()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $endDate = Carbon::now();
-        $startDate = Carbon::now()->addYears(-1)->addDays(-1);
-
-        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
-        self::assertNotNull($data_records);
-        self::assertCount(12, $data_records);
-        Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
-    }
-
-    public function testWhereBetweenNotFound()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $endDate = Carbon::now();
-        $startDate = Carbon::now()->addDays(-10);
-
-        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
-        self::assertCount(0, $data_records);
-        Log::info(json_encode($data_records, JSON_PRETTY_PRINT));
-    }
-
-    public function testPostFailed()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $this->withSession([
-            "nik" => "55000154",
-            "user" => "Doni Darmawan"
-        ])->post("/checking-form/Fajar-MotorList1804", [])
-            ->assertJson([
-                "error" => "All field is required! ⚠️"
-            ]);
-    }
-
-    public function testPostSuccess()
+    public function testPostEmoRecordAllFieldFilled()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -150,7 +83,7 @@ class EmoRecordTest extends TestCase
             ]);
     }
 
-    public function testPostSqlError()
+    public function testPostEmoRecordImportantFieldFilled()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -164,159 +97,6 @@ class EmoRecordTest extends TestCase
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Normal",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Tidak ada",
-            "created_at" => Carbon::now()->toDateTimeString(),
-            "checked_by" => "Doni Darmawan",
-        ])
-            ->assertSeeText("errorInfo")
-            ->assertDontSeeText("message")
-            ->assertDontSeeText("All field is required! ⚠️")
-            ->assertDontSeeText("Saved successfully! ✅");
-    }
-
-    public function testGetEmoDatalistRecord()
-    {
-
-        $this->seed(DatabaseSeeder::class);
-
-        $emo = EmoRecord::query()->select("emo")->distinct()->get();
-        self::assertNotNull($emo);
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
-    }
-
-    public function testGetTopFiveTempNde()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $temperature_d = EmoRecord::query()
-            ->select(["funcloc", "emo", "temperature_d", "created_at"])
-            ->orderByDesc("temperature_d")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->limit(5)
-            ->get();
-
-        self::assertCount(5, $temperature_d);
-
-        Log::info(json_encode($temperature_d, JSON_PRETTY_PRINT));
-    }
-
-    public function testGetTopFiveTempDe()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $temperature_a = EmoRecord::query()
-            ->select(["funcloc", "emo", "temperature_a", "created_at"])
-            ->orderByDesc("temperature_a")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->limit(5)
-            ->get();
-
-        self::assertCount(5, $temperature_a);
-
-        Log::info(json_encode($temperature_a, JSON_PRETTY_PRINT));
-    }
-
-    public function testGetTopFiveVibrationDe()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $vibration_value_de = EmoRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
-            ->orderByDesc("vibration_value_de")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->limit(5)
-            ->get();
-
-        self::assertCount(5, $vibration_value_de);
-
-        Log::info(json_encode($vibration_value_de, JSON_PRETTY_PRINT));
-    }
-
-    public function testGetTopFiveVibrationNde()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $vibration_value_nde = EmoRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
-            ->orderByDesc("vibration_value_nde")
-            ->where("funcloc", "LIKE", "%PM3%")
-            ->orWhere("funcloc", "LIKE", "%SP3%")
-            ->orWhere("funcloc", "LIKE", "%CH3%")
-            ->limit(5)
-            ->get();
-
-        self::assertCount(5, $vibration_value_nde);
-
-        Log::info(json_encode($vibration_value_nde, JSON_PRETTY_PRINT));
-    }
-
-    public function testMethodGetTopFiveTempDe()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        function returnTemperatureDe(string $temp_a, string $paper_machine)
-        {
-            $temperature_a = EmoRecord::query()
-                ->select(["funcloc", "emo", $temp_a, "created_at"])
-                ->orderByDesc($temp_a)
-                ->where("funcloc", "LIKE", "%PM$paper_machine%")
-                ->orWhere("funcloc", "LIKE", "%SP$paper_machine%")
-                ->orWhere("funcloc", "LIKE", "%CH$paper_machine%")
-                ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-                ->limit(5)
-                ->get();
-
-            return $temperature_a;
-        }
-
-        $result = returnTemperatureDe("temperature_a", "3");
-        self::assertNotNull($result);
-        self::assertCount(5, $result);
-        Log::info(json_encode($result, JSON_PRETTY_PRINT));
-    }
-
-    public function testComment()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $comments = EmoRecord::query()
-            ->select(["comment", "nik", "created_at"])->where("comment", "!=", null)
-            ->where("emo", "=", "EMO000426")
-            ->orderBy("created_at", "DESC")
-            ->get();
-
-        self::assertNotNull($comments);
-        Log::info(json_encode($comments, JSON_PRETTY_PRINT));
-    }
-
-    // SAVE DATA
-    public function testSaveDataFailed()
-    {
-        $this->seed(DatabaseSeeder::class);
-
-        $this->withSession([
-            "nik" => "55000154",
-            "user" => "Doni Darmawan",
-        ])->post("/checking-form/Fajar-MotorList1804", [
-            "funcloc" => null,
-            "emo" => null,
-            "motor_status" => null,
-            "clean_status" => null,
-            "nipple_grease_input" => null,
             "number_of_greasing_input" => null,
             "temperature_a" => null,
             "temperature_b" => null,
@@ -326,14 +106,214 @@ class EmoRecordTest extends TestCase
             "vibration_de" => null,
             "vibration_value_nde" => null,
             "vibration_nde" => null,
-            "comment" => null,
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "message" => "Saved successfully! ✅"
+            ]);
+    }
+
+    public function testPostEmoRecordFunclocFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => null,
+            "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
         ])
             ->assertJson([
                 "error" => "All field is required! ⚠️"
             ]);
     }
 
-    public function testSaveDataError()
+    public function testPostEmoRecordEmoFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => null,
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordSortFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "sort_field" => null,
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordMotorStatusFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => null,
+            "clean_status" => "Clean",
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordCleanStatusFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => "Running",
+            "clean_status" => null,
+            "nipple_grease_input" => "Available",
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordNippleGreaseInputFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease_input" => null,
+            "number_of_greasing_input" => "80",
+            "temperature_a" => "150",
+            "temperature_b" => "90",
+            "temperature_c" => "50",
+            "temperature_d" => "10",
+            "vibration_value_de" => "0.83",
+            "vibration_de" => "Good",
+            "vibration_value_nde" => "0.35",
+            "vibration_nde" => "Good",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
+        ])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordAllFieldEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [])
+            ->assertJson([
+                "error" => "All field is required! ⚠️"
+            ]);
+    }
+
+    public function testPostEmoRecordSqlError()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -370,62 +350,129 @@ class EmoRecordTest extends TestCase
             ]);
     }
 
-    public function testSaveDataSuccess()
+    public function testGetEmoRecord()
+    {
+        $this->seed([DatabaseSeeder::class]);
+
+        $emo_record = EmoRecord::query()->where("emo", "EMO000426")->get();
+        self::assertNotNull($emo_record);
+        self::assertCount(36, $emo_record);
+    }
+
+    public function testWhereBetweenSuccess()
     {
         $this->seed(DatabaseSeeder::class);
 
-        $this->withSession([
-            "nik" => "55000154",
-            "user" => "Doni Darmawan",
-        ])->post("/checking-form/Fajar-MotorList1804", [
-            "funcloc" => "FP-01-SP3-RJS-T092-P092",
-            "emo" => "EMO000426",
-            "sort_field" => "SP3.P.70/M",
-            "motor_status" => "Running",
-            "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "90",
-            "temperature_a" => "90",
-            "temperature_b" => "90",
-            "temperature_c" => "90",
-            "temperature_d" => "90",
-            "vibration_value_de" => "1",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "1",
-            "vibration_nde" => "Good",
-            "comment" => "",
-        ])
-            ->assertJson([
-                "message" => "Saved successfully! ✅"
-            ]);
+        $endDate = Carbon::now()->addDays(1)->toDateString();
+        $startDate = Carbon::now()->addYears(-1)->addDays(-1)->toDateString();
+
+        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000426")->get();
+        self::assertNotNull($data_records);
+        self::assertCount(12, $data_records);
     }
 
-    public function testReturnData()
+    public function testWhereBetweenNotFound()
     {
         $this->seed(DatabaseSeeder::class);
 
-        function returnData(string $temp_a, string $paper_machine)
-        {
-            $data = EmoRecord::query()
-                ->select(["funcloc", "emo", $temp_a, "created_at"])
-                ->orderByDesc($temp_a)
-                ->where("funcloc", "LIKE", "FP-01-PM$paper_machine%")
-                ->orWhere("funcloc", "LIKE", "FP-01-SP$paper_machine%")
-                ->orWhere("funcloc", "LIKE", "FP-01-FN$paper_machine%")
-                ->orWhere("funcloc", "LIKE", "FP-01-CH$paper_machine%")
-                ->whereBetween("created_at", [Carbon::now()->addMonths(-12), Carbon::now()])
-                ->limit(5)
-                ->get();
+        $endDate = Carbon::now()->addDays(3)->toDateString();
+        $startDate = Carbon::now()->addDays(1)->toDateString();
 
-            return $data;
-        }
-
-        $TEMP_DE_PM2 = returnData("temperature_a", "2");
-        self::assertCount(0, $TEMP_DE_PM2);
-        Log::info(json_encode($TEMP_DE_PM2, JSON_PRETTY_PRINT));
+        $data_records = EmoRecord::query()->whereBetween("created_at", [$startDate, $endDate])->where("emo", "=", "EMO000246")->get();
+        self::assertCount(0, $data_records);
     }
 
-    public function testEmoRecordUser()
+    public function testGetEmoDatalistRecord()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = EmoRecord::query()->select("emo")->distinct()->get();
+        self::assertNotNull($emo);
+        self::assertCount(8, $emo);
+        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
+    }
+
+    // GET TOP FIVE
+    public function testGetTopFiveTempDe()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $temperature_a = EmoRecord::query()
+            ->select(["funcloc", "emo", "temperature_a", "created_at"])
+            ->orderByDesc("temperature_a")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $temperature_a);
+    }
+
+    public function testGetTopFiveTempNde()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $temperature_d = EmoRecord::query()
+            ->select(["funcloc", "emo", "temperature_d", "created_at"])
+            ->orderByDesc("temperature_d")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $temperature_d);
+    }
+
+
+    public function testGetTopFiveVibrationDe()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $vibration_value_de = EmoRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
+            ->orderByDesc("vibration_value_de")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $vibration_value_de);
+    }
+
+    public function testGetTopFiveVibrationNde()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $vibration_value_nde = EmoRecord::query()
+            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
+            ->orderByDesc("vibration_value_nde")
+            ->where("funcloc", "LIKE", "%PM3%")
+            ->orWhere("funcloc", "LIKE", "%SP3%")
+            ->orWhere("funcloc", "LIKE", "%CH3%")
+            ->limit(5)
+            ->get();
+
+        self::assertCount(5, $vibration_value_nde);
+    }
+
+    public function testComment()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $comments = EmoRecord::query()
+            ->select(["comment", "nik", "created_at"])->where("comment", "!=", null)
+            ->where("emo", "=", "EMO000426")
+            ->orderBy("created_at", "DESC")
+            ->get();
+
+        self::assertNotNull($comments);
+        self::assertCount(3, $comments);
+    }
+
+    public function testCommentUser()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -437,9 +484,12 @@ class EmoRecordTest extends TestCase
             ->with(['user' => function ($query) {
                 $query->select('nik', 'fullname');
             }])
-            ->get();
+            ->first();
 
         self::assertNotNull($comments);
+        self::assertEquals("Pipa buburan bocor mengenai motor", $comments->comment);
+        self::assertEquals("55000092", $comments->user->nik);
+        self::assertEquals("R. Much Arief S", $comments->user->fullname);
         Log::info(json_encode($comments, JSON_PRETTY_PRINT));
     }
 }
