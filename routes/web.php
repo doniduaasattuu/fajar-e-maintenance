@@ -97,6 +97,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
         Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
 
+        Route::post("/equipment", [App\Http\Controllers\DataController::class, "equipment"]);
+
         Route::get("/install-dismantle", function () {
             return view("maintenance.install-dismantle", [
                 "title" => "Install Dismantle",

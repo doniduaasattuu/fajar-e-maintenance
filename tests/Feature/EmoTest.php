@@ -74,4 +74,13 @@ class EmoTest extends TestCase
         self::assertEquals("FP-01-SP3-RJS-T092-P092", $emo->funcLoc->id);
         self::assertEquals("Horizontal", $emo->emoDetails->mounting);
     }
+
+    public function testUpdateEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = Emo::query()->find("id", "");
+        $result = $emo->update(["id" => "Kosong"]);
+        self::assertTrue($result);
+    }
 }

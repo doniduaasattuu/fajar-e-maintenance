@@ -47,6 +47,9 @@
 
         form_equipment.onchange = () => {
             form_equipment.setAttribute("action", "/edit-equipment/" + emo_input.value);
+        }
+
+        form_equipment.oninput = () => {
             if (emo_input.value.length == 9) {
                 button_submit.removeAttribute("disabled");
             } else {

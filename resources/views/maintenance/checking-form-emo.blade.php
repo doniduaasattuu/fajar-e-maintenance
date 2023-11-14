@@ -15,13 +15,13 @@
     <div class="container mt-4 my-5">
 
         <!-- FAILED POST ALERT START -->
-        <div class="alert alert-danger" style="display: none" id="alert_response" role="alert">
+        <div class="alert alert-danger shadow" style="display: none" id="alert_response" role="alert">
             Error occurred! ⚠️
         </div>
         <!-- FAILED POST ALERT END -->
 
         <!-- SUCCESS POST ALERT START -->
-        <div class="alert alert-success" style="display: none" id="message_response" role="alert">
+        <div class="alert alert-success shadow" style="display: none" id="message_response" role="alert">
             Success! ✅
         </div>
         <!-- SUCCESS POST ALERT END -->

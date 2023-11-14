@@ -486,4 +486,14 @@ class DataController extends Controller
         $emo_list = EmoRecord::query()->select("emo")->distinct()->get();
         return response()->json($emo_list);
     }
+
+    // ==================================================
+    // ================ INSTALL DISMANTLE ===============
+    // ==================================================
+    public function equipment(Request $request)
+    {
+        $equipment = $request->input("equipment");
+        $emo = Emo::query()->find($equipment);
+        return response()->json(json_encode($emo));
+    }
 }
