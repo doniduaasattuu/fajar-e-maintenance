@@ -104,6 +104,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
                 "title" => "Install Dismantle",
             ]);
         });
+
+        Route::post("install-dismantle", [App\Http\Controllers\DataController::class, "doInstalDismantle"]);
     });
 
     Route::get("/chart", function () {

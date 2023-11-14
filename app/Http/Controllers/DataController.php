@@ -493,7 +493,15 @@ class DataController extends Controller
     public function equipment(Request $request)
     {
         $equipment = $request->input("equipment");
-        $emo = Emo::query()->find($equipment);
+        $emo = Emo::query()->with("emoDetails")->find($equipment);
         return response()->json(json_encode($emo));
+    }
+
+    public function doInstalDismantle(Request $request)
+    {
+        $data = $request->except(['_token']);
+        // var_dump($data);
+        // return response()->json(json_encode($data));
+        return response()->json($data);
     }
 }

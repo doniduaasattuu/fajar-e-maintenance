@@ -110,5 +110,31 @@ class EmoSeeder extends Seeder
         $emo7->created_at = Carbon::now()->toDateTimeString();
         $emo7->updated_at = Carbon::now()->toDateTimeString();
         $emo7->save();
+
+        $emo8 = new Emo();
+        $emo8->id = "EMO002281";
+        $emo8->funcloc = "FP-01-IN1-BIF-STDM-P050";
+        $emo8->material_number = null;
+        $emo8->equipment_description = "MOTOR FOR BOILER CIRCULATING PUMP 1";
+        $emo8->status = "Installed";
+        $emo8->sort_field = "IN1-BIF-STDM-P050/MBCP1/M-12A";
+        $emo8->unique_id = "5406";
+        $emo8->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList5406";
+        $emo8->created_at = Carbon::now()->toDateTimeString();
+        $emo8->updated_at = Carbon::now()->toDateTimeString();
+        $emo8->save();
+
+        $spare11kW = new Emo();
+        $spare11kW->id = "EMO004444";
+        $spare11kW->funcloc = null;
+        $spare11kW->material_number = "10012013";
+        $spare11kW->equipment_description = "MOTOR/AC/11kW/21.6A";
+        $spare11kW->status = "Available";
+        $spare11kW->sort_field = null;
+        $spare11kW->unique_id = "9999";
+        $spare11kW->qr_code_link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList9999";
+        $spare11kW->created_at = Carbon::now()->toDateTimeString();
+        $spare11kW->updated_at = Carbon::now()->toDateTimeString();
+        $spare11kW->save();
     }
 }
