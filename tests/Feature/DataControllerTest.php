@@ -308,4 +308,27 @@ class DataControllerTest extends TestCase
             ->assertStatus(302)
             ->assertRedirect("/");
     }
+
+    public function testGetSummaryPage()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->get("/summary", [
+            "title" => "Summary"
+        ])
+            ->assertSeeText("Summary of all checking data from each Paper Machine")
+            ->assertSeeText("PM1")
+            ->assertSeeText("PM2")
+            ->assertSeeText("PM3")
+            ->assertSeeText("EMO000426")
+            ->assertSeeText("MGM000481")
+            ->assertSeeText("PM5")
+            ->assertSeeText("PM7")
+            ->assertSeeText("PM8")
+            ->assertSeeText("ENC")
+            ->assertSeeText("WWT");
+    }
 }
