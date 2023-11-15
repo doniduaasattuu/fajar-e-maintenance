@@ -45,15 +45,29 @@
             </div>
 
             <div class="mt-3 text-center">
-                <h4>Vibration of {{ $sort_field }}</h4>
-                <div class="chart-container" style="position: relative;">
-                    <canvas id="vibration"></canvas>
+                <div>
+                    <h4>Vibration DE of {{ $sort_field }}</h4>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="vibration_de"></canvas>
+                    </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md mt-3">
+                <div class="mt-3">
+                    <h4>Vibration NDE of {{ $sort_field }}</h4>
+                    <div class="chart-container" style="position: relative;">
+                        <canvas id="vibration_nde"></canvas>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md mt-4">
                         <figure>
                             <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                            <figcaption class="figure-caption text-center">Vibration standard</figcaption>
+                            <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
+                        </figure>
+                    </div>
+                    <div class="col-md">
+                        <figure>
+                            <img class="img-fluid mx-auto d-block" src="/images/vibrations-checking-guide.png" alt="Vibration checking guide">
+                            <figcaption id="figcaption_vibration_checking_guide" class="figure-caption text-center">Vibrations checking guide</figcaption>
                         </figure>
                     </div>
                 </div>
@@ -143,16 +157,27 @@
             // console.info(motor_status);
 
             // TEMPERATURE
-            let temp_a = <?php echo json_encode($temperature_a) ?>;
-            let temp_b = <?php echo json_encode($temperature_b) ?>;
-            let temp_c = <?php echo json_encode($temperature_c) ?>;
-            let temp_d = <?php echo json_encode($temperature_d) ?>;
+            let temp_de = <?php echo json_encode($temperature_de) ?>;
+            let temp_body = <?php echo json_encode($temperature_body) ?>;
+            let temp_nde = <?php echo json_encode($temperature_nde) ?>;
 
             // VIBRATION
-            let vibration_value_de = <?php echo json_encode($vibration_value_de) ?>;
-            let vibration_de = <?php echo json_encode($vibration_de) ?>;
-            let vibration_value_nde = <?php echo json_encode($vibration_value_nde) ?>;
-            let vibration_nde = <?php echo json_encode($vibration_nde) ?>;
+            let vibration_de_vertical_value = <?php echo json_encode($vibration_de_vertical_value) ?>;
+            let vibration_de_vertical_desc = <?php echo json_encode($vibration_de_vertical_desc) ?>;
+            let vibration_de_horizontal_value = <?php echo json_encode($vibration_de_horizontal_value) ?>;
+            let vibration_de_horizontal_desc = <?php echo json_encode($vibration_de_horizontal_desc) ?>;
+            let vibration_de_axial_value = <?php echo json_encode($vibration_de_axial_value) ?>;
+            let vibration_de_axial_desc = <?php echo json_encode($vibration_de_axial_desc) ?>;
+            let vibration_de_frame_value = <?php echo json_encode($vibration_de_frame_value) ?>;
+            let vibration_de_frame_desc = <?php echo json_encode($vibration_de_frame_desc) ?>;
+
+            let vibration_nde_vertical_value = <?php echo json_encode($vibration_nde_vertical_value) ?>;
+            let vibration_nde_vertical_desc = <?php echo json_encode($vibration_nde_vertical_desc) ?>;
+            let vibration_nde_horizontal_value = <?php echo json_encode($vibration_nde_horizontal_value) ?>;
+            let vibration_nde_horizontal_desc = <?php echo json_encode($vibration_nde_horizontal_desc) ?>;
+            let vibration_nde_frame_value = <?php echo json_encode($vibration_nde_frame_value) ?>;
+            let vibration_nde_frame_desc = <?php echo json_encode($vibration_nde_frame_desc) ?>;
+
             let vibration_min = -5;
             let vibration_max = 5;
             let vibration_step = 1;
@@ -176,14 +201,14 @@
                 return age > 20;
             }
 
-            let deFive = vibration_value_de.filter(moreFive)
-            let ndeFive = vibration_value_nde.filter(moreFive)
+            let deFive = vibration_de_vertical_value.filter(moreFive)
+            let ndeFive = vibration_nde_vertical_value.filter(moreFive)
 
-            let deTen = vibration_value_de.filter(moreTen)
-            let ndeTen = vibration_value_nde.filter(moreTen)
+            let deTen = vibration_de_vertical_value.filter(moreTen)
+            let ndeTen = vibration_nde_vertical_value.filter(moreTen)
 
-            let deTwenty = vibration_value_de.filter(moreTwenty)
-            let ndeTwenty = vibration_value_nde.filter(moreTwenty)
+            let deTwenty = vibration_de_vertical_value.filter(moreTwenty)
+            let ndeTwenty = vibration_nde_vertical_value.filter(moreTwenty)
 
             if ((deFive.length >= 1) || (ndeFive.length >= 1)) {
                 vibration_max = 10
@@ -215,31 +240,24 @@
                 data: {
                     labels: date,
                     datasets: [{
-                            data: temp_a,
-                            label: "Point A",
+                            data: temp_de,
+                            label: "Temp DE",
                             borderColor: "rgb(62,149,205)",
                             backgroundColor: "rgb(62,149,205)",
                             fill: false,
                             tension: 0.3,
                         }, {
-                            data: temp_b,
-                            label: "Point B",
+                            data: temp_body,
+                            label: "Temp Body",
                             borderColor: "rgb(196,88,180)",
                             backgroundColor: "rgb(196,88,180)",
                             fill: false,
                             tension: 0.3,
                         }, {
-                            data: temp_c,
-                            label: "Point C",
+                            data: temp_nde,
+                            label: "Temp NDE",
                             borderColor: "rgb(80,80,80)",
                             backgroundColor: "rgb(80,80,80)",
-                            fill: false,
-                            tension: 0.3,
-                        }, {
-                            data: temp_d,
-                            label: "Point D",
-                            borderColor: "rgb(60,186,159)",
-                            backgroundColor: "rgb(60,186,159)",
                             fill: false,
                             tension: 0.3,
                         },
@@ -291,47 +309,41 @@
             temperature.options.plugins.legend.position = "bottom";
             // CHARTJS MOTOR_STATUS AND TEMPERATURE
 
-            // CHARTJS VIBRATION
-            var ctxv = document.getElementById('vibration').getContext('2d');
-            var vibration = new Chart(ctxv, {
+            // CHARTJS VIBRATION DE
+            var ctxv = document.getElementById('vibration_de').getContext('2d');
+            var vibration_de = new Chart(ctxv, {
                 type: chart_types,
                 data: {
                     labels: date,
                     datasets: [{
-                            data: vibration_value_de,
-                            label: "Vibration DE",
-                            borderColor: "rgb(62,149,205)",
-                            backgroundColor: "rgb(62,149,205)",
-                            fill: false,
-                            tension: 0.3,
-                        }, {
-                            data: vibration_value_nde,
-                            label: "Vibration NDE",
-                            borderColor: "rgb(60,186,159)",
-                            backgroundColor: "rgb(60,186,159)",
-                            fill: false,
-                            tension: 0.3,
-                        },
-                        // {
-                        //     type: 'line',
-                        //     data: vibration_de,
-                        //     label: "Vibration Desc DE",
-                        //     borderColor: "rgb(62,149,205)",
-                        //     backgroundColor: "rgba(62,149,205,0.7)",
-                        //     // stepped: true,
-                        //     fill: true,
-                        //     yAxisID: 'y2',
-                        // }, {
-                        //     type: 'line',
-                        //     data: vibration_nde,
-                        //     label: "Vibration Desc NDE",
-                        //     borderColor: "rgb(60,186,159)",
-                        //     backgroundColor: "rgba(60,186,159,0.7)",
-                        //     // stepped: true,
-                        //     fill: true,
-                        //     yAxisID: 'y2',
-                        // }
-                    ]
+                        data: vibration_de_vertical_value,
+                        label: "Vertical",
+                        borderColor: "rgb(62,149,205)",
+                        backgroundColor: "rgb(62,149,205)",
+                        fill: false,
+                        tension: 0.3,
+                    }, {
+                        data: vibration_de_horizontal_value,
+                        label: "Horizontal",
+                        borderColor: "rgb(60,186,159)",
+                        backgroundColor: "rgb(60,186,159)",
+                        fill: false,
+                        tension: 0.3,
+                    }, {
+                        data: vibration_de_axial_value,
+                        label: "Axial",
+                        borderColor: "rgb(196,88,180)",
+                        backgroundColor: "rgb(196,88,180)",
+                        fill: false,
+                        tension: 0.3,
+                    }, {
+                        data: vibration_de_frame_value,
+                        label: "Frame",
+                        borderColor: "rgb(80,80,80)",
+                        backgroundColor: "rgb(80,80,80)",
+                        fill: false,
+                        tension: 0.3,
+                    }, ]
                 },
                 options: {
                     plugins: {
@@ -368,9 +380,69 @@
                     },
                 }
             });
-            vibration.canvas.parentNode.style.height = '300px';
-            vibration.options.plugins.legend.position = "bottom";
-            // CHARTJS VIBRATION
+            vibration_de.canvas.parentNode.style.height = '300px';
+            vibration_de.options.plugins.legend.position = "bottom";
+            // CHARTJS VIBRATION DE
+
+            // CHARTJS VIBRATION DE
+            var ctxv = document.getElementById('vibration_nde').getContext('2d');
+            var vibration_nde = new Chart(ctxv, {
+                type: chart_types,
+                data: {
+                    labels: date,
+                    datasets: [{
+                        data: vibration_nde_vertical_value,
+                        label: "Vertical",
+                        borderColor: "rgb(62,149,205)",
+                        backgroundColor: "rgb(62,149,205)",
+                        fill: false,
+                        tension: 0.3,
+                    }, {
+                        data: vibration_nde_horizontal_value,
+                        label: "Horizontal",
+                        borderColor: "rgb(60,186,159)",
+                        backgroundColor: "rgb(60,186,159)",
+                        fill: false,
+                        tension: 0.3,
+                    }, {
+                        data: vibration_nde_frame_value,
+                        label: "Frame",
+                        borderColor: "rgb(80,80,80)",
+                        backgroundColor: "rgb(80,80,80)",
+                        fill: false,
+                        tension: 0.3,
+                    }, ]
+                },
+                options: {
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer
+                            },
+                        },
+                    },
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            stack: 'demo',
+                            title: {
+                                display: true,
+                                text: 'mm/s',
+                            },
+                            min: vibration_min,
+                            max: vibration_max,
+                            ticks: {
+                                stepSize: vibration_step,
+                            },
+                        },
+                    },
+                }
+            });
+            vibration_nde.canvas.parentNode.style.height = '300px';
+            vibration_nde.options.plugins.legend.position = "bottom";
+            // CHARTJS VIBRATION DE
 
             // CHARTJS GREASING
             var ctxg = document.getElementById('number_of_greasing').getContext('2d');

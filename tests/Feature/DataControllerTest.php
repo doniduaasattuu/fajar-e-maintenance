@@ -38,13 +38,17 @@ class DataControllerTest extends TestCase
             ->assertSeeText("Cleanliness")
             ->assertSeeText("Nipple Grease")
             ->assertSeeText("Number of Greasing")
-            ->assertSeeText("Temperature A")
-            ->assertSeeText("Temperature B")
-            ->assertSeeText("Temperature C")
-            ->assertSeeText("Temperature D")
-            ->assertSeeText("Vibration DE")
-            ->assertSeeText("Vibration NDE")
-            ->assertSeeText("Comment")
+            ->assertSeeText("Temperature DE")
+            ->assertSeeText("Temperature Body")
+            ->assertSeeText("Temperature NDE")
+            ->assertSee("vibration_de_vertical_value")
+            ->assertSee("vibration_de_horizontal_value")
+            ->assertSee("vibration_de_axial_value")
+            ->assertSee("vibration_de_frame_value")
+            ->assertSee("vibration_nde_vertical_value")
+            ->assertSee("vibration_nde_horizontal_value")
+            ->assertSee("vibration_nde_frame_value")
+            ->assertSeeText("Remarks")
             ->assertSeeText("Submit");
     }
 
@@ -56,7 +60,7 @@ class DataControllerTest extends TestCase
             "nik" => "55000154",
             "user" => "Doni Darmawan",
         ])
-            ->get("/checking-form/Fajar-MotorList9876", [
+            ->get("/checking-form/Fajar-MotorList0000", [
                 'title' => 'Checking Form'
             ])
             ->assertStatus(200)
@@ -155,7 +159,8 @@ class DataControllerTest extends TestCase
         $trends_sortfield
             ->assertStatus(200)
             ->assertSeeText("Temperature of SP3.P.70/M")
-            ->assertSeeText("Vibration of SP3.P.70/M")
+            ->assertSeeText("Vibration DE of SP3.P.70/M")
+            ->assertSeeText("Vibration NDE of SP3.P.70/M")
             ->assertSeeText("Number of Greasing SP3.P.70/M")
             ->assertSeeText("Plastik terminal perlu di ganti")
             ->assertSee("EMO000426")
@@ -180,7 +185,8 @@ class DataControllerTest extends TestCase
         $trends_sortfield_not_found
             ->assertStatus(200)
             ->assertSeeText("Temperature of SP9.P.70/M")
-            ->assertSeeText("Vibration of SP9.P.70/M")
+            ->assertSeeText("Vibration DE of SP9.P.70/M")
+            ->assertSeeText("Vibration NDE of SP9.P.70/M")
             ->assertSeeText("Number of Greasing SP9.P.70/M")
             ->assertDontSee("Edi Supriadi")
             ->assertSee("let length_of_data = 0");

@@ -17,6 +17,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
 
 class EmoRecordTest extends TestCase
@@ -33,22 +34,32 @@ class EmoRecordTest extends TestCase
         $emo_record->clean_status = "Clean";
         $emo_record->nipple_grease = "Available";
         $emo_record->number_of_greasing = 80;
-        $emo_record->temperature_a = 69;
-        $emo_record->temperature_b = 71;
-        $emo_record->temperature_c = 85;
-        $emo_record->temperature_d = 65;
-        $emo_record->vibration_value_de = 0.68;
-        $emo_record->vibration_de = "Good";
-        $emo_record->vibration_value_nde = 0.58;
-        $emo_record->vibration_nde = "Good";
+        $emo_record->number_of_greasing = rand(2, 4) * 10;
+        $emo_record->temperature_de = rand(35, 101);
+        $emo_record->temperature_body = rand(35, 101);
+        $emo_record->temperature_nde = rand(35, 101);
+        $emo_record->vibration_de_vertical_value = rand(45, 112) / 100;
+        $emo_record->vibration_de_vertical_desc = "Good";
+        $emo_record->vibration_de_horizontal_value = rand(45, 112) / 100;
+        $emo_record->vibration_de_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+        $emo_record->vibration_de_axial_value = rand(45, 112) / 100;
+        $emo_record->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+        $emo_record->vibration_de_frame_value = rand(45, 112) / 100;
+        $emo_record->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+        $emo_record->vibration_nde_vertical_value = rand(45, 112) / 100;
+        $emo_record->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+        $emo_record->vibration_nde_horizontal_value = rand(45, 112) / 100;
+        $emo_record->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+        $emo_record->vibration_nde_frame_value = rand(45, 112) / 100;
+        $emo_record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
         $emo_record->created_at = Carbon::now()->toDateTimeString();
         $emo_record->nik = User::query()->find("55000154")->nik;
         $result = $emo_record->save();
 
         self::assertTrue($result);
         self::assertNotNull($emo_record);
-        self::assertNotNull($emo_record->vibration_de);
-        self::assertEquals("Good", $emo_record->vibration_de);
+        self::assertNotNull($emo_record->vibration_de_vertical_value);
+        self::assertEquals("Good", $emo_record->vibration_de_vertical_desc);
         self::assertEquals("SP3.P.70/M", $emo_record->sort_field);
     }
 
@@ -65,16 +76,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "Doni Darmawan",
         ])
@@ -96,22 +116,72 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => null,
-            "temperature_a" => null,
-            "temperature_b" => null,
-            "temperature_c" => null,
-            "temperature_d" => null,
-            "vibration_value_de" => null,
-            "vibration_de" => null,
-            "vibration_value_nde" => null,
-            "vibration_nde" => null,
+            "nipple_grease" => "Available",
+            "number_of_greasing" => null,
+            'temperature_de' => null,
+            'temperature_body' => null,
+            'temperature_nde' => null,
+            'vibration_de_vertical_value' => null,
+            'vibration_de_horizontal_value' => null,
+            'vibration_de_axial_value' => null,
+            'vibration_de_frame_value' => null,
+            'vibration_nde_vertical_value' => null,
+            'vibration_nde_horizontal_value' => null,
+            'vibration_nde_frame_value' => null,
+            'vibration_de_vertical_desc' => null,
+            'vibration_de_horizontal_desc' => null,
+            'vibration_de_axial_desc' => null,
+            'vibration_de_frame_desc' => null,
+            'vibration_nde_vertical_desc' => null,
+            'vibration_nde_horizontal_desc' => null,
+            'vibration_nde_frame_desc' => null,
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
             ->assertJson([
                 "message" => "Saved successfully! ✅"
             ]);
+    }
+
+    public function testPostEmoRecordDatetimeEmpty()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan"
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "funcloc" => "FP-01-SP3-RJS-T092-P092",
+            "emo" => "EMO000426",
+            "sort_field" => "SP3.P.70/M",
+            "motor_status" => "Running",
+            "clean_status" => "Clean",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => null,
+            'temperature_de' => null,
+            'temperature_body' => null,
+            'temperature_nde' => null,
+            'vibration_de_vertical_value' => null,
+            'vibration_de_horizontal_value' => null,
+            'vibration_de_axial_value' => null,
+            'vibration_de_frame_value' => null,
+            'vibration_nde_vertical_value' => null,
+            'vibration_nde_horizontal_value' => null,
+            'vibration_nde_frame_value' => null,
+            'vibration_de_vertical_desc' => null,
+            'vibration_de_horizontal_desc' => null,
+            'vibration_de_axial_desc' => null,
+            'vibration_de_frame_desc' => null,
+            'vibration_nde_vertical_desc' => null,
+            'vibration_nde_horizontal_desc' => null,
+            'vibration_nde_frame_desc' => null,
+            "created_at" => null,
+            "checked_by" => "55000154",
+        ])
+            ->assertJson(
+                fn (AssertableJson $json) =>
+                $json->has("error")
+            );
     }
 
     public function testPostEmoRecordFunclocFieldEmpty()
@@ -127,16 +197,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -158,16 +237,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -189,16 +277,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => null,
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -220,16 +317,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => null,
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -251,16 +357,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => null,
-            "nipple_grease_input" => "Available",
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Available",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -282,16 +397,25 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => null,
-            "number_of_greasing_input" => "80",
-            "temperature_a" => "150",
-            "temperature_b" => "90",
-            "temperature_c" => "50",
-            "temperature_d" => "10",
-            "vibration_value_de" => "0.83",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "0.35",
-            "vibration_nde" => "Good",
+            "nipple_grease" => null,
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "created_at" => Carbon::now()->toDateTimeString(),
             "checked_by" => "55000154",
         ])
@@ -326,17 +450,28 @@ class EmoRecordTest extends TestCase
             "sort_field" => "SP3.P.70/M",
             "motor_status" => "Running",
             "clean_status" => "Clean",
-            "nipple_grease_input" => "Invalid", // should Available or Not Available
-            "number_of_greasing_input" => "90",
-            "temperature_a" => "90",
-            "temperature_b" => "90",
-            "temperature_c" => "90",
-            "temperature_d" => "90",
-            "vibration_value_de" => "1",
-            "vibration_de" => "Good",
-            "vibration_value_nde" => "1",
-            "vibration_nde" => "Good",
+            "nipple_grease" => "Invalid Value",
+            "number_of_greasing" => "80",
+            'temperature_de' => 78,
+            'temperature_body' => 66,
+            'temperature_nde' => 56,
+            'vibration_de_vertical_value' => 1.12,
+            'vibration_de_horizontal_value' => 1.12,
+            'vibration_de_axial_value' => 1.12,
+            'vibration_de_frame_value' => 1.12,
+            'vibration_nde_vertical_value' => 1.12,
+            'vibration_nde_horizontal_value' => 1.12,
+            'vibration_nde_frame_value' => 1.12,
+            'vibration_de_vertical_desc' => "Good",
+            'vibration_de_horizontal_desc' => "Good",
+            'vibration_de_axial_desc' => "Good",
+            'vibration_de_frame_desc' => "Good",
+            'vibration_nde_vertical_desc' => "Good",
+            'vibration_nde_horizontal_desc' => "Good",
+            'vibration_nde_frame_desc' => "Good",
             "comment" => "",
+            "created_at" => Carbon::now()->toDateTimeString(),
+            "checked_by" => "55000154",
         ])
             ->assertJson([
                 "error" => [
@@ -395,65 +530,65 @@ class EmoRecordTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $temperature_a = EmoRecord::query()
-            ->select(["funcloc", "emo", "temperature_a", "created_at"])
-            ->orderByDesc("temperature_a")
+        $temperature_de = EmoRecord::query()
+            ->select(["funcloc", "emo", "temperature_de", "created_at"])
+            ->orderByDesc("temperature_de")
             ->where("funcloc", "LIKE", "%PM3%")
             ->orWhere("funcloc", "LIKE", "%SP3%")
             ->orWhere("funcloc", "LIKE", "%CH3%")
             ->limit(5)
             ->get();
 
-        self::assertCount(5, $temperature_a);
+        self::assertCount(5, $temperature_de);
     }
 
     public function testGetTopFiveTempNde()
     {
         $this->seed(DatabaseSeeder::class);
 
-        $temperature_d = EmoRecord::query()
-            ->select(["funcloc", "emo", "temperature_d", "created_at"])
-            ->orderByDesc("temperature_d")
+        $temperature_nde = EmoRecord::query()
+            ->select(["funcloc", "emo", "temperature_nde", "created_at"])
+            ->orderByDesc("temperature_nde")
             ->where("funcloc", "LIKE", "%PM3%")
             ->orWhere("funcloc", "LIKE", "%SP3%")
             ->orWhere("funcloc", "LIKE", "%CH3%")
             ->limit(5)
             ->get();
 
-        self::assertCount(5, $temperature_d);
+        self::assertCount(5, $temperature_nde);
     }
 
 
-    public function testGetTopFiveVibrationDe()
+    public function testGetTopFiveVibrationDeVertical()
     {
         $this->seed(DatabaseSeeder::class);
 
-        $vibration_value_de = EmoRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_de", "created_at"])
-            ->orderByDesc("vibration_value_de")
+        $vibration_de_vertical_value = EmoRecord::query()
+            ->select(["funcloc", "emo", "vibration_de_vertical_value", "created_at"])
+            ->orderByDesc("vibration_de_vertical_value")
             ->where("funcloc", "LIKE", "%PM3%")
             ->orWhere("funcloc", "LIKE", "%SP3%")
             ->orWhere("funcloc", "LIKE", "%CH3%")
             ->limit(5)
             ->get();
 
-        self::assertCount(5, $vibration_value_de);
+        self::assertCount(5, $vibration_de_vertical_value);
     }
 
-    public function testGetTopFiveVibrationNde()
+    public function testGetTopFiveVibrationVerticalNde()
     {
         $this->seed(DatabaseSeeder::class);
 
-        $vibration_value_nde = EmoRecord::query()
-            ->select(["funcloc", "emo", "vibration_value_nde", "created_at"])
-            ->orderByDesc("vibration_value_nde")
+        $vibration_nde_vertical_value = EmoRecord::query()
+            ->select(["funcloc", "emo", "vibration_nde_vertical_value", "created_at"])
+            ->orderByDesc("vibration_nde_vertical_value")
             ->where("funcloc", "LIKE", "%PM3%")
             ->orWhere("funcloc", "LIKE", "%SP3%")
             ->orWhere("funcloc", "LIKE", "%CH3%")
             ->limit(5)
             ->get();
 
-        self::assertCount(5, $vibration_value_nde);
+        self::assertCount(5, $vibration_nde_vertical_value);
     }
 
     public function testComment()

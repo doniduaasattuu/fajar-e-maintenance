@@ -151,14 +151,39 @@ class DataController extends Controller
                     "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
                     "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
                     "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
-                    "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
-                    "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
-                    "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
-                    "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
-                    "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
-                    "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
-                    "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
-                    "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
+                    "temperature_de" => $this->returnColumnDataRecords("temperature_de", $emo_records),
+                    "temperature_body" => $this->returnColumnDataRecords("temperature_body", $emo_records),
+                    "temperature_nde" => $this->returnColumnDataRecords("temperature_nde", $emo_records),
+
+                    "vibration_de_vertical_value" => $this->returnColumnDataRecords("vibration_de_vertical_value", $emo_records),
+                    "vibration_de_vertical_desc" => $this->returnColumnDataRecords("vibration_de_vertical_desc", $emo_records),
+
+                    "vibration_de_horizontal_value" => $this->returnColumnDataRecords("vibration_de_horizontal_value", $emo_records),
+                    "vibration_de_horizontal_desc" => $this->returnColumnDataRecords("vibration_de_horizontal_desc", $emo_records),
+
+                    "vibration_de_axial_value" => $this->returnColumnDataRecords("vibration_de_axial_value", $emo_records),
+                    "vibration_de_axial_desc" => $this->returnColumnDataRecords("vibration_de_axial_desc", $emo_records),
+
+                    "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
+                    "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
+
+                    "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
+                    "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
+
+                    "vibration_nde_horizontal_value" => $this->returnColumnDataRecords("vibration_nde_horizontal_value", $emo_records),
+                    "vibration_nde_horizontal_desc" => $this->returnColumnDataRecords("vibration_nde_horizontal_desc", $emo_records),
+
+                    "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
+                    "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
+
+                    // "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
+                    // "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
+                    // "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
+                    // "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
+                    // "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
+                    // "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
+                    // "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
+                    // "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
                     "comments" => $comments->toArray(),
                     "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
                 ]);
@@ -175,58 +200,34 @@ class DataController extends Controller
     // =================================================
     public function saveDataMotor(Request $request)
     {
-        $funcloc = $request->input("funcloc");
-        $emo = $request->input("emo");
-        $sort_field = $request->input("sort_field");
-        $motor_status = $request->input("motor_status");
-        $clean_status = $request->input("clean_status");
-        $nipple_grease_input = $request->input("nipple_grease_input");
-        $number_of_greasing_input = ($request->input("number_of_greasing_input") != null) ? $request->input("number_of_greasing_input") : 0;
-        $temperature_a = ($request->input("temperature_a") != null) ? $request->input("temperature_a") : 0;
-        $temperature_b = ($request->input("temperature_b") != null) ? $request->input("temperature_b") : 0;
-        $temperature_c = ($request->input("temperature_c") != null) ? $request->input("temperature_c") : 0;
-        $temperature_d = ($request->input("temperature_d") != null) ? $request->input("temperature_d") : 0;
-        $vibration_value_de = ($request->input("vibration_value_de") != null) ? $request->input("vibration_value_de") : 0;
-        $vibration_de = $request->input("vibration_de");
-        $vibration_value_nde = ($request->input("vibration_value_nde") != null) ? $request->input("vibration_value_nde") : 0;
-        $vibration_nde = $request->input("vibration_nde");
-        $comment = $request->input("comment");
-        $nik = session("nik");
+        $request->merge([
+            "nik" => session("nik"),
+            "updated_at" => Carbon::now()->toDateTimeString()
+        ]);
+
+        $data = $request->input();
 
         if (
-            empty($funcloc) ||
-            empty($emo) ||
-            empty($sort_field) ||
-            empty($motor_status) ||
-            empty($clean_status) ||
-            empty($nipple_grease_input)
+            !empty($data["funcloc"]) &&
+            !empty($data["emo"]) &&
+            !empty($data["sort_field"]) &&
+            !empty($data["motor_status"]) &&
+            !empty($data["clean_status"]) &&
+            !empty($data["nipple_grease"])
         ) {
-            return response()->json([
-                "error" => "All field is required! ⚠️"
-            ]);
-        } else {
-
             try {
-                $data_record = new EmoRecord();
-                $data_record->funcloc = $funcloc;
-                $data_record->emo = $emo;
-                $data_record->sort_field = $sort_field;
-                $data_record->motor_status = $motor_status;
-                $data_record->clean_status = $clean_status;
-                $data_record->nipple_grease = $nipple_grease_input;
-                $data_record->number_of_greasing = $number_of_greasing_input;
-                $data_record->temperature_a = $temperature_a;
-                $data_record->temperature_b = $temperature_b;
-                $data_record->temperature_c = $temperature_c;
-                $data_record->temperature_d = $temperature_d;
-                $data_record->vibration_value_de = $vibration_value_de;
-                $data_record->vibration_de = $vibration_de;
-                $data_record->vibration_value_nde = $vibration_value_nde;
-                $data_record->vibration_nde = $vibration_nde;
-                $data_record->comment = $comment;
-                $data_record->created_at = Carbon::now()->toDateTimeString();
-                $data_record->nik = $nik;
-                $result = $data_record->save();
+
+                foreach ($data as $key => $value) {
+
+                    if ($value == null) {
+                        if ($key != "comment" && ("desc" != substr($key, -4))) {
+                            $data[$key] = 0;
+                        }
+                    }
+                }
+
+                $emo_record = EmoRecord::create($data);
+                $result = $emo_record->save();
             } catch (QueryException $error) {
                 return response()->json([
                     "error" => $error
@@ -243,7 +244,101 @@ class DataController extends Controller
                     ]);
                 }
             }
+
+            // if ($result == true) {
+            //     return response()->json([
+            //         "message" => "Saved successfully! ✅"
+            //     ]);
+            // } else {
+            //     return response()->json([
+            //         "error" => "Error saving record! ⚠️"
+            //     ]);
+            // }
+        } else {
+            return response()->json([
+                "error" => "All field is required! ⚠️"
+            ]);
         }
+
+
+        // $funcloc = $request->input("funcloc");
+        // $collection->eachSpread(function (string $id, string $value) {
+        //     // return response()->json(json_encode($id));
+        // });
+        // var_dump();
+
+        // $funcloc = $request->input("funcloc");
+        // return response()->json(json_encode($funcloc));
+
+        // $funcloc = $request->input("funcloc");
+        // $emo = $request->input("emo");
+        // $sort_field = $request->input("sort_field");
+        // $motor_status = $request->input("motor_status");
+        // $clean_status = $request->input("clean_status");
+        // $nipple_grease_input = $request->input("nipple_grease_input");
+        // $number_of_greasing_input = ($request->input("number_of_greasing_input") != null) ? $request->input("number_of_greasing_input") : 0;
+        // $temperature_a = ($request->input("temperature_a") != null) ? $request->input("temperature_a") : 0;
+        // $temperature_b = ($request->input("temperature_b") != null) ? $request->input("temperature_b") : 0;
+        // $temperature_c = ($request->input("temperature_c") != null) ? $request->input("temperature_c") : 0;
+        // $temperature_d = ($request->input("temperature_d") != null) ? $request->input("temperature_d") : 0;
+        // $vibration_value_de = ($request->input("vibration_value_de") != null) ? $request->input("vibration_value_de") : 0;
+        // $vibration_de = $request->input("vibration_de");
+        // $vibration_value_nde = ($request->input("vibration_value_nde") != null) ? $request->input("vibration_value_nde") : 0;
+        // $vibration_nde = $request->input("vibration_nde");
+        // $comment = $request->input("comment");
+        // $nik = session("nik");
+
+        // if (
+        //     empty($funcloc) ||
+        //     empty($emo) ||
+        //     empty($sort_field) ||
+        //     empty($motor_status) ||
+        //     empty($clean_status) ||
+        //     empty($nipple_grease_input)
+        // ) {
+        //     return response()->json([
+        //         "error" => "All field is required! ⚠️"
+        //     ]);
+        // } else {
+
+        //     try {
+        //         $data_record = new EmoRecord();
+        //         $data_record->funcloc = $funcloc;
+        //         $data_record->emo = $emo;
+        //         $data_record->sort_field = $sort_field;
+        //         $data_record->motor_status = $motor_status;
+        //         $data_record->clean_status = $clean_status;
+        //         $data_record->nipple_grease = $nipple_grease_input;
+        //         $data_record->number_of_greasing = $number_of_greasing_input;
+        //         $data_record->temperature_a = $temperature_a;
+        //         $data_record->temperature_b = $temperature_b;
+        //         $data_record->temperature_c = $temperature_c;
+        //         $data_record->temperature_d = $temperature_d;
+        //         $data_record->vibration_value_de = $vibration_value_de;
+        //         $data_record->vibration_de = $vibration_de;
+        //         $data_record->vibration_value_nde = $vibration_value_nde;
+        //         $data_record->vibration_nde = $vibration_nde;
+        //         $data_record->comment = $comment;
+        //         $data_record->created_at = Carbon::now()->toDateTimeString();
+        //         $data_record->nik = $nik;
+        //         $result = $data_record->save();
+        //     } catch (QueryException $error) {
+        //         return response()->json([
+        //             "error" => $error
+        //         ]);
+        //     }
+
+        //     if ($result) {
+        //         return response()->json([
+        //             "message" => "Saved successfully! ✅"
+        //         ]);
+        //     } else { {
+        //             return response()->json([
+        //                 "error" => "Error occurred! ⚠️"
+        //             ]);
+        //         }
+        //     }
+        // }
     }
 
     // ============================================

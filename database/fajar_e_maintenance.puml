@@ -77,14 +77,32 @@ entity emo_records {
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
       number_of_greasing VARCHAR(3) 0
-      temperature_a SMALLINT UNSIGNED 0
-      temperature_b SMALLINT UNSIGNED 0
-      temperature_c SMALLINT UNSIGNED 0
-      temperature_d SMALLINT UNSIGNED 0
-      vibration_value_de DECIMAL(4,2) 0.00
-      vibration_de ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-      vibration_value_nde DECIMAL(4,2) 0.00
-      vibration_nde ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+
+      temperature_de SMALLINT UNSIGNED 0
+      temperature_body SMALLINT UNSIGNED 0
+      temperature_nde SMALLINT UNSIGNED 0
+      
+      vibration_de_vertical_value DECIMAL(4,2) 0.00
+      vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+      vibration_de_horizontal_value DECIMAL(4,2) 0.00
+      vibration_de_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+      vibration_de_axial_value DECIMAL(4,2) 0.00
+      vibration_de_axial_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+      vibration_de_frame_value DECIMAL(4,2) 0.00
+      vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+
+      vibration_nde_vertical_value DECIMAL(4,2) 0.00
+      vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+      vibration_nde_horizontal_value DECIMAL(4,2) 0.00
+      vibration_nde_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+          
+      vibration_nde_frame_value DECIMAL(4,2) 0.00
+      vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+
       comment TEXT NULL
     * created_at TIMESTAMP
     * nik VARCHAR(8) <<FK>>
