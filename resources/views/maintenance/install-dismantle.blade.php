@@ -346,6 +346,38 @@
         }
 
         function showButtonSubmit() {
+            // CHANGE COLUMN STATUS DISMANTLE AUTO FILLED COLUMN STATUS INSTALL START
+            const status_dismantle = document.getElementById("status_dismantle");
+            const funcloc_dismantle = document.getElementById("funcloc_dismantle");
+            const sort_field_dismantle = document.getElementById("sort_field_dismantle");
+
+            const status_install = document.getElementById("status_install");
+            const funcloc_install = document.getElementById("funcloc_install");
+            const sort_field_install = document.getElementById("sort_field_install");
+
+            status_dismantle.onchange = () => {
+                if (status_dismantle.value == "Repaired" || status_dismantle.value == "Available") {
+                    if (funcloc_dismantle.value != "") {
+                        status_install.value = "Installed";
+                        funcloc_install.value = funcloc_dismantle.value;
+                        sort_field_install.value = sort_field_dismantle.value;
+
+                        funcloc_dismantle.value = "";
+                        sort_field_dismantle.value = "";
+                    }
+                } else {
+                    if (funcloc_install.value != "") {
+                        status_install.value = "Available";
+                        funcloc_dismantle.value = funcloc_install.value;
+                        sort_field_dismantle.value = sort_field_install.value;
+
+                        funcloc_install.value = "";
+                        sort_field_install.value = "";
+                    }
+                }
+            }
+            // CHANGE COLUMN STATUS DISMANTLE AUTO FILLED COLUMN STATUS INSTALL END
+
             if ((dismantle_form.childElementCount >= 1) && (install_form.childElementCount >= 1)) {
                 button_submit.classList.remove("d-none");
             } else {

@@ -284,7 +284,7 @@ class EmoDetailSeeder extends Seeder
         $emo_detail8->save();
 
         $spare11kW = new EmoDetail();
-        $spare11kW->emo_detail = "EMO004444";
+        $spare11kW->emo_detail = "EMO009999";
         $spare11kW->manufacture = "ABB";
         $spare11kW->serial_number = "AEEB160L BAFS";
         $spare11kW->type = "AEEBPA";

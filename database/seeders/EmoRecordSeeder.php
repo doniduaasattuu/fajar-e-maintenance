@@ -261,6 +261,27 @@ class EmoRecordSeeder extends Seeder
             $data_record7->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record7->nik = $nik;
             $data_record7->save();
+
+            // P050 IN1
+            $data_record8 = new EmoRecord();
+            $data_record8->funcloc = "FP-01-IN1-BIF-STDM-P050";
+            $data_record8->emo = "EMO002281";
+            $data_record8->sort_field = "IN1-BIF-STDM-P050/MBCP1/M-12A";
+            $data_record8->motor_status = "Running";
+            $data_record8->clean_status = "Clean";
+            $data_record8->nipple_grease = "Not Available";
+            $data_record8->number_of_greasing = null;
+            $data_record8->temperature_a = rand(40, 90);
+            $data_record8->temperature_b = rand(40, 90);
+            $data_record8->temperature_c = rand(40, 90);
+            $data_record8->temperature_d = rand(40, 90);
+            $data_record8->vibration_value_de = rand(45, 112) / 100;
+            $data_record8->vibration_de = "Good";
+            $data_record8->vibration_value_nde = rand(45, 112) / 100;
+            $data_record8->vibration_nde = "Good";
+            $data_record8->created_at = Carbon::now()->addMonths(- ($year - $i));
+            $data_record8->nik = User::query()->find("55000153")->nik;
+            $data_record8->save();
         }
     }
 }

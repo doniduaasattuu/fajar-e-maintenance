@@ -499,9 +499,78 @@ class DataController extends Controller
 
     public function doInstalDismantle(Request $request)
     {
+        $request->merge([
+            "updated_at_install" => Carbon::now()->toDateTimeString(),
+            "updated_at_dismantle" => Carbon::now()->toDateTimeString(),
+        ]);
+
         $data = $request->except(['_token']);
+
+        // $dismantle = [];
+        // $install = [];
+
+        foreach ($data as $key => $value) {
+            if (str_contains($key, "_dismantle")) {
+
+                $key_replaced = str_replace(substr($key, -10), "", $key);
+
+                // $dismantle[] = $key;
+
+                if (
+                    $key_replaced == "id" ||
+                    $key_replaced == "status" ||
+                    $key_replaced == "funcloc" ||
+                    $key_replaced == "sort_field" ||
+                    $key_replaced == "material_number" ||
+                    $key_replaced == "equipment_description" ||
+                    $key_replaced == "updated_at"
+                ) {
+                    try {
+                        Emo::query()->where("id", $data["id_dismantle"])->update([$key_replaced => $value]);
+                    } catch (QueryException $error) {
+                        return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    }
+                } else {
+                    try {
+                        EmoDetail::query()->where("emo_detail", $data["id_dismantle"])->update([$key_replaced => $value]);
+                    } catch (QueryException $error) {
+                        return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    }
+                }
+            } else if (str_contains($key, "_install")) {
+
+                $key_replaced = str_replace(substr($key, -8), "", $key);
+
+                // $dismantle[] = $key;
+
+                if (
+                    $key_replaced == "id" ||
+                    $key_replaced == "status" ||
+                    $key_replaced == "funcloc" ||
+                    $key_replaced == "sort_field" ||
+                    $key_replaced == "material_number" ||
+                    $key_replaced == "equipment_description" ||
+                    $key_replaced == "updated_at"
+                ) {
+                    try {
+                        Emo::query()->where("id", $data["id_install"])->update([$key_replaced => $value]);
+                    } catch (QueryException $error) {
+                        return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    }
+                } else {
+                    try {
+                        EmoDetail::query()->where("emo_detail", $data["id_install"])->update([$key_replaced => $value]);
+                    } catch (QueryException $error) {
+                        return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    }
+                }
+            }
+        }
+
+        return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
         // var_dump($data);
         // return response()->json(json_encode($data));
-        return response()->json($data);
+        // return response()->json([$dismantle, $install]);
+        // return response()->json($data);
     }
 }

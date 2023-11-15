@@ -125,7 +125,7 @@ class EmoSeeder extends Seeder
         $emo8->save();
 
         $spare11kW = new Emo();
-        $spare11kW->id = "EMO004444";
+        $spare11kW->id = "EMO009999";
         $spare11kW->funcloc = null;
         $spare11kW->material_number = "10012013";
         $spare11kW->equipment_description = "MOTOR/AC/11kW/21.6A";

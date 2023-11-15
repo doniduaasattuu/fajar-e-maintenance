@@ -66,9 +66,10 @@
 
         <!-- EMO ID AND TRENDS START  -->
         <div>
-            <h3 id="sort_field_information" class="mb-0">{{ $emo->sort_field }}</h3>
+            <h3 id="equipment_description" class="mb-0">{{ $emo->equipment_description }}</h3>
+            <p id="sort_field_information" class="lh-sm mb-0 text-secondary">{{ $emo->sort_field }}</p>
             <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
-            <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
+            <p id="emo_information" class="lh-sm fs-4 mb-3 text-secondary">{{ $emo->id }}</p>
         </div>
 
         <form action="/sortfield-trends" method="post">

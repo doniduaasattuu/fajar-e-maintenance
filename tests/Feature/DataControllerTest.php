@@ -56,7 +56,7 @@ class DataControllerTest extends TestCase
             "nik" => "55000154",
             "user" => "Doni Darmawan",
         ])
-            ->get("/checking-form/Fajar-MotorList9999", [
+            ->get("/checking-form/Fajar-MotorList9876", [
                 'title' => 'Checking Form'
             ])
             ->assertStatus(200)

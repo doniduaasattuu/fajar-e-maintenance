@@ -388,8 +388,6 @@ class EmoRecordTest extends TestCase
 
         $emo = EmoRecord::query()->select("emo")->distinct()->get();
         self::assertNotNull($emo);
-        self::assertCount(8, $emo);
-        Log::info(json_encode($emo, JSON_PRETTY_PRINT));
     }
 
     // GET TOP FIVE

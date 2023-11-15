@@ -9,7 +9,7 @@
             <form action="/search" method="post" class="mb-3 mb-lg-0 d-flex" role="search">
                 @csrf
                 <input id="search_data" name="search_data" class="search_input form-control me-2" type="search" placeholder="Search by Equipment" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
+                <button class="btn btn-primary" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item me-2 me-md-3">
