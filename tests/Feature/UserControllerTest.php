@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -246,5 +248,17 @@ class UserControllerTest extends TestCase
             "confirm_new_password" => "Password lama"
         ])
             ->assertSeeText("Password is not match!");
+    }
+
+    public function testGetNIK()
+    {
+        $this->seed(UserSeeder::class);
+
+        $nik = User::query()->select("nik")->get();
+        $randomNIK = $nik[rand(0, sizeof($nik))];
+
+        self::assertNotNull($nik);
+        self::assertNotNull($randomNIK->nik);
+        Log::info(json_encode($randomNIK->nik, JSON_PRETTY_PRINT));
     }
 }

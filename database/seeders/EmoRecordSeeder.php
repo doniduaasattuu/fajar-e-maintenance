@@ -18,7 +18,10 @@ class EmoRecordSeeder extends Seeder
     public function run(): void
     {
         DB::table("emo_records")->truncate();
-        $nik = User::query()->find("55000135")->nik;
+
+        // $nik = User::query()->find("55000135")->nik;
+        $users = User::query()->get();
+        $randomNIK = $users[rand(0, sizeof($users) - 1)]->nik;
         $emo = Emo::query()->find("EMO000426");
 
         $year = 36;
@@ -36,7 +39,7 @@ class EmoRecordSeeder extends Seeder
             if ($i == 26) {
                 $data_record->motor_status = "Running";
                 $data_record->comment = "Fan gesek dengan cover";
-                $data_record->nik = $nik;
+                $data_record->nik = $randomNIK;
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i))->addDays(-7);
                 $data_record->number_of_greasing = rand(3, 8) * 10;
 
@@ -52,6 +55,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_de_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
                 $data_record->vibration_nde_vertical_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
@@ -59,6 +63,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_nde_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
             } else if ($i == 29) {
                 $data_record->motor_status = "Running";
                 $data_record->comment = "Plastik terminal perlu di ganti";
@@ -78,6 +83,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_de_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
                 $data_record->vibration_nde_vertical_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
@@ -85,6 +91,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_nde_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
             } else if ($i == 30) {
                 $data_record->motor_status = "Running";
                 $data_record->comment = "Pipa buburan bocor mengenai motor";
@@ -104,6 +111,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_de_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
                 $data_record->vibration_nde_vertical_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
@@ -111,6 +119,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_nde_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
             } else if ($i == 32) {
                 $data_record->motor_status = "Not Running";
                 $data_record->comment = null;
@@ -130,6 +139,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_de_axial_desc = null;
                 $data_record->vibration_de_frame_value = 0;
                 $data_record->vibration_de_frame_desc = null;
+                $data_record->noise_de = "Normal";
 
                 $data_record->vibration_nde_vertical_value = 0;
                 $data_record->vibration_nde_vertical_desc = null;
@@ -137,10 +147,11 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_nde_horizontal_desc = null;
                 $data_record->vibration_nde_frame_value = 0;
                 $data_record->vibration_nde_frame_desc = null;
+                $data_record->noise_nde = "Normal";
             } else {
                 $data_record->motor_status = "Running";
                 $data_record->comment = null;
-                $data_record->nik = $nik;
+                $data_record->nik = $randomNIK;
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i));
                 $data_record->number_of_greasing = rand(3, 8) * 10;
 
@@ -156,6 +167,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_de_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
                 $data_record->vibration_nde_vertical_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
@@ -163,6 +175,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $data_record->vibration_nde_frame_value = rand(45, 112) / 100;
                 $data_record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+                $data_record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
             }
             $data_record->save();
 
@@ -187,14 +200,18 @@ class EmoRecordSeeder extends Seeder
             $data_record1->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record1->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record1->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record1->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record1->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record1->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record1->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record1->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record1->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record1->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record1->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record1->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record1->nik = $nik;
+            $data_record1->nik = $randomNIK;
             $data_record1->save();
 
             // C-06 SP3
@@ -217,14 +234,18 @@ class EmoRecordSeeder extends Seeder
             $data_record2->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record2->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record2->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record2->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record2->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record2->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record2->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record2->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record2->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record2->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record2->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record2->nik = $nik;
+            $data_record2->nik = $randomNIK;
             $data_record2->save();
 
             // P-2-5 PM8
@@ -247,14 +268,18 @@ class EmoRecordSeeder extends Seeder
             $data_record3->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record3->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record3->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record3->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record3->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record3->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record3->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record3->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record3->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record3->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record3->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record3->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record3->nik = $nik;
+            $data_record3->nik = $randomNIK;
             $data_record3->save();
 
             // RF-07 PM1
@@ -277,14 +302,18 @@ class EmoRecordSeeder extends Seeder
             $data_record4->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record4->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record4->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record4->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record4->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record4->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record4->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record4->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record4->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record4->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record4->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record4->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record4->nik = $nik;
+            $data_record4->nik = $randomNIK;
             $data_record4->save();
 
             // RF-04 SP1
@@ -307,14 +336,18 @@ class EmoRecordSeeder extends Seeder
             $data_record5->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record5->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record5->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record5->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record5->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record5->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record5->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record5->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record5->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record5->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record5->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record5->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record5->nik = $nik;
+            $data_record5->nik = $randomNIK;
             $data_record5->save();
 
             // M-21 SP5
@@ -337,14 +370,18 @@ class EmoRecordSeeder extends Seeder
             $data_record6->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record6->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record6->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record6->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record6->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record6->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record6->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record6->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record6->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record6->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record6->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record6->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record6->nik = $nik;
+            $data_record6->nik = $randomNIK;
             $data_record6->save();
 
             // RT-71-1 SP7
@@ -367,14 +404,18 @@ class EmoRecordSeeder extends Seeder
             $data_record7->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record7->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record7->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record7->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record7->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record7->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record7->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record7->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record7->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record7->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record7->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record7->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record7->nik = $nik;
+            $data_record7->nik = $randomNIK;
             $data_record7->save();
 
             // P050 IN1
@@ -397,12 +438,16 @@ class EmoRecordSeeder extends Seeder
             $data_record8->vibration_de_axial_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record8->vibration_de_frame_value = rand(45, 112) / 100;
             $data_record8->vibration_de_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record8->noise_de = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record8->vibration_nde_vertical_value = rand(45, 112) / 100;
             $data_record8->vibration_nde_vertical_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record8->vibration_nde_horizontal_value = rand(45, 112) / 100;
             $data_record8->vibration_nde_horizontal_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $data_record8->vibration_nde_frame_value = rand(45, 112) / 100;
             $data_record8->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
+            $data_record8->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
+
             $data_record8->created_at = Carbon::now()->addMonths(- ($year - $i));
             $data_record8->nik = User::query()->find("55000153")->nik;
             $data_record8->save();

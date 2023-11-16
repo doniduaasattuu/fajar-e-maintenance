@@ -93,6 +93,8 @@ entity emo_records {
      
       vibration_de_frame_value DECIMAL(4,2) 0.00
       vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      
+      noise_de ENUM(["Normal", "Abnormal"]) DEFAULT NORMAL
 
       vibration_nde_vertical_value DECIMAL(4,2) 0.00
       vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
@@ -102,6 +104,8 @@ entity emo_records {
           
       vibration_nde_frame_value DECIMAL(4,2) 0.00
       vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      
+      noise_nde ENUM(["Normal", "Abnormal"]) DEFAULT NORMAL
 
       comment TEXT NULL
     * created_at TIMESTAMP

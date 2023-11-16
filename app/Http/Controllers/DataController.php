@@ -167,6 +167,8 @@ class DataController extends Controller
                     "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
                     "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
 
+                    "noise_de" => $this->returnColumnDataRecords("noise_de", $emo_records),
+
                     "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
                     "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
 
@@ -175,6 +177,8 @@ class DataController extends Controller
 
                     "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
                     "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
+
+                    "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
 
                     // "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
                     // "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
@@ -207,18 +211,21 @@ class DataController extends Controller
 
         $data = $request->input();
 
+        // return response()->json($data["noise_de"]);
+
         if (
             !empty($data["funcloc"]) &&
             !empty($data["emo"]) &&
             !empty($data["sort_field"]) &&
             !empty($data["motor_status"]) &&
             !empty($data["clean_status"]) &&
-            !empty($data["nipple_grease"])
+            !empty($data["nipple_grease"]) &&
+            !empty($data["noise_de"]) &&
+            !empty($data["noise_nde"])
         ) {
             try {
 
                 foreach ($data as $key => $value) {
-
                     if ($value == null) {
                         if ($key != "comment" && ("desc" != substr($key, -4))) {
                             $data[$key] = 0;
@@ -226,6 +233,7 @@ class DataController extends Controller
                     }
                 }
 
+                // return response()->json($data);
                 $emo_record = EmoRecord::create($data);
                 $result = $emo_record->save();
             } catch (QueryException $error) {

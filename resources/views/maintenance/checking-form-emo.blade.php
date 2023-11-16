@@ -208,16 +208,16 @@
                     <!-- =========== VIBRATION START =========== -->
                     <div>
                         <div class="row">
-                            <div class="col-md mt-4">
+                            <div class="col-md">
                                 <figure>
                                     <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                                    <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
+                                    <figcaption id="figcaption_vibrations" class="figure-caption text-center">Vibration standard</figcaption>
                                 </figure>
                             </div>
                             <div class="col-md">
                                 <figure>
-                                    <img class="img-fluid mx-auto d-block" src="/images/vibrations-checking-guide.png" alt="Vibration checking guide">
-                                    <figcaption id="figcaption_vibration_checking_guide" class="figure-caption text-center">Vibrations checking guide</figcaption>
+                                    <img class="img-fluid mx-auto d-block" src="/images/vibration-inspection-guide.png" alt="Vibration inspection guide">
+                                    <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration inspection guide</figcaption>
                                 </figure>
                             </div>
                         </div>
@@ -276,7 +276,17 @@
                                 <option value="Unsatisfactory">Unsatisfactory</option>
                                 <option value="Unacceptable">Unacceptable</option>
                             </select>
+
+                            <!-- NOISE DE -->
+                            <label for="noise_de" class="fw-bold form-label">Noise DE</label>
+                            <select name="noise_de" id="noise_de" class="form-select mb-3" aria-label="Default select example">
+                                <option selected value="Normal">Normal</option>
+                                <option value="Abnormal">Abnormal</option>
+                            </select>
+
                         </div>
+                        <!-- DRIVE END -->
+                        <hr>
 
                         <!-- NON DRIVE END -->
                         <div class="non-drive-end my-4">
@@ -318,7 +328,16 @@
                                 <option value="Unsatisfactory">Unsatisfactory</option>
                                 <option value="Unacceptable">Unacceptable</option>
                             </select>
+
+                            <!-- NOISE NDE -->
+                            <label for="noise_nde" class="fw-bold form-label">Noise NDE</label>
+                            <select name="noise_nde" id="noise_nde" class="form-select mb-3" aria-label="Default select example">
+                                <option selected value="Normal">Normal</option>
+                                <option value="Abnormal">Abnormal</option>
+                            </select>
                         </div>
+                        <hr>
+                        <!-- NON DRIVE END -->
 
                         <!-- VIBRATION VALUE DE START -->
                         <!-- <div class="mb-2">
@@ -407,9 +426,9 @@
             ajax.onload = () => {
                 if (ajax.readyState == 4) {
 
-                    // response from server is format json
                     // console.info(ajax.responseText);
 
+                    // response from server is format json
                     let response_object = JSON.parse(ajax.responseText);
                     // console.info(response_object);
 

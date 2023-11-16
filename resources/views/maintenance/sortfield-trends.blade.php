@@ -51,23 +51,23 @@
                         <canvas id="vibration_de"></canvas>
                     </div>
                 </div>
-                <div class="mt-3">
+                <div class="my-3">
                     <h4>Vibration NDE of {{ $sort_field }}</h4>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="vibration_nde"></canvas>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md mt-4">
+                    <div class="col-md">
                         <figure>
                             <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                            <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration standard</figcaption>
+                            <figcaption id="figcaption_vibrations" class="figure-caption text-center">Vibration standard</figcaption>
                         </figure>
                     </div>
                     <div class="col-md">
                         <figure>
-                            <img class="img-fluid mx-auto d-block" src="/images/vibrations-checking-guide.png" alt="Vibration checking guide">
-                            <figcaption id="figcaption_vibration_checking_guide" class="figure-caption text-center">Vibrations checking guide</figcaption>
+                            <img class="img-fluid mx-auto d-block" src="/images/vibration-inspection-guide.png" alt="Vibration inspection guide">
+                            <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration inspection guide</figcaption>
                         </figure>
                     </div>
                 </div>
@@ -163,13 +163,16 @@
 
             // VIBRATION
             let vibration_de_vertical_value = <?php echo json_encode($vibration_de_vertical_value) ?>;
+            console.log(vibration_de_vertical_value);
             let vibration_de_vertical_desc = <?php echo json_encode($vibration_de_vertical_desc) ?>;
             let vibration_de_horizontal_value = <?php echo json_encode($vibration_de_horizontal_value) ?>;
             let vibration_de_horizontal_desc = <?php echo json_encode($vibration_de_horizontal_desc) ?>;
             let vibration_de_axial_value = <?php echo json_encode($vibration_de_axial_value) ?>;
             let vibration_de_axial_desc = <?php echo json_encode($vibration_de_axial_desc) ?>;
             let vibration_de_frame_value = <?php echo json_encode($vibration_de_frame_value) ?>;
-            let vibration_de_frame_desc = <?php echo json_encode($vibration_de_frame_desc) ?>;
+
+            let noise_de = <?php echo json_encode($noise_de) ?>;
+            noise_de = noise_de.map(changeAbnormalToNoisy)
 
             let vibration_nde_vertical_value = <?php echo json_encode($vibration_nde_vertical_value) ?>;
             let vibration_nde_vertical_desc = <?php echo json_encode($vibration_nde_vertical_desc) ?>;
@@ -178,9 +181,16 @@
             let vibration_nde_frame_value = <?php echo json_encode($vibration_nde_frame_value) ?>;
             let vibration_nde_frame_desc = <?php echo json_encode($vibration_nde_frame_desc) ?>;
 
-            let vibration_min = -5;
-            let vibration_max = 5;
-            let vibration_step = 1;
+            let noise_nde = <?php echo json_encode($noise_nde) ?>;
+            noise_nde = noise_nde.map(changeAbnormalToNoisy)
+
+            function changeAbnormalToNoisy(noise) {
+                if (noise == "Abnormal") {
+                    return "Noisy";
+                } else if (noise == "Normal") {
+                    return "Good";
+                };
+            }
 
             //  LINE CHARTS TYPES
             let chart_types = "line";
@@ -189,40 +199,103 @@
             }
 
             // DYNAMIC MAX RANGE FOR VIBRATION START
-            function moreFive(age) {
-                return age > 5;
+            let vibration_de_min = -5;
+            let vibration_de_max = 5;
+            let vibration_de_step = 1;
+
+            let vibration_nde_min = -5;
+            let vibration_nde_max = 5;
+            let vibration_nde_step = 1;
+
+            function moreFive(value) {
+                return value > 5;
             }
 
-            function moreTen(age) {
-                return age > 10;
+            function moreTen(value) {
+                return value > 10;
             }
 
-            function moreTwenty(age) {
-                return age > 20;
+            function moreTwenty(value) {
+                return value > 20;
             }
 
-            let deFive = vibration_de_vertical_value.filter(moreFive)
-            let ndeFive = vibration_nde_vertical_value.filter(moreFive)
+            let deFiveVertical = vibration_de_vertical_value.filter(moreFive)
+            let ndeFiveVertical = vibration_nde_vertical_value.filter(moreFive)
+            let deFiveHorizontal = vibration_de_horizontal_value.filter(moreFive)
+            let ndeFiveHorizontal = vibration_nde_horizontal_value.filter(moreFive)
+            let deFiveAxial = vibration_de_axial_value.filter(moreFive)
+            let deFiveFrame = vibration_de_frame_value.filter(moreFive)
+            let ndeFiveFrame = vibration_nde_frame_value.filter(moreFive)
 
-            let deTen = vibration_de_vertical_value.filter(moreTen)
-            let ndeTen = vibration_nde_vertical_value.filter(moreTen)
+            let deTenVertical = vibration_de_vertical_value.filter(moreTen)
+            let ndeTenVertical = vibration_nde_vertical_value.filter(moreTen)
+            let deTenHorizontal = vibration_de_horizontal_value.filter(moreTen)
+            let ndeTenHorizontal = vibration_nde_horizontal_value.filter(moreTen)
+            let deTenAxial = vibration_de_axial_value.filter(moreTen)
+            let deTenFrame = vibration_de_frame_value.filter(moreTen)
+            let ndeTenFrame = vibration_nde_frame_value.filter(moreTen)
 
-            let deTwenty = vibration_de_vertical_value.filter(moreTwenty)
-            let ndeTwenty = vibration_nde_vertical_value.filter(moreTwenty)
+            let deTwentyVertical = vibration_de_vertical_value.filter(moreTwenty)
+            let ndeTwentyVertical = vibration_nde_vertical_value.filter(moreTwenty)
+            let deTwentyHorizontal = vibration_de_horizontal_value.filter(moreTwenty)
+            let ndeTwentyHorizontal = vibration_nde_horizontal_value.filter(moreTwenty)
+            let deTwentyAxial = vibration_de_axial_value.filter(moreTwenty)
+            let deTwentyFrame = vibration_de_frame_value.filter(moreTwenty)
+            let ndeTwentyFrame = vibration_nde_frame_value.filter(moreTwenty)
 
-            if ((deFive.length >= 1) || (ndeFive.length >= 1)) {
-                vibration_max = 10
-                vibration_step = 2
-                vibration_min = -10
+            if (
+                (deFiveVertical.length >= 1) ||
+                (deFiveHorizontal.length >= 1) ||
+                (deFiveFrame.length >= 1) || (deFiveAxial.length >= 1)
+            ) {
+                vibration_de_max = 10
+                vibration_de_step = 2
+                vibration_de_min = -10
             }
-            if ((deTen.length >= 1) || (ndeTen.length >= 1)) {
-                vibration_step = 5
-                vibration_max = 20
+            if (
+                (deTenVertical.length >= 1) ||
+                (deTenHorizontal.length >= 1) ||
+                (deTenFrame.length >= 1) || (deTenAxial.length >= 1)
+            ) {
+                vibration_de_min = -15
+                vibration_de_step = 5
+                vibration_de_max = 25
             }
-            if ((deTwenty.length >= 1) || (ndeTwenty.length >= 1)) {
-                vibration_min = -15
-                vibration_step = 15
-                vibration_max = 45
+            if ((deTwentyVertical.length >= 1) ||
+                (deTwentyHorizontal.length >= 1) ||
+                (deTwentyFrame.length >= 1) || (deTwentyAxial.length >= 1)
+            ) {
+                vibration_de_min = -15
+                vibration_de_step = 15
+                vibration_de_max = 45
+            }
+
+            // DYNAMIC RANGE FOR DE
+            if (
+                (ndeFiveVertical.length >= 1) ||
+                (ndeFiveHorizontal.length >= 1) ||
+                (ndeFiveFrame.length >= 1)
+            ) {
+                vibration_nde_max = 10
+                vibration_nde_step = 2
+                vibration_nde_min = -10
+            }
+            if (
+                (ndeTenVertical.length >= 1) ||
+                (ndeTenHorizontal.length >= 1) ||
+                (ndeTenFrame.length >= 1)
+            ) {
+                vibration_nde_min = -15
+                vibration_nde_step = 5
+                vibration_nde_max = 25
+            }
+            if ((ndeTwentyVertical.length >= 1) ||
+                (ndeTwentyHorizontal.length >= 1) ||
+                (ndeTwentyFrame.length >= 1)
+            ) {
+                vibration_nde_min = -15
+                vibration_nde_step = 15
+                vibration_nde_max = 45
             }
             // DYNAMIC MAX RANGE FOR VIBRATION END
 
@@ -309,41 +382,51 @@
             temperature.options.plugins.legend.position = "bottom";
             // CHARTJS MOTOR_STATUS AND TEMPERATURE
 
-            // CHARTJS VIBRATION DE
-            var ctxv = document.getElementById('vibration_de').getContext('2d');
-            var vibration_de = new Chart(ctxv, {
+            // CHARTJS VIBRATION AND NOISE DE
+            var ctxvde = document.getElementById('vibration_de').getContext('2d');
+            var vibration_de = new Chart(ctxvde, {
                 type: chart_types,
                 data: {
                     labels: date,
                     datasets: [{
-                        data: vibration_de_vertical_value,
-                        label: "Vertical",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
-                        fill: false,
-                        tension: 0.3,
-                    }, {
-                        data: vibration_de_horizontal_value,
-                        label: "Horizontal",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
-                        fill: false,
-                        tension: 0.3,
-                    }, {
-                        data: vibration_de_axial_value,
-                        label: "Axial",
-                        borderColor: "rgb(196,88,180)",
-                        backgroundColor: "rgb(196,88,180)",
-                        fill: false,
-                        tension: 0.3,
-                    }, {
-                        data: vibration_de_frame_value,
-                        label: "Frame",
-                        borderColor: "rgb(80,80,80)",
-                        backgroundColor: "rgb(80,80,80)",
-                        fill: false,
-                        tension: 0.3,
-                    }, ]
+                            data: vibration_de_vertical_value,
+                            label: "Vertical",
+                            borderColor: "rgb(62,149,205)",
+                            backgroundColor: "rgb(62,149,205)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_de_horizontal_value,
+                            label: "Horizontal",
+                            borderColor: "rgb(60,186,159)",
+                            backgroundColor: "rgb(60,186,159)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_de_axial_value,
+                            label: "Axial",
+                            borderColor: "rgb(196,88,180)",
+                            backgroundColor: "rgb(196,88,180)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_de_frame_value,
+                            label: "Frame",
+                            borderColor: "rgb(80,80,80)",
+                            backgroundColor: "rgb(80,80,80)",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            type: 'line',
+                            data: noise_de,
+                            label: "Noise",
+                            borderColor: "rgb(171, 210, 182)",
+                            backgroundColor: "rgb(171, 210, 182, 0.5)",
+                            stepped: 'middle',
+                            yAxisID: 'y2',
+                        }
+                    ]
                 },
                 options: {
                     plugins: {
@@ -363,20 +446,20 @@
                                 display: true,
                                 text: 'mm/s',
                             },
-                            min: vibration_min,
-                            max: vibration_max,
+                            min: vibration_de_min,
+                            max: vibration_de_max,
                             ticks: {
-                                stepSize: vibration_step,
+                                stepSize: vibration_de_step,
                             },
                         },
-                        // y2: {
-                        //     type: 'category',
-                        //     labels: ['Unacceptable', 'Unsatisfactory', 'Satisfactory', 'Good'],
-                        //     offset: true,
-                        //     position: 'left',
-                        //     stack: 'demo',
-                        //     stackWeight: 1,
-                        // },
+                        y2: {
+                            type: 'category',
+                            labels: ['Noisy', 'Good'],
+                            offset: true,
+                            position: 'left',
+                            stack: 'demo',
+                            stackWeight: 1,
+                        },
                     },
                 }
             });
@@ -385,33 +468,43 @@
             // CHARTJS VIBRATION DE
 
             // CHARTJS VIBRATION DE
-            var ctxv = document.getElementById('vibration_nde').getContext('2d');
-            var vibration_nde = new Chart(ctxv, {
+            var ctxvnde = document.getElementById('vibration_nde').getContext('2d');
+            var vibration_nde = new Chart(ctxvnde, {
                 type: chart_types,
                 data: {
                     labels: date,
                     datasets: [{
-                        data: vibration_nde_vertical_value,
-                        label: "Vertical",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
-                        fill: false,
-                        tension: 0.3,
-                    }, {
-                        data: vibration_nde_horizontal_value,
-                        label: "Horizontal",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
-                        fill: false,
-                        tension: 0.3,
-                    }, {
-                        data: vibration_nde_frame_value,
-                        label: "Frame",
-                        borderColor: "rgb(80,80,80)",
-                        backgroundColor: "rgb(80,80,80)",
-                        fill: false,
-                        tension: 0.3,
-                    }, ]
+                            data: vibration_nde_vertical_value,
+                            label: "Vertical",
+                            borderColor: "rgb(62,149,205)",
+                            backgroundColor: "rgb(62,149,205)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_nde_horizontal_value,
+                            label: "Horizontal",
+                            borderColor: "rgb(60,186,159)",
+                            backgroundColor: "rgb(60,186,159)",
+                            fill: false,
+                            tension: 0.3,
+                        }, {
+                            data: vibration_nde_frame_value,
+                            label: "Frame",
+                            borderColor: "rgb(80,80,80)",
+                            backgroundColor: "rgb(80,80,80)",
+                            fill: false,
+                            tension: 0.3,
+                        },
+                        {
+                            type: 'line',
+                            data: noise_nde,
+                            label: "Noise",
+                            borderColor: "rgb(171, 210, 182)",
+                            backgroundColor: "rgb(171, 210, 182, 0.5)",
+                            stepped: 'middle',
+                            yAxisID: 'y2',
+                        }
+                    ]
                 },
                 options: {
                     plugins: {
@@ -431,11 +524,19 @@
                                 display: true,
                                 text: 'mm/s',
                             },
-                            min: vibration_min,
-                            max: vibration_max,
+                            min: vibration_nde_min,
+                            max: vibration_nde_max,
                             ticks: {
-                                stepSize: vibration_step,
+                                stepSize: vibration_nde_step,
                             },
+                        },
+                        y2: {
+                            type: 'category',
+                            labels: ['Noisy', 'Good'],
+                            offset: true,
+                            position: 'left',
+                            stack: 'demo',
+                            stackWeight: 1,
                         },
                     },
                 }

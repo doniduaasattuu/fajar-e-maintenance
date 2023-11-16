@@ -48,6 +48,22 @@ class UserSeeder extends Seeder
         $mbeat->phone_number = "087879107392";
         $mbeat->save();
 
+        $ridwan = new User();
+        $ridwan->nik = "32007012";
+        $ridwan->password = "1234";
+        $ridwan->fullname = "Ridwan Abdurahman";
+        $ridwan->department = "EI7";
+        $ridwan->phone_number = "08991544689";
+        $ridwan->save();
+
+        $jiyantoro = new User();
+        $jiyantoro->nik = "31100019";
+        $jiyantoro->password = "1234";
+        $jiyantoro->fullname = "Jiyantoro";
+        $jiyantoro->department = "EI7";
+        $jiyantoro->phone_number = "08991544689";
+        $jiyantoro->save();
+
         $prima = new User();
         $prima->nik = "31811016";
         $prima->password = "1234";

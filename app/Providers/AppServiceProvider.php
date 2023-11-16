@@ -15,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         date_default_timezone_set("Asia/Jakarta");
-        // DB::listen(function (QueryExecuted $query) {
-        //     Log::info($query->sql);
-        // });
+        DB::listen(function (QueryExecuted $query) {
+            Log::info($query->sql);
+        });
     }
 
     /**
