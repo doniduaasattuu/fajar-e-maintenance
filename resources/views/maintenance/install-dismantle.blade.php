@@ -83,7 +83,7 @@
 
                 <!-- FORM DISMANTLED -->
                 <div class="col">
-                    <p class="mb-0 text-secondary">Dismantled equipment</p>
+                    <p class="mb-0 text-secondary">Equipment will be dismantled</p>
                     <div>
                         <!-- SEARCH FORM -->
                         <div class="form-group row mb-3">
@@ -168,7 +168,7 @@
 
                 <!-- FORM INSTALLED START -->
                 <div class="col">
-                    <p class="mb-0 text-secondary">Installed equipment</p>
+                    <p class="mb-0 text-secondary">Equipment will be installed</p>
                     <div>
                         <!-- SEARCH FORM -->
                         <div class="form-group row mb-3">

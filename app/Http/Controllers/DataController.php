@@ -612,12 +612,12 @@ class DataController extends Controller
         // $dismantle = [];
         // $install = [];
 
+        DB::beginTransaction();
+
         foreach ($data as $key => $value) {
             if (str_contains($key, "_dismantle")) {
 
                 $key_replaced = str_replace(substr($key, -10), "", $key);
-
-                // $dismantle[] = $key;
 
                 if (
                     $key_replaced == "id" ||
@@ -631,20 +631,20 @@ class DataController extends Controller
                     try {
                         Emo::query()->where("id", $data["id_dismantle"])->update([$key_replaced => $value]);
                     } catch (QueryException $error) {
+                        DB::rollBack();
                         return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
                     }
                 } else {
                     try {
                         EmoDetail::query()->where("emo_detail", $data["id_dismantle"])->update([$key_replaced => $value]);
                     } catch (QueryException $error) {
+                        DB::rollBack();
                         return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
                     }
                 }
             } else if (str_contains($key, "_install")) {
 
                 $key_replaced = str_replace(substr($key, -8), "", $key);
-
-                // $dismantle[] = $key;
 
                 if (
                     $key_replaced == "id" ||
@@ -658,17 +658,21 @@ class DataController extends Controller
                     try {
                         Emo::query()->where("id", $data["id_install"])->update([$key_replaced => $value]);
                     } catch (QueryException $error) {
+                        DB::rollBack();
                         return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
                     }
                 } else {
                     try {
                         EmoDetail::query()->where("emo_detail", $data["id_install"])->update([$key_replaced => $value]);
                     } catch (QueryException $error) {
+                        DB::rollBack();
                         return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
                     }
                 }
             }
         }
+
+        DB::commit();
 
         return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
         // var_dump($data);
