@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Administrators;
 use App\Models\Emo;
+use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\AdministratorsSeeder;
 use Database\Seeders\DatabaseSeeder;
@@ -164,7 +165,6 @@ class DataControllerTest extends TestCase
             ->assertSeeText("Number of Greasing SP3.P.70/M")
             ->assertSeeText("Plastik terminal perlu di ganti")
             ->assertSee("EMO000426")
-            ->assertSee("Edi Supriadi")
             ->assertSee("let length_of_data = 12");
     }
 

@@ -255,7 +255,7 @@ class UserControllerTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $nik = User::query()->select("nik")->get();
-        $randomNIK = $nik[rand(0, sizeof($nik))];
+        $randomNIK = $nik[rand(0, sizeof($nik) - 1)];
 
         self::assertNotNull($nik);
         self::assertNotNull($randomNIK->nik);
