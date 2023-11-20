@@ -125,6 +125,86 @@ entity administrators {
     * admin_nik VARCHAR(8) <<FK>>
     --
 }
+
+entity transformers {
+    * id VARCHAR(9) <<PK>>
+    * status ENUM(["Installed", "Repaired", "Available"])
+      funcloc VARCHAR (150) <<FK>>
+      sort_field VARCHAR(150)
+    --
+      material_number VARCHAR(8)
+    * equipment_description VARCHAR(150)
+    * unique_id VARCHAR(6) UNIQUE
+    * qr_code_link VARCHAR(150) id=Fajar-TrafoListXXX
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
+}
+
+entity transformer_details {
+    * id BIGINT UNSIGNED AUTO_INCREMENT
+    * transfomer_details VARCHAR(9) <<FK>>
+    --
+    power_rate VARCHAR(25)
+    power_unit ENUM(["kVA"])
+    voltage_primary VARCHAR(25)
+    voltage_secondary VARCHAR(25)
+    current_primary VARCHAR(25)
+    current_nominal_secondary VARCHAR(25)
+    type ENUM(["Step Up", "Step Down"])
+    manufacture VARCHAR(150)
+    year_of_manufacture VARCHAR(150)
+    serial_number VARCHAR(150)
+    vector_group VARCHAR(150)
+    frequency VARCHAR(25)
+    insulation_class VARCHAR(25)
+    ip_rating VARCHAR(25)
+    temp_rise_oil_winding VARCHAR(25)
+    oil_type VARCHAR(25)
+    weight_of_oil VARCHAR(25)
+    connection_type_primary VARCHAR(50) Delta 
+    connection_type_secondary VARCHAR(50) Star / Star
+    weight VARCHAR(25)
+    type_of_cooling VARCHAR(25)
+    material_number VARCHAR(8)
+}
+
+entity transfomer_records {
+    * id BIGINT UNSIGNED AUTO_INCREMENT
+    * funcloc VARCHAR(150) <<FK>>
+    * etf VARCHAR(9) <<FK>>
+    * sort_field VARCHAR(150)
+    --
+    * transfomer_records ENUM(["Online", "Offline"])
+    * clean_status ENUM(["Clean", "Dirty"])
+
+      current_primary_phase_r VARCHAR(5)
+      current_primary_phase_s VARCHAR(5)
+      current_primary_phase_t VARCHAR(5)
+      
+      current_secondary_phase_r VARCHAR(5)
+      current_secondary_phase_s VARCHAR(5)
+      current_secondary_phase_t VARCHAR(5)
+
+      voltage_primary VARCHAR(10)
+      voltage_secondary VARCHAR(10)
+
+      winding_temperature_primary VARCHAR(10)
+      winding_temperature_secondary VARCHAR(10)
+
+      oil_temperature_primary VARCHAR(10)
+      oil_temperature_secondary VARCHAR(10)
+     
+      noise ENUM(["Normal", "Abnormal"]) DEFAULT NORMAL
+
+      silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
+      earthing_connection (["Lose", "No Lose"])
+      oil_leakage (["Leak", "No Leak"])
+      blower_condition (["Running", "Not Running"])
+
+      comment TEXT NULL
+    * created_at TIMESTAMP
+    * nik VARCHAR(8) <<FK>>
+}
  
 function_locations ||--o{ emos : Have
 function_locations ||--o{ emo_records : Have
@@ -132,6 +212,10 @@ emos ||--o{ emo_records : Have
 emos ||--|| emo_details : Contain
 emo_records ||--|| users : Include
 administrators ||--|| users : Registered
+
+function_locations ||--o{ transfomer_records : Have
+function_locations ||--o{ transformers : Have
+transformers ||--|| transformer_details : Contain
 
 
 @enduml
