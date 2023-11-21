@@ -15,7 +15,7 @@
 
     <div class="container-xl py-4">
         <div class="text-center">
-            <h4>Temperature of {{ $sort_field }}</h4>
+            <h4 class="text-break">Temperature of {{ $sort_field }}</h4>
 
             <div class="chart-container" style="position: relative;">
                 <canvas id="temperature"></canvas>
@@ -46,13 +46,13 @@
 
             <div class="mt-3 text-center">
                 <div>
-                    <h4>Vibration DE of {{ $sort_field }}</h4>
+                    <h4 class="text-break">Vibration DE of {{ $sort_field }}</h4>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="vibration_de"></canvas>
                     </div>
                 </div>
                 <div class="my-3">
-                    <h4>Vibration NDE of {{ $sort_field }}</h4>
+                    <h4 class="mt-5 text-break">Vibration NDE of {{ $sort_field }}</h4>
                     <div class="chart-container" style="position: relative;">
                         <canvas id="vibration_nde"></canvas>
                     </div>
@@ -74,7 +74,7 @@
             </div>
 
             <div id="number_of_greasing_display" class="mt-3 mb-5 text-center">
-                <h4>Number of Greasing {{ $sort_field }}</h4>
+                <h4 class="text-break">Number of Greasing {{ $sort_field }}</h4>
                 <div class="chart-container" style="position: relative;">
                     <canvas id="number_of_greasing"></canvas>
                 </div>
@@ -82,7 +82,7 @@
 
             <div id="findings">
                 <div class="mt-3 mb-3 text-center">
-                    <h4 class="mb-0">Findings Log</h4>
+                    <h4 class="text-break mb-0">Findings Log of {{ $sort_field }}</h4>
                     <div class="fs-6 text-secondary">The top one is the newest</div>
                 </div>
                 <div class="text-start">

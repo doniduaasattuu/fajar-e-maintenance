@@ -66,7 +66,7 @@
 
         <!-- EMO ID AND TRENDS START  -->
         <div>
-            <h5 id="equipment_description" class="mb-0">{{ $emo->equipment_description }}</h5>
+            <h5 id="equipment_description" class="text-break mb-0">{{ $emo->equipment_description }}</h5>
             <p id="sort_field_information" class="lh-sm mb-0 text-secondary">{{ $emo->sort_field }}</p>
             <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
             <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
@@ -100,23 +100,32 @@
                     <div class="accordion-body">
                         <table class="table table-hover">
                             <tbody>
+                                <!-- FUNCLOC -->
                                 <tr class="d-none" id="emo_function_location">
                                     <th>Function Location</th>
                                     <td>{{ $emo->funcloc }}</td>
                                 </tr>
+                                <!-- SORT FIELD -->
                                 <tr class="d-none" id="emo_sort_field">
                                     <th>Sort field</th>
                                     <td>{{ $emo->sort_field }}</td>
                                 </tr>
+                                <!-- STATUS -->
                                 <tr>
                                     <th>Status</th>
                                     <td id="status">{{ $emo->status }}</td>
                                 </tr>
+                                <!-- UPDATED AT -->
                                 <tr>
                                     <th>Updated at</th>
                                     <td>{{ $emo->updated_at }}</td>
                                 </tr>
-
+                                <!-- EQUIPMENT DESCRIPTION -->
+                                <tr>
+                                    <th>Equipment Description</th>
+                                    <td class="text-break">{{ $emo->equipment_description }}</td>
+                                </tr>
+                                <!-- MATERIAL NUMBER -->
                                 <tr>
                                     <th>Material number</th>
                                     <td>{{ $emo->material_number }}</td>
