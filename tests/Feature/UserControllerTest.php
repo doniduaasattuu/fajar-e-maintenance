@@ -6,6 +6,7 @@ use App\Models\User;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -95,12 +96,14 @@ class UserControllerTest extends TestCase
             "fullname" => "Doni Darmawan",
             "department" => "EI2",
             "phone_number" => "08983456945",
+            "registration_code" => "RG9uaSBEYXJtYXdhbg==",
         ])
             ->assertSeeText("NIK is used!");
     }
 
     public function testRegistrationSuccess()
     {
+        DB::table('users')->delete();
 
         $this->post('/registration', [
             "nik" => "55000155",
@@ -108,9 +111,25 @@ class UserControllerTest extends TestCase
             "fullname" => "Doni Darmawan",
             "department" => "EI2",
             "phone_number" => "08983456945",
+            "registration_code" => "RG9uaSBEYXJtYXdhbg==",
         ])
             ->assertSeeText("Login")
             ->assertSeeText("Registration Success!");
+    }
+
+    public function testRegistrationCodeIsWrong()
+    {
+        DB::table('users')->delete();
+
+        $this->post('/registration', [
+            "nik" => "55000155",
+            "password" => "1234",
+            "fullname" => "Doni Darmawan",
+            "department" => "EI2",
+            "phone_number" => "08983456945",
+            "registration_code" => "salah",
+        ])
+            ->assertSeeText("Registration Code is wrong!");
     }
 
     // ======= LOGOUT =======

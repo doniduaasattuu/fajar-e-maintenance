@@ -59,6 +59,7 @@ class UserController extends Controller
         $password = $request->input("password");
         $fullname = $request->input("fullname");
         $department = $request->input("department");
+        $registration_code = $request->input("registration_code");
         $phone_number = $request->input("phone_number");
 
         if (
@@ -66,6 +67,7 @@ class UserController extends Controller
             empty($password) ||
             empty($fullname) ||
             empty($department) ||
+            empty($registration_code) ||
             empty($phone_number)
         ) {
             return response()->view("user.registration", [
@@ -74,34 +76,41 @@ class UserController extends Controller
             ]);
         }
 
-        $user = User::query()->find($nik);
+        if ($registration_code === "RG9uaSBEYXJtYXdhbg==") {
+            $user = User::query()->find($nik);
 
-        if ($user == null) {
+            if ($user == null) {
 
-            $user = new User();
-            $user->nik = $nik;
-            $user->password = $password;
-            $user->fullname = $fullname;
-            $user->department = $department;
-            $user->phone_number = $phone_number;
+                $user = new User();
+                $user->nik = $nik;
+                $user->password = $password;
+                $user->fullname = $fullname;
+                $user->department = $department;
+                $user->phone_number = $phone_number;
 
-            $registration_success = $user->save();
+                $registration_success = $user->save();
 
-            if ($registration_success) {
-                return response()->view("user.login", [
-                    "title" => "Login",
-                    "registration_success" => true
-                ]);
+                if ($registration_success) {
+                    return response()->view("user.login", [
+                        "title" => "Login",
+                        "registration_success" => true
+                    ]);
+                } else {
+                    return response()->view("user.registration", [
+                        "title" => "Registration",
+                        "error" => "Registration error! ⚠️"
+                    ]);
+                }
             } else {
                 return response()->view("user.registration", [
                     "title" => "Registration",
-                    "error" => "Registration error! ⚠️"
+                    "error" => "NIK is used! ⚠️"
                 ]);
             }
         } else {
             return response()->view("user.registration", [
                 "title" => "Registration",
-                "error" => "NIK is used! ⚠️"
+                "error" => "Registration Code is wrong! ⚠️"
             ]);
         }
     }
