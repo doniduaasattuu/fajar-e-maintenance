@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2023 at 09:45 AM
+-- Generation Time: Nov 21, 2023 at 10:45 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,6 +30,15 @@ SET time_zone = "+00:00";
 CREATE TABLE `administrators` (
   `admin_nik` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `administrators`
+--
+
+INSERT INTO `administrators` (`admin_nik`) VALUES
+('31811016'),
+('31903007'),
+('55000154');
 
 -- --------------------------------------------------------
 
@@ -13146,8 +13155,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2023_10_18_013108_create_emo_records_table', 1),
 (7, '2023_11_07_084156_create_administrators_table', 1),
 (8, '2023_11_15_135526_add_seven_point_vibration_checking', 1),
-(9, '2023_11_16_085712_add_column_noise_for_de_and_nde_table_emo_records', 1),
-(10, '2023_11_16_150819_change_column_sort_field_unique_on_table_emos', 1);
+(9, '2023_11_16_085712_add_column_noise_for_de_and_nde_table_emo_records', 1);
 
 -- --------------------------------------------------------
 
@@ -13281,7 +13289,7 @@ ALTER TABLE `emo_records`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`

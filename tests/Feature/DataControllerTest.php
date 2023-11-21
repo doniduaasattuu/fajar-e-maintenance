@@ -154,7 +154,8 @@ class DataControllerTest extends TestCase
                 "nik" => "55000154",
                 "user" => "Doni Darmawan",
             ])->post("/sortfield-trends", [
-                "sort_field" => "SP3.P.70/M"
+                "sort_field" => "SP3.P.70/M",
+                "funcloc" => "FP-01-SP3-RJS-T092-P092"
             ]);
 
         $trends_sortfield
@@ -179,7 +180,8 @@ class DataControllerTest extends TestCase
                 "nik" => "55000154",
                 "user" => "Doni Darmawan",
             ])->post("/sortfield-trends", [
-                "sort_field" => "SP9.P.70/M"
+                "sort_field" => "SP9.P.70/M",
+                "funcloc" => "FP-01-SP3-RJS-T092-P999"
             ]);
 
         $trends_sortfield_not_found

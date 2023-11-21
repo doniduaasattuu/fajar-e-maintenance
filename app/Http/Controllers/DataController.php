@@ -127,12 +127,17 @@ class DataController extends Controller
     public function sortFieldMotorTrends(Request $request)
     {
         $sort_field = $request->input("sort_field");
+        $funcloc = $request->input("funcloc");
 
-        if (!is_null($sort_field) && !empty($sort_field)) {
+        if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
             $end_date = Carbon::now()->addDays(1);
             $start_date = Carbon::now()->addYears(-1)->addDays(-1);
 
-            $emo_records = EmoRecord::query()->whereBetween("created_at", [$start_date, $end_date])->where("sort_field", "=", $sort_field)->get();
+            $emo_records = EmoRecord::query()
+                ->where("funcloc", "=", $funcloc)
+                ->where("sort_field", "=", $sort_field)
+                ->whereBetween("created_at", [$start_date, $end_date])
+                ->get();
             $comments = EmoRecord::query()->with(['user' => function ($query) {
                 $query->select('nik', 'fullname');
             }])
