@@ -279,7 +279,7 @@
 
                             <!-- NOISE DE -->
                             <label for="noise_de" class="fw-bold form-label">Noise DE</label>
-                            <select name="noise_de" id="noise_de" class="form-select mb-3" aria-label="Default select example">
+                            <select disabled name="noise_de" id="noise_de" class="noises form-select mb-3" aria-label="Default select example">
                                 <option selected value="Normal">Normal</option>
                                 <option value="Abnormal">Abnormal</option>
                             </select>
@@ -331,7 +331,7 @@
 
                             <!-- NOISE NDE -->
                             <label for="noise_nde" class="fw-bold form-label">Noise NDE</label>
-                            <select name="noise_nde" id="noise_nde" class="form-select mb-3" aria-label="Default select example">
+                            <select disabled name="noise_nde" id="noise_nde" class="noises form-select mb-3" aria-label="Default select example">
                                 <option selected value="Normal">Normal</option>
                                 <option value="Abnormal">Abnormal</option>
                             </select>
@@ -390,6 +390,7 @@
         const nipple_grease_input = document.getElementById("nipple_grease_input");
         const number_of_greasing_input = document.getElementById("number_of_greasing_input");
         const temperatures_input = document.getElementsByClassName("temperature_input");
+        const noises = document.getElementsByClassName("noises");
         const alert_response = document.getElementById("alert_response");
         const message_response = document.getElementById("message_response");
         const myform = document.getElementById("myform");
@@ -637,8 +638,9 @@
             }
         }
 
-        // ENABLED TEMPERATURE AND VIBRATION VALUE
+        // ENABLED TEMPERATURE AND VIBRATION VALUE AND NOISES
         motor_status.onchange = () => {
+            // MOTOR STATUS IS RUNNING
             if (motor_status.value == "Running") {
                 for (let i = 0; i < temperatures_input.length; i++) {
                     temperatures_input[i].removeAttribute("disabled");
@@ -646,9 +648,11 @@
                 for (let j = 0; j < vibration_values.length; j++) {
                     vibration_values[j].removeAttribute("disabled");
                 }
-
+                for (let k = 0; k < noises.length; k++) {
+                    noises[k].removeAttribute("disabled");
+                }
             } else {
-
+                // MOTOR STATUS NOT SELECTED
                 for (let i = 0; i < temperatures_input.length; i++) {
                     temperatures_input[i].setAttribute("disabled", true);
                     temperatures_input[i].value = "";
@@ -659,6 +663,10 @@
                 }
                 for (let k = 0; k < vibrations.length; k++) {
                     normalizeInput(vibrations[k]);
+                }
+                for (let l = 0; l < noises.length; l++) {
+                    noises[l].value = "Normal";
+                    noises[l].setAttribute("disabled", true);
                 }
             }
 

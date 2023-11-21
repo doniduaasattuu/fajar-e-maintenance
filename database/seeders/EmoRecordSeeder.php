@@ -21,7 +21,6 @@ class EmoRecordSeeder extends Seeder
 
         // $nik = User::query()->find("55000135")->nik;
         $users = User::query()->get();
-        $randomNIK = $users[rand(0, sizeof($users) - 1)]->nik;
         $emo = Emo::query()->find("EMO000426");
 
         $year = 36;
@@ -39,7 +38,7 @@ class EmoRecordSeeder extends Seeder
             if ($i == 26) {
                 $data_record->motor_status = "Running";
                 $data_record->comment = "Fan gesek dengan cover";
-                $data_record->nik = $randomNIK;
+                $data_record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i))->addDays(-7);
                 $data_record->number_of_greasing = rand(3, 8) * 10;
 
@@ -151,7 +150,7 @@ class EmoRecordSeeder extends Seeder
             } else {
                 $data_record->motor_status = "Running";
                 $data_record->comment = null;
-                $data_record->nik = $randomNIK;
+                $data_record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i));
                 $data_record->number_of_greasing = rand(3, 8) * 10;
 
@@ -211,7 +210,7 @@ class EmoRecordSeeder extends Seeder
             $data_record1->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record1->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record1->nik = $randomNIK;
+            $data_record1->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record1->save();
 
             // C-06 SP3
@@ -245,7 +244,7 @@ class EmoRecordSeeder extends Seeder
             $data_record2->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record2->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record2->nik = $randomNIK;
+            $data_record2->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record2->save();
 
             // P-2-5 PM8
@@ -279,7 +278,7 @@ class EmoRecordSeeder extends Seeder
             $data_record3->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record3->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record3->nik = $randomNIK;
+            $data_record3->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record3->save();
 
             // RF-07 PM1
@@ -313,7 +312,7 @@ class EmoRecordSeeder extends Seeder
             $data_record4->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record4->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record4->nik = $randomNIK;
+            $data_record4->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record4->save();
 
             // RF-04 SP1
@@ -347,7 +346,7 @@ class EmoRecordSeeder extends Seeder
             $data_record5->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record5->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record5->nik = $randomNIK;
+            $data_record5->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record5->save();
 
             // M-21 SP5
@@ -381,7 +380,7 @@ class EmoRecordSeeder extends Seeder
             $data_record6->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record6->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record6->nik = $randomNIK;
+            $data_record6->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record6->save();
 
             // RT-71-1 SP7
@@ -415,7 +414,7 @@ class EmoRecordSeeder extends Seeder
             $data_record7->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
 
             $data_record7->created_at = Carbon::now()->addMonths(- ($year - $i));
-            $data_record7->nik = $randomNIK;
+            $data_record7->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $data_record7->save();
 
             // P050 IN1
