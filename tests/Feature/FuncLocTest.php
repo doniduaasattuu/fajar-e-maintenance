@@ -7,6 +7,7 @@ use App\Models\FunctionLocation;
 use Database\Seeders\EmoDetailSeeder;
 use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
+use Database\Seeders\TransformersSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Carbon;
@@ -49,5 +50,16 @@ class FuncLocTest extends TestCase
 
         self::assertNotNull($emoDetail);
         self::assertEquals("Horizontal", $emoDetail->mounting);
+    }
+
+    public function testFunclocToTransformersRelations()
+    {
+        $this->seed([FunctionLocationSeeder::class, TransformersSeeder::class]);
+
+        $funcloc = FunctionLocation::query()->find("FP-01-IN1");
+        $transformers = $funcloc->transformers;
+
+        self::assertNotNull($transformers);
+        self::assertCount(1, $transformers);
     }
 }

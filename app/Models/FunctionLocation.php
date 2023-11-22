@@ -22,7 +22,7 @@ class FunctionLocation extends Model
         return $this->hasMany(Emo::class, "funcloc", "id");
     }
 
-    public function trafos(): HasMany
+    public function transformers(): HasMany
     {
         return $this->hasMany(Transformers::class, "funcloc", "id");
     }

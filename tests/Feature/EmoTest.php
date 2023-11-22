@@ -59,7 +59,7 @@ class EmoTest extends TestCase
             $emo->updated_at = Carbon::now()->toDateTimeString();
             $result = $emo->save();
         } catch (QueryException $exception) {
-            Log::info(json_encode($exception, JSON_PRETTY_PRINT));
+
             self::assertEquals("Duplicate entry 'EMO000426' for key 'PRIMARY'", $exception->errorInfo[2]);
         }
     }
