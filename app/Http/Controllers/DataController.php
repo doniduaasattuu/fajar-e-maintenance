@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\Transformers;
 use App\Models\User;
 use Carbon\Carbon;
 use Ghunti\HighchartsPHP\Highchart;
@@ -56,6 +57,16 @@ class DataController extends Controller
         } else if ($equipment_code === "Fajar-TrafoList") {
             // Fajar-TrafoList
             $trafoList = $equipment;
+            $uri = "id=" . $trafoList;
+            $transformer = Transformers::query()->with("transformerDetails")->where("qr_code_link", "=", $uri)->first();
+
+            if (!is_null($transformer)) {
+                return response()->json($transformer);
+            } else {
+                return response()->view("utility.page-not-found", [
+                    "title" => "Oops!"
+                ]);
+            }
         } else {
             return response()->view("utility.page-not-found", [
                 "title" => "Oops!"

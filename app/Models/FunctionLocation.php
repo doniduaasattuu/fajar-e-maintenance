@@ -22,6 +22,11 @@ class FunctionLocation extends Model
         return $this->hasMany(Emo::class, "funcloc", "id");
     }
 
+    public function trafos(): HasMany
+    {
+        return $this->hasMany(Transformers::class, "funcloc", "id");
+    }
+
     public function emoDetail(): HasOneThrough
     {
         return $this->hasOneThrough(

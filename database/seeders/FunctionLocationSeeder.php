@@ -76,5 +76,12 @@ class FunctionLocationSeeder extends Seeder
         $funloc8->created_at = Carbon::now()->toDateTimeString();
         $funloc8->updated_at = Carbon::now()->toDateTimeString();
         $funloc8->save();
+
+        $trafo = new FunctionLocation();
+        $trafo->id = "FP-01-IN1";
+        $trafo->tag_name = "TRAFO ENC";
+        $trafo->created_at = Carbon::now()->toDateTimeString();
+        $trafo->updated_at = Carbon::now()->toDateTimeString();
+        $trafo->save();
     }
 }

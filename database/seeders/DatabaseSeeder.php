@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('transformer_details')->delete();
+        DB::table('transformers')->delete();
         DB::table('emo_records')->delete();
         DB::table('emo_details')->delete();
         DB::table('emos')->delete();
@@ -30,6 +32,8 @@ class DatabaseSeeder extends Seeder
             EmoSeeder::class,
             EmoDetailSeeder::class,
             EmoRecordSeeder::class,
+            TransformersSeeder::class,
+            TransformerDetailSeeder::class,
         ]);
     }
 }

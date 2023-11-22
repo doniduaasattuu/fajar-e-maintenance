@@ -135,37 +135,42 @@ entity transformers {
       material_number VARCHAR(8)
     * equipment_description VARCHAR(150)
     * unique_id VARCHAR(6) UNIQUE
-    * qr_code_link VARCHAR(150) id=Fajar-TrafoListXXX
+    * qr_code_link VARCHAR(150) UNIQUE
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
 
 entity transformer_details {
     * id BIGINT UNSIGNED AUTO_INCREMENT
-    * transformer_details VARCHAR(9) <<FK>>
+    * transformer_detail VARCHAR(9) <<FK>>
     --
     power_rate VARCHAR(25)
     power_unit ENUM(["kVA"])
-    voltage_primary VARCHAR(25)
-    voltage_secondary VARCHAR(25)
-    current_primary VARCHAR(25)
-    current_nominal_secondary VARCHAR(25)
+
+    primary_voltage VARCHAR(25)
+    secondary_voltage VARCHAR(25)
+    
+    primary_current VARCHAR(25)
+    secondary_current VARCHAR(25)
+    
+    primary_connection_type VARCHAR(25)
+    secondary_connection_type VARCHAR(25)
+    
     type ENUM(["Step Up", "Step Down"])
-    manufacture VARCHAR(150)
-    year_of_manufacture VARCHAR(150)
-    serial_number VARCHAR(150)
-    vector_group VARCHAR(150)
+    manufacturer VARCHAR(25)
+    year_of_manufacture VARCHAR(5)
+    serial_number VARCHAR(25)
+
+    vector_group VARCHAR(25)
     frequency VARCHAR(25)
     insulation_class VARCHAR(25)
-    ip_rating VARCHAR(25)
-    temp_rise_oil_winding VARCHAR(25)
-    oil_type VARCHAR(25)
-    weight_of_oil VARCHAR(25)
-    connection_type_primary VARCHAR(50) Delta 
-    connection_type_secondary VARCHAR(50) Star / Star
-    weight VARCHAR(25)
+
     type_of_cooling VARCHAR(25)
-    material_number VARCHAR(8)
+    temp_rise_oil_winding VARCHAR(25)
+    weight VARCHAR(25)
+    weight_of_oil VARCHAR(25)
+    oil_type VARCHAR(25)
+    ip_rating VARCHAR(25)
 }
 
 entity transformer_records {
