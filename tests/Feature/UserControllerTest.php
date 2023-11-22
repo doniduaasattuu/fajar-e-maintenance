@@ -132,6 +132,21 @@ class UserControllerTest extends TestCase
             ->assertSeeText("Registration Code is wrong!");
     }
 
+    public function testRegisterNikDuplicateAndRegistrationCodeIsWrong()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/registration', [
+            "nik" => "55000154",
+            "password" => "1234",
+            "fullname" => "Doni Darmawan",
+            "department" => "EI2",
+            "phone_number" => "08983456945",
+            "registration_code" => "salah",
+        ])
+            ->assertSeeText("Registration Code is wrong!");
+    }
+
     // ======= LOGOUT =======
     public function testLogout()
     {
