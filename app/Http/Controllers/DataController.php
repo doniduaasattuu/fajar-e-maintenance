@@ -40,7 +40,7 @@ class DataController extends Controller
 
             if (!is_null($emo)) {
 
-                return response()->view("maintenance.checking-form-emo", [
+                return response()->view("maintenance.emos.checking-form", [
                     "title" => "Checking Form",
                     "emo" => $emo,
                     "emoDetail" => $emo->emoDetails->toArray(),
@@ -51,9 +51,6 @@ class DataController extends Controller
                     "title" => "Oops!"
                 ]);
             }
-        } else if ($equipment_code === "Fajar-PanelList") {
-            // Fajar-PanelList
-            $panelList = $equipment;
         } else if ($equipment_code === "Fajar-TrafoList") {
             // Fajar-TrafoList
             $trafoList = $equipment;
@@ -61,12 +58,21 @@ class DataController extends Controller
             $transformer = Transformers::query()->with("transformerDetails")->where("qr_code_link", "=", $uri)->first();
 
             if (!is_null($transformer)) {
-                return response()->json($transformer);
+
+                return response()->view("maintenance.transformers.checking-form", [
+                    "title" => "Checking Form",
+                    "transformer" => $transformer,
+                    "transformerDetail" => $transformer->transformerDetails->toArray(),
+                    "trafoList" => $trafoList,
+                ]);
             } else {
                 return response()->view("utility.page-not-found", [
                     "title" => "Oops!"
                 ]);
             }
+        } else if ($equipment_code === "Fajar-PanelList") {
+            // Fajar-PanelList
+            $panelList = $equipment;
         } else {
             return response()->view("utility.page-not-found", [
                 "title" => "Oops!"
@@ -88,7 +94,16 @@ class DataController extends Controller
             ]);
 
             return redirect($redirected);
-        } else if (!empty($search_data) && !is_null($search_data) && strlen($search_data) == 9) {
+        } else if (
+            !empty($search_data) &&
+            !is_null($search_data) &&
+            strlen($search_data) == 9 &&
+            (substr($search_data, 0, 3) == "EMO" ||
+                substr($search_data, 0, 3) == "MGM" ||
+                substr($search_data, 0, 3) == "MGB" ||
+                substr($search_data, 0, 3) == "MFB" ||
+                substr($search_data, 0, 3) == "MDO")
+        ) {
             // Equimpent format
             $emo = Emo::query()->find($search_data);
             if (!is_null($emo)) {
@@ -98,6 +113,29 @@ class DataController extends Controller
 
                 $redirected = action([DataController::class, "getCheckingForm"], [
                     "equipment" => $motorList
+                ]);
+
+                return redirect($redirected);
+            } else {
+                return response()->view("utility.page-not-found", [
+                    "title" => "Oops!"
+                ]);
+            }
+        } else if (
+            !empty($search_data) &&
+            !is_null($search_data) &&
+            strlen($search_data) == 9 &&
+            substr($search_data, 0, 3) == "ETF"
+        ) {
+            // Equimpent format
+            $etf = Transformers::query()->find($search_data);
+            if (!is_null($etf)) {
+
+                $qr_code_link = $etf->qr_code_link;
+                $trafoList = (explode("=", $qr_code_link))[1];
+
+                $redirected = action([DataController::class, "getCheckingForm"], [
+                    "equipment" => $trafoList
                 ]);
 
                 return redirect($redirected);
