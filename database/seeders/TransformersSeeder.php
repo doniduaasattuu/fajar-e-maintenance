@@ -18,7 +18,7 @@ class TransformersSeeder extends Seeder
         $trafo->id = "ETF000085";
         $trafo->status = "Installed";
         $trafo->funcloc = "FP-01-IN1";
-        $trafo->sort_field = "TR PLN";
+        $trafo->sort_field = "TRAFO;STEP DOWN;150/20kV;UNINDO 50 KVA;";
         $trafo->material_number = null;
         $trafo->equipment_description = "TR PLN";
         $trafo->unique_id = "1";

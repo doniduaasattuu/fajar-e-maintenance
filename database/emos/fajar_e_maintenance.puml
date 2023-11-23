@@ -179,28 +179,23 @@ entity transformer_records {
     * etf VARCHAR(9) <<FK>>
     * sort_field VARCHAR(150)
     --
-    * transformer_records ENUM(["Online", "Offline"])
+    * transformer_status ENUM(["Online", "Offline"])
     * clean_status ENUM(["Clean", "Dirty"])
 
-      current_primary_phase_r VARCHAR(5)
-      current_primary_phase_s VARCHAR(5)
-      current_primary_phase_t VARCHAR(5)
+      primary_current_phase_r SMALLINT(5) 0
+      primary_current_phase_s SMALLINT(5) 0
+      primary_current_phase_t SMALLINT(5) 0
       
-      current_secondary_phase_r VARCHAR(5)
-      current_secondary_phase_s VARCHAR(5)
-      current_secondary_phase_t VARCHAR(5)
+      secondary_current_phase_r SMALLINT(5) 0
+      secondary_current_phase_s SMALLINT(5) 0
+      secondary_current_phase_t SMALLINT(5) 0
 
-      voltage_primary VARCHAR(10)
-      voltage_secondary VARCHAR(10)
-
-      winding_temperature_primary VARCHAR(10)
-      winding_temperature_secondary VARCHAR(10)
-
-      oil_temperature_primary VARCHAR(10)
-      oil_temperature_secondary VARCHAR(10)
+      primary_voltage VARCHAR(10) INT 0
+      secondary_voltage VARCHAR(10) INT 0
+      winding_temperature VARCHAR(10) INT 0
+      oil_temperature VARCHAR(10) SMALLINT(5) 0
      
-      noise ENUM(["Normal", "Abnormal"]) DEFAULT NORMAL
-
+      noise ENUM(["Normal", "Abnormal"])
       silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
       earthing_connection (["Lose", "No Lose"])
       oil_leakage (["Leak", "No Leak"])

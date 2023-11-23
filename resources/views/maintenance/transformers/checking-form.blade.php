@@ -145,6 +145,142 @@
         </div>
         <!-- TRANSFORMER DETAILS END -->
 
+        <!-- TRANSFORMER CHECKING FORM START -->
+        <form id="myform" action="/checking-form/{{ $trafoList }}" method="post">
+            @csrf
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label for="transformer_status" class="fw-bold form-label">Transformer Status</label>
+                        <select name="transformer_status" id="transformer_status" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Transformer Status--</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+
+                    <!-- CLEAN STATUS -->
+                    <div class="mb-3">
+                        <label for="clean_status" class="fw-bold form-label">Clean Status</label>
+                        <select name="clean_status" id="clean_status" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Cleanliness--</option>
+                            <option value="Clean">Clean</option>
+                            <option value="Dirty">Dirty</option>
+                        </select>
+                    </div>
+
+                    <!-- PRIMARY CURRENT -->
+                    <div class="mb-3">
+                        <div class="row">
+                            <label class="fw-bold form-label">Primary Current (A)</label>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                            </div>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
+                            </div>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECONDARY CURRENT -->
+                    <div class="mb-3">
+                        <div class="row">
+                            <label class="fw-bold form-label">Secondary Current (A)</label>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                            </div>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
+                            </div>
+                            <div class="col">
+                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRIMARY VOLTAGE -->
+                    <div class="mb-3">
+                        <label for="primary_voltage" class="fw-bold form-label">Primary Voltage</label>
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control voltage_input" placeholder="Ampere" name="primary_voltage" id="primary_voltage">
+                    </div>
+
+                    <!-- SECONDARY VOLTAGE -->
+                    <div class="mb-3">
+                        <label for="secondary_voltage" class="fw-bold form-label">Secondary Voltage</label>
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control voltage_input" placeholder="Ampere" name="secondary_voltage" id="secondary_voltage">
+                    </div>
+
+                    <!-- WINDING TEMPERATURE -->
+                    <div class="mb-3">
+                        <label for="winding_temperature" class="fw-bold form-label">Winding Temperature</label>
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="winding_temperature" id="winding_temperature">
+                    </div>
+
+                    <!-- OIL TEMPERATURE -->
+                    <div class="mb-3">
+                        <label for="oil_temperature" class="fw-bold form-label">Oil Temperature</label>
+                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="oil_temperature" id="oil_temperature">
+                    </div>
+
+                    <!-- NOISE -->
+                    <div class="mb-3">
+                        <label for="noise" class="fw-bold form-label">Noise</label>
+                        <select name="noise" id="noise" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Noise--</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Abnormal">Abnormal</option>
+                        </select>
+                    </div>
+
+                    <!-- SILICA GEL -->
+                    <div class="mb-3">
+                        <label for="silica_gel" class="fw-bold form-label">Silica Gel</label>
+                        <select name="silica_gel" id="silica_gel" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Silica Gel--</option>
+                            <option title="Good" value="Dark Blue">Dark Blue</option>
+                            <option title="Satisfactory" value="Light Blue">Light Blue</option>
+                            <option title="Unsatisfactory" value="Pink">Pink</option>
+                            <option title="Unacceptable" value="Brown">Brown</option>
+                        </select>
+                    </div>
+
+                    <!-- EARTHING CONNECTION -->
+                    <div class="mb-3">
+                        <label for="earthing_connection" class="fw-bold form-label">Earthing Connection</label>
+                        <select name="earthing_connection" id="earthing_connection" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Earthing Connection--</option>
+                            <option value="No Lose">No Lose</option>
+                            <option value="Lose">Lose</option>
+                        </select>
+                    </div>
+
+                    <!-- BLOWER CONDITION -->
+                    <div class="mb-3">
+                        <label for="blower_condition" class="fw-bold form-label">Blower Condition</label>
+                        <select name="blower_condition" id="blower_condition" class="form-select mb-3" aria-label="Default select example">
+                            <option value="">--Blower Condition--</option>
+                            <option value="Running">Running</option>
+                            <option value="Not Running">Not Running</option>
+                        </select>
+                    </div>
+
+                    <!-- COMMENT -->
+                    <div class="my-4">
+                        <label for="comment" class="fw-bold form-label">Remarks</label>
+                        <textarea placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- TRANSFORMER CHECKING FORM END -->
+
     </div>
 
 </body>
