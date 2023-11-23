@@ -134,7 +134,7 @@
                                 @foreach ($transformerDetail as $key => $value)
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
-                                    <td id="{{ $key }}">{{ $value  }}</td>
+                                    <td>{{ $value  }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -159,28 +159,18 @@
                         </select>
                     </div>
 
-                    <!-- CLEAN STATUS -->
-                    <div class="mb-3">
-                        <label for="clean_status" class="fw-bold form-label">Clean Status</label>
-                        <select name="clean_status" id="clean_status" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">--Cleanliness--</option>
-                            <option value="Clean">Clean</option>
-                            <option value="Dirty">Dirty</option>
-                        </select>
-                    </div>
-
                     <!-- PRIMARY CURRENT -->
                     <div class="mb-3">
                         <div class="row">
                             <label class="fw-bold form-label">Primary Current (A)</label>
                             <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                            </div>
+                            <div class="col px-0">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
                             </div>
                             <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
-                            </div>
-                            <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
                             </div>
                         </div>
                     </div>
@@ -190,46 +180,54 @@
                         <div class="row">
                             <label class="fw-bold form-label">Secondary Current (A)</label>
                             <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase R" name="secondary_current_phase_r" id="secondary_current_phase_r">
+                            </div>
+                            <div class="col px-0">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase S" name="secondary_current_phase_s" id="secondary_current_phase_s">
                             </div>
                             <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
-                            </div>
-                            <div class="col">
-                                <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control current_input" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
+                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase T" name="secondary_current_phase_t" id="secondary_current_phase_t">
                             </div>
                         </div>
                     </div>
 
                     <!-- PRIMARY VOLTAGE -->
                     <div class="mb-3">
-                        <label for="primary_voltage" class="fw-bold form-label">Primary Voltage</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control voltage_input" placeholder="Ampere" name="primary_voltage" id="primary_voltage">
+                        <label for="primary_voltage" class="fw-bold form-label">Primary Voltage (V)</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="primary_voltage" id="primary_voltage">
                     </div>
 
                     <!-- SECONDARY VOLTAGE -->
                     <div class="mb-3">
-                        <label for="secondary_voltage" class="fw-bold form-label">Secondary Voltage</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control voltage_input" placeholder="Ampere" name="secondary_voltage" id="secondary_voltage">
-                    </div>
-
-                    <!-- WINDING TEMPERATURE -->
-                    <div class="mb-3">
-                        <label for="winding_temperature" class="fw-bold form-label">Winding Temperature</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="winding_temperature" id="winding_temperature">
+                        <label for="secondary_voltage" class="fw-bold form-label">Secondary Voltage (V)</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="secondary_voltage" id="secondary_voltage">
                     </div>
 
                     <!-- OIL TEMPERATURE -->
                     <div class="mb-3">
                         <label for="oil_temperature" class="fw-bold form-label">Oil Temperature</label>
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="oil_temperature" id="oil_temperature">
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="oil_temperature" id="oil_temperature">
+                    </div>
+
+                    <!-- WINDING TEMPERATURE -->
+                    <div class="mb-3">
+                        <label for="winding_temperature" class="fw-bold form-label">Winding Temperature</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="winding_temperature" id="winding_temperature">
+                    </div>
+
+                    <!-- CLEAN STATUS -->
+                    <div class="mb-3">
+                        <label for="clean_status" class="fw-bold form-label">Clean Status</label>
+                        <select disabled name="clean_status" id="clean_status" class="form-select mb-3 required" aria-label="Default select example">
+                            <option value="Clean">Clean</option>
+                            <option value="Dirty">Dirty</option>
+                        </select>
                     </div>
 
                     <!-- NOISE -->
                     <div class="mb-3">
                         <label for="noise" class="fw-bold form-label">Noise</label>
-                        <select name="noise" id="noise" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">--Noise--</option>
+                        <select disabled name="noise" id="noise" class="form-select mb-3" aria-label="Default select example">
                             <option value="Normal">Normal</option>
                             <option value="Abnormal">Abnormal</option>
                         </select>
@@ -238,8 +236,7 @@
                     <!-- SILICA GEL -->
                     <div class="mb-3">
                         <label for="silica_gel" class="fw-bold form-label">Silica Gel</label>
-                        <select name="silica_gel" id="silica_gel" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">--Silica Gel--</option>
+                        <select disabled name="silica_gel" id="silica_gel" class="form-select mb-3" aria-label="Default select example">
                             <option title="Good" value="Dark Blue">Dark Blue</option>
                             <option title="Satisfactory" value="Light Blue">Light Blue</option>
                             <option title="Unsatisfactory" value="Pink">Pink</option>
@@ -250,31 +247,38 @@
                     <!-- EARTHING CONNECTION -->
                     <div class="mb-3">
                         <label for="earthing_connection" class="fw-bold form-label">Earthing Connection</label>
-                        <select name="earthing_connection" id="earthing_connection" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">--Earthing Connection--</option>
-                            <option value="No Lose">No Lose</option>
-                            <option value="Lose">Lose</option>
+                        <select disabled name="earthing_connection" id="earthing_connection" class="form-select mb-3" aria-label="Default select example">
+                            <option value="Tight">Tight</option>
+                            <option value="Loose">Loose</option>
+                        </select>
+                    </div>
+
+                    <!-- OIL LEAKAGE -->
+                    <div class="mb-3">
+                        <label for="oil_leakage" class="fw-bold form-label">Oil Leakage</label>
+                        <select disabled name="oil_leakage" id="oil_leakage" class="form-select mb-3" aria-label="Default select example">
+                            <option value="No Leaks">No Leaks</option>
+                            <option value="Leaks">Leaks</option>
                         </select>
                     </div>
 
                     <!-- BLOWER CONDITION -->
                     <div class="mb-3">
                         <label for="blower_condition" class="fw-bold form-label">Blower Condition</label>
-                        <select name="blower_condition" id="blower_condition" class="form-select mb-3" aria-label="Default select example">
-                            <option value="">--Blower Condition--</option>
-                            <option value="Running">Running</option>
-                            <option value="Not Running">Not Running</option>
+                        <select disabled name="blower_condition" id="blower_condition" class="form-select mb-3" aria-label="Default select example">
+                            <option value="Normal">Normal</option>
+                            <option value="Abnormal">Abnormal</option>
                         </select>
                     </div>
 
                     <!-- COMMENT -->
-                    <div class="my-4">
+                    <div class="mb-3">
                         <label for="comment" class="fw-bold form-label">Remarks</label>
-                        <textarea placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                        <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
 
-                    <div class="mb-4">
-                        <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
+                    <div class="mt-4">
+                        <input disabled id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
                 </div>
             </div>
@@ -283,6 +287,166 @@
 
     </div>
 
+    <script>
+        let myform = document.getElementById("myform");
+        const ajax = new XMLHttpRequest();
+
+        let transformer_function_location = document.getElementById("transformer_function_location");
+        let transformer_sort_field = document.getElementById("transformer_sort_field");
+        let status = document.getElementById("status");
+
+        let transformer_status = document.getElementById("transformer_status");
+        let temperatures = document.getElementsByClassName("temperature");
+        // let clean_status = document.getElementById("clean_status");
+        // let primary_currents = document.getElementsByClassName("primary_current");
+        // let secondary_currents = document.getElementsByClassName("secondary_current");
+        // let primary_voltage = document.getElementById("primary_voltage")
+        // let secondary_voltage = document.getElementById("secondary_voltage")
+        // let winding_temperature = document.getElementById("winding_temperature")
+        // let oil_temperature = document.getElementById("oil_temperature")
+        // let noise = document.getElementById("noise")
+        // let silica_gel = document.getElementById("silica_gel")
+        // let earthing_connection = document.getElementById("earthing_connection")
+        // let blower_condition = document.getElementById("blower_condition")
+        // let comment = document.getElementById("comment")
+        let unrequireds = document.getElementsByClassName("unrequired"); // current and voltage which is unrequired while transformer offline
+
+        // ========================================================
+        // ============= UNHIDE FUNCLOC & SORTFIELD  ==============
+        // ========================================================
+        if (status.textContent == "Installed") {
+            transformer_function_location.classList.remove("d-none");
+            transformer_sort_field.classList.remove("d-none");
+        }
+
+        // ========================================================
+        // ===================== ENABLE INPUT  ====================
+        // ========================================================
+        transformer_status.onchange = () => {
+            // ENABLE ALL INPUT FIELD WHILE ONLINE
+            if (transformer_status.value === 'Online') {
+                for (input of myform) {
+                    if (input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "transformer_status") {
+                        continue;
+                    } else {
+                        input.removeAttribute("disabled")
+                    }
+                }
+            } else if (transformer_status.value === "Offline") {
+                // ENABLE SOME INPUT FILED IF OFFLINE
+                for (input of myform) {
+                    if (input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "transformer_status") {
+                        continue;
+                    } else {
+                        input.removeAttribute("disabled")
+                    }
+                }
+                // CURRENT AND VOLTAGE FIELD
+                for (input of unrequireds) {
+                    input.value = "";
+                    input.setAttribute("disabled", true);
+                }
+            } else {
+                // DISABLED ALL INPUT WHILE UNSELECTED
+                for (input of myform) {
+                    if (input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "transformer_status") {
+                        continue;
+                    } else {
+                        input.setAttribute("disabled", true);
+                    }
+                }
+                // CURRENT AND VOLTAGE FIELD
+                for (input of unrequireds) {
+                    input.value = "";
+                }
+            }
+        }
+
+        // ========================================================
+        // =================== INPUT VALIDATION ===================
+        // ========================================================
+        // FUNCTION ONLY NUMBER ALLOWED
+        function onlynumber(evt) {
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        }
+
+        // VALIDATE TEMPERATURE NOT EXCEED 200°C
+        for (let i = 0; i < temperatures.length; i++) {
+            temperatures[i].onchange = () => {
+                if (Number(temperatures[i].value) > 200 || temperatures[i].value.length > 3) {
+                    let temperatureModal = new bootstrap.Modal(document.getElementById('temperature_alert'), {});
+                    temperatureModal.show();
+                    temperatures[i].value = "";
+                }
+            }
+        }
+
+        // ========================================================
+        // =================== POST DATA AJAX  ====================
+        // ========================================================
+        let buttonSubmit = document.getElementById("buttonsubmit");
+        buttonSubmit.onclick = () => {
+
+            let myArray = {
+                'funcloc': '{{ $transformer->funcloc }}',
+                'transformer': '{{ $transformer->id }}',
+                'sort_field': '{{ $transformer->sort_field }}',
+                'equipment_code': '{{ $trafoList }}',
+            };
+            for (let input of myform) {
+                if (`${input.name}` == "_token") {
+                    continue;
+                } else if (`${input.value}` == "Submit") {
+                    continue;
+                } else {
+                    myArray[`${input.name}`] = `${input.value}`;
+                }
+            }
+            console.table(myArray);
+
+            ajax.open("POST", "/checking-form/{{ $trafoList }}");
+            ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")
+            ajax.setRequestHeader("Content-Type", "application/json");
+            ajax.onload = () => {
+                if (ajax.readyState == 4) {
+
+                    // console.info(ajax.responseText);
+
+                    // response from server is format json
+                    let response_object = JSON.parse(ajax.responseText);
+                    // console.info(response_object);
+
+                    if (response_object.error?.errorInfo == undefined) {
+                        // if have object have error will display error message 
+                        if (response_object.hasOwnProperty("error")) {
+                            alert_response.textContent = response_object.error;
+                            message_response.style.display = "none";
+                            alert_response.style.display = "block";
+                            document.documentElement.scrollTop = 0;
+                        } else {
+                            // will display response message success
+                            message_response.textContent = response_object.message;
+                            alert_response.style.display = "none";
+                            message_response.style.display = "block";
+                            document.documentElement.scrollTop = 0;
+                        }
+                    } else {
+                        alert_response.textContent = response_object.error.connectionName + "Error: " + response_object.error.errorInfo[2];
+                        message_response.style.display = "none";
+                        alert_response.style.display = "block";
+                        document.documentElement.scrollTop = 0;
+                    }
+                }
+            }
+            ajax.send(JSON.stringify(myArray));
+        }
+    </script>
 </body>
 
 </html>

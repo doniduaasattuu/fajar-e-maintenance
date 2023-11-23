@@ -57,7 +57,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     });
 
     Route::get('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "getCheckingForm"]);
-    Route::post('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "saveDataMotor"]);
+    Route::post('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "saveDataRecordEquipment"]);
 
     Route::get('/change-name', [App\Http\Controllers\UserController::class, "changeName"]);
     Route::post('/change-name', [App\Http\Controllers\UserController::class, "doChangeName"]);

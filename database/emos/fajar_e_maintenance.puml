@@ -176,31 +176,32 @@ entity transformer_details {
 entity transformer_records {
     * id BIGINT UNSIGNED AUTO_INCREMENT
     * funcloc VARCHAR(150) <<FK>>
-    * etf VARCHAR(9) <<FK>>
+    * transformer VARCHAR(9) <<FK>>
     * sort_field VARCHAR(150)
     --
     * transformer_status ENUM(["Online", "Offline"])
-    * clean_status ENUM(["Clean", "Dirty"])
 
-      primary_current_phase_r SMALLINT(5) 0
-      primary_current_phase_s SMALLINT(5) 0
-      primary_current_phase_t SMALLINT(5) 0
+      primary_current_phase_r UNSIGNED SMALLINT(5) 0
+      primary_current_phase_s UNSIGNED SMALLINT(5) 0
+      primary_current_phase_t UNSIGNED SMALLINT(5) 0 
+
+      secondary_current_phase_r UNSIGNED SMALLINT(5) 0
+      secondary_current_phase_s UNSIGNED SMALLINT(5) 0
+      secondary_current_phase_t UNSIGNED SMALLINT(5) 0
       
-      secondary_current_phase_r SMALLINT(5) 0
-      secondary_current_phase_s SMALLINT(5) 0
-      secondary_current_phase_t SMALLINT(5) 0
-
       primary_voltage VARCHAR(10) INT 0
       secondary_voltage VARCHAR(10) INT 0
+
       winding_temperature VARCHAR(10) INT 0
-      oil_temperature VARCHAR(10) SMALLINT(5) 0
-     
+      oil_temperature VARCHAR(10) UNSIGNED SMALLINT(5) 0
+
+    * clean_status ENUM(["Clean", "Dirty"])
       noise ENUM(["Normal", "Abnormal"])
       silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
       earthing_connection (["Lose", "No Lose"])
-      oil_leakage (["Leak", "No Leak"])
+      oil_leakage (["No Leaks", "Leaks"])
       blower_condition (["Running", "Not Running"])
-
+     
       comment TEXT NULL
     * created_at TIMESTAMP
     * nik VARCHAR(8) <<FK>>

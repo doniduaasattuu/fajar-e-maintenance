@@ -414,6 +414,7 @@
                 'funcloc': '{{ $emo->funcloc }}',
                 'emo': '{{ $emo->id }}',
                 'sort_field': '{{ $emo->sort_field }}',
+                'equipment_code': '{{ $motorList }}',
             };
             // console.info(myform);
             for (let input of myform) {

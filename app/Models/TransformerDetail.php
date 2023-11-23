@@ -15,6 +15,10 @@ class TransformerDetail extends Model
     public $incrementing = true;
     public $timestamps = false;
 
+    protected $hidden = [
+        'id'
+    ];
+
     public function funcloc(): HasOneThrough
     {
         return $this->hasOneThrough(

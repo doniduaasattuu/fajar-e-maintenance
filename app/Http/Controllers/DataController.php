@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\TransformerRecord;
 use App\Models\Transformers;
 use App\Models\User;
 use Carbon\Carbon;
@@ -253,137 +254,157 @@ class DataController extends Controller
         }
     }
 
-    // =================================================
-    // ================ SAVE DATA MOTOR ================
-    // =================================================
-    public function saveDataMotor(Request $request)
+    // ============================================================
+    // ================ SAVE DATA RECORD EQUIPMENT ================
+    // ============================================================
+    public function saveDataRecordEquipment(Request $request)
     {
         $request->merge([
             "nik" => session("nik"),
-            "updated_at" => Carbon::now()->toDateTimeString()
+            "created_at" => Carbon::now()->toDateTimeString(),
         ]);
 
         $data = $request->input();
+        // $equipment_code = substr(explode("=", $data["qr_code_link"])[1], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
+        $equipment_code = substr($data["equipment_code"], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
 
-        // return response()->json($data["noise_de"]);
+        // return response()->json($equipment_code);
 
-        if (
-            !empty($data["funcloc"]) &&
-            !empty($data["emo"]) &&
-            !empty($data["sort_field"]) &&
-            !empty($data["motor_status"]) &&
-            !empty($data["clean_status"]) &&
-            !empty($data["nipple_grease"]) &&
-            !empty($data["noise_de"]) &&
-            !empty($data["noise_nde"])
-        ) {
-            try {
+        if ($equipment_code == "Fajar-MotorList") {
+            // EQUIPMENT MOTOR
 
-                foreach ($data as $key => $value) {
-                    if ($value == null) {
-                        if ($key != "comment" && ("desc" != substr($key, -4))) {
+            if (
+                !empty($data["funcloc"]) &&
+                !empty($data["emo"]) &&
+                !empty($data["sort_field"]) &&
+                !empty($data["motor_status"]) &&
+                !empty($data["clean_status"]) &&
+                !empty($data["nipple_grease"]) &&
+                !empty($data["noise_de"]) &&
+                !empty($data["noise_nde"])
+            ) {
+                try {
+
+                    foreach ($data as $key => $value) {
+                        if ($value == null) {
+                            if ($key != "comment" && ("desc" != substr($key, -4))) {
+                                $data[$key] = 0;
+                            }
+                        }
+                    }
+
+                    // return response()->json($data);
+                    $emo_record = EmoRecord::create($data);
+                    $result = $emo_record->save();
+                } catch (QueryException $error) {
+                    return response()->json([
+                        "error" => $error
+                    ]);
+                }
+
+                if ($result) {
+                    return response()->json([
+                        "message" => "Saved successfully! ✅"
+                    ]);
+                } else { {
+                        return response()->json([
+                            "error" => "Error occurred! ⚠️"
+                        ]);
+                    }
+                }
+            } else {
+                return response()->json([
+                    "error" => "All field is required! ⚠️"
+                ]);
+            }
+        } else if ($equipment_code == "Fajar-TrafoList") {
+            // EQUIPMENT TRAFO
+
+            if (
+                !empty($data["funcloc"]) &&
+                !empty($data["transformer"]) &&
+                !empty($data["sort_field"]) &&
+                !empty($data["equipment_code"]) &&
+                !empty($data["transformer_status"]) &&
+                !empty($data["clean_status"]) &&
+                !empty($data["noise"]) &&
+                !empty($data["silica_gel"]) &&
+                !empty($data["earthing_connection"]) &&
+                !empty($data["blower_condition"])
+            ) {
+                try {
+
+                    foreach ($data as $key => $value) {
+                        if ($value == null) {
                             $data[$key] = 0;
                         }
                     }
-                }
 
-                // return response()->json($data);
-                $emo_record = EmoRecord::create($data);
-                $result = $emo_record->save();
-            } catch (QueryException $error) {
-                return response()->json([
-                    "error" => $error
-                ]);
-            }
-
-            if ($result) {
-                return response()->json([
-                    "message" => "Saved successfully! ✅"
-                ]);
-            } else { {
+                    $transformer_record = TransformerRecord::create($data);
+                    $result = $transformer_record->save();
+                } catch (QueryException $error) {
                     return response()->json([
-                        "error" => "Error occurred! ⚠️"
+                        "error" => $error
                     ]);
                 }
-            }
 
-            // if ($result == true) {
-            //     return response()->json([
-            //         "message" => "Saved successfully! ✅"
-            //     ]);
-            // } else {
-            //     return response()->json([
-            //         "error" => "Error saving record! ⚠️"
-            //     ]);
-            // }
+                if ($result) {
+                    return response()->json([
+                        "message" => "Saved successfully! ✅"
+                    ]);
+                } else { {
+                        return response()->json([
+                            "error" => "Error occurred! ⚠️"
+                        ]);
+                    }
+                }
+            } else {
+                return response()->json([
+                    "error" => "All field is required! ⚠️"
+                ]);
+            }
         } else {
-            return response()->json([
-                "error" => "All field is required! ⚠️"
+            return response()->view("utility.page-not-found", [
+                "title" => "Oops!"
             ]);
         }
 
 
-        // $funcloc = $request->input("funcloc");
-        // $collection->eachSpread(function (string $id, string $value) {
-        //     // return response()->json(json_encode($id));
-        // });
-        // var_dump();
 
-        // $funcloc = $request->input("funcloc");
-        // return response()->json(json_encode($funcloc));
 
-        // $funcloc = $request->input("funcloc");
-        // $emo = $request->input("emo");
-        // $sort_field = $request->input("sort_field");
-        // $motor_status = $request->input("motor_status");
-        // $clean_status = $request->input("clean_status");
-        // $nipple_grease_input = $request->input("nipple_grease_input");
-        // $number_of_greasing_input = ($request->input("number_of_greasing_input") != null) ? $request->input("number_of_greasing_input") : 0;
-        // $temperature_a = ($request->input("temperature_a") != null) ? $request->input("temperature_a") : 0;
-        // $temperature_b = ($request->input("temperature_b") != null) ? $request->input("temperature_b") : 0;
-        // $temperature_c = ($request->input("temperature_c") != null) ? $request->input("temperature_c") : 0;
-        // $temperature_d = ($request->input("temperature_d") != null) ? $request->input("temperature_d") : 0;
-        // $vibration_value_de = ($request->input("vibration_value_de") != null) ? $request->input("vibration_value_de") : 0;
-        // $vibration_de = $request->input("vibration_de");
-        // $vibration_value_nde = ($request->input("vibration_value_nde") != null) ? $request->input("vibration_value_nde") : 0;
-        // $vibration_nde = $request->input("vibration_nde");
-        // $comment = $request->input("comment");
-        // $nik = session("nik");
+
+        // $request->merge([
+        //     "nik" => session("nik"),
+        //     "updated_at" => Carbon::now()->toDateTimeString()
+        // ]);
+
+        // $data = $request->input();
+
+        // return response()->json($data);
 
         // if (
-        //     empty($funcloc) ||
-        //     empty($emo) ||
-        //     empty($sort_field) ||
-        //     empty($motor_status) ||
-        //     empty($clean_status) ||
-        //     empty($nipple_grease_input)
+        //     !empty($data["funcloc"]) &&
+        //     !empty($data["emo"]) &&
+        //     !empty($data["sort_field"]) &&
+        //     !empty($data["motor_status"]) &&
+        //     !empty($data["clean_status"]) &&
+        //     !empty($data["nipple_grease"]) &&
+        //     !empty($data["noise_de"]) &&
+        //     !empty($data["noise_nde"])
         // ) {
-        //     return response()->json([
-        //         "error" => "All field is required! ⚠️"
-        //     ]);
-        // } else {
-
         //     try {
-        //         $data_record = new EmoRecord();
-        //         $data_record->funcloc = $funcloc;
-        //         $data_record->emo = $emo;
-        //         $data_record->sort_field = $sort_field;
-        //         $data_record->motor_status = $motor_status;
-        //         $data_record->clean_status = $clean_status;
-        //         $data_record->nipple_grease = $nipple_grease_input;
-        //         $data_record->number_of_greasing = $number_of_greasing_input;
-        //         $data_record->temperature_a = $temperature_a;
-        //         $data_record->temperature_b = $temperature_b;
-        //         $data_record->temperature_c = $temperature_c;
-        //         $data_record->temperature_d = $temperature_d;
-        //         $data_record->vibration_value_de = $vibration_value_de;
-        //         $data_record->vibration_de = $vibration_de;
-        //         $data_record->vibration_value_nde = $vibration_value_nde;
-        //         $data_record->vibration_nde = $vibration_nde;
-        //         $data_record->comment = $comment;
-        //         $data_record->created_at = Carbon::now()->toDateTimeString();
-        //         $data_record->nik = $nik;
-        //         $result = $data_record->save();
+
+        //         foreach ($data as $key => $value) {
+        //             if ($value == null) {
+        //                 if ($key != "comment" && ("desc" != substr($key, -4))) {
+        //                     $data[$key] = 0;
+        //                 }
+        //             }
+        //         }
+
+        //         // return response()->json($data);
+        //         $emo_record = EmoRecord::create($data);
+        //         $result = $emo_record->save();
         //     } catch (QueryException $error) {
         //         return response()->json([
         //             "error" => $error
@@ -400,6 +421,10 @@ class DataController extends Controller
         //             ]);
         //         }
         //     }
+        // } else {
+        //     return response()->json([
+        //         "error" => "All field is required! ⚠️"
+        //     ]);
         // }
     }
 
