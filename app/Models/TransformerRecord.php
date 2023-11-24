@@ -18,4 +18,30 @@ class TransformerRecord extends Model
     {
         return $this->hasOne(User::class, 'nik', 'nik');
     }
+
+    protected $fillable = [
+        "funcloc",
+        "transformer",
+        "sort_field",
+        "transformer_status",
+        "primary_current_phase_r",
+        "primary_current_phase_s",
+        "primary_current_phase_t",
+        "secondary_current_phase_r",
+        "secondary_current_phase_s",
+        "secondary_current_phase_t",
+        "primary_voltage",
+        "secondary_voltage",
+        "oil_temperature",
+        "winding_temperature",
+        "clean_status",
+        "noise",
+        "silica_gel",
+        "earthing_connection",
+        "oil_leakage",
+        "blower_condition",
+        "comment",
+        "created_at",
+        "nik",
+    ];
 }

@@ -174,81 +174,88 @@ class DataController extends Controller
         return $result;
     }
 
-    public function sortFieldMotorTrends(Request $request)
+    public function equipmentTrends(Request $request)
     {
         $sort_field = $request->input("sort_field");
         $funcloc = $request->input("funcloc");
+        $equipment_code = substr($request->input("equipment_code"), 0, 15);
 
-        if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
-            $end_date = Carbon::now()->addDays(1);
-            $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+        if ($equipment_code == "Fajar-MotorList") {
+            if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
+                $end_date = Carbon::now()->addDays(1);
+                $start_date = Carbon::now()->addYears(-1)->addDays(-1);
 
-            $emo_records = EmoRecord::query()
-                ->where("funcloc", "=", $funcloc)
-                ->where("sort_field", "=", $sort_field)
-                ->whereBetween("created_at", [$start_date, $end_date])
-                ->get();
-            $comments = EmoRecord::query()->with(['user' => function ($query) {
-                $query->select('nik', 'fullname');
-            }])
-                ->select(["comment", "emo", "created_at", "nik"])
-                ->where("sort_field", "=", $sort_field)
-                ->where("comment", "!=", null)
-                ->whereBetween("created_at", [$start_date, $end_date])
-                ->orderBy("created_at", "DESC")
-                ->get();
+                $emo_records = EmoRecord::query()
+                    ->where("funcloc", "=", $funcloc)
+                    ->where("sort_field", "=", $sort_field)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->get();
+                $comments = EmoRecord::query()->with(['user' => function ($query) {
+                    $query->select('nik', 'fullname');
+                }])
+                    ->select(["comment", "emo", "created_at", "nik"])
+                    ->where("sort_field", "=", $sort_field)
+                    ->where("comment", "!=", null)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->orderBy("created_at", "DESC")
+                    ->get();
 
-            if (!is_null($emo_records)) {
+                if (!is_null($emo_records)) {
 
-                return response()->view("maintenance.sortfield-trends", [
-                    "title" => "Sort Field",
-                    "sort_field" => $sort_field,
-                    "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
-                    "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
-                    "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
-                    "temperature_de" => $this->returnColumnDataRecords("temperature_de", $emo_records),
-                    "temperature_body" => $this->returnColumnDataRecords("temperature_body", $emo_records),
-                    "temperature_nde" => $this->returnColumnDataRecords("temperature_nde", $emo_records),
+                    return response()->view("maintenance.emos.trends", [
+                        "title" => "Sort Field",
+                        "sort_field" => $sort_field,
+                        "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
+                        "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
+                        "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
+                        "temperature_de" => $this->returnColumnDataRecords("temperature_de", $emo_records),
+                        "temperature_body" => $this->returnColumnDataRecords("temperature_body", $emo_records),
+                        "temperature_nde" => $this->returnColumnDataRecords("temperature_nde", $emo_records),
 
-                    "vibration_de_vertical_value" => $this->returnColumnDataRecords("vibration_de_vertical_value", $emo_records),
-                    "vibration_de_vertical_desc" => $this->returnColumnDataRecords("vibration_de_vertical_desc", $emo_records),
+                        "vibration_de_vertical_value" => $this->returnColumnDataRecords("vibration_de_vertical_value", $emo_records),
+                        "vibration_de_vertical_desc" => $this->returnColumnDataRecords("vibration_de_vertical_desc", $emo_records),
 
-                    "vibration_de_horizontal_value" => $this->returnColumnDataRecords("vibration_de_horizontal_value", $emo_records),
-                    "vibration_de_horizontal_desc" => $this->returnColumnDataRecords("vibration_de_horizontal_desc", $emo_records),
+                        "vibration_de_horizontal_value" => $this->returnColumnDataRecords("vibration_de_horizontal_value", $emo_records),
+                        "vibration_de_horizontal_desc" => $this->returnColumnDataRecords("vibration_de_horizontal_desc", $emo_records),
 
-                    "vibration_de_axial_value" => $this->returnColumnDataRecords("vibration_de_axial_value", $emo_records),
-                    "vibration_de_axial_desc" => $this->returnColumnDataRecords("vibration_de_axial_desc", $emo_records),
+                        "vibration_de_axial_value" => $this->returnColumnDataRecords("vibration_de_axial_value", $emo_records),
+                        "vibration_de_axial_desc" => $this->returnColumnDataRecords("vibration_de_axial_desc", $emo_records),
 
-                    "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
-                    "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
+                        "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
+                        "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
 
-                    "noise_de" => $this->returnColumnDataRecords("noise_de", $emo_records),
+                        "noise_de" => $this->returnColumnDataRecords("noise_de", $emo_records),
 
-                    "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
-                    "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
+                        "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
+                        "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
 
-                    "vibration_nde_horizontal_value" => $this->returnColumnDataRecords("vibration_nde_horizontal_value", $emo_records),
-                    "vibration_nde_horizontal_desc" => $this->returnColumnDataRecords("vibration_nde_horizontal_desc", $emo_records),
+                        "vibration_nde_horizontal_value" => $this->returnColumnDataRecords("vibration_nde_horizontal_value", $emo_records),
+                        "vibration_nde_horizontal_desc" => $this->returnColumnDataRecords("vibration_nde_horizontal_desc", $emo_records),
 
-                    "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
-                    "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
+                        "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
+                        "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
 
-                    "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
+                        "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
 
-                    // "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
-                    // "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
-                    // "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
-                    // "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
-                    // "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
-                    // "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
-                    // "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
-                    // "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
-                    "comments" => $comments->toArray(),
-                    "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
-                ]);
+                        // "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
+                        // "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
+                        // "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
+                        // "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
+                        // "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
+                        // "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
+                        // "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
+                        // "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
+                        "comments" => $comments->toArray(),
+                        "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
+                    ]);
+                } else {
+                    return Redirect::back();
+                }
             } else {
                 return Redirect::back();
             }
+        } else if ($equipment_code == "Fajar-TrafoList") {
+            // EQUIPMENT TRAFO
         } else {
             return Redirect::back();
         }
@@ -336,7 +343,11 @@ class DataController extends Controller
 
                     foreach ($data as $key => $value) {
                         if ($value == null) {
-                            $data[$key] = 0;
+                            if ($key === "comment") {
+                                continue;
+                            } else {
+                                $data[$key] = 0;
+                            }
                         }
                     }
 

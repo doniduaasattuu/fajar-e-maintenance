@@ -72,9 +72,10 @@
             <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
         </div>
 
-        <form action="/sortfield-trends" method="post">
+        <form action="/equipment-trends" method="post">
             @csrf
             <input type="hidden" id="sort_field" name="sort_field" value="{{ $emo->sort_field }}">
+            <input type="hidden" id="equipment_code" name="equipment_code" value="{{ $motorList }}">
             <input type="hidden" id="funcloc" name="funcloc" value="{{ $emo->funcloc }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">

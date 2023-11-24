@@ -68,7 +68,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/trends/{emo}', [App\Http\Controllers\DataController::class, "trends"]);
     Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"]);
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
-    Route::post('/sortfield-trends', [App\Http\Controllers\DataController::class, "sortFieldMotorTrends"]);
+    Route::post('/equipment-trends', [App\Http\Controllers\DataController::class, "equipmentTrends"]);
 
     Route::get("/summary", [App\Http\Controllers\DataController::class, "summary"]);
 

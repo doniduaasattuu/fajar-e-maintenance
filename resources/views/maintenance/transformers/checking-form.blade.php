@@ -72,10 +72,11 @@
             <p id="transformer_information" class="lh-sm mb-3 text-secondary">{{ $transformer->id }}</p>
         </div>
 
-        <form action="/sortfield-trends" method="post">
+        <form action="/equipment-trends" method="post">
             @csrf
             <input type="hidden" id="sort_field" name="sort_field" value="{{ $transformer->sort_field }}">
             <input type="hidden" id="funcloc" name="funcloc" value="{{ $transformer->funcloc }}">
+            <input type="hidden" id="equipment_code" name="equipment_code" value="{{ $trafoList }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
@@ -416,7 +417,7 @@
             ajax.onload = () => {
                 if (ajax.readyState == 4) {
 
-                    // console.info(ajax.responseText);
+                    console.info(ajax.responseText);
 
                     // response from server is format json
                     let response_object = JSON.parse(ajax.responseText);
