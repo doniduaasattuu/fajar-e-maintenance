@@ -181,6 +181,8 @@ class DataController extends Controller
         $equipment_code = substr($request->input("equipment_code"), 0, 15);
 
         if ($equipment_code == "Fajar-MotorList") {
+
+            // EQUIPMENT MOTOR
             if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
                 $end_date = Carbon::now()->addDays(1);
                 $start_date = Carbon::now()->addYears(-1)->addDays(-1);
@@ -255,7 +257,84 @@ class DataController extends Controller
                 return Redirect::back();
             }
         } else if ($equipment_code == "Fajar-TrafoList") {
+
             // EQUIPMENT TRAFO
+            if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
+                $end_date = Carbon::now()->addDays(1);
+                $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+
+                $transformer_records = TransformerRecord::query()
+                    ->where("funcloc", "=", $funcloc)
+                    ->where("sort_field", "=", $sort_field)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->get();
+                $comments = TransformerRecord::query()->with(['user' => function ($query) {
+                    $query->select('nik', 'fullname');
+                }])
+                    ->select(["comment", "transformer", "created_at", "nik"])
+                    ->where("sort_field", "=", $sort_field)
+                    ->where("comment", "!=", null)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->orderBy("created_at", "DESC")
+                    ->get();
+
+                if (!is_null($transformer_records)) {
+
+                    // return response()->json([
+                    //     "title" => "Sort Field",
+                    //     "sort_field" => $sort_field,
+                    //     "date_category" => $this->returnColumnDataRecords("created_at", $transformer_records),
+                    //     "transformer_status" => $this->returnColumnDataRecords("transformer_status", $transformer_records),
+                    //     "primary_current_phase_r" => $this->returnColumnDataRecords("primary_current_phase_r", $transformer_records),
+                    //     "primary_current_phase_s" => $this->returnColumnDataRecords("primary_current_phase_s", $transformer_records),
+                    //     "primary_current_phase_t" => $this->returnColumnDataRecords("primary_current_phase_t", $transformer_records),
+                    //     "secondary_current_phase_r" => $this->returnColumnDataRecords("secondary_current_phase_r", $transformer_records),
+                    //     "secondary_current_phase_s" => $this->returnColumnDataRecords("secondary_current_phase_s", $transformer_records),
+                    //     "secondary_current_phase_t" => $this->returnColumnDataRecords("secondary_current_phase_t", $transformer_records),
+                    //     "primary_voltage" => $this->returnColumnDataRecords("primary_voltage", $transformer_records),
+                    //     "secondary_voltage" => $this->returnColumnDataRecords("secondary_voltage", $transformer_records),
+                    //     "oil_temperature" => $this->returnColumnDataRecords("oil_temperature", $transformer_records),
+                    //     "winding_temperature" => $this->returnColumnDataRecords("winding_temperature", $transformer_records),
+                    //     "clean_status" => $this->returnColumnDataRecords("clean_status", $transformer_records),
+                    //     "noise" => $this->returnColumnDataRecords("noise", $transformer_records),
+                    //     "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
+                    //     "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
+                    //     "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
+                    //     "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
+                    //     "comments" => $comments->toArray(),
+                    //     "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
+                    // ]);
+
+                    return response()->view("maintenance.transformers.trends", [
+                        "title" => "Sort Field",
+                        "sort_field" => $sort_field,
+                        "date_category" => $this->returnColumnDataRecords("created_at", $transformer_records),
+                        "transformer_status" => $this->returnColumnDataRecords("transformer_status", $transformer_records),
+                        "primary_current_phase_r" => $this->returnColumnDataRecords("primary_current_phase_r", $transformer_records),
+                        "primary_current_phase_s" => $this->returnColumnDataRecords("primary_current_phase_s", $transformer_records),
+                        "primary_current_phase_t" => $this->returnColumnDataRecords("primary_current_phase_t", $transformer_records),
+                        "secondary_current_phase_r" => $this->returnColumnDataRecords("secondary_current_phase_r", $transformer_records),
+                        "secondary_current_phase_s" => $this->returnColumnDataRecords("secondary_current_phase_s", $transformer_records),
+                        "secondary_current_phase_t" => $this->returnColumnDataRecords("secondary_current_phase_t", $transformer_records),
+                        "primary_voltage" => $this->returnColumnDataRecords("primary_voltage", $transformer_records),
+                        "secondary_voltage" => $this->returnColumnDataRecords("secondary_voltage", $transformer_records),
+                        "oil_temperature" => $this->returnColumnDataRecords("oil_temperature", $transformer_records),
+                        "winding_temperature" => $this->returnColumnDataRecords("winding_temperature", $transformer_records),
+                        "clean_status" => $this->returnColumnDataRecords("clean_status", $transformer_records),
+                        "noise" => $this->returnColumnDataRecords("noise", $transformer_records),
+                        "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
+                        "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
+                        "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
+                        "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
+                        "comments" => $comments->toArray(),
+                        "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
+                    ]);
+                } else {
+                    return Redirect::back();
+                }
+            } else {
+                return Redirect::back();
+            }
         } else {
             return Redirect::back();
         }
