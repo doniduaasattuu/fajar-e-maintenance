@@ -65,11 +65,11 @@
         <!-- VIBRATION ALERT END -->
 
         <!-- TRANSFORMER ID AND TRENDS START  -->
-        <div>
+        <div class="mb-4">
             <h5 id="equipment_description" class="text-break mb-0">{{ $transformer->equipment_description }}</h5>
             <p id="sort_field_information" class="lh-sm mb-0 text-secondary">{{ $transformer->sort_field }}</p>
             <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $transformer->funcloc }}</p>
-            <p id="transformer_information" class="lh-sm mb-3 text-secondary">{{ $transformer->id }}</p>
+            <p id="transformer_information" class="lh-sm mb-0 text-secondary">{{ $transformer->id }}</p>
         </div>
 
         <form action="/equipment-trends" method="post">
