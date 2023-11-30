@@ -48,6 +48,7 @@ class TransformerRecordSeeder extends Seeder
             $transformer_record->silica_gel = array(0 => "Dark Blue", 1 => "Light Blue", 2 => "Pink", 3 => "Brown")[rand(0, 3)];
             $transformer_record->earthing_connection = array(0 => "Tight", 1 => "Loose")[rand(0, 1)];
             $transformer_record->oil_leakage = array(0 => "No Leaks", 1 => "Leaks")[rand(0, 1)];
+            $transformer_record->oil_level = rand(0, 100);
             $transformer_record->blower_condition = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
             $transformer_record->comment = null;
             $transformer_record->created_at = Carbon::now()->addMonths(- ($year - $i));

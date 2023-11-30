@@ -79,6 +79,14 @@
             </div>
         </div>
 
+        <!-- OIL LEVEL -->
+        <div class="text-center">
+            <h4 class="text-break">Oil Level of {{ $sort_field }}</h4>
+            <div class="chart-container mb-4" style="position: relative;">
+                <canvas id="canvas_oil_level"></canvas>
+            </div>
+        </div>
+
         <!-- BLOWER CONDITION -->
         <div class="text-center">
             <h4 class="text-break">Blower Condition of {{ $sort_field }}</h4>
@@ -108,6 +116,7 @@
             let silica_gel = <?php echo json_encode($silica_gel) ?>;
             let earthing_connection = <?php echo json_encode($earthing_connection) ?>;
             let oil_leakage = <?php echo json_encode($oil_leakage) ?>;
+            let oil_level = <?php echo json_encode($oil_level) ?>;
             let blower_condition = <?php echo json_encode($blower_condition) ?>;
             let comments = <?php echo json_encode($comments) ?>;
             let checked_by = <?php echo json_encode($checked_by) ?>;
@@ -445,7 +454,7 @@
             canvas_earthing_connection.options.plugins.legend.position = "bottom";
             // CHARTJS SILICA GEL
 
-            // CHARTJS SILICA GEL
+            // CHARTJS OIL LEAKAGE
             var ctxsol = document.getElementById('canvas_oil_leakage').getContext('2d');
             var canvas_oil_leakage = new Chart(ctxsol, {
                 type: 'line',
@@ -484,7 +493,52 @@
             });
             canvas_oil_leakage.canvas.parentNode.style.height = '300px';
             canvas_oil_leakage.options.plugins.legend.position = "bottom";
-            // CHARTJS SILICA GEL
+            // CHARTJS OIL LEAKAGE
+
+            // CHARTJS OIL LEVEL
+            var ctxsolv = document.getElementById('canvas_oil_level').getContext('2d');
+            var canvas_oil_level = new Chart(ctxsolv, {
+                type: 'line',
+                data: {
+                    labels: date,
+                    datasets: [{
+                        data: oil_level,
+                        label: "Oil Level",
+                        borderColor: "rgb(62,149,205)",
+                        backgroundColor: "rgb(62,149,205)",
+                        fill: false,
+                        tension: 0.3,
+                    }]
+                },
+                options: {
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                footer: footer
+                            },
+                        },
+                    },
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            stack: 'demo',
+                            min: 0,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return value + "%";
+                                }
+                            },
+                        },
+                    },
+                }
+            });
+            canvas_oil_level.canvas.parentNode.style.height = '300px';
+            canvas_oil_level.options.plugins.legend.position = "bottom";
+            // CHARTJS OIL LEVEL
 
             // CHARTJS BLOWER CONDITION
             var ctxsbc = document.getElementById('canvas_blower_condition').getContext('2d');

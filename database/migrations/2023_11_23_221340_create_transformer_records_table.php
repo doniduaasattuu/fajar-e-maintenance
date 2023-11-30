@@ -37,6 +37,7 @@ return new class extends Migration
             $table->enum("silica_gel", ["Dark Blue", "Light Blue", "Pink", "Brown"])->nullable(false);
             $table->enum("earthing_connection", ["Tight", "Loose"])->nullable(false);
             $table->enum("oil_leakage", ["No Leaks", "Leaks"])->nullable(false);
+            $table->unsignedTinyInteger("oil_level")->nullable(false);
             $table->enum("blower_condition", ["Normal", "Abnormal"])->nullable(false);
             $table->text("comment")->nullable(true);
 

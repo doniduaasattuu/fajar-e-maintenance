@@ -39,6 +39,7 @@ class TransformerRecord extends Model
         "silica_gel",
         "earthing_connection",
         "oil_leakage",
+        "oil_level",
         "blower_condition",
         "comment",
         "created_at",

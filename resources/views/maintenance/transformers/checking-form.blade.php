@@ -64,6 +64,25 @@
         </div>
         <!-- VIBRATION ALERT END -->
 
+        <!-- OIL LEVEL ALERT START -->
+        <div class="modal fade" id="oil_level_alert" tabindex="-1" aria-labelledby="oil_level_alertLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="bg-light modal-header">
+                        <h1 class=" modal-title fs-5" id="oil_level_alertLabel">Invalid input ⚠️</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Oil level should not exceed 100%!
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- OIL LEVEL ALERT END -->
+
         <!-- TRANSFORMER ID AND TRENDS START  -->
         <div class="mb-4">
             <h5 id="equipment_description" class="text-break mb-0">{{ $transformer->equipment_description }}</h5>
@@ -263,6 +282,12 @@
                         </select>
                     </div>
 
+                    <!-- OIL LEVEL -->
+                    <div class="mb-3">
+                        <label for="oil_level" class="fw-bold form-label">Oil Level</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="100" class="form-control" placeholder="0-100%" name="oil_level" id="oil_level">
+                    </div>
+
                     <!-- BLOWER CONDITION -->
                     <div class="mb-3">
                         <label for="blower_condition" class="fw-bold form-label">Blower Condition</label>
@@ -298,6 +323,7 @@
 
         let transformer_status = document.getElementById("transformer_status");
         let temperatures = document.getElementsByClassName("temperature");
+        let oil_level = document.getElementById("oil_level");
         // let clean_status = document.getElementById("clean_status");
         // let primary_currents = document.getElementsByClassName("primary_current");
         // let secondary_currents = document.getElementsByClassName("secondary_current");
@@ -385,6 +411,15 @@
                     temperatureModal.show();
                     temperatures[i].value = "";
                 }
+            }
+        }
+
+        // VALIDATION OIL LEVEL BELOW 100%
+        oil_level.onchange = () => {
+            if (oil_level.value > 100) {
+                let oilLevelModal = new bootstrap.Modal(document.getElementById('oil_level_alert'), {});
+                oilLevelModal.show();
+                oil_level.value = "";
             }
         }
 

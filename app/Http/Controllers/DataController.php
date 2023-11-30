@@ -325,6 +325,7 @@ class DataController extends Controller
                         "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
                         "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
                         "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
+                        "oil_level" => $this->returnColumnDataRecords("oil_level", $transformer_records),
                         "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
                         "comments" => $comments->toArray(),
                         "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
