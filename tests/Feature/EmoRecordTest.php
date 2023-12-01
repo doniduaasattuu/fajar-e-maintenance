@@ -74,6 +74,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -116,6 +117,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -158,6 +160,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -199,6 +202,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => null,
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -239,6 +243,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => null,
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -279,6 +284,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => null,
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -319,6 +325,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => null,
             "clean_status" => "Clean",
             "nipple_grease" => "Available",
@@ -359,6 +366,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => null,
             "nipple_grease" => "Available",
@@ -399,6 +407,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => null,
@@ -435,7 +444,9 @@ class EmoRecordTest extends TestCase
         $this->withSession([
             "nik" => "55000154",
             "user" => "Doni Darmawan"
-        ])->post("/checking-form/Fajar-MotorList1804", [])
+        ])->post("/checking-form/Fajar-MotorList1804", [
+            "equipment_code" => "Fajar-MotorList1804",
+        ])
             ->assertJson([
                 "error" => "All field is required! ⚠️"
             ]);
@@ -452,6 +463,7 @@ class EmoRecordTest extends TestCase
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "emo" => "EMO000426",
             "sort_field" => "SP3.P.70/M",
+            "equipment_code" => "Fajar-MotorList1804",
             "motor_status" => "Running",
             "clean_status" => "Clean",
             "nipple_grease" => "Invalid Value",

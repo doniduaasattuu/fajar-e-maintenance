@@ -65,11 +65,11 @@
         <!-- VIBRATION ALERT END -->
 
         <!-- EMO ID AND TRENDS START  -->
-        <div>
-            <h5 id="equipment_description" class="text-break mb-0">{{ $emo->equipment_description }}</h5>
-            <p id="sort_field_information" class="lh-sm mb-0 text-secondary">{{ $emo->sort_field }}</p>
-            <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
-            <p id="emo_information" class="lh-sm mb-3 text-secondary">{{ $emo->id }}</p>
+        <div class="mb-3">
+            <h5 id="sort_field_information" class="text-break lh-sm mb-0">{{ $emo->sort_field }}</h5>
+            <p id="equipment_description" class="text-break mb-0 text-secondary">{{ $emo->equipment_description }}</p>
+            <p id="funcloc_information" class="text-break lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
+            <p id="emo_information" class="text-break lh-sm mb-0 text-secondary">{{ $emo->id }}</p>
         </div>
 
         <form action="/equipment-trends" method="post">
@@ -347,7 +347,6 @@
                                 <option value="Abnormal">Abnormal</option>
                             </select>
                         </div>
-                        <hr>
                         <!-- NON DRIVE END -->
 
                         <!-- VIBRATION VALUE DE START -->
@@ -381,13 +380,13 @@
                     <!-- =========== VIBRATIONS END=========== -->
 
                     <!-- =========== COMMENT START=========== -->
-                    <div class="my-4">
+                    <div class="mb-4">
                         <label for="vibration_value_de_vertical" class="fw-bold form-label">Remarks</label>
                         <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
                     <!-- =========== COMMENT END =========== -->
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
                 </div>

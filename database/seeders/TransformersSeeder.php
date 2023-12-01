@@ -18,9 +18,9 @@ class TransformersSeeder extends Seeder
         $trafo->id = "ETF000085";
         $trafo->status = "Installed";
         $trafo->funcloc = "FP-01-IN1";
-        $trafo->sort_field = "TRAFO;STEP DOWN;150/20kV;UNINDO 50 KVA;";
+        $trafo->sort_field = "TRAFO PLN";
         $trafo->material_number = null;
-        $trafo->equipment_description = "TRAFO PLN";
+        $trafo->equipment_description = "TRAFO;STEP DOWN;150/20kV;UNINDO 50 KVA;";
         $trafo->unique_id = "1";
         $trafo->qr_code_link = "id=Fajar-TrafoList1";
         $trafo->created_at = Carbon::now()->toDateTimeString();

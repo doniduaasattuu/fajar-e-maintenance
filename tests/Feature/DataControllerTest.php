@@ -153,9 +153,10 @@ class DataControllerTest extends TestCase
             ])->withSession([
                 "nik" => "55000154",
                 "user" => "Doni Darmawan",
-            ])->post("/sortfield-trends", [
+            ])->post("/equipment-trends", [
                 "sort_field" => "SP3.P.70/M",
-                "funcloc" => "FP-01-SP3-RJS-T092-P092"
+                "funcloc" => "FP-01-SP3-RJS-T092-P092",
+                "equipment_code" => "Fajar-MotorList1804",
             ]);
 
         $trends_sortfield
@@ -179,9 +180,10 @@ class DataControllerTest extends TestCase
             ])->withSession([
                 "nik" => "55000154",
                 "user" => "Doni Darmawan",
-            ])->post("/sortfield-trends", [
+            ])->post("/equipment-trends", [
                 "sort_field" => "SP9.P.70/M",
-                "funcloc" => "FP-01-SP3-RJS-T092-P999"
+                "funcloc" => "FP-01-SP3-RJS-T092-P999",
+                "equipment_code" => "Fajar-MotorList78910",
             ]);
 
         $trends_sortfield_not_found
@@ -203,7 +205,7 @@ class DataControllerTest extends TestCase
         ])->withSession([
             "nik" => "55000154",
             "user" => "Doni Darmawan",
-        ])->post("/sortfield-trends", [
+        ])->post("/equipment-trends", [
             "sort_field" => ""
         ])
             ->assertStatus(302)

@@ -56,7 +56,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return redirect("/");
     });
 
-    Route::get('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "getCheckingForm"]);
+    Route::get('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "getEquipmentCheckingForm"]);
     Route::post('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "saveDataRecordEquipment"]);
 
     Route::get('/change-name', [App\Http\Controllers\UserController::class, "changeName"]);

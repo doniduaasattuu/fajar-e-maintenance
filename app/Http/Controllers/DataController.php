@@ -29,7 +29,7 @@ class DataController extends Controller
     // ===============================================
     // ================ CHECKING FORM ================
     // ===============================================
-    public function getCheckingForm(Request $request, string $equipment)
+    public function getEquipmentCheckingForm(Request $request, string $equipment)
     {
         // EQUIPMENT CHECK (EMO / ELP / ETF / etc)
         $equipment_code = substr($equipment, 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
@@ -90,7 +90,7 @@ class DataController extends Controller
 
         if (!empty($search_data) && !is_null($search_data) && strlen($search_data) > 9 && substr($search_data, 0, 5) === "Fajar") {
             // Fajar-XXXList
-            $redirected = action([DataController::class, "getCheckingForm"], [
+            $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
                 "equipment" => $search_data
             ]);
 
@@ -112,7 +112,7 @@ class DataController extends Controller
                 $qr_code_link = $emo->qr_code_link;
                 $motorList = (explode("=", $qr_code_link))[1];
 
-                $redirected = action([DataController::class, "getCheckingForm"], [
+                $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
                     "equipment" => $motorList
                 ]);
 
@@ -135,7 +135,7 @@ class DataController extends Controller
                 $qr_code_link = $etf->qr_code_link;
                 $trafoList = (explode("=", $qr_code_link))[1];
 
-                $redirected = action([DataController::class, "getCheckingForm"], [
+                $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
                     "equipment" => $trafoList
                 ]);
 

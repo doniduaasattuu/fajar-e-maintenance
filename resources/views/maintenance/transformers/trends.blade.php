@@ -421,7 +421,7 @@
                     labels: date,
                     datasets: [{
                         data: earthing_connection,
-                        label: "Earthin Connection",
+                        label: "Earthing Connection",
                         borderColor: "rgb(62,149,205)",
                         backgroundColor: "rgb(62,149,205)",
                         fill: false,
