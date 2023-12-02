@@ -357,11 +357,7 @@ class DataController extends Controller
         ]);
 
         $data = $request->input();
-        // $equipment_id = substr(explode("=", $data["qr_code_link"])[1], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
-        // $equipment_id = substr(, 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
         $equipment_list = preg_replace('/[0-9]/i', '', $data["equipment_id"]);
-
-        // return response()->json($equipment_id);
 
         if ($equipment_list == "Fajar-MotorList") {
             // EQUIPMENT MOTOR
@@ -370,6 +366,7 @@ class DataController extends Controller
                 !empty($data["funcloc"]) &&
                 !empty($data["emo"]) &&
                 !empty($data["sort_field"]) &&
+                !empty($data["equipment_id"]) &&
                 !empty($data["motor_status"]) &&
                 !empty($data["clean_status"]) &&
                 !empty($data["nipple_grease"]) &&
@@ -386,7 +383,6 @@ class DataController extends Controller
                         }
                     }
 
-                    // return response()->json($data);
                     $emo_record = EmoRecord::create($data);
                     $result = $emo_record->save();
                 } catch (QueryException $error) {
@@ -423,17 +419,22 @@ class DataController extends Controller
                 !empty($data["noise"]) &&
                 !empty($data["silica_gel"]) &&
                 !empty($data["earthing_connection"]) &&
+                !empty($data["oil_leakage"]) &&
+                !empty($data["oil_level"]) &&
                 !empty($data["blower_condition"])
             ) {
                 try {
 
                     foreach ($data as $key => $value) {
                         if ($value == null) {
-                            if ($key === "comment") {
-                                continue;
-                            } else {
+                            if ($key != "comment") {
                                 $data[$key] = 0;
                             }
+                            // if ($key === "comment") {
+                            //     continue;
+                            // } else {
+                            //     $data[$key] = 0;
+                            // }
                         }
                     }
 

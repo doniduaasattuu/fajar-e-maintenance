@@ -76,36 +76,36 @@ entity emo_records {
     * motor_status ENUM(["Running", "Not Running"])
     * clean_status ENUM(["Clean", "Dirty"])
     * nipple_grease ENUM(["Available", "Not Available"])
-      number_of_greasing TINYINT(3) 0
+    * number_of_greasing TINYINT(3) 0
 
-      temperature_de SMALLINT(5) UNSIGNED 0
-      temperature_body SMALLINT(5) UNSIGNED 0
-      temperature_nde SMALLINT(5) UNSIGNED 0
+    * temperature_de SMALLINT(5) UNSIGNED 0
+    * temperature_body SMALLINT(5) UNSIGNED 0
+    * temperature_nde SMALLINT(5) UNSIGNED 0
       
-      vibration_de_vertical_value DECIMAL(4,2) 0.00
+    * vibration_de_vertical_value DECIMAL(4,2) 0.00
       vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
      
-      vibration_de_horizontal_value DECIMAL(4,2) 0.00
+    * vibration_de_horizontal_value DECIMAL(4,2) 0.00
       vibration_de_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
      
-      vibration_de_axial_value DECIMAL(4,2) 0.00
+    * vibration_de_axial_value DECIMAL(4,2) 0.00
       vibration_de_axial_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
      
-      vibration_de_frame_value DECIMAL(4,2) 0.00
+    * vibration_de_frame_value DECIMAL(4,2) 0.00
       vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
       
-      noise_de ENUM(["Normal", "Abnormal"]) NULL
+    * noise_de ENUM(["Normal", "Abnormal"])
 
-      vibration_nde_vertical_value DECIMAL(4,2) 0.00
+    * vibration_nde_vertical_value DECIMAL(4,2) 0.00
       vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
      
-      vibration_nde_horizontal_value DECIMAL(4,2) 0.00
+    * vibration_nde_horizontal_value DECIMAL(4,2) 0.00
       vibration_nde_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
           
-      vibration_nde_frame_value DECIMAL(4,2) 0.00
+    * vibration_nde_frame_value DECIMAL(4,2) 0.00
       vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
       
-      noise_nde ENUM(["Normal", "Abnormal"]) NULL
+    * noise_nde ENUM(["Normal", "Abnormal"])
 
       comment TEXT NULL
     * created_at TIMESTAMP CURRENT
@@ -200,6 +200,7 @@ entity transformer_records {
     * silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
     * earthing_connection (["No Loose", "Loose"])
     * oil_leakage (["No Leaks", "Leaks"])
+    * oil_level TINYINT(3) UNSIGNED 0
     * blower_condition (["Running", "Not Running"])
       comment TEXT NULL
       

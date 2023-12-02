@@ -177,8 +177,8 @@
         <!-- ========================================= -->
         <form id="myform" action="/checking-form/{{ $trafoList }}" method="post">
             @csrf
-            <div class="row">
-                <div class="col">
+            <div>
+                <div>
                     <div class="mb-3">
                         <label for="transformer_status" class="fw-bold form-label">Transformer Status</label>
                         <select name="transformer_status" id="transformer_status" class="form-select mb-3" aria-label="Default select example">
@@ -308,6 +308,7 @@
                             <option value="Abnormal">Abnormal</option>
                         </select>
                     </div>
+                    <hr>
 
                     <!-- COMMENT -->
                     <div class="mb-3">
@@ -315,7 +316,8 @@
                         <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
 
-                    <div class="mt-4">
+                    <!-- BUTTON SUBMIT -->
+                    <div>
                         <input disabled id="buttonSubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
                 </div>
@@ -433,12 +435,10 @@
                 'funcloc': '{{ $transformer->funcloc }}',
                 'transformer': '{{ $transformer->id }}',
                 'sort_field': '{{ $transformer->sort_field }}',
-                'equipment_code': '{{ $trafoList }}',
+                'equipment_id': '{{ $trafoList }}',
             };
             for (let input of myform) {
-                if (`${input.name}` == "_token") {
-                    continue;
-                } else if (`${input.value}` == "Submit") {
+                if (`${input.name}` == "_token" || `${input.value}` == "Submit") {
                     continue;
                 } else {
                     myArray[`${input.name}`] = `${input.value}`;

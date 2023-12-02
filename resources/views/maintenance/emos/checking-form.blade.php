@@ -423,7 +423,7 @@
                 </div>
 
                 <!-- BUTTON SUBMIT -->
-                <div class="mb-3">
+                <div>
                     <input disabled id="buttonSubmit" class="btn btn-primary" type="button" value="Submit">
                 </div>
             </div>
@@ -564,9 +564,7 @@
                 'equipment_id': '{{ $equipment_id }}',
             };
             for (let input of myform) {
-                if (`${input.name}` == "_token") {
-                    continue;
-                } else if (`${input.value}` == "Submit") {
+                if (`${input.name}` == "_token" || `${input.value}` == "Submit") {
                     continue;
                 } else {
                     myArray[`${input.name}`] = `${input.value}`;
@@ -608,7 +606,7 @@
                     }
                 }
             }
-            // ajax.send(JSON.stringify(myArray));
+            ajax.send(JSON.stringify(myArray));
         }
 
         // ========================================================
