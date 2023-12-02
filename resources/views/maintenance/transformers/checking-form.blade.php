@@ -83,14 +83,15 @@
         </div>
         <!-- OIL LEVEL ALERT END -->
 
-        <!-- TRANSFORMER ID AND TRENDS START  -->
+        <!-- HEADER -->
         <div class="mb-3">
-            <h5 id="sort_field_information" class="text-break mb-0">{{ $transformer->sort_field }}</h5>
-            <p id="equipment_description" class="lh-sm mb-0 text-secondary">{{ $transformer->equipment_description }}</p>
-            <p id="funcloc_information" class="lh-sm mb-0 text-secondary">{{ $transformer->funcloc }}</p>
-            <p id="transformer_information" class="lh-sm mb-0 text-secondary">{{ $transformer->id }}</p>
+            <h5 class="text-break lh-sm mb-0">{{ $transformer->sort_field }}</h5>
+            <p class="text-break mb-0 text-secondary">{{ $transformer->equipment_description }}</p>
+            <p class="text-break lh-sm mb-0 text-secondary">{{ $transformer->funcloc }}</p>
+            <p class="text-break lh-sm mb-0 text-secondary">{{ $transformer->id }}</p>
         </div>
 
+        <!-- TRENDS -->
         <form action="/equipment-trends" method="post">
             @csrf
             <input type="hidden" id="sort_field" name="sort_field" value="{{ $transformer->sort_field }}">
@@ -102,12 +103,10 @@
                 </svg>
                 TRENDS
             </button>
-
         </form>
-        <!-- TRANSFORMER ID AND TRENDS END -->
 
         <!-- TRANSFORMER DETAILS START -->
-        <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion mb-4" id="accordionDetails">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="bg-primary text-white accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -117,40 +116,48 @@
                         <strong class="ms-2">TRANSFORMER DETAILS</strong>
                     </button>
                 </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <!-- DETAILS -->
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionDetails">
                     <div class="accordion-body">
                         <table class="table table-hover">
                             <tbody>
+
                                 <!-- FUNCLOC -->
                                 <tr class="d-none" id="transformer_function_location">
                                     <th>Function Location</th>
                                     <td>{{ $transformer->funcloc }}</td>
                                 </tr>
+
                                 <!-- SORT FIELD -->
                                 <tr class="d-none" id="transformer_sort_field">
                                     <th>Sort field</th>
                                     <td>{{ $transformer->sort_field }}</td>
                                 </tr>
+
                                 <!-- STATUS -->
                                 <tr>
                                     <th>Status</th>
                                     <td id="status">{{ $transformer->status }}</td>
                                 </tr>
+
                                 <!-- UPDATED AT -->
                                 <tr>
                                     <th>Updated at</th>
                                     <td>{{ $transformer->updated_at }}</td>
                                 </tr>
+
                                 <!-- EQUIPMENT DESCRIPTION -->
                                 <tr>
                                     <th>Equipment Description</th>
                                     <td class="text-break">{{ $transformer->equipment_description }}</td>
                                 </tr>
+
                                 <!-- MATERIAL NUMBER -->
                                 <tr>
                                     <th>Material number</th>
                                     <td>{{ $transformer->material_number }}</td>
                                 </tr>
+
                                 @foreach ($transformerDetail as $key => $value)
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
@@ -165,7 +172,9 @@
         </div>
         <!-- TRANSFORMER DETAILS END -->
 
-        <!-- TRANSFORMER CHECKING FORM START -->
+        <!-- ========================================= -->
+        <!-- ========== CHECKING FORM START ========== -->
+        <!-- ========================================= -->
         <form id="myform" action="/checking-form/{{ $trafoList }}" method="post">
             @csrf
             <div class="row">
@@ -179,60 +188,63 @@
                         </select>
                     </div>
 
-                    <!-- PRIMARY CURRENT -->
-                    <div class="mb-3">
-                        <div class="row">
-                            <label class="fw-bold form-label">Primary Current (A)</label>
-                            <div class="col">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
-                            </div>
-                            <div class="col px-0">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
-                            </div>
-                            <div class="col">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SECONDARY CURRENT -->
-                    <div class="mb-3">
-                        <div class="row">
-                            <label class="fw-bold form-label">Secondary Current (A)</label>
-                            <div class="col">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase R" name="secondary_current_phase_r" id="secondary_current_phase_r">
-                            </div>
-                            <div class="col px-0">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase S" name="secondary_current_phase_s" id="secondary_current_phase_s">
-                            </div>
-                            <div class="col">
-                                <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase T" name="secondary_current_phase_t" id="secondary_current_phase_t">
+                    <!-- OFFLINE DISABLED INPUT -->
+                    <div>
+                        <!-- PRIMARY CURRENT -->
+                        <div class="mb-3">
+                            <div class="row">
+                                <label class="fw-bold form-label">Primary Current (A)</label>
+                                <div class="col">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
+                                </div>
+                                <div class="col px-0">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
+                                </div>
+                                <div class="col">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control primary_current unrequired" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- PRIMARY VOLTAGE -->
-                    <div class="mb-3">
-                        <label for="primary_voltage" class="fw-bold form-label">Primary Voltage (V)</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="primary_voltage" id="primary_voltage">
-                    </div>
+                        <!-- SECONDARY CURRENT -->
+                        <div class="mb-3">
+                            <div class="row">
+                                <label class="fw-bold form-label">Secondary Current (A)</label>
+                                <div class="col">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase R" name="secondary_current_phase_r" id="secondary_current_phase_r">
+                                </div>
+                                <div class="col px-0">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase S" name="secondary_current_phase_s" id="secondary_current_phase_s">
+                                </div>
+                                <div class="col">
+                                    <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control secondary_current unrequired" placeholder="Phase T" name="secondary_current_phase_t" id="secondary_current_phase_t">
+                                </div>
+                            </div>
+                        </div>
 
-                    <!-- SECONDARY VOLTAGE -->
-                    <div class="mb-3">
-                        <label for="secondary_voltage" class="fw-bold form-label">Secondary Voltage (V)</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="secondary_voltage" id="secondary_voltage">
-                    </div>
+                        <!-- PRIMARY VOLTAGE -->
+                        <div class="mb-3">
+                            <label for="primary_voltage" class="fw-bold form-label">Primary Voltage (V)</label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="primary_voltage" id="primary_voltage">
+                        </div>
 
-                    <!-- OIL TEMPERATURE -->
-                    <div class="mb-3">
-                        <label for="oil_temperature" class="fw-bold form-label">Oil Temperature</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="oil_temperature" id="oil_temperature">
-                    </div>
+                        <!-- SECONDARY VOLTAGE -->
+                        <div class="mb-3">
+                            <label for="secondary_voltage" class="fw-bold form-label">Secondary Voltage (V)</label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" class="form-control voltage_input unrequired" placeholder="Volt" name="secondary_voltage" id="secondary_voltage">
+                        </div>
 
-                    <!-- WINDING TEMPERATURE -->
-                    <div class="mb-3">
-                        <label for="winding_temperature" class="fw-bold form-label">Winding Temperature</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="winding_temperature" id="winding_temperature">
+                        <!-- OIL TEMPERATURE -->
+                        <div class="mb-3">
+                            <label for="oil_temperature" class="fw-bold form-label">Oil Temperature</label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="oil_temperature" id="oil_temperature">
+                        </div>
+
+                        <!-- WINDING TEMPERATURE -->
+                        <div class="mb-3">
+                            <label for="winding_temperature" class="fw-bold form-label">Winding Temperature</label>
+                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="winding_temperature" id="winding_temperature">
+                        </div>
                     </div>
 
                     <!-- CLEAN STATUS -->
@@ -304,7 +316,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <input disabled id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
+                        <input disabled id="buttonSubmit" class="btn btn-primary" type="button" value="Submit">
                     </div>
                 </div>
             </div>
@@ -320,23 +332,12 @@
         let transformer_function_location = document.getElementById("transformer_function_location");
         let transformer_sort_field = document.getElementById("transformer_sort_field");
         let status = document.getElementById("status");
+        let buttonSubmit = document.getElementById("buttonSubmit");
 
         let transformer_status = document.getElementById("transformer_status");
         let temperatures = document.getElementsByClassName("temperature");
         let oil_level = document.getElementById("oil_level");
-        // let clean_status = document.getElementById("clean_status");
-        // let primary_currents = document.getElementsByClassName("primary_current");
-        // let secondary_currents = document.getElementsByClassName("secondary_current");
-        // let primary_voltage = document.getElementById("primary_voltage")
-        // let secondary_voltage = document.getElementById("secondary_voltage")
-        // let winding_temperature = document.getElementById("winding_temperature")
-        // let oil_temperature = document.getElementById("oil_temperature")
-        // let noise = document.getElementById("noise")
-        // let silica_gel = document.getElementById("silica_gel")
-        // let earthing_connection = document.getElementById("earthing_connection")
-        // let blower_condition = document.getElementById("blower_condition")
-        // let comment = document.getElementById("comment")
-        let unrequireds = document.getElementsByClassName("unrequired"); // current and voltage which is unrequired while transformer offline
+        let unrequireds = document.getElementsByClassName("unrequired"); // current, voltage & temperature which is unrequired while transformer offline
 
         // ========================================================
         // ============= UNHIDE FUNCLOC & SORTFIELD  ==============
@@ -426,7 +427,6 @@
         // ========================================================
         // =================== POST DATA AJAX  ====================
         // ========================================================
-        let buttonSubmit = document.getElementById("buttonsubmit");
         buttonSubmit.onclick = () => {
 
             let myArray = {

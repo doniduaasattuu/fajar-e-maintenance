@@ -27,35 +27,42 @@ use function PHPUnit\Framework\returnCallback;
 class DataController extends Controller
 {
     // ===============================================
+    // ============= RESPONSE NOT FOUND ==============
+    // ===============================================
+    public function pageNotFound()
+    {
+        return response()->view("utility.page-not-found", [
+            "title" => "Oops!"
+        ], 404);
+    }
+
+    // ===============================================
     // ================ CHECKING FORM ================
     // ===============================================
-    public function getEquipmentCheckingForm(Request $request, string $equipment)
+    public function getEquipmentCheckingForm(Request $request, string $equipment_id)
     {
-        // EQUIPMENT CHECK (EMO / ELP / ETF / etc)
-        $equipment_code = substr($equipment, 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
 
-        if ($equipment_code === "Fajar-MotorList") {
-            $motorList = $equipment;
-            $uri = "https://www.safesave.info/MIC.php?id=" . $motorList;
-            $emo = Emo::query()->with("emoDetails")->where("qr_code_link", "=", $uri)->first();
+        // equipment_id = Fajar-[Motor/Trafo]List-[0-9] eg. Fajar-TrafoList1, Fajar-MotorList1804
+        $equipment_list = preg_replace('/[0-9]/i', '', $equipment_id); // Fajar-MotorList / Fajar-TrafoList
+
+        if ($equipment_list === "Fajar-MotorList") {
+
+            $qr_code_link = "https://www.safesave.info/MIC.php?id=" . $equipment_id;
+            $emo = Emo::query()->with("emoDetails")->where("qr_code_link", "=", $qr_code_link)->first();
 
             if (!is_null($emo)) {
 
                 return response()->view("maintenance.emos.checking-form", [
                     "title" => "Checking Form",
                     "emo" => $emo,
-                    "emoDetail" => $emo->emoDetails->toArray(),
-                    "motorList" => $motorList,
+                    "equipment_id" => $equipment_id,
                 ]);
             } else {
-                return response()->view("utility.page-not-found", [
-                    "title" => "Oops!"
-                ]);
+                return $this->pageNotFound();
             }
-        } else if ($equipment_code === "Fajar-TrafoList") {
-            // Fajar-TrafoList
-            $trafoList = $equipment;
-            $uri = "id=" . $trafoList;
+        } else if ($equipment_list === "Fajar-TrafoList") {
+
+            $uri = "id=" . $equipment_id;
             $transformer = Transformers::query()->with("transformerDetails")->where("qr_code_link", "=", $uri)->first();
 
             if (!is_null($transformer)) {
@@ -64,16 +71,14 @@ class DataController extends Controller
                     "title" => "Checking Form",
                     "transformer" => $transformer,
                     "transformerDetail" => $transformer->transformerDetails->toArray(),
-                    "trafoList" => $trafoList,
+                    "trafoList" => $equipment_id,
                 ]);
             } else {
-                return response()->view("utility.page-not-found", [
-                    "title" => "Oops!"
-                ]);
+                return $this->pageNotFound();
             }
-        } else if ($equipment_code === "Fajar-PanelList") {
+        } else if ($equipment_list === "Fajar-PanelList") {
             // Fajar-PanelList
-            $panelList = $equipment;
+            $panelList = $equipment_id;
         } else {
             return response()->view("utility.page-not-found", [
                 "title" => "Oops!"
@@ -178,9 +183,9 @@ class DataController extends Controller
     {
         $sort_field = $request->input("sort_field");
         $funcloc = $request->input("funcloc");
-        $equipment_code = substr($request->input("equipment_code"), 0, 15);
+        $equipment_id = substr($request->input("equipment_id"), 0, 15);
 
-        if ($equipment_code == "Fajar-MotorList") {
+        if ($equipment_id == "Fajar-MotorList") {
 
             // EQUIPMENT MOTOR
             if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
@@ -256,7 +261,7 @@ class DataController extends Controller
             } else {
                 return Redirect::back();
             }
-        } else if ($equipment_code == "Fajar-TrafoList") {
+        } else if ($equipment_id == "Fajar-TrafoList") {
 
             // EQUIPMENT TRAFO
             if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
@@ -352,12 +357,13 @@ class DataController extends Controller
         ]);
 
         $data = $request->input();
-        // $equipment_code = substr(explode("=", $data["qr_code_link"])[1], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
-        $equipment_code = substr($data["equipment_code"], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
+        // $equipment_id = substr(explode("=", $data["qr_code_link"])[1], 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
+        // $equipment_id = substr(, 0, 15); // Fajar-MotorList, Fajar-TrafoList, Fajar-PanelList, etc.
+        $equipment_list = preg_replace('/[0-9]/i', '', $data["equipment_id"]);
 
-        // return response()->json($equipment_code);
+        // return response()->json($equipment_id);
 
-        if ($equipment_code == "Fajar-MotorList") {
+        if ($equipment_list == "Fajar-MotorList") {
             // EQUIPMENT MOTOR
 
             if (
@@ -404,14 +410,14 @@ class DataController extends Controller
                     "error" => "All field is required! ⚠️"
                 ]);
             }
-        } else if ($equipment_code == "Fajar-TrafoList") {
+        } else if ($equipment_list == "Fajar-TrafoList") {
             // EQUIPMENT TRAFO
 
             if (
                 !empty($data["funcloc"]) &&
                 !empty($data["transformer"]) &&
                 !empty($data["sort_field"]) &&
-                !empty($data["equipment_code"]) &&
+                !empty($data["equipment_id"]) &&
                 !empty($data["transformer_status"]) &&
                 !empty($data["clean_status"]) &&
                 !empty($data["noise"]) &&

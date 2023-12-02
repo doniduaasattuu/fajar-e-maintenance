@@ -64,7 +64,7 @@ class DataControllerTest extends TestCase
             ->get("/checking-form/Fajar-MotorList0000", [
                 'title' => 'Checking Form'
             ])
-            ->assertStatus(200)
+            ->assertStatus(404)
             ->assertSeeText("Page not found.");
     }
     // CHECKING FORM TEST END

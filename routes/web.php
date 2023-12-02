@@ -56,8 +56,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return redirect("/");
     });
 
-    Route::get('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "getEquipmentCheckingForm"]);
-    Route::post('/checking-form/{equipment}', [App\Http\Controllers\DataController::class, "saveDataRecordEquipment"]);
+    // equipment_id = Fajar-[Motor/Trafo]List-[0-9] eg. Fajar-TrafoList1, Fajar-MotorList1804
+    Route::get('/checking-form/{equipment_id}', [App\Http\Controllers\DataController::class, "getEquipmentCheckingForm"]);
+    Route::post('/checking-form/{equipment_id}', [App\Http\Controllers\DataController::class, "saveDataRecordEquipment"]);
 
     Route::get('/change-name', [App\Http\Controllers\UserController::class, "changeName"]);
     Route::post('/change-name', [App\Http\Controllers\UserController::class, "doChangeName"]);

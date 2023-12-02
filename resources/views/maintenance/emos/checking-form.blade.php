@@ -64,18 +64,19 @@
         </div>
         <!-- VIBRATION ALERT END -->
 
-        <!-- EMO ID AND TRENDS START  -->
+        <!-- HEADER  -->
         <div class="mb-3">
-            <h5 id="sort_field_information" class="text-break lh-sm mb-0">{{ $emo->sort_field }}</h5>
-            <p id="equipment_description" class="text-break mb-0 text-secondary">{{ $emo->equipment_description }}</p>
-            <p id="funcloc_information" class="text-break lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
-            <p id="emo_information" class="text-break lh-sm mb-0 text-secondary">{{ $emo->id }}</p>
+            <h5 class="text-break lh-sm mb-0">{{ $emo->sort_field }}</h5>
+            <p class="text-break mb-0 text-secondary">{{ $emo->equipment_description }}</p>
+            <p class="text-break lh-sm mb-0 text-secondary">{{ $emo->funcloc }}</p>
+            <p class="text-break lh-sm mb-0 text-secondary">{{ $emo->id }}</p>
         </div>
 
+        <!-- TRENDS -->
         <form action="/equipment-trends" method="post">
             @csrf
             <input type="hidden" id="sort_field" name="sort_field" value="{{ $emo->sort_field }}">
-            <input type="hidden" id="equipment_code" name="equipment_code" value="{{ $motorList }}">
+            <input type="hidden" id="equipment_id" name="equipment_id" value="{{ $equipment_id }}">
             <input type="hidden" id="funcloc" name="funcloc" value="{{ $emo->funcloc }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
@@ -83,12 +84,10 @@
                 </svg>
                 TRENDS
             </button>
-
         </form>
-        <!-- EMO ID AND TRENDS END -->
 
         <!-- MOTOR DETAILS START -->
-        <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion mb-4" id="accordionDetails">
             <div class="accordion-item">
                 <h2 class="accordion-header">
                     <button class="bg-primary text-white accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -98,44 +97,51 @@
                         <strong class="ms-2">MOTOR DETAILS</strong>
                     </button>
                 </h2>
-                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionDetails">
                     <div class="accordion-body">
                         <table class="table table-hover">
                             <tbody>
+
                                 <!-- FUNCLOC -->
                                 <tr class="d-none" id="emo_function_location">
                                     <th>Function Location</th>
                                     <td>{{ $emo->funcloc }}</td>
                                 </tr>
+
                                 <!-- SORT FIELD -->
                                 <tr class="d-none" id="emo_sort_field">
                                     <th>Sort field</th>
                                     <td>{{ $emo->sort_field }}</td>
                                 </tr>
+
                                 <!-- STATUS -->
                                 <tr>
                                     <th>Status</th>
                                     <td id="status">{{ $emo->status }}</td>
                                 </tr>
+
                                 <!-- UPDATED AT -->
                                 <tr>
                                     <th>Updated at</th>
                                     <td>{{ $emo->updated_at }}</td>
                                 </tr>
+
                                 <!-- EQUIPMENT DESCRIPTION -->
                                 <tr>
                                     <th>Equipment Description</th>
                                     <td class="text-break">{{ $emo->equipment_description }}</td>
                                 </tr>
+
                                 <!-- MATERIAL NUMBER -->
                                 <tr>
                                     <th>Material number</th>
                                     <td>{{ $emo->material_number }}</td>
                                 </tr>
-                                @foreach ($emoDetail as $key => $value)
+
+                                @foreach ($emo->emoDetails->toArray() as $key => $value)
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
-                                    <td id="{{ $key }}">{{ $value  }}</td>
+                                    <td id="{{ 'detail_' . $key }}">{{ $value  }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -146,299 +152,435 @@
         </div>
         <!-- MOTOR DETAILS END -->
 
-        <!-- CHECKING FORM START -->
-        <form id="myform" action="/checking-form/{{ $motorList }}" method="post">
+        <!-- ========================================= -->
+        <!-- ========== CHECKING FORM START ========== -->
+        <!-- ========================================= -->
+        <form id="myform" action="/checking-form/{{ $equipment_id }}" method="post">
             @csrf
             <div class="row">
                 <div class="col">
-                    <select name="motor_status" id="motor_status" class="form-select mb-3" aria-label="Default select example">
-                        <option value="">--Motor Status--</option>
-                        <option value="Running">Running</option>
-                        <option value="Not Running">Not Running</option>
-                    </select>
-                    <select name="clean_status" id="clean_status" class="form-select mb-3" aria-label="Default select example">
-                        <option value="">--Cleanliness--</option>
-                        <option value="Clean">Clean</option>
-                        <option value="Dirty">Dirty</option>
-                    </select>
-                    <select name="nipple_grease" id="nipple_grease_input" class="form-select mb-3" aria-label="Default select example">
-                        <option value="">--Nipple Grease--</option>
-                        <option value="Available">Available</option>
-                        <option value="Not Available">Not Available</option>
-                    </select>
-                    <div class="mb-4">
-                        <label for="number_of_greasing_input" class="fw-bold form-label">Number of Greasing</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing" id="number_of_greasing_input">
-                    </div>
 
-                    <!-- =========== TEMPERATURE START =========== -->
-                    <div>
-                        <div class="row mb-3">
-                            <div class="col-md">
-                                <figure>
-                                    <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
-                                    <figcaption class="figure-caption text-center">Left side</figcaption>
-                                </figure>
-                            </div>
-                            <div class="col-md">
-                                <figure>
-                                    <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
-                                    <figcaption class="figure-caption text-center">Front side</figcaption>
-                                </figure>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="col-md">
-                                <figure>
-                                    <img class="img-fluid mx-auto d-block" src="/images/temp_iso_IEC_60085.png" alt="Temperature">
-                                    <figcaption class="figure-caption text-center">IEC 60085</figcaption>
-                                </figure>
-                            </div>
-                        </div>
-
-                        <div class="mb-1">
-                            <label for="temperature_de" class="fw-bold form-label">Temperature DE</label>
-                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_de" id="temperature_de">
-                        </div>
-                        <div class="mb-1">
-                            <label for="temperature_body" class="fw-bold form-label">Temperature Body</label>
-                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_body" id="temperature_body">
-                        </div>
-                        <div class="mb-4">
-                            <label for="temperature_nde" class="fw-bold form-label">Temperature NDE</label>
-                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_nde" id="temperature_nde">
-                        </div>
-                        <!-- <div class="mb-4">
-                            <label for="temperature_d" class="fw-bold form-label">Temperature D <span style="font-weight: 400;">(NDE)</span></label>
-                            <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature_input" placeholder="°C" name="temperature_d" id="temperature_d">
-                        </div> -->
-                    </div>
-                    <!-- =========== TEMPERATURE END =========== -->
-
-                    <!-- =========== VIBRATION START =========== -->
-                    <div>
-                        <div class="row">
-                            <div class="col-md">
-                                <figure>
-                                    <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
-                                    <figcaption id="figcaption_vibrations" class="figure-caption text-center">Vibration standard</figcaption>
-                                </figure>
-                            </div>
-                            <div class="col-md">
-                                <figure>
-                                    <img class="img-fluid mx-auto d-block" src="/images/vibration-inspection-guide.png" alt="Vibration inspection guide">
-                                    <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration inspection guide</figcaption>
-                                </figure>
-                            </div>
-                        </div>
-
-                        <!-- =========================== VIBRATION START =========================== -->
-                        <!-- DRIVE END -->
-                        <div class="drive-end mb-4">
-                            <!-- VIBRATION DEV -->
-                            <div class="mb-2">
-                                <label for="vibration_de_vertical_value" class="vibrations_label fw-bold form-label">DEV (Vertical)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_de_vertical_value" id="vibration_de_vertical_value">
-                            </div>
-                            <select disabled id="vibration_de_vertical_desc" name="vibration_de_vertical_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- VIBRATION DEH -->
-                            <div class="mb-2">
-                                <label for="vibration_de_horizontal_value" class="vibrations_label fw-bold form-label">DEH (Horizontal)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_de_horizontal_value" id="vibration_de_horizontal_value">
-                            </div>
-                            <select disabled id="vibration_de_horizontal_desc" name="vibration_de_horizontal_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- VIBRATION DEA -->
-                            <div class="mb-2">
-                                <label for="vibration_de_axial_value" class="vibrations_label fw-bold form-label">DEA (Axial)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_de_axial_value" id="vibration_de_axial_value">
-                            </div>
-                            <select disabled id="vibration_de_axial_desc" name="vibration_de_axial_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- VIBRATION DE FRAME -->
-                            <div class="mb-2">
-                                <label for="vibration_de_frame_value" class="vibrations_label fw-bold form-label">DE Frame Horizontal (Diagonal from NDE)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_de_frame_value" id="vibration_de_frame_value">
-                            </div>
-                            <select disabled id="vibration_de_frame_desc" name="vibration_de_frame_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- NOISE DE -->
-                            <label for="noise_de" class="fw-bold form-label">Noise DE</label>
-                            <select disabled name="noise_de" id="noise_de" class="noises form-select mb-3" aria-label="Default select example">
-                                <option selected value="Normal">Normal</option>
-                                <option value="Abnormal">Abnormal</option>
-                            </select>
-
-                        </div>
-                        <!-- DRIVE END -->
-                        <hr>
-
-                        <!-- NON DRIVE END -->
-                        <div class="non-drive-end my-4">
-                            <!-- VIBRATION NDEV -->
-                            <div class="mb-2">
-                                <label for="vibration_nde_vertical_value" class="vibrations_label fw-bold form-label">NDEV (Vertical)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_nde_vertical_value" id="vibration_nde_vertical_value">
-                            </div>
-                            <select disabled id="vibration_nde_vertical_desc" name="vibration_nde_vertical_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- VIBRATION NDEH -->
-                            <div class="mb-2">
-                                <label for="vibration_nde_horizontal_value" class="vibrations_label fw-bold form-label">NDEH (Horizontal)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_nde_horizontal_value" id="vibration_nde_horizontal_value">
-                            </div>
-                            <select disabled id="vibration_nde_horizontal_desc" name="vibration_nde_horizontal_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- VIBRATION NDE FRAME -->
-                            <div class="mb-2">
-                                <label for="vibration_nde_frame_value" class="vibrations_label fw-bold form-label">NDE Frame Horizontal (Diagonal from DE)</label>
-                                <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_nde_frame_value" id="vibration_nde_frame_value">
-                            </div>
-                            <select disabled id="vibration_nde_frame_desc" name="vibration_nde_frame_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                                <option value="">--Status--</option>
-                                <option value="Good">Good</option>
-                                <option value="Satisfactory">Satisfactory</option>
-                                <option value="Unsatisfactory">Unsatisfactory</option>
-                                <option value="Unacceptable">Unacceptable</option>
-                            </select>
-
-                            <!-- NOISE NDE -->
-                            <label for="noise_nde" class="fw-bold form-label">Noise NDE</label>
-                            <select disabled name="noise_nde" id="noise_nde" class="noises form-select mb-3" aria-label="Default select example">
-                                <option selected value="Normal">Normal</option>
-                                <option value="Abnormal">Abnormal</option>
-                            </select>
-                        </div>
-                        <!-- NON DRIVE END -->
-
-                        <!-- VIBRATION VALUE DE START -->
-                        <!-- <div class="mb-2">
-                            <label for="vibration_value_de_vertical" class="vibrations_label fw-bold form-label">Vibration DE</label>
-                            <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_de_vertical" id="vibration_value_de_vertical">
-                        </div>
-                        <select disabled id="vibration_de_vertical_desc" name="vibration_de_vertical_desc" class="vibration form-select mb-3 " aria-label="Default select example">
-                            <option value="">--Status--</option>
-                            <option value="Good">Good</option>
-                            <option value="Satisfactory">Satisfactory</option>
-                            <option value="Unsatisfactory">Unsatisfactory</option>
-                            <option value="Unacceptable">Unacceptable</option>
-                        </select> -->
-                        <!-- VIBRATION VALUE DE END -->
-
-                        <!-- VIBRATION VALUE NDE START -->
-                        <!-- <div class="mb-2">
-                            <label for="vibration_value_nde" class="vibrations_label fw-bold form-label">Vibration NDE</label>
-                            <input disabled type="number" step="0.01" min="0.01" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value" placeholder="Vibration value (mm/s)" name="vibration_value_nde" id="vibration_value_nde">
-                        </div>
-                        <select disabled id="vibration_nde" name="vibration_nde" class="vibration form-select mb-3 " aria-label="Default select example">
-                            <option selected value="">--Status--</option>
-                            <option value="Good">Good</option>
-                            <option value="Satisfactory">Satisfactory</option>
-                            <option value="Unsatisfactory">Unsatisfactory</option>
-                            <option value="Unacceptable">Unacceptable</option>
-                        </select> -->
-                        <!-- VIBRATION VALUE NDE END -->
-                    </div>
-                    <!-- =========== VIBRATIONS END=========== -->
-
-                    <!-- =========== COMMENT START=========== -->
-                    <div class="mb-4">
-                        <label for="vibration_value_de_vertical" class="fw-bold form-label">Remarks</label>
-                        <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
-                    </div>
-                    <!-- =========== COMMENT END =========== -->
-
+                    <!-- MOTOR STATUS -->
                     <div class="mb-3">
-                        <input id="buttonsubmit" class="btn btn-primary" type="button" value="Submit">
+                        <label for="motor_status" class="fw-bold form-label">Motor Status</label>
+                        <select name="motor_status" id="motor_status" class="form-select" aria-label="Default select example">
+                            <option value="">--Motor Status--</option>
+                            <option value="Running">Running</option>
+                            <option value="Not Running">Not Running</option>
+                        </select>
+                    </div>
+
+                    <!-- CLEAN STATUS -->
+                    <div class="mb-3">
+                        <label for="clean_status" class="fw-bold form-label">Cleanliness</label>
+                        <select disabled name="clean_status" id="clean_status" class="form-select" aria-label="Default select example">
+                            <option value="Clean">Clean</option>
+                            <option value="Dirty">Dirty</option>
+                        </select>
+                    </div>
+
+                    <!-- NIPPLE GREASE -->
+                    <div class="mb-3">
+                        <label for="nipple_grease" class="fw-bold form-label">Nipple Grease</label>
+                        <select disabled name="nipple_grease" id="nipple_grease" class="form-select" aria-label="Default select example">
+                            <option value="Available">Available</option>
+                            <option value="Not Available">Not Available</option>
+                        </select>
+                    </div>
+
+                    <!-- NUMBER OF GREASING -->
+                    <div class="mb-3">
+                        <label for="number_of_greasing" class="fw-bold form-label">Number of Greasing</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="255" step="10" class="form-control" name="number_of_greasing" id="number_of_greasing">
                     </div>
                 </div>
-            </div>
-        </form>
-        <!-- CHECKING FORM END -->
 
+                <!-- ========================================= -->
+                <!-- =========== TEMPERATURE START =========== -->
+                <!-- ========================================= -->
+                <div class="mb-3">
+                    <div class="row mb-3">
+
+                        <!-- IMAGE LEFT SIDE -->
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid" src="/images/left-side.jpeg" alt="Left Side">
+                                <figcaption class="figure-caption text-center">Left side</figcaption>
+                            </figure>
+                        </div>
+
+                        <!-- IMAGE FRONT SIDE -->
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid" src="/images/front-side.jpeg" alt="Front Side">
+                                <figcaption class="figure-caption text-center">Front side</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <!-- IMAGE IEC 60085 -->
+                    <div class="mb-3">
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid mx-auto d-block" src="/images/temp_iso_IEC_60085.png" alt="Temperature">
+                                <figcaption class="figure-caption text-center">IEC 60085</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <!-- TEMPERATURE DE -->
+                    <div class="mb-3">
+                        <label for="temperature_de" class="fw-bold form-label">Temperature DE</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="temperature_de" id="temperature_de">
+                    </div>
+
+                    <!-- TEMPERATURE BODY -->
+                    <div class="mb-3">
+                        <label for="temperature_body" class="fw-bold form-label">Temperature Body</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="temperature_body" id="temperature_body">
+                    </div>
+
+                    <!-- TEMPERATURE NDE -->
+                    <div class="mb-3">
+                        <label for="temperature_nde" class="fw-bold form-label">Temperature NDE</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="200" class="form-control temperature unrequired" placeholder="°C" name="temperature_nde" id="temperature_nde">
+                    </div>
+                </div>
+                <!-- ========================================= -->
+                <!-- ============ TEMPERATURE END ============ -->
+                <!-- ========================================= -->
+
+                <!-- ========================================= -->
+                <!-- ============ VIBRATION START ============ -->
+                <!-- ========================================= -->
+                <div>
+                    <div class="row">
+
+                        <!-- IMAGE VIBRATION SEVERITY TABLE -->
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid mx-auto d-block" src="/images/vibration-iso-10816.jpg" alt="Vibration">
+                                <figcaption id="figcaption_vibrations" class="figure-caption text-center">Vibration standard</figcaption>
+                            </figure>
+                        </div>
+
+                        <!-- IMAGE VIBRATION INSPECTION GUIDE -->
+                        <div class="col-md">
+                            <figure>
+                                <img class="img-fluid mx-auto d-block" src="/images/vibration-inspection-guide.png" alt="Vibration inspection guide">
+                                <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration inspection guide</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+
+                    <!-- ========================================= -->
+                    <!-- ============= VIBRATION DE ============== -->
+                    <!-- ========================================= -->
+                    <div class="drive-end">
+
+                        <!-- VIBRATION DEV -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_de_vertical_value" class="vibrations_label fw-bold form-label">DEV (Vertical)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_de_vertical_value" id="vibration_de_vertical_value">
+                            </div>
+                            <select disabled id="vibration_de_vertical_desc" name="vibration_de_vertical_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- VIBRATION DEH -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_de_horizontal_value" class="vibrations_label fw-bold form-label">DEH (Horizontal)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_de_horizontal_value" id="vibration_de_horizontal_value">
+                            </div>
+                            <select disabled id="vibration_de_horizontal_desc" name="vibration_de_horizontal_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- VIBRATION DEA -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_de_axial_value" class="vibrations_label fw-bold form-label">DEA (Axial)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_de_axial_value" id="vibration_de_axial_value">
+                            </div>
+                            <select disabled id="vibration_de_axial_desc" name="vibration_de_axial_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- VIBRATION DE FRAME -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_de_frame_value" class="vibrations_label fw-bold form-label">DE Frame Horizontal (Diagonal from NDE)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_de_frame_value" id="vibration_de_frame_value">
+                            </div>
+                            <select disabled id="vibration_de_frame_desc" name="vibration_de_frame_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- NOISE DE -->
+                        <div class="mb-3">
+                            <label for="noise_de" class="fw-bold form-label">Noise DE</label>
+                            <select disabled name="noise_de" id="noise_de" class="noise form-select unrequired" aria-label="Default select example">
+                                <option selected value="Normal">Normal</option>
+                                <option value="Abnormal">Abnormal</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <!-- DRIVE END -->
+
+                    <!-- ========================================= -->
+                    <!-- ============= VIBRATION DE ============== -->
+                    <!-- ========================================= -->
+                    <div class="non-drive-end">
+
+                        <!-- VIBRATION NDEV -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_nde_vertical_value" class="vibrations_label fw-bold form-label">NDEV (Vertical)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_nde_vertical_value" id="vibration_nde_vertical_value">
+                            </div>
+                            <select disabled id="vibration_nde_vertical_desc" name="vibration_nde_vertical_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- VIBRATION NDEH -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_nde_horizontal_value" class="vibrations_label fw-bold form-label">NDEH (Horizontal)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_nde_horizontal_value" id="vibration_nde_horizontal_value">
+                            </div>
+                            <select disabled id="vibration_nde_horizontal_desc" name="vibration_nde_horizontal_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- VIBRATION NDE FRAME -->
+                        <div class="mb-3">
+                            <div class="mb-2">
+                                <label for="vibration_nde_frame_value" class="vibrations_label fw-bold form-label">NDE Frame Horizontal (Diagonal from DE)</label>
+                                <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_nde_frame_value" id="vibration_nde_frame_value">
+                            </div>
+                            <select disabled id="vibration_nde_frame_desc" name="vibration_nde_frame_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                                <option value="">--Status--</option>
+                                <option value="Good">Good</option>
+                                <option value="Satisfactory">Satisfactory</option>
+                                <option value="Unsatisfactory">Unsatisfactory</option>
+                                <option value="Unacceptable">Unacceptable</option>
+                            </select>
+                        </div>
+
+                        <!-- NOISE NDE -->
+                        <div class="mb-3">
+                            <label for="noise_nde" class="fw-bold form-label">Noise NDE</label>
+                            <select disabled name="noise_nde" id="noise_nde" class="noise form-select unrequired" aria-label="Default select example">
+                                <option selected value="Normal">Normal</option>
+                                <option value="Abnormal">Abnormal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <!-- ========================================= -->
+                <!-- ============= VIBRATION END ============= -->
+                <!-- ========================================= -->
+
+                <!-- COMMENT -->
+                <div class="mb-3">
+                    <label for="comment" class="fw-bold form-label">Remarks</label>
+                    <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                </div>
+
+                <!-- BUTTON SUBMIT -->
+                <div class="mb-3">
+                    <input disabled id="buttonSubmit" class="btn btn-primary" type="button" value="Submit">
+                </div>
+            </div>
     </div>
+    </form>
+    <!-- CHECKING FORM END -->
 
     <script>
-        const nipple_grease_input = document.getElementById("nipple_grease_input");
-        const number_of_greasing_input = document.getElementById("number_of_greasing_input");
-        const temperatures_input = document.getElementsByClassName("temperature_input");
-        const noises = document.getElementsByClassName("noises");
-        const alert_response = document.getElementById("alert_response");
-        const message_response = document.getElementById("message_response");
-        const myform = document.getElementById("myform");
-        const ajax = new XMLHttpRequest()
+        let myform = document.getElementById("myform");
+        const ajax = new XMLHttpRequest();
+        let motor_status = document.getElementById("motor_status");
+        let unrequireds = document.getElementsByClassName("unrequired"); // temperature, vibration and number_of_greasing which is unrequired while emo not running
+        let nipple_grease = document.getElementById("nipple_grease");
+        let number_of_greasing = document.getElementById("number_of_greasing");
+        let buttonSubmit = document.getElementById("buttonSubmit");
+        let temperatures = document.getElementsByClassName("temperature");
+        let vibration_values = document.getElementsByClassName("vibration_value");
+        let detail_power_rate = document.getElementById("detail_power_rate");
+        let detail_power_unit = document.getElementById("detail_power_unit");
+        let vibrations = document.getElementsByClassName("vibration")
+        let status = document.getElementById("status");
+        let emo_function_location = document.getElementById("emo_function_location");
+        let emo_sort_field = document.getElementById("emo_sort_field");
+        let noises = document.getElementsByClassName("noise");
 
-        // AJAX START
-        let buttonSubmit = document.getElementById("buttonsubmit");
+        // ========================================================
+        // ============= UNHIDE FUNCLOC & SORTFIELD  ==============
+        // ========================================================
+        if (status.textContent == "Installed") {
+            emo_function_location.classList.remove("d-none");
+            emo_sort_field.classList.remove("d-none");
+        }
+
+        // ========================================================
+        // ===================== ENABLE INPUT  ====================
+        // ========================================================
+        motor_status.onchange = () => {
+            // ENABLE ALL INPUT FIELD WHILE RUNNING
+            if (motor_status.value === 'Running') {
+                for (input of myform) {
+                    if (
+                        input.classList.contains("vibration_description") ||
+                        input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "motor_status") {
+                        continue;
+                    } else {
+                        input.removeAttribute("disabled");
+                    }
+                }
+
+                disabledNumberOfGreasing();
+            } else if (motor_status.value === "Not Running") {
+                // ENABLE SOME INPUT FILED IF NOT RUNNING
+                for (input of myform) {
+                    if (
+                        input.classList.contains("vibration_description") ||
+                        input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "motor_status") {
+                        continue;
+                    } else {
+                        input.removeAttribute("disabled")
+                    }
+                }
+
+                for (input of unrequireds) {
+                    input.setAttribute("disabled", true);
+                    if (!input.classList.contains("noise")) {
+                        input.value = "";
+                    }
+                }
+
+                disabledNumberOfGreasing();
+            } else {
+                // DISABLED ALL INPUT WHILE UNSELECTED
+                for (input of myform) {
+                    if (
+                        input.classList.contains("vibration_description") ||
+                        input.getAttribute("name") == "_token" ||
+                        input.getAttribute("name") == "motor_status") {
+                        continue;
+                    } else {
+                        input.setAttribute("disabled", true);
+                    }
+                }
+
+                for (input of unrequireds) {
+                    if (!input.classList.contains("noise")) {
+                        input.value = "";
+                    }
+                }
+            }
+
+        }
+
+        // DISABLED NUMBER OF GREASING IF NIPPLE GREASE IS UNAVAILABLE
+        function disabledNumberOfGreasing() {
+            if (nipple_grease.value == "Available") {
+                number_of_greasing.removeAttribute("disabled");
+            } else {
+                number_of_greasing.setAttribute("disabled", true);
+            }
+        }
+        nipple_grease.onchange = () => {
+            disabledNumberOfGreasing();
+        }
+
+        // ========================================================
+        // =================== INPUT VALIDATION ===================
+        // ========================================================
+        // FUNCTION ONLY NUMBER ALLOWED
+        function onlynumber(evt) {
+            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
+            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+                return false;
+            return true;
+        }
+
+        // VALIDATE TEMPERATURE NOT EXCEED 200°C
+        for (let i = 0; i < temperatures.length; i++) {
+            temperatures[i].onchange = () => {
+                if (Number(temperatures[i].value) > 200 || temperatures[i].value.length > 3) {
+                    let temperatureModal = new bootstrap.Modal(document.getElementById('temperature_alert'), {});
+                    temperatureModal.show();
+                    temperatures[i].value = "";
+                }
+            }
+        }
+
+        // ========================================================
+        // =================== POST DATA AJAX  ====================
+        // ========================================================
         buttonSubmit.onclick = () => {
 
             let myArray = {
                 'funcloc': '{{ $emo->funcloc }}',
                 'emo': '{{ $emo->id }}',
                 'sort_field': '{{ $emo->sort_field }}',
-                'equipment_code': '{{ $motorList }}',
+                'equipment_id': '{{ $equipment_id }}',
             };
-            // console.info(myform);
             for (let input of myform) {
-                // console.info(`${key}: ${value}`);
                 if (`${input.name}` == "_token") {
                     continue;
                 } else if (`${input.value}` == "Submit") {
                     continue;
                 } else {
-                    // console.info(`${input.name}: ${input.value}`);
-                    // myArray.push(`${input.name}: ${input.value}`);
                     myArray[`${input.name}`] = `${input.value}`;
                 }
             }
             console.table(myArray);
 
-            ajax.open("POST", "/checking-form/{{ $motorList }}");
+            ajax.open("POST", "/checking-form/{{ $equipment_id }}");
             ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")
-            // ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             ajax.setRequestHeader("Content-Type", "application/json");
             ajax.onload = () => {
                 if (ajax.readyState == 4) {
 
-                    // console.info(ajax.responseText);
+                    console.info(ajax.responseText);
 
                     // response from server is format json
                     let response_object = JSON.parse(ajax.responseText);
@@ -466,50 +608,12 @@
                     }
                 }
             }
-
-            ajax.send(JSON.stringify(myArray));
-            // ajax.send(
-            //     "funcloc=" + '{{ $emo->funcloc }}' + "&" +
-            //     "emo=" + '{{ $emo->id }}' + "&" +
-            //     "sort_field=" + '{{ $emo->sort_field }}' + "&" +
-
-            //     "motor_status=" + myform[1].value + "&" +
-            //     "clean_status=" + myform[2].value + "&" +
-            //     "nipple_grease_input=" + myform[3].value + "&" +
-            //     "number_of_greasing_input=" + myform[4].value + "&" +
-
-            //     "temperature_a=" + myform[5].value + "&" +
-            //     "temperature_b=" + myform[6].value + "&" +
-            //     "temperature_c=" + myform[7].value + "&" +
-            //     "temperature_d=" + myform[8].value + "&" +
-
-            //     "vibration_value_de_vertical=" + myform[9].value + "&" +
-            //     "vibration_de=" + myform[10].value + "&" +
-            //     "vibration_value_nde=" + myform[11].value + "&" +
-            //     "vibration_nde=" + myform[12].value + "&" +
-
-            //     "comment=" + myform[13].value
-            // );
-        }
-        // AJAX END
-
-        let jsonku = {
-            nama: "Doni",
-            kelas: "19.3B.24"
+            // ajax.send(JSON.stringify(myArray));
         }
 
-        // console.info(jsonku);
-        // console.info(JSON.stringify(jsonku));
-        // console.info(JSON.stringify(myArray));
-
-        // VIBRATION VALUE ALERT VALIDATION AND STATUS START
-        const vibration_values = document.getElementsByClassName("vibration_value");
-        const vibrations = document.getElementsByClassName("vibration");
-        const motor_class = document.getElementById("motor_class");
-        const vibrations_label = document.getElementsByClassName("vibrations_label");
-        const figcaption_vibration = document.getElementById("figcaption_vibration");
-        const comment = document.getElementById("comment");
-
+        // ========================================================
+        // ========= CHANGE COLOR VIBRATION DESCRIPTION  ==========
+        // ========================================================
         // GOOD
         function vibrationGood(element) {
             element.value = "Good";
@@ -566,9 +670,10 @@
 
         for (let i = 0; i < vibration_values.length; i++) {
             vibration_values[i].onchange = () => {
-
                 if (vibration_values[i].value > 45 || vibration_values[i].value < 0) {
-                    let vibrationModal = new bootstrap.Modal(document.getElementById('vibration_alert'), {});
+                    let vibrationModal = new bootstrap.Modal(
+                        document.getElementById("vibration_alert"), {}
+                    );
                     vibrationModal.show();
                     vibration_values[i].value = "0.01";
                 }
@@ -577,234 +682,107 @@
                     normalizeInput(vibrations[i]);
                 }
 
-                motor_power_rate = power_rate.textContent.split(" ")[0].split("/")[0]; // MOTOR WHO HAVE 2 WINDINGS
-                motor_power_unit = power_unit.textContent == "kW" ? "kW" : "HP";
+                motor_detail_power_rate = detail_power_rate.textContent.split(" ")[0].split("/")[0]; // MOTOR WHO HAVE 2 WINDINGS
+                motor_detail_power_unit = detail_power_unit.textContent == "kW" ? "kW" : "HP";
 
-                if (motor_power_unit == "HP") {
-                    motor_power_rate = Math.floor(motor_power_rate * 0.7457);
+                if (motor_detail_power_unit == "HP") {
+                    motor_detail_power_rate = Math.floor(motor_detail_power_rate * 0.7457);
                 }
 
-                if (motor_power_rate <= 15) {
+                if (motor_detail_power_rate <= 15) {
                     // MOTOR CLASS 1 == UNDER 15kW
-                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/Class 1)";
+                    figcaption_vibration.textContent =
+                        "Vibration standard " + `(${motor_detail_power_rate}kW` + "/Class 1)";
 
-                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 0.71)) {
+                    if (
+                        vibration_values[i].value >= 0.01 &&
+                        vibration_values[i].value <= 0.71
+                    ) {
                         // GOOD
                         vibrationGood(vibrations[i]);
-                    } else if ((vibration_values[i].value > 0.71) && (vibration_values[i].value <= 1.80)) {
+                    } else if (
+                        vibration_values[i].value > 0.71 &&
+                        vibration_values[i].value <= 1.8
+                    ) {
                         // SATISFACTORY
                         vibrationSatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 1.80) && (vibration_values[i].value <= 4.50)) {
+                    } else if (
+                        vibration_values[i].value > 1.8 &&
+                        vibration_values[i].value <= 4.5
+                    ) {
                         // UNSATISFACTORY
                         vibrationUnsatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 4.50) && (vibration_values[i].value <= 45)) {
+                    } else if (
+                        vibration_values[i].value > 4.5 &&
+                        vibration_values[i].value <= 45
+                    ) {
                         // UNACCEPTABLE
                         vibrationUnacceptable(vibrations[i]);
                     }
-                } else if (motor_power_rate < 300) {
+                } else if (motor_detail_power_rate < 300) {
                     // MOTOR CLASS 2 == MORE THAN 15kW UNDER 300k
-                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/Class 2)";
+                    figcaption_vibration.textContent =
+                        "Vibration standard " + `(${motor_detail_power_rate}kW` + "/Class 2)";
 
-                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 1.12)) {
+                    if (
+                        vibration_values[i].value >= 0.01 &&
+                        vibration_values[i].value <= 1.12
+                    ) {
                         // GOOD
                         vibrationGood(vibrations[i]);
-                    } else if ((vibration_values[i].value > 1.12) && (vibration_values[i].value <= 2.80)) {
+                    } else if (
+                        vibration_values[i].value > 1.12 &&
+                        vibration_values[i].value <= 2.8
+                    ) {
                         // SATISFACTORY
                         vibrationSatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 2.80) && (vibration_values[i].value <= 7.10)) {
+                    } else if (
+                        vibration_values[i].value > 2.8 &&
+                        vibration_values[i].value <= 7.1
+                    ) {
                         // UNSATISFACTORY
                         vibrationUnsatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 7.10) && (vibration_values[i].value <= 45)) {
+                    } else if (
+                        vibration_values[i].value > 7.1 &&
+                        vibration_values[i].value <= 45
+                    ) {
                         // UNACCEPTABLE
                         vibrationUnacceptable(vibrations[i]);
                     }
                 } else {
                     // MOTOR CLASS 3 == MORE THAN 300kW
-                    figcaption_vibration.textContent = "Vibration standard " + `(${motor_power_rate}kW` + "/>=Class 3)";
+                    figcaption_vibration.textContent =
+                        "Vibration standard " +
+                        `(${motor_detail_power_rate}kW` +
+                        "/>=Class 3)";
 
-                    if ((vibration_values[i].value >= 0.01) && (vibration_values[i].value <= 1.80)) {
+                    if (
+                        vibration_values[i].value >= 0.01 &&
+                        vibration_values[i].value <= 1.8
+                    ) {
                         // GOOD
                         vibrationGood(vibrations[i]);
-                    } else if ((vibration_values[i].value > 1.80) && (vibration_values[i].value <= 4.50)) {
+                    } else if (
+                        vibration_values[i].value > 1.8 &&
+                        vibration_values[i].value <= 4.5
+                    ) {
                         // SATISFACTORY
                         vibrationSatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 4.50) && (vibration_values[i].value <= 11.2)) {
+                    } else if (
+                        vibration_values[i].value > 4.5 &&
+                        vibration_values[i].value <= 11.2
+                    ) {
                         // UNSATISFACTORY
                         vibrationUnsatisfactory(vibrations[i]);
-                    } else if ((vibration_values[i].value > 11.2) && (vibration_values[i].value <= 45)) {
+                    } else if (
+                        vibration_values[i].value > 11.2 &&
+                        vibration_values[i].value <= 45
+                    ) {
                         // UNACCEPTABLE
                         vibrationUnacceptable(vibrations[i]);
                     }
                 }
-            }
-        }
-
-        // ENABLED INPUT NUMBER OF GREASING
-        nipple_grease_input.onchange = () => {
-            if (nipple_grease_input.value == "Available") {
-                number_of_greasing_input.removeAttribute("disabled");
-            } else {
-                number_of_greasing_input.value = "";
-                number_of_greasing_input.setAttribute("disabled", true);
-            }
-        }
-
-        // ENABLED TEMPERATURE AND VIBRATION VALUE AND NOISES
-        motor_status.onchange = () => {
-            // MOTOR STATUS IS RUNNING
-            if (motor_status.value == "Running") {
-                for (let i = 0; i < temperatures_input.length; i++) {
-                    temperatures_input[i].removeAttribute("disabled");
-                }
-                for (let j = 0; j < vibration_values.length; j++) {
-                    vibration_values[j].removeAttribute("disabled");
-                }
-                for (let k = 0; k < noises.length; k++) {
-                    noises[k].removeAttribute("disabled");
-                }
-            } else {
-                // MOTOR STATUS NOT SELECTED
-                for (let i = 0; i < temperatures_input.length; i++) {
-                    temperatures_input[i].setAttribute("disabled", true);
-                    temperatures_input[i].value = "";
-                }
-                for (let j = 0; j < vibration_values.length; j++) {
-                    vibration_values[j].setAttribute("disabled", true);
-                    vibration_values[j].value = "";
-                }
-                for (let k = 0; k < vibrations.length; k++) {
-                    normalizeInput(vibrations[k]);
-                }
-                for (let l = 0; l < noises.length; l++) {
-                    noises[l].value = "Normal";
-                    noises[l].setAttribute("disabled", true);
-                }
-            }
-
-            // ENABLE COMMENT
-            if (motor_status.value != "") {
-                comment.removeAttribute("disabled", true);
-                comment.value = "";
-            } else {
-                comment.setAttribute("disabled", true);
-                comment.value = "";
-            }
-        }
-
-        // VALIDATE NUMBER OF GREASING NOT EXCEED 255
-        number_of_greasing_input.onchange = () => {
-            if (Number(number_of_greasing_input.value) > 255) {
-                number_of_greasing_input.value = 255
-            }
-        }
-
-        // ONLY NUMBER DATA TYPES ALLOWED
-        function onlynumber(evt) {
-            let ASCIICode = (evt.which) ? evt.which : evt.keyCode
-            if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
-                return false;
-            return true;
-        }
-
-        // VALIDATE INPUT TEMPERATURE NOT EXCEED 200 DEGREE
-        for (let i = 0; i < temperatures_input.length; i++) {
-            temperatures_input[i].onchange = () => {
-                // if (temperatures_input[i].value.length > 3) {
-                //     let value_accepted = temperatures_input[i].value.substring(0, 3)
-                //     temperatures_input[i].value = value_accepted
-                // }
-
-                if (Number(temperatures_input[i].value) > 200 || temperatures_input[i].value.length > 3) {
-                    let temperatureModal = new bootstrap.Modal(document.getElementById('temperature_alert'), {});
-                    temperatureModal.show();
-                    temperatures_input[i].value = "";
-                }
-            }
-        }
-
-        // ADD UNIT TO MOTOR DETAILS
-        function changeUnit(id, unit) {
-            if (id.textContent.length >= 1) {
-                id.textContent = id.textContent + " " + unit;
-            } else {
-                id.textContent = "";
-            }
-        }
-
-        const power_unit = document.getElementById("power_unit");
-        const power_rate = document.getElementById("power_rate");
-        changeUnit(power_rate, power_unit.textContent);
-
-        power_unit.parentElement.style.display = "none";
-
-        const voltage = document.getElementById("voltage");
-        changeUnit(voltage, "V");
-
-        const current_nominal = document.getElementById("current_nominal");
-        changeUnit(current_nominal, "A");
-
-        const frequency = document.getElementById("frequency");
-        changeUnit(frequency, "Hz");
-
-        const pole = document.getElementById("pole");
-        changeUnit(pole, "P");
-
-        const rpm = document.getElementById("rpm");
-        changeUnit(rpm, "Rpm");
-
-        const shaft_diameter = document.getElementById("shaft_diameter");
-        changeUnit(shaft_diameter, "mm");
-
-        const cos_phi = document.getElementById("cos_phi");
-        changeUnit(cos_phi, "φ");
-
-        const efficiency = document.getElementById("efficiency");
-        changeUnit(efficiency, "%");
-
-        const phase_supply = document.getElementById("phase_supply");
-        changeUnit(phase_supply, "Phase");
-
-        const greasing_qty_de = document.getElementById("greasing_qty_de");
-        changeUnit(greasing_qty_de, "grams");
-
-        const greasing_qty_nde = document.getElementById("greasing_qty_nde");
-        changeUnit(greasing_qty_nde, "grams");
-
-        const length = document.getElementById("length");
-        changeUnit(length, "mm");
-
-        const width = document.getElementById("width");
-        changeUnit(width, "mm");
-
-        const height = document.getElementById("height");
-        changeUnit(height, "mm");
-
-        const weight = document.getElementById("weight");
-        changeUnit(weight, "kg");
-
-        // HIDE FUNCLOC WHILE NOT INSTALLED
-        let function_location = document.getElementById("emo_function_location");
-        let sort_field = document.getElementById("emo_sort_field");
-        let status = document.getElementById("status");
-
-        if (status.textContent == "Installed") {
-            function_location.classList.remove("d-none");
-            sort_field.classList.remove("d-none");
-        }
-
-        // DISABLED INPUT WHEN EQUIPMENT IS NOT INSTALLED (AVAILABLE / REPAIRED)
-        const funcloc_information = document.getElementById("funcloc_information");
-        const sort_field_information = document.getElementById("sort_field_information");
-        if (funcloc_information.textContent == "" && sort_field_information.textContent == "") {
-            buttonSubmit.setAttribute("disabled", true);
-            motor_status.setAttribute("disabled", true);
-            clean_status.setAttribute("disabled", true);
-            nipple_grease_input.setAttribute("disabled", true);
-        } else {
-            buttonSubmit.removeAttribute("disabled");
-            motor_status.removeAttribute("disabled");
-            clean_status.removeAttribute("disabled");
-            nipple_grease_input.removeAttribute("disabled");
+            };
         }
     </script>
 </body>
