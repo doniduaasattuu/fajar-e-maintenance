@@ -17,81 +17,139 @@
 
         <!-- PRIMARY CURRENT -->
         <div class="text-center">
-            <h4 class="text-break">Primary Current of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Primary Current of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_primary_current"></canvas>
             </div>
         </div>
 
         <!-- SECONDARY CURRENT -->
         <div class="text-center">
-            <h4 class="text-break">Secondary Current of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Secondary Current of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_secondary_current"></canvas>
             </div>
         </div>
 
         <!-- VOLTAGE -->
         <div class="text-center">
-            <h4 class="text-break">Voltage of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Voltage of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_voltage"></canvas>
             </div>
         </div>
 
         <!-- TEMPERATURE -->
         <div class="text-center">
-            <h4 class="text-break">Temperature of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Temperature of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_temperature"></canvas>
             </div>
         </div>
 
         <!-- NOISE -->
         <div class="text-center">
-            <h4 class="text-break">Noise of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Noise of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_noise"></canvas>
             </div>
         </div>
 
         <!-- SILICA GEL -->
         <div class="text-center">
-            <h4 class="text-break">Silica Gel of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Silica Gel of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_silica_gel"></canvas>
             </div>
         </div>
 
         <!-- EARTHING CONNECTION -->
         <div class="text-center">
-            <h4 class="text-break">Earthing Connection of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Earthing Connection of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_earthing_connection"></canvas>
             </div>
         </div>
 
         <!-- OIL LEAKAGE -->
         <div class="text-center">
-            <h4 class="text-break">Oil Leakage of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Oil Leakage of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_oil_leakage"></canvas>
             </div>
         </div>
 
         <!-- OIL LEVEL -->
         <div class="text-center">
-            <h4 class="text-break">Oil Level of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Oil Level of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_oil_level"></canvas>
             </div>
         </div>
 
         <!-- BLOWER CONDITION -->
         <div class="text-center">
-            <h4 class="text-break">Blower Condition of {{ $sort_field }}</h4>
-            <div class="chart-container mb-4" style="position: relative;">
+            <!-- <h4 class="text-break">Blower Condition of {{ $sort_field }}</h4> -->
+            <div class="card shadow p-3 chart-container mb-5" style="position: relative;">
                 <canvas id="canvas_blower_condition"></canvas>
+            </div>
+        </div>
+
+        <div id="findings">
+            <div class="mt-3 mb-3 text-center">
+                <h5 class="text-break mb-0">Findings Log of {{ $sort_field }}</h5>
+                <div class="fs-6 text-secondary">The top one is the newest</div>
+            </div>
+            <div class="text-start">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Desc</th>
+                            <th scope="col">Equipment</th>
+                            <th scope="col">Reporter</th>
+                            <th scope="col">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $i = 1;
+                        @endphp
+                        @foreach ($comments as $comment )
+                        <tr class="comment_row">
+                            <td>{{ $i }}</td>
+                            @foreach ($comment as $key => $value )
+
+                            @if ($key == "nik")
+                            @continue
+
+                            @elseif ($key == "created_at")
+                            <td>
+                                <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ $value }}">{{ date_format(date_create($value), "d-M-y") }}</div>
+                            </td>
+
+                            @elseif ($key == "user")
+                            @if (strlen(explode(" ", $value['fullname'])[0]) < 3) <td>
+                                <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ $value['nik'] }} - {{ $value['fullname'] }}">{{ explode(" ", $value['fullname'])[1] }}</div>
+                                </td>
+                                @else
+                                <td>
+                                    <div data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{{ $value['nik'] }} - {{ $value['fullname'] }}">{{ explode(" ", $value['fullname'])[0] }}</div>
+                                </td>
+                                @endif
+
+                                @else
+                                <td>{{ $value }}</td>
+                                @endif
+
+                                @endforeach
+                        </tr>
+                        @php
+                        $i++
+                        @endphp
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -120,6 +178,7 @@
             let blower_condition = <?php echo json_encode($blower_condition) ?>;
             let comments = <?php echo json_encode($comments) ?>;
             let checked_by = <?php echo json_encode($checked_by) ?>;
+            let sort_field = <?php echo json_encode($sort_field) ?>;
 
             const footer = (tooltipItems) => {
                 return 'By: ' + checked_by[tooltipItems[0].dataIndex];
@@ -134,22 +193,22 @@
                     datasets: [{
                         data: primary_current_phase_r,
                         label: "Phase R",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        borderColor: "rgb(20, 20, 20)",
+                        backgroundColor: "rgb(20, 20, 20)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: primary_current_phase_s,
                         label: "Phase S",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
+                        borderColor: "rgb(140, 96, 87)",
+                        backgroundColor: "rgb(140, 96, 87)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: primary_current_phase_t,
                         label: "Phase T",
-                        borderColor: "rgb(196,88,180)",
-                        backgroundColor: "rgb(196,88,180)",
+                        borderColor: "rgb(197, 195, 198)",
+                        backgroundColor: "rgb(197, 195, 198)",
                         fill: false,
                         tension: 0.3,
                     }, ]
@@ -159,6 +218,13 @@
                         tooltip: {
                             callbacks: {
                                 footer: footer
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Primary Current " + sort_field,
+                            font: {
+                                size: 16
                             },
                         },
                     },
@@ -172,11 +238,12 @@
                                 display: true,
                                 text: 'Amps',
                             },
+
                         },
                     },
                 }
             });
-            canvas_primary_current.canvas.parentNode.style.height = '300px';
+            canvas_primary_current.canvas.parentNode.style.height = '350px';
             canvas_primary_current.options.plugins.legend.position = "bottom";
             // CHARTJS PRIMARY CURRENT
 
@@ -189,22 +256,22 @@
                     datasets: [{
                         data: secondary_current_phase_r,
                         label: "Phase R",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        borderColor: "rgb(20, 20, 20)",
+                        backgroundColor: "rgb(20, 20, 20)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: secondary_current_phase_s,
                         label: "Phase S",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
+                        borderColor: "rgb(140, 96, 87)",
+                        backgroundColor: "rgb(140, 96, 87)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: secondary_current_phase_t,
                         label: "Phase T",
-                        borderColor: "rgb(196,88,180)",
-                        backgroundColor: "rgb(196,88,180)",
+                        borderColor: "rgb(197, 195, 198)",
+                        backgroundColor: "rgb(197, 195, 198)",
                         fill: false,
                         tension: 0.3,
                     }, ]
@@ -214,6 +281,13 @@
                         tooltip: {
                             callbacks: {
                                 footer: footer
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Secondary Current " + sort_field,
+                            font: {
+                                size: 16
                             },
                         },
                     },
@@ -231,7 +305,7 @@
                     },
                 }
             });
-            canvas_secondary_current.canvas.parentNode.style.height = '300px';
+            canvas_secondary_current.canvas.parentNode.style.height = '350px';
             canvas_secondary_current.options.plugins.legend.position = "bottom";
             // CHARTJS SECONDARY CURRENT
 
@@ -243,16 +317,16 @@
                     labels: date,
                     datasets: [{
                         data: primary_voltage,
-                        label: "Primary Voltage",
+                        label: "Primary",
                         borderColor: "rgb(62,149,205)",
                         backgroundColor: "rgb(62,149,205)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: secondary_voltage,
-                        label: "Secondary Voltage",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
+                        label: "Secondary",
+                        borderColor: "rgb(231, 90, 124)",
+                        backgroundColor: "rgb(231, 90, 124)",
                         fill: false,
                         tension: 0.3,
                     }]
@@ -262,6 +336,13 @@
                         tooltip: {
                             callbacks: {
                                 footer: footer
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Voltage " + sort_field,
+                            font: {
+                                size: 16
                             },
                         },
                     },
@@ -279,7 +360,7 @@
                     },
                 }
             });
-            canvas_voltage.canvas.parentNode.style.height = '300px';
+            canvas_voltage.canvas.parentNode.style.height = '350px';
             canvas_voltage.options.plugins.legend.position = "bottom";
             // CHARTJS VOLTAGE
 
@@ -291,16 +372,16 @@
                     labels: date,
                     datasets: [{
                         data: oil_temperature,
-                        label: "Oil Temperature",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        label: "Oil",
+                        borderColor: "rgb(245, 187, 0)",
+                        backgroundColor: "rgb(245, 187, 0)",
                         fill: false,
                         tension: 0.3,
                     }, {
                         data: winding_temperature,
-                        label: "Winding Temperature",
-                        borderColor: "rgb(60,186,159)",
-                        backgroundColor: "rgb(60,186,159)",
+                        label: "Winding",
+                        borderColor: "rgb(255, 78, 0)",
+                        backgroundColor: "rgb(255, 78, 0)",
                         fill: false,
                         tension: 0.3,
                     }]
@@ -310,6 +391,13 @@
                         tooltip: {
                             callbacks: {
                                 footer: footer
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: "Temperature " + sort_field,
+                            font: {
+                                size: 16
                             },
                         },
                     },
@@ -327,7 +415,7 @@
                     },
                 }
             });
-            canvas_temperature.canvas.parentNode.style.height = '300px';
+            canvas_temperature.canvas.parentNode.style.height = '350px';
             canvas_temperature.options.plugins.legend.position = "bottom";
             // CHARTJS TEMPERATURE
 
@@ -354,6 +442,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Noise " + sort_field,
+                            font: {
+                                size: 16,
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -368,7 +463,7 @@
                     },
                 }
             });
-            canvas_noise.canvas.parentNode.style.height = '300px';
+            canvas_noise.canvas.parentNode.style.height = '350px';
             canvas_noise.options.plugins.legend.position = "bottom";
             // CHARTJS NOISE
 
@@ -395,6 +490,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Silica Gel " + sort_field,
+                            font: {
+                                size: 16
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -409,7 +511,7 @@
                     },
                 }
             });
-            canvas_silica_gel.canvas.parentNode.style.height = '300px';
+            canvas_silica_gel.canvas.parentNode.style.height = '350px';
             canvas_silica_gel.options.plugins.legend.position = "bottom";
             // CHARTJS SILICA GEL
 
@@ -436,6 +538,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Earthing Connection " + sort_field,
+                            font: {
+                                size: 16
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -450,7 +559,7 @@
                     },
                 }
             });
-            canvas_earthing_connection.canvas.parentNode.style.height = '300px';
+            canvas_earthing_connection.canvas.parentNode.style.height = '350px';
             canvas_earthing_connection.options.plugins.legend.position = "bottom";
             // CHARTJS SILICA GEL
 
@@ -477,6 +586,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Oil Leakage " + sort_field,
+                            font: {
+                                size: 16
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -491,7 +607,7 @@
                     },
                 }
             });
-            canvas_oil_leakage.canvas.parentNode.style.height = '300px';
+            canvas_oil_leakage.canvas.parentNode.style.height = '350px';
             canvas_oil_leakage.options.plugins.legend.position = "bottom";
             // CHARTJS OIL LEAKAGE
 
@@ -517,6 +633,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Oil Level " + sort_field,
+                            font: {
+                                size: 16
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -536,7 +659,7 @@
                     },
                 }
             });
-            canvas_oil_level.canvas.parentNode.style.height = '300px';
+            canvas_oil_level.canvas.parentNode.style.height = '350px';
             canvas_oil_level.options.plugins.legend.position = "bottom";
             // CHARTJS OIL LEVEL
 
@@ -563,6 +686,13 @@
                                 footer: footer
                             },
                         },
+                        title: {
+                            display: true,
+                            text: "Blower Condition " + sort_field,
+                            font: {
+                                size: 16
+                            },
+                        },
                     },
                     maintainAspectRatio: false,
                     scales: {
@@ -577,9 +707,22 @@
                     },
                 }
             });
-            canvas_blower_condition.canvas.parentNode.style.height = '300px';
+            canvas_blower_condition.canvas.parentNode.style.height = '350px';
             canvas_blower_condition.options.plugins.legend.position = "bottom";
             // CHARTJS BLOWER CONDITION
+        </script>
+
+        <script>
+            // BOOTSTRAP TOOLTIPS
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+            // HIDDEN FINDINGS LOG IF EMPTY
+            const findings = document.getElementById("findings");
+            let finding_comments = <?php echo json_encode($comments) ?>;
+            if (finding_comments.length == 0) {
+                findings.style.display = "none";
+            }
         </script>
 </body>
 

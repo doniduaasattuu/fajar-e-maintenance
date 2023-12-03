@@ -124,7 +124,7 @@ class EmoRecordSeeder extends Seeder
                 $data_record->comment = null;
                 $data_record->nik = "31100156";
                 $data_record->created_at = Carbon::now()->addMonths(- ($year - $i))->addDays(7);
-                $data_record->number_of_greasing = 0;
+                $data_record->number_of_greasing = rand(3, 8) * 10;
 
                 $data_record->temperature_de = 0;
                 $data_record->temperature_body = 0;
@@ -186,7 +186,6 @@ class EmoRecordSeeder extends Seeder
             $data_record1->motor_status = "Running";
             $data_record1->clean_status = "Clean";
             $data_record1->nipple_grease = "Not Available";
-            $data_record1->number_of_greasing = null;
             $data_record1->number_of_greasing = rand(2, 4) * 10;
             $data_record1->temperature_de = rand(35, 101);
             $data_record1->temperature_body = rand(35, 101);
@@ -221,7 +220,7 @@ class EmoRecordSeeder extends Seeder
             $data_record2->motor_status = "Running";
             $data_record2->clean_status = "Clean";
             $data_record2->nipple_grease = "Not Available";
-            $data_record2->number_of_greasing = null;
+            $data_record2->number_of_greasing = rand(3, 8) * 10;
             $data_record2->temperature_de = rand(35, 101);
             $data_record2->temperature_body = rand(35, 101);
             $data_record2->temperature_nde = rand(35, 101);
@@ -357,7 +356,7 @@ class EmoRecordSeeder extends Seeder
             $data_record6->motor_status = "Running";
             $data_record6->clean_status = "Clean";
             $data_record6->nipple_grease = "Available";
-            $data_record6->number_of_greasing = rand(2, 8) * 10;
+            $data_record6->number_of_greasing = rand(3, 8) * 10;
             $data_record6->temperature_de = rand(35, 101);
             $data_record6->temperature_body = rand(35, 101);
             $data_record6->temperature_nde = rand(35, 101);
@@ -391,7 +390,7 @@ class EmoRecordSeeder extends Seeder
             $data_record7->motor_status = "Running";
             $data_record7->clean_status = "Clean";
             $data_record7->nipple_grease = "Available";
-            $data_record7->number_of_greasing = rand(2, 8) * 10;
+            $data_record7->number_of_greasing = rand(3, 8) * 10;
             $data_record7->temperature_de = rand(35, 101);
             $data_record7->temperature_body = rand(35, 101);
             $data_record7->temperature_nde = rand(35, 101);
@@ -425,7 +424,7 @@ class EmoRecordSeeder extends Seeder
             $data_record8->motor_status = "Running";
             $data_record8->clean_status = "Clean";
             $data_record8->nipple_grease = "Not Available";
-            $data_record8->number_of_greasing = null;
+            $data_record8->number_of_greasing = rand(3, 8) * 10;
             $data_record8->temperature_de = rand(35, 101);
             $data_record8->temperature_body = rand(35, 101);
             $data_record8->temperature_nde = rand(35, 101);

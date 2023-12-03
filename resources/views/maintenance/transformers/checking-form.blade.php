@@ -7,10 +7,24 @@
     #copy_text:hover {
         cursor: pointer;
     }
+
+    /* #loading {
+        z-index: 9999;
+        width: 100%;
+        height: 100vh;
+        background-color: black;
+        position: absolute;
+    } */
 </style>
 
 <body>
     @include("utility.navbar")
+
+    <!-- <div id="loading">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div> -->
 
     <div class="container mt-4 my-5">
 
@@ -96,7 +110,7 @@
             @csrf
             <input type="hidden" id="sort_field" name="sort_field" value="{{ $transformer->sort_field }}">
             <input type="hidden" id="funcloc" name="funcloc" value="{{ $transformer->funcloc }}">
-            <input type="hidden" id="equipment_code" name="equipment_code" value="{{ $trafoList }}">
+            <input type="hidden" id="equipment_id" name="equipment_id" value="{{ $equipment_id }}">
             <button class="btn btn-success fw-bold mb-2 text-white">
                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
@@ -158,7 +172,7 @@
                                     <td>{{ $transformer->material_number }}</td>
                                 </tr>
 
-                                @foreach ($transformerDetail as $key => $value)
+                                @foreach ($transformer->transformerDetails->toArray() as $key => $value)
                                 <tr>
                                     <th scope="row">{{ str_replace("_", " ", ucwords($key)) }}</th>
                                     <td>{{ $value  }}</td>
@@ -175,7 +189,7 @@
         <!-- ========================================= -->
         <!-- ========== CHECKING FORM START ========== -->
         <!-- ========================================= -->
-        <form id="myform" action="/checking-form/{{ $trafoList }}" method="post">
+        <form id="myform" action="/checking-form/{{ $equipment_id }}" method="post">
             @csrf
             <div>
                 <div>
@@ -435,7 +449,7 @@
                 'funcloc': '{{ $transformer->funcloc }}',
                 'transformer': '{{ $transformer->id }}',
                 'sort_field': '{{ $transformer->sort_field }}',
-                'equipment_id': '{{ $trafoList }}',
+                'equipment_id': '{{ $equipment_id }}',
             };
             for (let input of myform) {
                 if (`${input.name}` == "_token" || `${input.value}` == "Submit") {
@@ -446,7 +460,7 @@
             }
             console.table(myArray);
 
-            ajax.open("POST", "/checking-form/{{ $trafoList }}");
+            ajax.open("POST", "/checking-form/{{ $equipment_id }}");
             ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")
             ajax.setRequestHeader("Content-Type", "application/json");
             ajax.onload = () => {

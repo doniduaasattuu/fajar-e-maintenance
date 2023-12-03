@@ -22,18 +22,30 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
 
+use function Laravel\Prompts\search;
 use function PHPUnit\Framework\returnCallback;
 
 class DataController extends Controller
 {
     // ===============================================
-    // ============= RESPONSE NOT FOUND ==============
+    // ============== UTILITY FUNCTIONS ==============
     // ===============================================
+    // PAGE NOT FOUND
     public function pageNotFound()
     {
         return response()->view("utility.page-not-found", [
             "title" => "Oops!"
         ], 404);
+    }
+
+    // GET TYPE OF EQUIPMENT
+    function getTypeOfEquipment(Collection $equipments): array
+    {
+        $type_of_equipment = [];
+        foreach ($equipments as $equipment) {
+            array_push($type_of_equipment, preg_replace('/[0-9]/i', '', $equipment->id));
+        }
+        return $type_of_equipment;
     }
 
     // ===============================================
@@ -70,8 +82,7 @@ class DataController extends Controller
                 return response()->view("maintenance.transformers.checking-form", [
                     "title" => "Checking Form",
                     "transformer" => $transformer,
-                    "transformerDetail" => $transformer->transformerDetails->toArray(),
-                    "trafoList" => $equipment_id,
+                    "equipment_id" => $equipment_id,
                 ]);
             } else {
                 return $this->pageNotFound();
@@ -80,9 +91,7 @@ class DataController extends Controller
             // Fajar-PanelList
             $panelList = $equipment_id;
         } else {
-            return response()->view("utility.page-not-found", [
-                "title" => "Oops!"
-            ]);
+            return $this->pageNotFound();
         }
     }
 
@@ -93,10 +102,22 @@ class DataController extends Controller
     {
         $search_data = $request->input("search_data");
 
-        if (!empty($search_data) && !is_null($search_data) && strlen($search_data) > 9 && substr($search_data, 0, 5) === "Fajar") {
-            // Fajar-XXXList
+        // TYPE OF MOTOR
+        $emos_id = Emo::query()->select(['id'])->distinct('id')->get();
+        $transformers_id = Transformers::query()->select(['id'])->distinct('id')->get();
+
+        $type_of_motor = array_unique($this->getTypeOfEquipment($emos_id));
+        $type_of_trafo = array_unique($this->getTypeOfEquipment($transformers_id));
+
+        if (
+            !empty($search_data) &&
+            !is_null($search_data) &&
+            strlen($search_data) > 9 &&
+            substr($search_data, 0, 5) === "Fajar"
+        ) {
+            // Fajar-XXXList format
             $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
-                "equipment" => $search_data
+                "equipment_id" => $search_data
             ]);
 
             return redirect($redirected);
@@ -104,13 +125,9 @@ class DataController extends Controller
             !empty($search_data) &&
             !is_null($search_data) &&
             strlen($search_data) == 9 &&
-            (substr($search_data, 0, 3) == "EMO" ||
-                substr($search_data, 0, 3) == "MGM" ||
-                substr($search_data, 0, 3) == "MGB" ||
-                substr($search_data, 0, 3) == "MFB" ||
-                substr($search_data, 0, 3) == "MDO")
+            in_array(strtoupper(substr($search_data, 0, 3)), $type_of_motor)
         ) {
-            // Equimpent format
+            // Equipment format
             $emo = Emo::query()->find($search_data);
             if (!is_null($emo)) {
 
@@ -118,20 +135,18 @@ class DataController extends Controller
                 $motorList = (explode("=", $qr_code_link))[1];
 
                 $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
-                    "equipment" => $motorList
+                    "equipment_id" => $motorList
                 ]);
 
                 return redirect($redirected);
             } else {
-                return response()->view("utility.page-not-found", [
-                    "title" => "Oops!"
-                ]);
+                return $this->pageNotFound();
             }
         } else if (
             !empty($search_data) &&
             !is_null($search_data) &&
             strlen($search_data) == 9 &&
-            substr($search_data, 0, 3) == "ETF"
+            in_array(strtoupper(substr($search_data, 0, 3)), $type_of_trafo)
         ) {
             // Equimpent format
             $etf = Transformers::query()->find($search_data);
@@ -141,19 +156,15 @@ class DataController extends Controller
                 $trafoList = (explode("=", $qr_code_link))[1];
 
                 $redirected = action([DataController::class, "getEquipmentCheckingForm"], [
-                    "equipment" => $trafoList
+                    "equipment_id" => $trafoList
                 ]);
 
                 return redirect($redirected);
             } else {
-                return response()->view("utility.page-not-found", [
-                    "title" => "Oops!"
-                ]);
+                return $this->pageNotFound();
             }
         } else {
-            return response()->view("utility.page-not-found", [
-                "title" => "Oops!"
-            ]);
+            return $this->pageNotFound();
         }
     }
 
@@ -183,9 +194,10 @@ class DataController extends Controller
     {
         $sort_field = $request->input("sort_field");
         $funcloc = $request->input("funcloc");
-        $equipment_id = substr($request->input("equipment_id"), 0, 15);
+        $equipment_id = $request->input("equipment_id");
+        $equipment_list = preg_replace("/[0-9]/i", "", $equipment_id);
 
-        if ($equipment_id == "Fajar-MotorList") {
+        if ($equipment_list == "Fajar-MotorList") {
 
             // EQUIPMENT MOTOR
             if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
@@ -244,14 +256,6 @@ class DataController extends Controller
 
                         "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
 
-                        // "temperature_a" => $this->returnColumnDataRecords("temperature_a", $emo_records),
-                        // "temperature_b" => $this->returnColumnDataRecords("temperature_b", $emo_records),
-                        // "temperature_c" => $this->returnColumnDataRecords("temperature_c", $emo_records),
-                        // "temperature_d" => $this->returnColumnDataRecords("temperature_d", $emo_records),
-                        // "vibration_value_de" => $this->returnColumnDataRecords("vibration_value_de", $emo_records),
-                        // "vibration_de" => $this->returnColumnDataRecords("vibration_de", $emo_records),
-                        // "vibration_value_nde" => $this->returnColumnDataRecords("vibration_value_nde", $emo_records),
-                        // "vibration_nde" => $this->returnColumnDataRecords("vibration_nde", $emo_records),
                         "comments" => $comments->toArray(),
                         "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
                     ]);
@@ -261,7 +265,7 @@ class DataController extends Controller
             } else {
                 return Redirect::back();
             }
-        } else if ($equipment_id == "Fajar-TrafoList") {
+        } else if ($equipment_list == "Fajar-TrafoList") {
 
             // EQUIPMENT TRAFO
             if (!is_null($sort_field) && !empty($sort_field) && !is_null($funcloc) && !empty($funcloc)) {
@@ -462,9 +466,7 @@ class DataController extends Controller
                 ]);
             }
         } else {
-            return response()->view("utility.page-not-found", [
-                "title" => "Oops!"
-            ]);
+            return $this->pageNotFound();
         }
 
 

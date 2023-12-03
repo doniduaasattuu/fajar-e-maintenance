@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\AdministratorsSeeder;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
@@ -98,7 +99,7 @@ class DataControllerTest extends TestCase
         ])->post("/search", [
             "search_data" => "EMO000999"
         ])
-            ->assertStatus(200)
+            ->assertStatus(404)
             ->assertSeeText("Page not found");
     }
 
@@ -137,7 +138,7 @@ class DataControllerTest extends TestCase
             ]);
 
         $response
-            ->assertStatus(200)
+            ->assertStatus(404)
             ->assertSeeText("Page not found.");
     }
     // SEARCH TEST END
@@ -156,7 +157,7 @@ class DataControllerTest extends TestCase
             ])->post("/equipment-trends", [
                 "sort_field" => "SP3.P.70/M",
                 "funcloc" => "FP-01-SP3-RJS-T092-P092",
-                "equipment_code" => "Fajar-MotorList1804",
+                "equipment_id" => "Fajar-MotorList1804",
             ]);
 
         $trends_sortfield
@@ -183,7 +184,7 @@ class DataControllerTest extends TestCase
             ])->post("/equipment-trends", [
                 "sort_field" => "SP9.P.70/M",
                 "funcloc" => "FP-01-SP3-RJS-T092-P999",
-                "equipment_code" => "Fajar-MotorList78910",
+                "equipment_id" => "Fajar-MotorList78910",
             ]);
 
         $trends_sortfield_not_found
@@ -334,5 +335,44 @@ class DataControllerTest extends TestCase
             ->assertSeeText("PM8")
             ->assertSeeText("ENC")
             ->assertSeeText("WWT");
+    }
+
+    public function testGetTypeOfEquipmentMotor()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        // $emos = Emo::query()->select(['id'])->distinct('id')->get();
+        // $type_of_motor = [];
+        // foreach ($emos as $emo) {
+        //     array_push($type_of_motor, preg_replace('/[0-9]/i', '', $emo->id));
+        // }
+        // $type_of_motor = array_unique($type_of_motor);
+
+        // self::assertFalse(in_array("MDO", $type_of_motor));
+        // self::assertTrue(in_array("MGM", $type_of_motor));
+        // self::assertTrue(in_array("EMO", $type_of_motor));
+
+        // self::assertNotNull($type_of_motor);
+        // Log::info($type_of_motor);
+
+        $emos = Emo::query()->select(['id'])->distinct('id')->get();
+
+        function getTypeOfEquipment(Collection $equipments): array
+        {
+            $type_of_equipment = [];
+            foreach ($equipments as $equipment) {
+                array_push($type_of_equipment, preg_replace('/[0-9]/i', '', $equipment->id));
+            }
+            return $type_of_equipment;
+        }
+
+        $type_of_motor = array_unique(getTypeOfEquipment($emos));
+
+        self::assertFalse(in_array("MDO", $type_of_motor));
+        self::assertTrue(in_array("MGM", $type_of_motor));
+        self::assertTrue(in_array("EMO", $type_of_motor));
+
+        self::assertNotNull($type_of_motor);
+        Log::info($type_of_motor);
     }
 }
