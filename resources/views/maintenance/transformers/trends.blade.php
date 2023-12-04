@@ -95,6 +95,7 @@
             </div>
         </div>
 
+        <!-- FINDING -->
         <div id="findings">
             <div class="mt-3 mb-3 text-center">
                 <h5 class="text-break mb-0">Findings Log of {{ $sort_field }}</h5>
@@ -428,8 +429,8 @@
                     datasets: [{
                         data: noise,
                         label: "Noise",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        borderColor: "rgb(171, 210, 182)",
+                        backgroundColor: "rgb(171, 210, 182)",
                         fill: false,
                         tension: 0.3,
                         stepped: 'middle',
@@ -463,7 +464,7 @@
                     },
                 }
             });
-            canvas_noise.canvas.parentNode.style.height = '350px';
+            canvas_noise.canvas.parentNode.style.height = '250px';
             canvas_noise.options.plugins.legend.position = "bottom";
             // CHARTJS NOISE
 
@@ -524,8 +525,8 @@
                     datasets: [{
                         data: earthing_connection,
                         label: "Earthing Connection",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        borderColor: "rgb(255, 16, 83)",
+                        backgroundColor: "rgb(255, 16, 83)",
                         fill: false,
                         tension: 0.3,
                         stepped: 'middle',
@@ -559,7 +560,7 @@
                     },
                 }
             });
-            canvas_earthing_connection.canvas.parentNode.style.height = '350px';
+            canvas_earthing_connection.canvas.parentNode.style.height = '250px';
             canvas_earthing_connection.options.plugins.legend.position = "bottom";
             // CHARTJS SILICA GEL
 
@@ -572,8 +573,8 @@
                     datasets: [{
                         data: oil_leakage,
                         label: "Oil Leakage",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
+                        borderColor: "rgb(176, 213, 96)",
+                        backgroundColor: "rgb(176, 213, 96)",
                         fill: false,
                         tension: 0.3,
                         stepped: 'middle',
@@ -607,7 +608,7 @@
                     },
                 }
             });
-            canvas_oil_leakage.canvas.parentNode.style.height = '350px';
+            canvas_oil_leakage.canvas.parentNode.style.height = '250px';
             canvas_oil_leakage.options.plugins.legend.position = "bottom";
             // CHARTJS OIL LEAKAGE
 
@@ -620,9 +621,9 @@
                     datasets: [{
                         data: oil_level,
                         label: "Oil Level",
-                        borderColor: "rgb(62,149,205)",
-                        backgroundColor: "rgb(62,149,205)",
-                        fill: false,
+                        borderColor: "rgb(245, 187, 0)",
+                        backgroundColor: "rgba(245, 187, 0, 0.7)",
+                        fill: true,
                         tension: 0.3,
                     }]
                 },
@@ -707,7 +708,7 @@
                     },
                 }
             });
-            canvas_blower_condition.canvas.parentNode.style.height = '350px';
+            canvas_blower_condition.canvas.parentNode.style.height = '250px';
             canvas_blower_condition.options.plugins.legend.position = "bottom";
             // CHARTJS BLOWER CONDITION
         </script>
@@ -722,6 +723,14 @@
             let finding_comments = <?php echo json_encode($comments) ?>;
             if (finding_comments.length == 0) {
                 findings.style.display = "none";
+            }
+
+            // SWAP COMMENT COLUMN
+            const comment_rows = document.getElementsByClassName('comment_row');
+            for (let i = 0; i < comment_rows.length; i++) {
+                let date = comment_rows[i].lastElementChild.previousElementSibling;
+                comment_rows[i].removeChild(date)
+                comment_rows[i].appendChild(date)
             }
         </script>
 </body>
