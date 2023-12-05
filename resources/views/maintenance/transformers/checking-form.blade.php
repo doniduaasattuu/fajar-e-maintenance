@@ -194,7 +194,7 @@
             <div>
                 <div>
                     <div class="mb-3">
-                        <label for="transformer_status" class="fw-bold form-label">Transformer Status</label>
+                        <label for="transformer_status" class="fw-bold form-label">Transformer Status *</label>
                         <select name="transformer_status" id="transformer_status" class="form-select mb-3" aria-label="Default select example">
                             <option value="">--Transformer Status--</option>
                             <option value="Online">Online</option>
@@ -263,7 +263,7 @@
 
                     <!-- CLEAN STATUS -->
                     <div class="mb-3">
-                        <label for="clean_status" class="fw-bold form-label">Clean Status</label>
+                        <label for="clean_status" class="fw-bold form-label">Clean Status *</label>
                         <select disabled name="clean_status" id="clean_status" class="form-select mb-3 required" aria-label="Default select example">
                             <option value="Clean">Clean</option>
                             <option value="Dirty">Dirty</option>
@@ -272,8 +272,8 @@
 
                     <!-- NOISE -->
                     <div class="mb-3">
-                        <label for="noise" class="fw-bold form-label">Noise</label>
-                        <select disabled name="noise" id="noise" class="form-select mb-3" aria-label="Default select example">
+                        <label for="noise" class="fw-bold form-label">Noise *</label>
+                        <select disabled name="noise" id="noise" class="form-select mb-3 required" aria-label="Default select example">
                             <option value="Normal">Normal</option>
                             <option value="Abnormal">Abnormal</option>
                         </select>
@@ -281,8 +281,8 @@
 
                     <!-- SILICA GEL -->
                     <div class="mb-3">
-                        <label for="silica_gel" class="fw-bold form-label">Silica Gel</label>
-                        <select disabled name="silica_gel" id="silica_gel" class="form-select mb-3" aria-label="Default select example">
+                        <label for="silica_gel" class="fw-bold form-label">Silica Gel *</label>
+                        <select disabled name="silica_gel" id="silica_gel" class="form-select mb-3 required" aria-label="Default select example">
                             <option title="Good" value="Dark Blue">Dark Blue</option>
                             <option title="Satisfactory" value="Light Blue">Light Blue</option>
                             <option title="Unsatisfactory" value="Pink">Pink</option>
@@ -292,8 +292,8 @@
 
                     <!-- EARTHING CONNECTION -->
                     <div class="mb-3">
-                        <label for="earthing_connection" class="fw-bold form-label">Earthing Connection</label>
-                        <select disabled name="earthing_connection" id="earthing_connection" class="form-select mb-3" aria-label="Default select example">
+                        <label for="earthing_connection" class="fw-bold form-label">Earthing Connection *</label>
+                        <select disabled name="earthing_connection" id="earthing_connection" class="form-select mb-3 required" aria-label="Default select example">
                             <option value="Tight">Tight</option>
                             <option value="Loose">Loose</option>
                         </select>
@@ -301,8 +301,8 @@
 
                     <!-- OIL LEAKAGE -->
                     <div class="mb-3">
-                        <label for="oil_leakage" class="fw-bold form-label">Oil Leakage</label>
-                        <select disabled name="oil_leakage" id="oil_leakage" class="form-select mb-3" aria-label="Default select example">
+                        <label for="oil_leakage" class="fw-bold form-label">Oil Leakage *</label>
+                        <select disabled name="oil_leakage" id="oil_leakage" class="form-select mb-3 required" aria-label="Default select example">
                             <option value="No Leaks">No Leaks</option>
                             <option value="Leaks">Leaks</option>
                         </select>
@@ -310,14 +310,14 @@
 
                     <!-- OIL LEVEL -->
                     <div class="mb-3">
-                        <label for="oil_level" class="fw-bold form-label">Oil Level</label>
-                        <input disabled type="number" onkeypress="return onlynumber(event)" min="0" max="100" class="form-control" placeholder="0-100%" name="oil_level" id="oil_level">
+                        <label for="oil_level" class="fw-bold form-label">Oil Level *</label>
+                        <input disabled type="number" onkeypress="return onlynumber(event)" step="10" min="0" max="100" class="form-control required" placeholder="0-100%" name="oil_level" id="oil_level">
                     </div>
 
                     <!-- BLOWER CONDITION -->
                     <div class="mb-3">
-                        <label for="blower_condition" class="fw-bold form-label">Blower Condition</label>
-                        <select disabled name="blower_condition" id="blower_condition" class="form-select mb-3" aria-label="Default select example">
+                        <label for="blower_condition" class="fw-bold form-label">Blower Condition *</label>
+                        <select disabled name="blower_condition" id="blower_condition" class="form-select mb-3 required" aria-label="Default select example">
                             <option value="Normal">Normal</option>
                             <option value="Abnormal">Abnormal</option>
                         </select>
@@ -327,7 +327,7 @@
                     <!-- COMMENT -->
                     <div class="mb-3">
                         <label for="comment" class="fw-bold form-label">Remarks</label>
-                        <textarea disabled placeholder="Description of findings if any" class="form-control" name="comment" id="comment" cols="30" rows="5"></textarea>
+                        <textarea disabled placeholder="Description of findings if any" class="form-control mb-3" name="comment" id="comment" cols="30" rows="5"></textarea>
                     </div>
 
                     <!-- BUTTON SUBMIT -->
@@ -406,6 +406,8 @@
                 for (input of unrequireds) {
                     input.value = "";
                 }
+
+                setInputValueToDefaultValue();
             }
         }
 
@@ -495,6 +497,21 @@
                 }
             }
             ajax.send(JSON.stringify(myArray));
+        }
+
+        // SET REQUIRED INPUT SELECT VALUE TO DEFAULT VALUE
+        function setInputValueToDefaultValue() {
+            let requireds = document.getElementsByClassName("required");
+            for (required of requireds) {
+                let input = document.getElementById(required.id);
+                let input_firstchild = input.firstElementChild ?? "";
+                let reset = input_firstchild.value == undefined ? "" : input_firstchild.value;
+
+                input.value = reset;
+            }
+
+            let comment = document.getElementById("comment");
+            comment.value = "";
         }
     </script>
 </body>

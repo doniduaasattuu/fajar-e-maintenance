@@ -162,7 +162,7 @@
 
                     <!-- MOTOR STATUS -->
                     <div class="mb-3">
-                        <label for="motor_status" class="fw-bold form-label">Motor Status</label>
+                        <label for="motor_status" class="fw-bold form-label">Motor Status *</label>
                         <select name="motor_status" id="motor_status" class="form-select" aria-label="Default select example">
                             <option value="">--Motor Status--</option>
                             <option value="Running">Running</option>
@@ -172,8 +172,8 @@
 
                     <!-- CLEAN STATUS -->
                     <div class="mb-3">
-                        <label for="clean_status" class="fw-bold form-label">Cleanliness</label>
-                        <select disabled name="clean_status" id="clean_status" class="form-select" aria-label="Default select example">
+                        <label for="clean_status" class="fw-bold form-label">Cleanliness *</label>
+                        <select disabled name="clean_status" id="clean_status" class="form-select required" aria-label="Default select example">
                             <option value="Clean">Clean</option>
                             <option value="Dirty">Dirty</option>
                         </select>
@@ -181,8 +181,8 @@
 
                     <!-- NIPPLE GREASE -->
                     <div class="mb-3">
-                        <label for="nipple_grease" class="fw-bold form-label">Nipple Grease</label>
-                        <select disabled name="nipple_grease" id="nipple_grease" class="form-select" aria-label="Default select example">
+                        <label for="nipple_grease" class="fw-bold form-label">Nipple Grease *</label>
+                        <select disabled name="nipple_grease" id="nipple_grease" class="form-select required" aria-label="Default select example">
                             <option value="Available">Available</option>
                             <option value="Not Available">Not Available</option>
                         </select>
@@ -441,6 +441,7 @@
         let buttonSubmit = document.getElementById("buttonSubmit");
         let temperatures = document.getElementsByClassName("temperature");
         let vibration_values = document.getElementsByClassName("vibration_value");
+        let vibration_descriptions = document.getElementsByClassName("vibration_description");
         let detail_power_rate = document.getElementById("detail_power_rate");
         let detail_power_unit = document.getElementById("detail_power_unit");
         let vibrations = document.getElementsByClassName("vibration")
@@ -495,6 +496,11 @@
                     }
                 }
 
+                for (noise of noises) {
+                    noise.value = "Normal"
+                }
+
+                normalizeVibrationDescription()
                 disabledNumberOfGreasing();
             } else {
                 // DISABLED ALL INPUT WHILE UNSELECTED
@@ -514,8 +520,18 @@
                         input.value = "";
                     }
                 }
-            }
 
+
+                normalizeVibrationDescription()
+
+                for (noise of noises) {
+                    noise.value = "Normal"
+                }
+
+                comment.value = "";
+                nipple_grease.value = "Available";
+                clean_status.value = "Clean";
+            }
         }
 
         // DISABLED NUMBER OF GREASING IF NIPPLE GREASE IS UNAVAILABLE
@@ -659,6 +675,7 @@
         // NORMALIZE COLOR
         function normalizeInput(element) {
             element.value = "";
+            element.classList.add("text-dark");
             element.classList.remove("text-white");
             element.classList.remove("bg-success");
             element.classList.remove("bg-warning");
@@ -781,6 +798,13 @@
                     }
                 }
             };
+        }
+
+        // NORMALIZE VIBRATION DESCRIPTION
+        function normalizeVibrationDescription() {
+            for (vibration_description of vibration_descriptions) {
+                normalizeInput(vibration_description);
+            }
         }
     </script>
 </body>
