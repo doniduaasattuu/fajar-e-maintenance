@@ -66,8 +66,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/change-password', [App\Http\Controllers\UserController::class, "changePassword"]);
     Route::post('/change-password', [App\Http\Controllers\UserController::class, "doChangePassword"]);
 
-    Route::get('/trends/{emo}', [App\Http\Controllers\DataController::class, "trends"]);
     Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"]);
+    Route::post('/trends-picker', [App\Http\Controllers\DataController::class, "trendsRender"]);
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
     Route::post('/equipment-trends', [App\Http\Controllers\DataController::class, "equipmentTrends"]);
 

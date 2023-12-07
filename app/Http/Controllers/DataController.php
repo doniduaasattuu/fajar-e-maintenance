@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
 
 use function Laravel\Prompts\search;
+use function Laravel\Prompts\select;
+use function PHPUnit\Framework\isEmpty;
+use function PHPUnit\Framework\isNull;
 use function PHPUnit\Framework\returnCallback;
 
 class DataController extends Controller
@@ -46,6 +49,48 @@ class DataController extends Controller
             array_push($type_of_equipment, preg_replace('/[0-9]/i', '', $equipment->id));
         }
         return $type_of_equipment;
+    }
+
+    function renderEmoTrend($emo_records, $comments, $equipment)
+    {
+        return response()->view("maintenance.emos.trends", [
+            "title" => "Sort Field",
+            "sort_field" => $equipment == "" ? $emo_records[0]->sort_field : $equipment,
+            "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
+            "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
+            "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
+            "temperature_de" => $this->returnColumnDataRecords("temperature_de", $emo_records),
+            "temperature_body" => $this->returnColumnDataRecords("temperature_body", $emo_records),
+            "temperature_nde" => $this->returnColumnDataRecords("temperature_nde", $emo_records),
+
+            "vibration_de_vertical_value" => $this->returnColumnDataRecords("vibration_de_vertical_value", $emo_records),
+            "vibration_de_vertical_desc" => $this->returnColumnDataRecords("vibration_de_vertical_desc", $emo_records),
+
+            "vibration_de_horizontal_value" => $this->returnColumnDataRecords("vibration_de_horizontal_value", $emo_records),
+            "vibration_de_horizontal_desc" => $this->returnColumnDataRecords("vibration_de_horizontal_desc", $emo_records),
+
+            "vibration_de_axial_value" => $this->returnColumnDataRecords("vibration_de_axial_value", $emo_records),
+            "vibration_de_axial_desc" => $this->returnColumnDataRecords("vibration_de_axial_desc", $emo_records),
+
+            "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
+            "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
+
+            "noise_de" => $this->returnColumnDataRecords("noise_de", $emo_records),
+
+            "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
+            "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
+
+            "vibration_nde_horizontal_value" => $this->returnColumnDataRecords("vibration_nde_horizontal_value", $emo_records),
+            "vibration_nde_horizontal_desc" => $this->returnColumnDataRecords("vibration_nde_horizontal_desc", $emo_records),
+
+            "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
+            "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
+
+            "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
+
+            "comments" => $comments->toArray(),
+            "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
+        ]);
     }
 
     // ===============================================
@@ -221,44 +266,7 @@ class DataController extends Controller
 
                 if (!is_null($emo_records)) {
 
-                    return response()->view("maintenance.emos.trends", [
-                        "title" => "Sort Field",
-                        "sort_field" => $sort_field,
-                        "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
-                        "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
-                        "number_of_greasing" => $this->returnColumnDataRecords("number_of_greasing", $emo_records),
-                        "temperature_de" => $this->returnColumnDataRecords("temperature_de", $emo_records),
-                        "temperature_body" => $this->returnColumnDataRecords("temperature_body", $emo_records),
-                        "temperature_nde" => $this->returnColumnDataRecords("temperature_nde", $emo_records),
-
-                        "vibration_de_vertical_value" => $this->returnColumnDataRecords("vibration_de_vertical_value", $emo_records),
-                        "vibration_de_vertical_desc" => $this->returnColumnDataRecords("vibration_de_vertical_desc", $emo_records),
-
-                        "vibration_de_horizontal_value" => $this->returnColumnDataRecords("vibration_de_horizontal_value", $emo_records),
-                        "vibration_de_horizontal_desc" => $this->returnColumnDataRecords("vibration_de_horizontal_desc", $emo_records),
-
-                        "vibration_de_axial_value" => $this->returnColumnDataRecords("vibration_de_axial_value", $emo_records),
-                        "vibration_de_axial_desc" => $this->returnColumnDataRecords("vibration_de_axial_desc", $emo_records),
-
-                        "vibration_de_frame_value" => $this->returnColumnDataRecords("vibration_de_frame_value", $emo_records),
-                        "vibration_de_frame_desc" => $this->returnColumnDataRecords("vibration_de_frame_desc", $emo_records),
-
-                        "noise_de" => $this->returnColumnDataRecords("noise_de", $emo_records),
-
-                        "vibration_nde_vertical_value" => $this->returnColumnDataRecords("vibration_nde_vertical_value", $emo_records),
-                        "vibration_nde_vertical_desc" => $this->returnColumnDataRecords("vibration_nde_vertical_desc", $emo_records),
-
-                        "vibration_nde_horizontal_value" => $this->returnColumnDataRecords("vibration_nde_horizontal_value", $emo_records),
-                        "vibration_nde_horizontal_desc" => $this->returnColumnDataRecords("vibration_nde_horizontal_desc", $emo_records),
-
-                        "vibration_nde_frame_value" => $this->returnColumnDataRecords("vibration_nde_frame_value", $emo_records),
-                        "vibration_nde_frame_desc" => $this->returnColumnDataRecords("vibration_nde_frame_desc", $emo_records),
-
-                        "noise_nde" => $this->returnColumnDataRecords("noise_nde", $emo_records),
-
-                        "comments" => $comments->toArray(),
-                        "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
-                    ]);
+                    return $this->renderEmoTrend($emo_records, $comments, "");
                 } else {
                     return Redirect::back();
                 }
@@ -288,31 +296,6 @@ class DataController extends Controller
                     ->get();
 
                 if (!is_null($transformer_records)) {
-
-                    // return response()->json([
-                    //     "title" => "Sort Field",
-                    //     "sort_field" => $sort_field,
-                    //     "date_category" => $this->returnColumnDataRecords("created_at", $transformer_records),
-                    //     "transformer_status" => $this->returnColumnDataRecords("transformer_status", $transformer_records),
-                    //     "primary_current_phase_r" => $this->returnColumnDataRecords("primary_current_phase_r", $transformer_records),
-                    //     "primary_current_phase_s" => $this->returnColumnDataRecords("primary_current_phase_s", $transformer_records),
-                    //     "primary_current_phase_t" => $this->returnColumnDataRecords("primary_current_phase_t", $transformer_records),
-                    //     "secondary_current_phase_r" => $this->returnColumnDataRecords("secondary_current_phase_r", $transformer_records),
-                    //     "secondary_current_phase_s" => $this->returnColumnDataRecords("secondary_current_phase_s", $transformer_records),
-                    //     "secondary_current_phase_t" => $this->returnColumnDataRecords("secondary_current_phase_t", $transformer_records),
-                    //     "primary_voltage" => $this->returnColumnDataRecords("primary_voltage", $transformer_records),
-                    //     "secondary_voltage" => $this->returnColumnDataRecords("secondary_voltage", $transformer_records),
-                    //     "oil_temperature" => $this->returnColumnDataRecords("oil_temperature", $transformer_records),
-                    //     "winding_temperature" => $this->returnColumnDataRecords("winding_temperature", $transformer_records),
-                    //     "clean_status" => $this->returnColumnDataRecords("clean_status", $transformer_records),
-                    //     "noise" => $this->returnColumnDataRecords("noise", $transformer_records),
-                    //     "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
-                    //     "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
-                    //     "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
-                    //     "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
-                    //     "comments" => $comments->toArray(),
-                    //     "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
-                    // ]);
 
                     return response()->view("maintenance.transformers.trends", [
                         "title" => "Sort Field",
@@ -411,8 +394,8 @@ class DataController extends Controller
                 ]);
             }
         } else if ($equipment_list == "Fajar-TrafoList") {
-            // EQUIPMENT TRAFO
 
+            // EQUIPMENT TRAFO
             if (
                 !empty($data["funcloc"]) &&
                 !empty($data["transformer"]) &&
@@ -434,11 +417,6 @@ class DataController extends Controller
                             if ($key != "comment") {
                                 $data[$key] = 0;
                             }
-                            // if ($key === "comment") {
-                            //     continue;
-                            // } else {
-                            //     $data[$key] = 0;
-                            // }
                         }
                     }
 
@@ -468,156 +446,8 @@ class DataController extends Controller
         } else {
             return $this->pageNotFound();
         }
-
-
-
-
-
-        // $request->merge([
-        //     "nik" => session("nik"),
-        //     "updated_at" => Carbon::now()->toDateTimeString()
-        // ]);
-
-        // $data = $request->input();
-
-        // return response()->json($data);
-
-        // if (
-        //     !empty($data["funcloc"]) &&
-        //     !empty($data["emo"]) &&
-        //     !empty($data["sort_field"]) &&
-        //     !empty($data["motor_status"]) &&
-        //     !empty($data["clean_status"]) &&
-        //     !empty($data["nipple_grease"]) &&
-        //     !empty($data["noise_de"]) &&
-        //     !empty($data["noise_nde"])
-        // ) {
-        //     try {
-
-        //         foreach ($data as $key => $value) {
-        //             if ($value == null) {
-        //                 if ($key != "comment" && ("desc" != substr($key, -4))) {
-        //                     $data[$key] = 0;
-        //                 }
-        //             }
-        //         }
-
-        //         // return response()->json($data);
-        //         $emo_record = EmoRecord::create($data);
-        //         $result = $emo_record->save();
-        //     } catch (QueryException $error) {
-        //         return response()->json([
-        //             "error" => $error
-        //         ]);
-        //     }
-
-        //     if ($result) {
-        //         return response()->json([
-        //             "message" => "Saved successfully! ✅"
-        //         ]);
-        //     } else { {
-        //             return response()->json([
-        //                 "error" => "Error occurred! ⚠️"
-        //             ]);
-        //         }
-        //     }
-        // } else {
-        //     return response()->json([
-        //         "error" => "All field is required! ⚠️"
-        //     ]);
-        // }
     }
 
-    // ============================================
-    // ================ EMO TRENDS ================
-    // ============================================
-    public function trends(Request $request, string $emo)
-    {
-        $end_date = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(1);
-        $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
-
-        if (strlen($emo) == 9) {
-
-            $end_date = date_format(date_create($end_date), "Y-m-d");
-            $start_date = date_format(date_create($start_date), "Y-m-d");
-
-            $emo_records = EmoRecord::query()->whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $emo)->get();
-            $emo_details = EmoDetail::query()->where("emo_detail", "=", $emo)->first();
-
-            $comments = EmoRecord::query()
-                ->select(["comment", "funcloc", "nik", "created_at"])->where("comment", "!=", null)
-                ->whereBetween("created_at", [$start_date, $end_date])
-                ->where("emo", "=", $emo)
-                ->orderBy("created_at", "DESC")
-                ->get();
-
-            if (!is_null($emo_details)) {
-
-                $nipple_grease = $emo_details->nipple_grease;
-                $date_category = [];
-                $motor_status = [];
-                $temperature_a = [];
-                $temperature_b = [];
-                $temperature_c = [];
-                $temperature_d = [];
-                $vibration_value_de = [];
-                $vibration_de = [];
-                $vibration_value_nde = [];
-                $vibration_nde = [];
-                $number_of_greasing = [];
-                $checked_by = [];
-
-                foreach ($emo_records as $record) {
-                    $year = substr($record->created_at, 2, 2);
-                    $month = substr($record->created_at, 5, 2);
-                    $date = substr($record->created_at, 8, 2);
-                    array_push($date_category, $date . "/" . $month . "/" . $year);
-
-                    array_push($motor_status, $record->motor_status);
-
-                    array_push($temperature_a, $record->temperature_a);
-                    array_push($temperature_b, $record->temperature_b);
-                    array_push($temperature_c, $record->temperature_c);
-                    array_push($temperature_d, $record->temperature_d);
-
-                    array_push($vibration_value_de, (float) $record->vibration_value_de);
-                    array_push($vibration_value_nde, (float) $record->vibration_value_nde);
-
-                    array_push($vibration_de, $record->vibration_de);
-                    array_push($vibration_nde, $record->vibration_nde);
-
-                    array_push($number_of_greasing, $record->number_of_greasing);
-
-                    array_push($checked_by, User::query()->find($record->nik)->fullname);
-                }
-
-                return response()->view("maintenance.trends", [
-                    "title" => "Trends",
-                    "date_category" => $date_category,
-                    "motor_status" => $motor_status,
-                    "temperature_a" => $temperature_a,
-                    "temperature_b" => $temperature_b,
-                    "temperature_c" => $temperature_c,
-                    "temperature_d" => $temperature_d,
-                    "vibration_value_de" => $vibration_value_de,
-                    "vibration_de" => $vibration_de,
-                    "vibration_value_nde" => $vibration_value_nde,
-                    "vibration_nde" => $vibration_nde,
-                    "number_of_greasing" => $number_of_greasing,
-                    "emo" => $emo,
-                    "nipple_grease" => $nipple_grease,
-                    "comments" => $comments->toArray(),
-                    "checked_by" => $checked_by,
-                ]);
-            } else {
-
-                return Redirect::back();
-            }
-        } else {
-
-            return Redirect::back();
-        }
-    }
 
     // ===================================================
     // ================ EMO TRENDS PICKER ================
@@ -629,6 +459,123 @@ class DataController extends Controller
             "header" => "Equipment trend",
         ]);
     }
+
+    // ============================================
+    // ============= EMO, ETF TRENDS ==============
+    // ============================================
+    public function trendsRender(Request $request)
+    {
+        $equipment = $request->input("equipment");
+        $end_date = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(1);
+        $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
+
+        $equipment_records = EmoRecord::whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
+
+        if ($equipment_records) {
+            $comments = EmoRecord::query()
+                ->with(['user' => function ($query) {
+                    $query->select('nik', 'fullname');
+                }])
+                ->select(["comment", "emo", "created_at", "nik"])
+                ->where("emo", "=", $equipment)
+                ->where("comment", "!=", null)
+                ->whereBetween("created_at", [$start_date, $end_date])
+                ->orderBy("created_at", "DESC")
+                ->get();
+
+            return $this->renderEmoTrend($equipment_records, $comments, $equipment_records[0]->emo);
+        } else {
+            return $this->pageNotFound();
+        }
+
+
+
+
+
+        // if (strlen($equipment) == 9) {
+
+        //     $end_date = date_format(date_create($end_date), "Y-m-d");
+        //     $start_date = date_format(date_create($start_date), "Y-m-d");
+
+        //     $emo_records = EmoRecord::query()->with(['emoDetails'])->whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
+        //     $emo_details = $emo_records->emoDetails;
+
+        //     $comments = EmoRecord::query()
+        //         ->select(["comment", "funcloc", "nik", "created_at"])->where("comment", "!=", null)
+        //         ->whereBetween("created_at", [$start_date, $end_date])
+        //         ->where("emo", "=", $equipment)
+        //         ->orderBy("created_at", "DESC")
+        //         ->get();
+
+        //     if (!is_null($emo_details)) {
+
+        //         $nipple_grease = $emo_details->nipple_grease;
+        //         $date_category = [];
+        //         $motor_status = [];
+        //         $temperature_a = [];
+        //         $temperature_b = [];
+        //         $temperature_c = [];
+        //         $temperature_d = [];
+        //         $vibration_value_de = [];
+        //         $vibration_de = [];
+        //         $vibration_value_nde = [];
+        //         $vibration_nde = [];
+        //         $number_of_greasing = [];
+        //         $checked_by = [];
+
+        //         foreach ($emo_records as $record) {
+        //             $year = substr($record->created_at, 2, 2);
+        //             $month = substr($record->created_at, 5, 2);
+        //             $date = substr($record->created_at, 8, 2);
+        //             array_push($date_category, $date . "/" . $month . "/" . $year);
+
+        //             array_push($motor_status, $record->motor_status);
+
+        //             array_push($temperature_a, $record->temperature_a);
+        //             array_push($temperature_b, $record->temperature_b);
+        //             array_push($temperature_c, $record->temperature_c);
+        //             array_push($temperature_d, $record->temperature_d);
+
+        //             array_push($vibration_value_de, (float) $record->vibration_value_de);
+        //             array_push($vibration_value_nde, (float) $record->vibration_value_nde);
+
+        //             array_push($vibration_de, $record->vibration_de);
+        //             array_push($vibration_nde, $record->vibration_nde);
+
+        //             array_push($number_of_greasing, $record->number_of_greasing);
+
+        //             array_push($checked_by, User::query()->find($record->nik)->fullname);
+        //         }
+
+        //         return response()->view("maintenance.trends", [
+        //             "title" => "Trends",
+        //             "date_category" => $date_category,
+        //             "motor_status" => $motor_status,
+        //             "temperature_a" => $temperature_a,
+        //             "temperature_b" => $temperature_b,
+        //             "temperature_c" => $temperature_c,
+        //             "temperature_d" => $temperature_d,
+        //             "vibration_value_de" => $vibration_value_de,
+        //             "vibration_de" => $vibration_de,
+        //             "vibration_value_nde" => $vibration_value_nde,
+        //             "vibration_nde" => $vibration_nde,
+        //             "number_of_greasing" => $number_of_greasing,
+        //             "emo" => $equipment,
+        //             "nipple_grease" => $nipple_grease,
+        //             "comments" => $comments->toArray(),
+        //             "checked_by" => $checked_by,
+        //         ]);
+        //     } else {
+
+        //         return Redirect::back();
+        //     }
+        // } else {
+
+        //     return Redirect::back();
+        // }
+    }
+
+
 
     // ===================================================
     // =============== SUMMARY TOP OF FIVE ===============

@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\EmoRecord;
 use App\Models\FunctionLocation;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\EmoDetailSeeder;
+use Database\Seeders\EmoRecordSeeder;
 use Database\Seeders\EmoSeeder;
 use Database\Seeders\FunctionLocationSeeder;
 use Illuminate\Database\QueryException;
@@ -185,6 +187,32 @@ class EmoTest extends TestCase
 
         self::assertNotNull($funcloc);
         self::assertEquals("FP-01-SP3-RJS-T092-P092", $funcloc->id);
+    }
+
+    public function testEmoToEmoRecordsRelationsFound()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $end_date = Carbon::now()->addDays(1);
+        $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+
+        // $emo = Emo::query()->whereBetween("created_at", [$start_date, $end_date])->find("EMO000426");
+        // $emo_records = $emo->emoRecords->toQuery()->whereBetween("created_at", [$start_date, $end_date])->get();
+        $emo_records = EmoRecord::whereBetween("created_at", [$start_date, $end_date])->where("emo", "EMO000426")->get();
+
+        // self::assertNotNull($emo);
+        // self::assertNotNull($emo->emoRecords);
+        // self::assertCount(36, $emo->emoRecords);
+        self::assertCount(12, $emo_records);
+        Log::info(json_encode($emo_records, JSON_PRETTY_PRINT));
+    }
+
+    public function testEmoToEmoRecordsRelationsNotFound()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $emo = Emo::query()->with(['emoRecords'])->find("EMO000000");
+        self::assertNull($emo);
     }
 
     public function testEmoQueryWith()

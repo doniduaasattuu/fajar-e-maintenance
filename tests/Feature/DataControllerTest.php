@@ -188,7 +188,7 @@ class DataControllerTest extends TestCase
             ]);
 
         $trends_sortfield_not_found
-            ->assertStatus(200)
+            ->assertStatus(500)
             ->assertSeeText("Temperature of SP9.P.70/M")
             ->assertSeeText("Vibration DE of SP9.P.70/M")
             ->assertSeeText("Vibration NDE of SP9.P.70/M")

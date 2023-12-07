@@ -623,6 +623,28 @@ class EmoRecordTest extends TestCase
         self::assertCount(3, $comments);
     }
 
+    public function testCommentTrend()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $end_date = Carbon::now()->addDays(1);
+        $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+
+        $comments = EmoRecord::query()
+            ->with(['user' => function ($query) {
+                $query->select('nik', 'fullname');
+            }])
+            ->select(["comment", "emo", "created_at", "nik"])
+            ->where("emo", "=", "EMO000426")
+            ->where("comment", "!=", null)
+            ->whereBetween("created_at", [$start_date, $end_date])
+            ->orderBy("created_at", "DESC")
+            ->get();
+
+        self::assertNotNull($comments);
+        Log::info(json_encode($comments, JSON_PRETTY_PRINT));
+    }
+
     public function testCommentUser()
     {
         $this->seed(DatabaseSeeder::class);

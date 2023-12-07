@@ -10,8 +10,8 @@
     <div class="container d-flex absolute mt-5 vh-100">
         <div class="my-4 py-5 position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
             <!-- my-auto align-items-center mx-auto   -->
-            <form id="trends-picker" method="get">
-
+            <form id="/trends-picker" method="post">
+                @csrf
                 @isset($error)
                 <div class="alert alert-danger" role="alert">
                     {{ $error }}
@@ -31,9 +31,10 @@
                 </div>
 
                 <div class=" mb-3">
-                    <label for="emo_input" class="form-label -mb-5">Equipment</label>
-                    <input list="emo_datalist" id="emo_input" class="form-control" aria-describedby="listHelp">
-                    <datalist id="emo_datalist">
+                    <label for="equipment" class="form-label -mb-5">Equipment</label>
+                    <input name="equipment" id="equipment" class="form-control" aria-describedby="listHelp">
+                    <!-- <input list="emo_datalist" name="equipment" id="equipment" class="form-control" aria-describedby="listHelp"> -->
+                    <!-- <datalist id="emo_datalist"> -->
                     </datalist>
                 </div>
 
@@ -80,10 +81,10 @@
         }
         ajax.send();
 
-        let trends_picker = document.getElementById("trends-picker");
-        trends_picker.onchange = () => {
-            trends_picker.setAttribute("action", "/trends/" + emo_input.value);
-        }
+        // let trends_picker = document.getElementById("trends-picker");
+        // trends_picker.onchange = () => {
+        //     trends_picker.setAttribute("action", "/trends-picker/" + emo_input.value);
+        // }
     </script>
 </body>
 
