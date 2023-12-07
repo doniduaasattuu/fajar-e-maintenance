@@ -51,6 +51,7 @@ class DataController extends Controller
         return $type_of_equipment;
     }
 
+    // EMO TREND
     function renderEmoTrend($emo_records, $comments, $equipment)
     {
         return response()->view("maintenance.emos.trends", [
@@ -90,6 +91,36 @@ class DataController extends Controller
 
             "comments" => $comments->toArray(),
             "checked_by" => $this->returnColumnDataRecords("nik", $emo_records),
+        ]);
+    }
+
+    // TRANSFORMER TREND
+    private function renderTransformerTrend($transformer_records, $comments, $equipment)
+    {
+        return response()->view("maintenance.transformers.trends", [
+            "title" => "Sort Field",
+            "sort_field" => $equipment == "" ? $transformer_records[0]->sort_field : $equipment,
+            "date_category" => $this->returnColumnDataRecords("created_at", $transformer_records),
+            "transformer_status" => $this->returnColumnDataRecords("transformer_status", $transformer_records),
+            "primary_current_phase_r" => $this->returnColumnDataRecords("primary_current_phase_r", $transformer_records),
+            "primary_current_phase_s" => $this->returnColumnDataRecords("primary_current_phase_s", $transformer_records),
+            "primary_current_phase_t" => $this->returnColumnDataRecords("primary_current_phase_t", $transformer_records),
+            "secondary_current_phase_r" => $this->returnColumnDataRecords("secondary_current_phase_r", $transformer_records),
+            "secondary_current_phase_s" => $this->returnColumnDataRecords("secondary_current_phase_s", $transformer_records),
+            "secondary_current_phase_t" => $this->returnColumnDataRecords("secondary_current_phase_t", $transformer_records),
+            "primary_voltage" => $this->returnColumnDataRecords("primary_voltage", $transformer_records),
+            "secondary_voltage" => $this->returnColumnDataRecords("secondary_voltage", $transformer_records),
+            "oil_temperature" => $this->returnColumnDataRecords("oil_temperature", $transformer_records),
+            "winding_temperature" => $this->returnColumnDataRecords("winding_temperature", $transformer_records),
+            "clean_status" => $this->returnColumnDataRecords("clean_status", $transformer_records),
+            "noise" => $this->returnColumnDataRecords("noise", $transformer_records),
+            "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
+            "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
+            "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
+            "oil_level" => $this->returnColumnDataRecords("oil_level", $transformer_records),
+            "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
+            "comments" => $comments->toArray(),
+            "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
         ]);
     }
 
@@ -264,7 +295,7 @@ class DataController extends Controller
                     ->orderBy("created_at", "DESC")
                     ->get();
 
-                if (!is_null($emo_records)) {
+                if ($emo_records->isNotEmpty()) {
 
                     return $this->renderEmoTrend($emo_records, $comments, "");
                 } else {
@@ -295,33 +326,9 @@ class DataController extends Controller
                     ->orderBy("created_at", "DESC")
                     ->get();
 
-                if (!is_null($transformer_records)) {
+                if ($transformer_records->isNotEmpty()) {
 
-                    return response()->view("maintenance.transformers.trends", [
-                        "title" => "Sort Field",
-                        "sort_field" => $sort_field,
-                        "date_category" => $this->returnColumnDataRecords("created_at", $transformer_records),
-                        "transformer_status" => $this->returnColumnDataRecords("transformer_status", $transformer_records),
-                        "primary_current_phase_r" => $this->returnColumnDataRecords("primary_current_phase_r", $transformer_records),
-                        "primary_current_phase_s" => $this->returnColumnDataRecords("primary_current_phase_s", $transformer_records),
-                        "primary_current_phase_t" => $this->returnColumnDataRecords("primary_current_phase_t", $transformer_records),
-                        "secondary_current_phase_r" => $this->returnColumnDataRecords("secondary_current_phase_r", $transformer_records),
-                        "secondary_current_phase_s" => $this->returnColumnDataRecords("secondary_current_phase_s", $transformer_records),
-                        "secondary_current_phase_t" => $this->returnColumnDataRecords("secondary_current_phase_t", $transformer_records),
-                        "primary_voltage" => $this->returnColumnDataRecords("primary_voltage", $transformer_records),
-                        "secondary_voltage" => $this->returnColumnDataRecords("secondary_voltage", $transformer_records),
-                        "oil_temperature" => $this->returnColumnDataRecords("oil_temperature", $transformer_records),
-                        "winding_temperature" => $this->returnColumnDataRecords("winding_temperature", $transformer_records),
-                        "clean_status" => $this->returnColumnDataRecords("clean_status", $transformer_records),
-                        "noise" => $this->returnColumnDataRecords("noise", $transformer_records),
-                        "silica_gel" => $this->returnColumnDataRecords("silica_gel", $transformer_records),
-                        "earthing_connection" => $this->returnColumnDataRecords("earthing_connection", $transformer_records),
-                        "oil_leakage" => $this->returnColumnDataRecords("oil_leakage", $transformer_records),
-                        "oil_level" => $this->returnColumnDataRecords("oil_level", $transformer_records),
-                        "blower_condition" => $this->returnColumnDataRecords("blower_condition", $transformer_records),
-                        "comments" => $comments->toArray(),
-                        "checked_by" => $this->returnColumnDataRecords("nik", $transformer_records),
-                    ]);
+                    return $this->renderTransformerTrend($transformer_records, $comments, "");
                 } else {
                     return Redirect::back();
                 }
@@ -466,12 +473,21 @@ class DataController extends Controller
     public function trendsRender(Request $request)
     {
         $equipment = $request->input("equipment");
+        $equipment_code = preg_replace('/[0-9]/i', '', $equipment);
         $end_date = !is_null($request->input("end_date")) ? $request->input("end_date") : Carbon::now()->addDays(1);
         $start_date = !is_null($request->input("start_date")) ? $request->input("start_date") : Carbon::now()->addYears(-1)->addDays(-1);
 
-        $equipment_records = EmoRecord::whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
+        $emos_id = Emo::query()->select(['id'])->distinct('id')->get();
+        $transformers_id = Transformers::query()->select(['id'])->distinct('id')->get();
 
-        if ($equipment_records) {
+        $type_of_motor = array_unique($this->getTypeOfEquipment($emos_id));
+        $type_of_trafo = array_unique($this->getTypeOfEquipment($transformers_id));
+
+        if (in_array(strtoupper($equipment_code), $type_of_motor)) {
+
+            // EMO
+            $emo_records = EmoRecord::whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
+
             $comments = EmoRecord::query()
                 ->with(['user' => function ($query) {
                     $query->select('nik', 'fullname');
@@ -483,7 +499,24 @@ class DataController extends Controller
                 ->orderBy("created_at", "DESC")
                 ->get();
 
-            return $this->renderEmoTrend($equipment_records, $comments, $equipment_records[0]->emo);
+            return $this->renderEmoTrend($emo_records, $comments, $emo_records[0]->emo);
+        } else if (in_array(strtoupper($equipment_code), $type_of_trafo)) {
+
+            // ETF
+            $transformer_records = TransformerRecord::whereBetween("created_at", [$start_date, $end_date])->where("transformer", "=", $equipment)->get();
+
+            $comments = TransformerRecord::query()
+                ->with(['user' => function ($query) {
+                    $query->select('nik', 'fullname');
+                }])
+                ->select(["comment", "transformer", "created_at", "nik"])
+                ->where("transformer", "=", $equipment)
+                ->where("comment", "!=", null)
+                ->whereBetween("created_at", [$start_date, $end_date])
+                ->orderBy("created_at", "DESC")
+                ->get();
+
+            return $this->renderTransformerTrend($transformer_records, $comments, $transformer_records[0]->transformer);
         } else {
             return $this->pageNotFound();
         }

@@ -175,26 +175,17 @@ class DataControllerTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $trends_sortfield_not_found = $this->followingRedirects()
-            ->withHeaders([
-                'X-XSRF-TOKEN' => csrf_token()
-            ])->withSession([
-                "nik" => "55000154",
-                "user" => "Doni Darmawan",
-            ])->post("/equipment-trends", [
-                "sort_field" => "SP9.P.70/M",
-                "funcloc" => "FP-01-SP3-RJS-T092-P999",
-                "equipment_id" => "Fajar-MotorList78910",
-            ]);
-
-        $trends_sortfield_not_found
-            ->assertStatus(500)
-            ->assertSeeText("Temperature of SP9.P.70/M")
-            ->assertSeeText("Vibration DE of SP9.P.70/M")
-            ->assertSeeText("Vibration NDE of SP9.P.70/M")
-            ->assertSeeText("Number of Greasing SP9.P.70/M")
-            ->assertDontSee("Edi Supriadi")
-            ->assertSee("let length_of_data = 0");
+        $this->withHeaders([
+            'X-XSRF-TOKEN' => csrf_token()
+        ])->withSession([
+            "nik" => "55000154",
+            "user" => "Doni Darmawan",
+        ])->post("/equipment-trends", [
+            "sort_field" => "SP9.P.70/M",
+            "funcloc" => "FP-01-SP3-RJS-T092-P999",
+            "equipment_id" => "Fajar-MotorList78910",
+        ])
+            ->assertStatus(302);;
     }
 
     public function testSortFieldTrendsFailed()

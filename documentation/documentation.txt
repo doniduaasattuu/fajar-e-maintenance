@@ -3,6 +3,7 @@
 // DATA CONTROLLER
 equipment_id = Fajar-[Motor/Trafo]List-[0-9] eg. Fajar-TrafoList1, Fajar-MotorList1804
 equipment_list = Fajar-[Motor/Trao]List eg. Fajar-TrafoList, Fajar-MotorList
+equipment_code = EMO, ETF, ELP, dll
 detail_power_rate
 
 Contoh teks di dalam file txt
