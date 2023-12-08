@@ -45,41 +45,41 @@
     </div>
 
     <script>
-        const emo_datalist = document.getElementById("emo_datalist");
-        const emo_input = document.getElementById("emo_input");
-        const end_date = document.getElementById("end_date");
+        // const emo_datalist = document.getElementById("emo_datalist");
+        // const emo_input = document.getElementById("emo_input");
+        // const end_date = document.getElementById("end_date");
 
-        function addZero(value) {
-            if (value < 10) {
-                return "0" + value;
-            } else {
-                return value;
-            }
-        }
+        // function addZero(value) {
+        //     if (value < 10) {
+        //         return "0" + value;
+        //     } else {
+        //         return value;
+        //     }
+        // }
 
-        let date = new Date()
-        let tanggal = addZero(date.getDate() + 1)
-        let bulan = addZero(date.getMonth() + 1)
-        let tahun = date.getFullYear()
-        end_date.value = tahun + "-" + bulan + "-" + tanggal
+        // let date = new Date()
+        // let tanggal = addZero(date.getDate() + 1)
+        // let bulan = addZero(date.getMonth() + 1)
+        // let tahun = date.getFullYear()
+        // end_date.value = tahun + "-" + bulan + "-" + tanggal
 
         // GET EMO LIST IN DATA RECORD
-        const ajax = new XMLHttpRequest();
-        ajax.open("GET", "/emo-datalist")
-        ajax.onload = () => {
-            if (ajax.readyState == 4) {
+        // const ajax = new XMLHttpRequest();
+        // ajax.open("GET", "/emo-datalist")
+        // ajax.onload = () => {
+        //     if (ajax.readyState == 4) {
 
-                let emo_datalist_length = JSON.parse(ajax.response).length;
-                for (let i = 0; i < emo_datalist_length; i++) {
-                    emo_value = JSON.parse(ajax.response)[i].emo
-                    let emo_option = document.createElement("option");
-                    emo_option.value = emo_value;
-                    emo_option.textContent = emo_value;
-                    emo_datalist.appendChild(emo_option);
-                }
-            }
-        }
-        ajax.send();
+        //         let emo_datalist_length = JSON.parse(ajax.response).length;
+        //         for (let i = 0; i < emo_datalist_length; i++) {
+        //             emo_value = JSON.parse(ajax.response)[i].emo
+        //             let emo_option = document.createElement("option");
+        //             emo_option.value = emo_value;
+        //             emo_option.textContent = emo_value;
+        //             emo_datalist.appendChild(emo_option);
+        //         }
+        //     }
+        // }
+        // ajax.send();
 
         // let trends_picker = document.getElementById("trends-picker");
         // trends_picker.onchange = () => {

@@ -34,11 +34,17 @@
     <!-- MESSAGE -->
 
     <div class="container py-4">
-        <h4 class="text-secondary">{{ $emo["id"] }}</h4>
+        <h4 class="text-secondary mb-4">{{ $equipment->id }}</h4>
         <form id="edit_form" action="/update-equipment" method="post">
             @csrf
-            @foreach ($emo as $key => $value )
-            @if ($key != "emo_details")
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-xl-2 fw-bold">Database Table</label>
+                <div class="col-xl-10">
+                    <input class="form-control" readonly value="{{ $equipment->getTable() }}">
+                </div>
+            </div>
+            @foreach ($equipment->toArray() as $key => $value )
+            @if ($key != "emo_details" || $key != "transformer_details")
             <!-- EMO -->
 
             @if ($key == "status")
@@ -64,15 +70,14 @@
             </div>
 
             @else
-            <!-- EMO DETAILS -->
-            @foreach ($value as $emo_details_key => $emo_details_value )
-
-            @if ($emo_details_key == "power_unit")
+            <!-- EQUIPMENT DETAILS -->
+            @foreach ($value as $equipment_details_key => $equipment_details_value )
+            @if ($equipment_details_key == "power_unit")
             <!-- POWER UNIT -->
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($emo_details_key)) }}</label>
+                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
-                    <select name="{{ $emo_details_key }}" id="{{ $emo_details_key }}" value="{{ $emo_details_value }}" class="form-select" aria-label="Default select example">
+                    <select name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" value="{{ $equipment_details_value }}" class="form-select" aria-label="Default select example">
                         <option value="kW">kW</option>
                         <option value="HP">HP</option>
                     </select>
@@ -81,12 +86,12 @@
             @continue
             @endif
 
-            @if ($emo_details_key == "nipple_grease")
+            @if ($equipment_details_key == "nipple_grease")
             <!-- NIPPLE GREASE -->
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($emo_details_key)) }}</label>
+                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
-                    <select name="{{ $emo_details_key }}" id="{{ $emo_details_key }}" value="{{ $emo_details_value }}" class="form-select" aria-label="Default select example">
+                    <select name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" value="{{ $equipment_details_value }}" class="form-select" aria-label="Default select example">
                         <option value="Available">Available</option>
                         <option value="Not Available">Not Available</option>
                     </select>
@@ -95,12 +100,12 @@
             @continue
             @endif
 
-            @if ($emo_details_key == "cooling_fan")
+            @if ($equipment_details_key == "cooling_fan")
             <!-- COOLING FAN -->
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($emo_details_key)) }}</label>
+                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
-                    <select name="{{ $emo_details_key }}" id="{{ $emo_details_key }}" value="{{ $emo_details_value }}" class="form-select" aria-label="Default select example">
+                    <select name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" value="{{ $equipment_details_value }}" class="form-select" aria-label="Default select example">
                         <option value="Internal">Internal</option>
                         <option value="External">External</option>
                         <option value="Not Available">Not Available</option>
@@ -110,12 +115,12 @@
             @continue
             @endif
 
-            @if ($emo_details_key == "mounting")
+            @if ($equipment_details_key == "mounting")
             <!-- MOUNTING -->
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($emo_details_key)) }}</label>
+                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
-                    <select name="{{ $emo_details_key }}" id="{{ $emo_details_key }}" value="{{ $emo_details_value }}" list="mounting_list" class="form-select" aria-label="Default select example">
+                    <select name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" value="{{ $equipment_details_value }}" list="mounting_list" class="form-select" aria-label="Default select example">
                         <option value="Horizontal">Horizontal</option>
                         <option value="Vertical">Vertical</option>
                         <option value="V/H">V/H</option>
@@ -127,9 +132,9 @@
             @endif
 
             <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($emo_details_key)) }}</label>
+                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
-                    <input name="{{ $emo_details_key }}" id="{{ $emo_details_key }}" type="text" class="form-control" value="{{ $emo_details_value }}">
+                    <input name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" type="text" class="form-control" value="{{ $equipment_details_value }}">
                 </div>
             </div>
             @endforeach
@@ -177,10 +182,22 @@
         const funcloc = document.getElementById("funcloc");
         const sort_field = document.getElementById("sort_field");
 
+        funcloc_value_temp = "";
+        sort_field_value_temp = "";
+
         status.onchange = () => {
             if (status.value != "Installed") {
+
+                if (funcloc.value != "" && sort_field.value != "") {
+                    funcloc_value_temp = funcloc.value;
+                    sort_field_value_temp = sort_field.value;
+                }
+
                 funcloc.value = "";
                 sort_field.value = "";
+            } else {
+                funcloc.value = funcloc_value_temp;
+                sort_field.value = sort_field_value_temp;
             }
         }
     </script>

@@ -18,7 +18,6 @@ class Emo extends Model
 
     protected $hidden = [
         "created_at",
-        // "updated_at",
         "unique_id",
         "qr_code_link",
     ];

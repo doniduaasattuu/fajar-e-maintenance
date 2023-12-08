@@ -95,7 +95,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
                 'title' => "Search equipment"
             ]);
         });
-        Route::get("/edit-equipment/{equipment}", [App\Http\Controllers\DataController::class, "editEquipment"]);
+        Route::post("/edit-equipment", [App\Http\Controllers\DataController::class, "editEquipment"]);
         Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
 
         Route::post("/equipment", [App\Http\Controllers\DataController::class, "equipment"]);

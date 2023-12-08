@@ -15,6 +15,12 @@ class Transformers extends Model
     public $incrementing = false;
     public $timestamps = true;
 
+    protected $hidden = [
+        "created_at",
+        "unique_id",
+        "qr_code_link",
+    ];
+
     public function funcloc(): BelongsTo
     {
         return $this->belongsTo(FunctionLocation::class, "funcloc", "id");

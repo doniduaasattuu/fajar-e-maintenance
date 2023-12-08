@@ -34,7 +34,7 @@ class DataController extends Controller
     // ============== UTILITY FUNCTIONS ==============
     // ===============================================
     // PAGE NOT FOUND
-    public function pageNotFound()
+    private function pageNotFound()
     {
         return response()->view("utility.page-not-found", [
             "title" => "Oops!"
@@ -42,7 +42,7 @@ class DataController extends Controller
     }
 
     // GET TYPE OF EQUIPMENT
-    function getTypeOfEquipment(Collection $equipments): array
+    private function getTypeOfEquipment(Collection $equipments): array
     {
         $type_of_equipment = [];
         foreach ($equipments as $equipment) {
@@ -52,7 +52,7 @@ class DataController extends Controller
     }
 
     // EMO TREND
-    function renderEmoTrend($emo_records, $comments, $equipment)
+    private function renderEmoTrend($emo_records, $comments, $equipment)
     {
         return response()->view("maintenance.emos.trends", [
             "title" => "Sort Field",
@@ -672,13 +672,22 @@ class DataController extends Controller
     // ==============================================
     // =============== EDIT EQUIPMENT ===============
     // ==============================================
-    public function editEquipment(Request $request, string $equipment)
+    public function editEquipment(Request $request)
     {
-        if (!is_null($equipment)) {
+        $equipment = $request->input("equipment");
+        $equipment_details = $request->input("equipment_details");
 
-            $with_emo_details = $request->input("emo_details");
+        $equipment_code = preg_replace('/[0-9]/i', '', $equipment); // EMO / ETF
 
-            if ($with_emo_details) {
+        $emos_id = Emo::query()->select(['id'])->distinct('id')->get();
+        $transformers_id = Transformers::query()->select(['id'])->distinct('id')->get();
+
+        $type_of_motor = array_unique($this->getTypeOfEquipment($emos_id));
+        $type_of_trafo = array_unique($this->getTypeOfEquipment($transformers_id));
+
+        if (in_array(strtoupper($equipment_code), $type_of_motor)) {
+
+            if ($equipment_details) {
                 $emo = Emo::query()->with("emoDetails")->find($equipment);
             } else {
                 $emo = Emo::query()->find($equipment);
@@ -687,7 +696,26 @@ class DataController extends Controller
             if (!is_null($emo)) {
                 return response()->view("maintenance.edit-equipment", [
                     "title" => "Edit Equipment",
-                    "emo" => $emo->toArray(),
+                    "equipment" => $emo,
+                ]);
+            } else {
+                return response()->view("maintenance.search-equipment", [
+                    'title' => "Search equipment",
+                    'message' => "Equipment not found."
+                ]);
+            }
+        } else if (in_array(strtoupper($equipment_code), $type_of_trafo)) {
+
+            if ($equipment_details) {
+                $transformer = Transformers::query()->with("transformerDetails")->find($equipment);
+            } else {
+                $transformer = Transformers::query()->find($equipment);
+            }
+
+            if (!is_null($transformer)) {
+                return response()->view("maintenance.edit-equipment", [
+                    "title" => "Edit Equipment",
+                    "equipment" => $transformer,
                 ]);
             } else {
                 return response()->view("maintenance.search-equipment", [
