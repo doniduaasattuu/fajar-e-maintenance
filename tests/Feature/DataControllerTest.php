@@ -216,6 +216,7 @@ class DataControllerTest extends TestCase
             "user" => "Doni Darmawan",
             "nik" => "55000154"
         ])->post("/update-equipment", [
+            "table" => "emos",
             "id" => "EMO000426",
             "funcloc" => "FP-01-SP3-RJS-T092-P092",
             "material_number" => "12345678",
@@ -253,10 +254,15 @@ class DataControllerTest extends TestCase
             "weight" => null,
             "cooling_fan" => "Internal",
             "mounting" => "Horizontal",
-        ])
+        ]);
+
+        $response
             ->assertStatus(200)
             ->assertSeeText("Your changes have been successfully saved!")
             ->assertDontSeeText("10010668");
+
+        $emo = Emo::query()->with("emoDetails")->find("EMO000426");
+        self::assertEquals("12345678", $emo->material_number);
     }
 
     public function testUpdateEquipmentFailed()
@@ -365,5 +371,21 @@ class DataControllerTest extends TestCase
 
         self::assertNotNull($type_of_motor);
         Log::info($type_of_motor);
+    }
+
+    public function testGetColumnOfTable()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $col = DB::getSchemaBuilder()->getColumnListing("emos");
+        self::assertNotNull($col);
+        Log::info(json_encode($col, JSON_PRETTY_PRINT));
+    }
+
+    public function testGetTypeOfColumn()
+    {
+        $col = DB::getSchemaBuilder()->getColumnListing('emos', 'status');
+        self::assertNotNull($col);
+        Log::info(json_encode($col, JSON_PRETTY_PRINT));
     }
 }

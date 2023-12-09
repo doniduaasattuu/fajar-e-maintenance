@@ -66,7 +66,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/change-password', [App\Http\Controllers\UserController::class, "changePassword"]);
     Route::post('/change-password', [App\Http\Controllers\UserController::class, "doChangePassword"]);
 
-    Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"]);
+    Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"])->name("trendsPicker");
     Route::post('/trends-picker', [App\Http\Controllers\DataController::class, "trendsRender"]);
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
     Route::post('/equipment-trends', [App\Http\Controllers\DataController::class, "equipmentTrends"]);
@@ -92,9 +92,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::middleware(AdministratorMiddleware::class)->group(function () {
         Route::get("/search-equipment", function () {
             return view("maintenance.search-equipment", [
-                'title' => "Search equipment"
+                'title' => "Search Equipment"
             ]);
-        });
+        })->name("searchEquipment");
         Route::post("/edit-equipment", [App\Http\Controllers\DataController::class, "editEquipment"]);
         Route::post("/update-equipment", [App\Http\Controllers\DataController::class, "updateEquipment"]);
 

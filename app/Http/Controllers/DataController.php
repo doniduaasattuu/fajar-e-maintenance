@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\TransformerDetail;
 use App\Models\TransformerRecord;
 use App\Models\Transformers;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Ghunti\HighchartsPHP\Highchart;
 use Ghunti\HighchartsPHP\HighchartJsExpr;
 use Illuminate\Database\Eloquent\Collection;
@@ -55,7 +57,7 @@ class DataController extends Controller
     private function renderEmoTrend($emo_records, $comments, $equipment)
     {
         return response()->view("maintenance.emos.trends", [
-            "title" => "Sort Field",
+            "title" => $equipment == "" ? "Sort Field Trend" : "Equipment Trend",
             "sort_field" => $equipment == "" ? $emo_records[0]->sort_field : $equipment,
             "date_category" => $this->returnColumnDataRecords("created_at", $emo_records),
             "motor_status" => $this->returnColumnDataRecords("motor_status", $emo_records),
@@ -463,7 +465,6 @@ class DataController extends Controller
     {
         return response()->view("maintenance.trends-picker", [
             "title" => "Trends picker",
-            "header" => "Equipment trend",
         ]);
     }
 
@@ -488,35 +489,45 @@ class DataController extends Controller
             // EMO
             $emo_records = EmoRecord::whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
 
-            $comments = EmoRecord::query()
-                ->with(['user' => function ($query) {
-                    $query->select('nik', 'fullname');
-                }])
-                ->select(["comment", "emo", "created_at", "nik"])
-                ->where("emo", "=", $equipment)
-                ->where("comment", "!=", null)
-                ->whereBetween("created_at", [$start_date, $end_date])
-                ->orderBy("created_at", "DESC")
-                ->get();
+            if ($emo_records->isNotEmpty()) {
 
-            return $this->renderEmoTrend($emo_records, $comments, $emo_records[0]->emo);
+                $comments = EmoRecord::query()
+                    ->with(['user' => function ($query) {
+                        $query->select('nik', 'fullname');
+                    }])
+                    ->select(["comment", "emo", "created_at", "nik"])
+                    ->where("emo", "=", $equipment)
+                    ->where("comment", "!=", null)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->orderBy("created_at", "DESC")
+                    ->get();
+
+                return $this->renderEmoTrend($emo_records, $comments, $emo_records[0]->emo);
+            } else {
+                return redirect()->back()->with("message", "Record not found.");
+            }
         } else if (in_array(strtoupper($equipment_code), $type_of_trafo)) {
 
             // ETF
             $transformer_records = TransformerRecord::whereBetween("created_at", [$start_date, $end_date])->where("transformer", "=", $equipment)->get();
 
-            $comments = TransformerRecord::query()
-                ->with(['user' => function ($query) {
-                    $query->select('nik', 'fullname');
-                }])
-                ->select(["comment", "transformer", "created_at", "nik"])
-                ->where("transformer", "=", $equipment)
-                ->where("comment", "!=", null)
-                ->whereBetween("created_at", [$start_date, $end_date])
-                ->orderBy("created_at", "DESC")
-                ->get();
+            if ($transformer_records->isNotEmpty()) {
 
-            return $this->renderTransformerTrend($transformer_records, $comments, $transformer_records[0]->transformer);
+                $comments = TransformerRecord::query()
+                    ->with(['user' => function ($query) {
+                        $query->select('nik', 'fullname');
+                    }])
+                    ->select(["comment", "transformer", "created_at", "nik"])
+                    ->where("transformer", "=", $equipment)
+                    ->where("comment", "!=", null)
+                    ->whereBetween("created_at", [$start_date, $end_date])
+                    ->orderBy("created_at", "DESC")
+                    ->get();
+
+                return $this->renderTransformerTrend($transformer_records, $comments, $transformer_records[0]->transformer);
+            } else {
+                return redirect()->back()->with("message", "Record not found.");
+            }
         } else {
             return $this->pageNotFound();
         }
@@ -737,35 +748,52 @@ class DataController extends Controller
             "updated_at" => Carbon::now()->toDateTimeString()
         ]);
 
-        $data = $request->except(['_token']);
+        $table = $request->input('table');
+        $data = $request->except(['_token', 'table']);
 
         // return response()->json($data);
 
+        DB::beginTransaction();
         foreach ($data as $key => $value) {
             if (
                 $key == "id" ||
+                $key == "status" ||
                 $key == "funcloc" ||
+                $key == "sort_field" ||
                 $key == "material_number" ||
                 $key == "equipment_description" ||
-                $key == "status" ||
-                $key == "sort_field" ||
                 $key == "updated_at"
             ) {
                 try {
-                    Emo::query()->where("id", $data["id"])->update([$key => $value]);
-                } catch (QueryException $error) {
-                    return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    if ($table == 'emos') {
+                        Emo::query()->where("id", $data["id"])->update([$key => $value]);
+                    } else if ($table == 'transformers') {
+                        Transformers::query()->where("id", $data["id"])->update([$key => $value]);
+                    } else {
+                        throw new Exception("Table is not defined!.");
+                    }
+                } catch (Exception $error) {
+                    DB::rollBack();
+                    return redirect()->route("searchEquipment", ['title' => 'Search Equipment'])->with("message", $error->getMessage() . " ⚠️");
                 }
             } else {
                 try {
-                    EmoDetail::query()->where("emo_detail", $data["id"])->update([$key => $value]);
-                } catch (QueryException $error) {
-                    return redirect()->back()->with("message", $error->getMessage() . " ⚠️");
+                    if ($table == 'emos') {
+                        EmoDetail::query()->where("emo_detail", $data["id"])->update([$key => $value]);
+                    } else if ($table == 'transformers') {
+                        TransformerDetail::query()->where("transformer_detail", $data["id"])->update([$key => $value]);
+                    } else {
+                        throw new Exception("Table is not defined!.");
+                    }
+                } catch (Exception $error) {
+                    DB::rollBack();
+                    return redirect()->route("searchEquipment", ['title' => 'Search Equipment'])->with("message", $error->getMessage() . " ⚠️");
                 }
             }
         }
+        DB::commit();
 
-        return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
+        return redirect()->route("searchEquipment", ['title' => 'Search Equipment'])->with("message", "Your changes have been successfully saved! ✅");
     }
 
     // ============================================

@@ -160,7 +160,8 @@ class ViewTest extends TestCase
 
         $this->view("maintenance.edit-equipment", [
             "title" => "Edit Equipment",
-            "emo" => $emo->toArray(),
+            "equipment" => $emo,
+            "equipment_details" => true,
         ])
             ->assertSeeText("EMO000426")
             ->assertSeeText("Funcloc")

@@ -6,21 +6,48 @@
 <body>
     @include("utility.navbar")
 
+
+    <!-- MESSAGE -->
+    @if (session("message"))
+    <div class="modal fade" id="message" tabindex="-1" aria-labelledby="messageLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="bg-light modal-header">
+                    <h1 class=" modal-title fs-5" id="messageLabel">Message</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ session("message") }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let message = new bootstrap.Modal(document.getElementById('message'), {});
+        message.show();
+    </script>
+    @endif
+    <!-- MESSAGE -->
+
     <div class="container py-4">
         <h4 class="text-secondary mb-4">{{ $equipment->id }}</h4>
         <form id="edit_form" action="/update-equipment" method="post">
             @csrf
-
-            <!-- TABLE -->
-            <input class="d-none" readonly name="table" type="text" class="form-control" value="{{ $equipment->getTable() }}">
-            <!-- TABLE -->
-
-            @if ($equipment->getTable() == "emos") <!-- EQUIPMENT FOREACH -->
-
-            <!-- EQUIPMENT EMO START -->
+            <div class="form-group row mb-3">
+                <label class="col-form-label col-xl-2 fw-bold">Database Table</label>
+                <div class="col-xl-10">
+                    <input class="form-control" readonly value="{{ $equipment->getTable() }}">
+                </div>
+            </div>
             @foreach ($equipment->toArray() as $key => $value )
-            @if ($key != "emo_details")
+            @if ($key != "emo_details" || $key != "transformer_details")
+            <!-- EMO -->
 
+            <!-- ======================================================================== -->
             @if ($key == "status")
             <!-- IF STATUS_MOTOR -->
             <div class="form-group row mb-3">
@@ -35,6 +62,7 @@
             </div>
             @continue
             @endif
+            <!-- ======================================================================== -->
 
             <div class="form-group row mb-3">
                 <label for="{{ $key }}" class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($key)) }}</label>
@@ -43,12 +71,9 @@
                 </div>
             </div>
 
-
             @else
-
-            @foreach ($value as $equipment_details_key => $equipment_details_value ) <!-- EQUIPMENT DETAILS -->
-
-            <!-- ======================================================================== -->
+            <!-- EQUIPMENT DETAILS -->
+            @foreach ($value as $equipment_details_key => $equipment_details_value )
             @if ($equipment_details_key == "power_unit")
             <!-- POWER UNIT -->
             <div class="form-group row mb-3">
@@ -62,9 +87,7 @@
             </div>
             @continue
             @endif
-            <!-- ======================================================================== -->
 
-            <!-- ======================================================================== -->
             @if ($equipment_details_key == "nipple_grease")
             <!-- NIPPLE GREASE -->
             <div class="form-group row mb-3">
@@ -78,9 +101,7 @@
             </div>
             @continue
             @endif
-            <!-- ======================================================================== -->
 
-            <!-- ======================================================================== -->
             @if ($equipment_details_key == "cooling_fan")
             <!-- COOLING FAN -->
             <div class="form-group row mb-3">
@@ -95,9 +116,7 @@
             </div>
             @continue
             @endif
-            <!-- ======================================================================== -->
 
-            <!-- ======================================================================== -->
             @if ($equipment_details_key == "mounting")
             <!-- MOUNTING -->
             <div class="form-group row mb-3">
@@ -113,88 +132,17 @@
             </div>
             @continue
             @endif
-            <!-- ======================================================================== -->
 
-            <!-- NOT ENUM TYPE -->
             <div class="form-group row mb-3">
                 <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
                 <div class="col-xl-10">
                     <input name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" type="text" class="form-control" value="{{ $equipment_details_value }}">
                 </div>
             </div>
-            <!-- NOT ENUM TYPE -->
             @endforeach
 
             @endif
-
-            @endforeach <!-- EQUIPMENT DETAILS -->
-            <!-- EQUIPMENT EMO END -->
-
-            @elseif ($equipment->getTable() == "transformers") <!-- EQUIPMENT FOREACH -->
-
-            <!-- EQUIPMENT TRANSFORMER START -->
-            @foreach ($equipment->toArray() as $key => $value )
-            @if ($key != "transformer_details")
-
-            @if ($key == "status")
-            <!-- IF STATUS_TRAFO -->
-            <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($key)) }}</label>
-                <div class="col-xl-10">
-                    <select name="{{ $key }}" id="{{ $key }}" value="{{ $value }}" class="form-select" aria-label="Default select example">
-                        <option value="Repaired">Repaired</option>
-                        <option value="Installed">Installed</option>
-                        <option value="Available">Available</option>
-                    </select>
-                </div>
-            </div>
-            @continue
-            @endif
-
-            <div class="form-group row mb-3">
-                <label for="{{ $key }}" class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($key)) }}</label>
-                <div class="col-xl-10">
-                    <input name="{{ $key }}" id="{{ $key }}" type="text" class="form-control" value="{{ $value }}">
-                </div>
-            </div>
-
-
-            @else
-
-            @foreach ($value as $equipment_details_key => $equipment_details_value ) <!-- EQUIPMENT DETAILS -->
-
-            <!-- ======================================================================== -->
-            @if ($equipment_details_key == "type")
-            <!-- TRANSFORMER TYPE -->
-            <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
-                <div class="col-xl-10">
-                    <select name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" value="{{ $equipment_details_value }}" class="form-select" aria-label="Default select example">
-                        <option value="Step Up">Step Up</option>
-                        <option value="Step Down">Step Down</option>
-                    </select>
-                </div>
-            </div>
-            @continue
-            @endif
-            <!-- ======================================================================== -->
-
-            <!-- NOT ENUM TYPE -->
-            <div class="form-group row mb-3">
-                <label class="col-form-label col-xl-2 fw-bold">{{ str_replace("_", " ", ucwords($equipment_details_key)) }}</label>
-                <div class="col-xl-10">
-                    <input name="{{ $equipment_details_key }}" id="{{ $equipment_details_key }}" type="text" class="form-control" value="{{ $equipment_details_value }}">
-                </div>
-            </div>
-            <!-- NOT ENUM TYPE -->
             @endforeach
-
-            @endif
-
-            @endforeach <!-- EQUIPMENT DETAILS -->
-            <!-- EQUIPMENT TRANSFORMER END -->
-            @endif <!-- EQUIPMENT FOREACH -->
-
             <div>
                 <button type="submit" class="mt-2 mb-4 btn btn-primary">
                     <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
