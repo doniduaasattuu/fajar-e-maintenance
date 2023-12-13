@@ -49,11 +49,13 @@
                 <div class=" mb-3">
                     <label for="start_date" class="form-label -mb-5">Start Date</label>
                     <input type="date" name="start_date" id="start_date" class="form-control" aria-describedby="dateHelp">
+                    <small id="emailHelp" class="form-text text-muted">The default value is year to date.</small>
                 </div>
 
                 <div class=" mb-3">
                     <label for="end_date" class="form-label -mb-5">End Date</label>
                     <input type="date" name="end_date" id="end_date" class="form-control" aria-describedby="dateHelp">
+                    <small id="emailHelp" class="form-text text-muted">The default value is tomorrow.</small>
                 </div>
 
                 <div class=" mb-3">

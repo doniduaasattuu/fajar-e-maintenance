@@ -14,17 +14,30 @@ class TransformersSeeder extends Seeder
      */
     public function run(): void
     {
-        $trafo = new Transformers();
-        $trafo->id = "ETF000085";
-        $trafo->status = "Installed";
-        $trafo->funcloc = "FP-01-IN1";
-        $trafo->sort_field = "TRAFO PLN";
-        $trafo->material_number = null;
-        $trafo->equipment_description = "TRAFO;STEP DOWN;150/20kV;UNINDO 50 KVA;";
-        $trafo->unique_id = "1";
-        $trafo->qr_code_link = "id=Fajar-TrafoList1";
-        $trafo->created_at = Carbon::now()->toDateTimeString();
-        $trafo->updated_at = Carbon::now()->toDateTimeString();
-        $trafo->save();
+        $trafo1 = new Transformers();
+        $trafo1->id = "ETF000085";
+        $trafo1->status = "Installed";
+        $trafo1->funcloc = "FP-01-IN1";
+        $trafo1->sort_field = "TRAFO PLN";
+        $trafo1->material_number = null;
+        $trafo1->equipment_description = "TRAFO;STEP DOWN;150/20kV;UNINDO 50 KVA;";
+        $trafo1->unique_id = "1";
+        $trafo1->qr_code_link = "id=Fajar-TrafoList1";
+        $trafo1->created_at = Carbon::now()->toDateTimeString();
+        $trafo1->updated_at = Carbon::now()->toDateTimeString();
+        $trafo1->save();
+
+        $trafo2 = new Transformers();
+        $trafo2->id = "ETF000026";
+        $trafo2->status = "Installed";
+        $trafo2->funcloc = "FP-01-GT2-TRF-PWP2";
+        $trafo2->sort_field = "TR AUX GTG #1 lama";
+        $trafo2->material_number = null;
+        $trafo2->equipment_description = "TR AUX GTG #1";
+        $trafo2->unique_id = "4";
+        $trafo2->qr_code_link = "id=Fajar-TrafoList4";
+        $trafo2->created_at = Carbon::now()->toDateTimeString();
+        $trafo2->updated_at = Carbon::now()->toDateTimeString();
+        $trafo2->save();
     }
 }

@@ -301,10 +301,10 @@ class DataController extends Controller
 
                     return $this->renderEmoTrend($emo_records, $comments, "");
                 } else {
-                    return Redirect::back();
+                    return Redirect::back()->with('message', 'Record not found.');
                 }
             } else {
-                return Redirect::back();
+                return Redirect::back()->with('message', 'Record not found.');
             }
         } else if ($equipment_list == "Fajar-TrafoList") {
 
@@ -332,13 +332,13 @@ class DataController extends Controller
 
                     return $this->renderTransformerTrend($transformer_records, $comments, "");
                 } else {
-                    return Redirect::back();
+                    return Redirect::back()->with('message', 'Record not found.');
                 }
             } else {
-                return Redirect::back();
+                return Redirect::back()->with('message', 'Record not found.');
             }
         } else {
-            return Redirect::back();
+            return Redirect::back()->with('message', 'Record not found.');
         }
     }
 
@@ -531,95 +531,7 @@ class DataController extends Controller
         } else {
             return $this->pageNotFound();
         }
-
-
-
-
-
-        // if (strlen($equipment) == 9) {
-
-        //     $end_date = date_format(date_create($end_date), "Y-m-d");
-        //     $start_date = date_format(date_create($start_date), "Y-m-d");
-
-        //     $emo_records = EmoRecord::query()->with(['emoDetails'])->whereBetween("created_at", [$start_date, $end_date])->where("emo", "=", $equipment)->get();
-        //     $emo_details = $emo_records->emoDetails;
-
-        //     $comments = EmoRecord::query()
-        //         ->select(["comment", "funcloc", "nik", "created_at"])->where("comment", "!=", null)
-        //         ->whereBetween("created_at", [$start_date, $end_date])
-        //         ->where("emo", "=", $equipment)
-        //         ->orderBy("created_at", "DESC")
-        //         ->get();
-
-        //     if (!is_null($emo_details)) {
-
-        //         $nipple_grease = $emo_details->nipple_grease;
-        //         $date_category = [];
-        //         $motor_status = [];
-        //         $temperature_a = [];
-        //         $temperature_b = [];
-        //         $temperature_c = [];
-        //         $temperature_d = [];
-        //         $vibration_value_de = [];
-        //         $vibration_de = [];
-        //         $vibration_value_nde = [];
-        //         $vibration_nde = [];
-        //         $number_of_greasing = [];
-        //         $checked_by = [];
-
-        //         foreach ($emo_records as $record) {
-        //             $year = substr($record->created_at, 2, 2);
-        //             $month = substr($record->created_at, 5, 2);
-        //             $date = substr($record->created_at, 8, 2);
-        //             array_push($date_category, $date . "/" . $month . "/" . $year);
-
-        //             array_push($motor_status, $record->motor_status);
-
-        //             array_push($temperature_a, $record->temperature_a);
-        //             array_push($temperature_b, $record->temperature_b);
-        //             array_push($temperature_c, $record->temperature_c);
-        //             array_push($temperature_d, $record->temperature_d);
-
-        //             array_push($vibration_value_de, (float) $record->vibration_value_de);
-        //             array_push($vibration_value_nde, (float) $record->vibration_value_nde);
-
-        //             array_push($vibration_de, $record->vibration_de);
-        //             array_push($vibration_nde, $record->vibration_nde);
-
-        //             array_push($number_of_greasing, $record->number_of_greasing);
-
-        //             array_push($checked_by, User::query()->find($record->nik)->fullname);
-        //         }
-
-        //         return response()->view("maintenance.trends", [
-        //             "title" => "Trends",
-        //             "date_category" => $date_category,
-        //             "motor_status" => $motor_status,
-        //             "temperature_a" => $temperature_a,
-        //             "temperature_b" => $temperature_b,
-        //             "temperature_c" => $temperature_c,
-        //             "temperature_d" => $temperature_d,
-        //             "vibration_value_de" => $vibration_value_de,
-        //             "vibration_de" => $vibration_de,
-        //             "vibration_value_nde" => $vibration_value_nde,
-        //             "vibration_nde" => $vibration_nde,
-        //             "number_of_greasing" => $number_of_greasing,
-        //             "emo" => $equipment,
-        //             "nipple_grease" => $nipple_grease,
-        //             "comments" => $comments->toArray(),
-        //             "checked_by" => $checked_by,
-        //         ]);
-        //     } else {
-
-        //         return Redirect::back();
-        //     }
-        // } else {
-
-        //     return Redirect::back();
-        // }
     }
-
-
 
     // ===================================================
     // =============== SUMMARY TOP OF FIVE ===============
@@ -890,9 +802,5 @@ class DataController extends Controller
         DB::commit();
 
         return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
-        // var_dump($data);
-        // return response()->json(json_encode($data));
-        // return response()->json([$dismantle, $install]);
-        // return response()->json($data);
     }
 }
