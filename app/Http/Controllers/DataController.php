@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmoRecord;
 use App\Models\Emo;
 use App\Models\EmoDetail;
+use App\Models\FunctionLocation;
 use App\Models\TransformerDetail;
 use App\Models\TransformerRecord;
 use App\Models\Transformers;
@@ -51,6 +52,12 @@ class DataController extends Controller
             array_push($type_of_equipment, preg_replace('/[0-9]/i', '', $equipment->id));
         }
         return $type_of_equipment;
+    }
+
+    // GET TABLE COLUMNS
+    public function getTableColumns($table)
+    {
+        return DB::getSchemaBuilder()->getColumnListing($table);
     }
 
     // EMO TREND
@@ -802,5 +809,40 @@ class DataController extends Controller
         DB::commit();
 
         return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
+    }
+    // ==================================================
+    // ================ REGISTRY FUNCLOC ================
+    // ==================================================
+    public function registryFuncloc()
+    {
+        $funcloc_table = DB::getSchemaBuilder()->getColumnListing('function_locations');
+
+        return response()->view("maintenance.registry-funcloc", [
+            'title' => "Registry Funcloc",
+            'funcloc_table' => $funcloc_table,
+        ]);
+    }
+
+    public function registerFuncloc(Request $request)
+    {
+        $request->merge(['created_at' => Carbon::now()->toDateTimeString()]);
+        $data = $request->except(['_token']);
+
+        // return response()->json($data);
+
+        DB::beginTransaction();
+
+        try {
+
+            FunctionLocation::query()->insert($data);
+
+            DB::commit();
+
+            return redirect()->back()->with('message', 'Success');
+        } catch (QueryException $error) {
+            DB::rollBack();
+            return redirect()->back()->with('message', $error->errorInfo[2]);
+        }
+        // return response()->json($data);
     }
 }

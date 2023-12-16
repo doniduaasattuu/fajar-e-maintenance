@@ -48,7 +48,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="border-bottom border-top dropdown-item" href="/search-equipment">Edit Equipment</a></li>
                         <li><a class="border-bottom dropdown-item" href="/install-dismantle">Instal Dismantle</a></li>
-                        <!-- <li><a class="border-bottom dropdown-item" href="#">Update Funcloc</a></li> -->
+                        <li><a class="border-bottom dropdown-item" href="/registry-funcloc">Registry Funcloc</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

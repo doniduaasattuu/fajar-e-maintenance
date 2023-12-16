@@ -388,4 +388,75 @@ class DataControllerTest extends TestCase
         self::assertNotNull($col);
         Log::info(json_encode($col, JSON_PRETTY_PRINT));
     }
+
+    public function testGetRegistryFuncloc()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $funcloc_table = DB::getSchemaBuilder()->getColumnListing('function_locations');
+
+        $this->withSession([
+            'user' => 'Doni Darmawan',
+            'nik' => '55000154',
+        ])->get('/registry-funcloc', [
+            'title' => 'Registry Funcloc',
+            'funcloc_table' => $funcloc_table
+        ])
+            ->assertSeeText('Funcloc Registration')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Tag name')
+            ->assertDontSeeText('Id');
+    }
+
+    public function testRegisterFunclocSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'user' => 'Doni Darmawan',
+            'nik' => '55000154'
+        ])
+            ->post('/register-funcloc', [
+                'id' => 'FP-01-PM3-FUNCLOC',
+                'tag_name' => 'CONTOH',
+                'created_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSessionHas(['message' => 'Success']);
+    }
+
+    public function testRegisterFunclocFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->testRegisterFunclocSuccess();
+
+        $this->withSession([
+            'user' => 'Doni Darmawan',
+            'nik' => '55000154'
+        ])
+            ->post('/register-funcloc', [
+                'id' => 'FP-01-PM3-FUNCLOC',
+                'tag_name' => 'CONTOH',
+                'created_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSessionHas(['message' => "Duplicate entry 'FP-01-PM3-FUNCLOC' for key 'PRIMARY'"]);
+    }
+
+    public function testRegisterFunclocNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->testRegisterFunclocSuccess();
+
+        $this->withSession([
+            'user' => 'Doni Darmawan',
+            'nik' => '55000154'
+        ])
+            ->post('/register-funcloc', [
+                'id' => null,
+                'tag_name' => '',
+                'created_at' => '',
+            ])
+            ->assertSessionHas(['message' => "Column 'id' cannot be null"]);
+    }
 }

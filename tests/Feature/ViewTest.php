@@ -6,6 +6,7 @@ use App\Models\Emo;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ViewTest extends TestCase
@@ -173,5 +174,17 @@ class ViewTest extends TestCase
             ->assertSeeText("Greasing type")
             ->assertSeeText("Mounting")
             ->assertSeeText("Save");
+    }
+
+    public function testViewRegistryFuncloc()
+    {
+        $funcloc_table = DB::getSchemaBuilder()->getColumnListing('function_locations');
+
+        $this->view("maintenance.registry-funcloc", [
+            "title" => "Registry Funcloc",
+            "funcloc_table" => $funcloc_table,
+        ])
+            ->assertSeeText("Funcloc")
+            ->assertSeeText("Tag name");
     }
 }

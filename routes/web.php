@@ -89,7 +89,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return response()->file("wiring/INVERTER_ACS580.pdf");
     });
 
-    Route::middleware(AdministratorMiddleware::class)->group(function () {
+    Route::middleware([AdministratorMiddleware::class, OnlyMemberMiddleware::class])->group(function () {
         Route::get("/search-equipment", function () {
             return view("maintenance.search-equipment", [
                 'title' => "Search Equipment"
@@ -105,6 +105,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
                 "title" => "Install Dismantle",
             ]);
         });
+
+        Route::get("/registry-funcloc", [App\Http\Controllers\DataController::class, "registryFuncloc"]);
+        Route::post("/register-funcloc", [App\Http\Controllers\DataController::class, "registerFuncloc"]);
 
         Route::post("install-dismantle", [App\Http\Controllers\DataController::class, "doInstalDismantle"]);
     });
