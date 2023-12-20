@@ -457,6 +457,22 @@ class DataControllerTest extends TestCase
                 'tag_name' => '',
                 'created_at' => '',
             ])
-            ->assertSessionHas(['message' => "Column 'id' cannot be null"]);
+            ->assertSessionHas(['message' => "Funcloc is invalid!"]);
+    }
+
+    public function testRegisterFunclocInvalid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'user' => 'Doni Darmawan',
+            'nik' => '55000154'
+        ])
+            ->post('/register-funcloc', [
+                'id' => 'FP-02-PM3-WRS-T005-P019',
+                'tag_name' => 'P-34',
+                'created_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSessionHas(['message' => "Funcloc is invalid!"]);
     }
 }

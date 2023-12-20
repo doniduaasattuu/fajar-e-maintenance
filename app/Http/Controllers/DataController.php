@@ -826,23 +826,24 @@ class DataController extends Controller
     public function registerFuncloc(Request $request)
     {
         $request->merge(['created_at' => Carbon::now()->toDateTimeString()]);
-        $data = $request->except(['_token']);
-
-        // return response()->json($data);
+        $data = $request->all();
 
         DB::beginTransaction();
 
-        try {
+        if (substr($data['id'], 0, 6) === 'FP-01-') {
+            try {
 
-            FunctionLocation::query()->insert($data);
+                FunctionLocation::query()->insert($data);
 
-            DB::commit();
+                DB::commit();
 
-            return redirect()->back()->with('message', 'Success');
-        } catch (QueryException $error) {
-            DB::rollBack();
-            return redirect()->back()->with('message', $error->errorInfo[2]);
+                return redirect()->back()->with('message', 'Success');
+            } catch (QueryException $error) {
+                DB::rollBack();
+                return redirect()->back()->with('message', $error->errorInfo[2]);
+            }
+        } else {
+            return redirect()->back()->with('message', 'Funcloc is invalid!');
         }
-        // return response()->json($data);
     }
 }
