@@ -606,7 +606,6 @@
                     myArray[`${input.name}`] = `${input.value}`;
                 }
             }
-            console.table(myArray);
 
             ajax.open("POST", "/checking-form/{{ $equipment_id }}");
             ajax.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}")

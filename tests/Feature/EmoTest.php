@@ -225,4 +225,26 @@ class EmoTest extends TestCase
         self::assertEquals("FP-01-SP3-RJS-T092-P092", $emo->funcLoc->id);
         self::assertEquals("Horizontal", $emo->emoDetails->mounting);
     }
+
+    public function testCheckEmoExist()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $id = 'EMO000426';
+        $emo = Emo::query()->find($id);
+
+        self::assertTrue(!is_null($emo));
+        self::assertNotNull($emo);
+    }
+
+    public function testCheckEmoNotExist()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $id = 'EMO012345';
+        $emo = Emo::query()->find($id);
+
+        self::assertTrue(is_null($emo));
+        self::assertNull($emo);
+    }
 }

@@ -457,6 +457,6 @@ class DataControllerTest extends TestCase
                 'tag_name' => '',
                 'created_at' => '',
             ])
-            ->assertSessionHas(['message' => "Column 'id' cannot be null"]);
+            ->assertSessionHas(['message' => "Funcloc is invalid"]);
     }
 }

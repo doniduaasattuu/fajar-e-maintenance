@@ -49,6 +49,7 @@
                         <li><a class="border-bottom border-top dropdown-item" href="/search-equipment">Edit Equipment</a></li>
                         <li><a class="border-bottom dropdown-item" href="/install-dismantle">Instal Dismantle</a></li>
                         <li><a class="border-bottom dropdown-item" href="/registry-funcloc">Registry Funcloc</a></li>
+                        <li><a class="border-bottom dropdown-item" href="/registry-motor">Registry Motor</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

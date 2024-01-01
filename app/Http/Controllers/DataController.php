@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 
 use function Laravel\Prompts\search;
 use function Laravel\Prompts\select;
@@ -724,6 +725,34 @@ class DataController extends Controller
         return response()->json($emo_list);
     }
 
+    // ============================================
+    // ================ EMO CHECK =================
+    // ============================================
+    public function emoCheck(Request $request)
+    {
+        $id = $request->input('emo');
+
+        $emo = Emo::query()->find($id);
+
+        if (!is_null($emo)) {
+            return 'Equipment is already registered';
+        }
+    }
+
+    // ============================================
+    // ============== UNIQUE ID CHECK =============
+    // ============================================
+    public function uniqueIdCheck(Request $request)
+    {
+        $unique_id = $request->input('unique_id');
+
+        $emo = Emo::query()->where('unique_id', '=', $unique_id)->first();
+
+        if (!is_null($emo)) {
+            return 'Unique id is already registered';
+        }
+    }
+
     // ==================================================
     // ================ INSTALL DISMANTLE ===============
     // ==================================================
@@ -810,6 +839,7 @@ class DataController extends Controller
 
         return redirect()->back()->with("message", "Your changes have been successfully saved! ✅");
     }
+
     // ==================================================
     // ================ REGISTRY FUNCLOC ================
     // ==================================================
@@ -823,11 +853,78 @@ class DataController extends Controller
         ]);
     }
 
+    // ==================================================
+    // ================ REGISTRY FUNCLOC ================
+    // ==================================================
     public function registerFuncloc(Request $request)
     {
         $request->merge(['created_at' => Carbon::now()->toDateTimeString()]);
         $data = $request->except(['_token']);
 
+        if (substr($data['id'], 0, 6) !== 'FP-01-') {
+            return redirect()->back()->with('message', 'Funcloc is invalid');
+        }
+        // return response()->json($data);
+
+        DB::beginTransaction();
+
+        try {
+
+            FunctionLocation::query()->insert($data);
+
+            DB::commit();
+
+            return redirect()->back()->with('message', 'Success');
+        } catch (QueryException $error) {
+            DB::rollBack();
+            return redirect()->back()->with('message', $error->errorInfo[2]);
+        }
+        // return response()->json($data);
+    }
+
+    // ==================================================
+    // ================= CHECK FUNCLOC ==================
+    // ==================================================
+    public function funclocCheck(Request $request)
+    {
+        $funcloc = $request->input('funcloc');
+
+        $function_location = FunctionLocation::query()->find($funcloc);
+
+        if (is_null($function_location)) {
+            return 'Funcloc is exist';
+        } else {
+            return 'Funcloc is not exist';
+        }
+    }
+
+
+    // ==================================================
+    // ================= REGISTRY MOTOR =================
+    // ==================================================
+    public function registryMotor()
+    {
+        $emos_column = DB::getSchemaBuilder()->getColumnListing('emos');
+        $emo_details_column = DB::getSchemaBuilder()->getColumnListing('emo_details');
+
+        $columns = array_merge($emos_column, $emo_details_column);
+
+        // return response()->json($columns);
+
+        return response()->view("maintenance.registry-motor", [
+            'title' => "Registry Motor",
+            'columns' => $columns,
+        ]);
+    }
+
+    public function registerMotor(Request $request)
+    {
+        $request->merge(['created_at' => Carbon::now()->toDateTimeString()]);
+        $data = $request->except(['_token']);
+
+        if (substr($data['id'], 0, 6) !== 'FP-01-') {
+            return redirect()->back()->with('message', 'Funcloc is invalid');
+        }
         // return response()->json($data);
 
         DB::beginTransaction();

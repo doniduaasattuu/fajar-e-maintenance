@@ -69,6 +69,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/trends-picker', [App\Http\Controllers\DataController::class, "trendsPicker"])->name("trendsPicker");
     Route::post('/trends-picker', [App\Http\Controllers\DataController::class, "trendsRender"]);
     Route::get('/emo-datalist', [App\Http\Controllers\DataController::class, "emoDatalist"]);
+    Route::post('/emo-check', [App\Http\Controllers\DataController::class, "emoCheck"]);
+    Route::post('/unique-id-check', [App\Http\Controllers\DataController::class, "uniqueIdCheck"]);
     Route::post('/equipment-trends', [App\Http\Controllers\DataController::class, "equipmentTrends"]);
 
     Route::get("/summary", [App\Http\Controllers\DataController::class, "summary"]);
@@ -108,6 +110,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
 
         Route::get("/registry-funcloc", [App\Http\Controllers\DataController::class, "registryFuncloc"]);
         Route::post("/register-funcloc", [App\Http\Controllers\DataController::class, "registerFuncloc"]);
+
+        Route::get("/registry-motor", [App\Http\Controllers\DataController::class, "registryMotor"]);
+        Route::post("/register-motor", [App\Http\Controllers\DataController::class, "registerMotor"]);
 
         Route::post("install-dismantle", [App\Http\Controllers\DataController::class, "doInstalDismantle"]);
     });
