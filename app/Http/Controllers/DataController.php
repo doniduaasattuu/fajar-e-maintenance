@@ -862,7 +862,7 @@ class DataController extends Controller
         $data = $request->except(['_token']);
 
         if (substr($data['id'], 0, 6) !== 'FP-01-') {
-            return redirect()->back()->with('message', 'Funcloc is invalid');
+            return redirect()->back()->with('message', 'Funcloc is invalid!');
         }
         // return response()->json($data);
 
@@ -923,23 +923,26 @@ class DataController extends Controller
         $data = $request->except(['_token']);
 
         if (substr($data['id'], 0, 6) !== 'FP-01-') {
-            return redirect()->back()->with('message', 'Funcloc is invalid');
+            return redirect()->back()->with('message', 'Funcloc is invalid!');
         }
         // return response()->json($data);
 
         DB::beginTransaction();
 
-        try {
+        if (substr($data['id'], 0, 6) === 'FP-01-') {
+            try {
 
-            FunctionLocation::query()->insert($data);
+                FunctionLocation::query()->insert($data);
 
-            DB::commit();
+                DB::commit();
 
-            return redirect()->back()->with('message', 'Success');
-        } catch (QueryException $error) {
-            DB::rollBack();
-            return redirect()->back()->with('message', $error->errorInfo[2]);
+                return redirect()->back()->with('message', 'Success');
+            } catch (QueryException $error) {
+                DB::rollBack();
+                return redirect()->back()->with('message', $error->errorInfo[2]);
+            }
+        } else {
+            return redirect()->back()->with('message', 'Funcloc is invalid!');
         }
-        // return response()->json($data);
     }
 }
