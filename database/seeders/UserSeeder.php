@@ -16,12 +16,20 @@ class UserSeeder extends Seeder
     {
         DB::delete("delete from users");
 
-        $user = new User();
-        $user->nik = '55000154';
-        $user->password = 'rahasia';
-        $user->fullname = 'Doni Darmawan';
-        $user->department = 'EI2';
-        $user->phone_number = '08983456945';
-        $user->save();
+        $user1 = new User();
+        $user1->nik = '55000154';
+        $user1->password = 'rahasia';
+        $user1->fullname = 'Doni Darmawan';
+        $user1->department = 'EI2';
+        $user1->phone_number = '08983456945';
+        $user1->save();
+
+        $user2 = new User();
+        $user2->nik = '55000153';
+        $user2->password = 'rahasia';
+        $user2->fullname = 'Jamal Mirdad';
+        $user2->department = 'EI6';
+        $user2->phone_number = '08983456945';
+        $user2->save();
     }
 }
