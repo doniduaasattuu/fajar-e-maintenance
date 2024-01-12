@@ -20,7 +20,7 @@ class OnlyMemberMiddleware
         if (isset($session)) {
             return $next($request);
         } else {
-            return redirect("/login");
+            return redirect()->route('login');
         }
     }
 }

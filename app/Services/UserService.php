@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use Exception;
 
 interface UserService
 {
@@ -16,4 +15,10 @@ interface UserService
     public function niks(): array;
 
     public function userExists(string $nik): bool;
+
+    public function user(string $nik): User;
+
+    public function getTableColumns(): array;
+
+    public function updateProfile(array $validated): bool;
 }

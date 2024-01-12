@@ -18,7 +18,7 @@ class OnlyGuestMiddleware
         $session = $request->session()->get("user");
 
         if (isset($session)) {
-            return redirect("/");
+            return redirect()->route('home');
         } else {
             return $next($request);
         }

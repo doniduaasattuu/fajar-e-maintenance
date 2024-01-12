@@ -22,12 +22,11 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
     Route::post('/login', [App\Http\Controllers\UserController::class, 'doLogin']);
     Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration'])->name('registration');
     Route::post('/registration', [App\Http\Controllers\UserController::class, 'register']);
-    // Route::fallback(function () {
-    //     return redirect('/');
-    // });
 });
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 });

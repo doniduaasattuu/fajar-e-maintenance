@@ -25,6 +25,19 @@ class UserServiceTest extends TestCase
         self::assertTrue($userService->userExists('55000154'));
     }
 
+    public function testUserServiceNiks()
+    {
+        $this->seed(UserSeeder::class);
+        $userService = $this->app->make(UserService::class);
+
+        $niks = [
+            '55000153',
+            '55000154'
+        ];
+
+        self::assertEquals($niks, $userService->niks());
+    }
+
     public function testUserServiceDepartments()
     {
         $userService = $this->app->make(UserService::class);
@@ -65,5 +78,30 @@ class UserServiceTest extends TestCase
         ];
 
         self::assertFalse($userService->login($validated));
+    }
+
+    public function testUserServiceGetColumn()
+    {
+        $userService = $this->app->make(UserService::class);
+
+        $columns = [
+            'nik',
+            'password',
+            'fullname',
+            'department',
+            'phone_number',
+        ];
+
+        self::assertEquals($columns, $userService->getTableColumns());
+    }
+
+    public function testUserServiceUser()
+    {
+        $this->seed(UserSeeder::class);
+
+        $userService = $this->app->make(UserService::class);
+        $currentUser = $userService->user('55000154');
+        self::assertNotNull($currentUser);
+        Log::info(json_encode($currentUser, JSON_PRETTY_PRINT));
     }
 }

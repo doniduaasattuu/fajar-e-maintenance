@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -34,7 +33,7 @@ class UserController extends Controller
         $rules = [
             'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
             'password' => ['required', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-            'fullname' => ['required'],
+            'fullname' => ['required', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
@@ -65,7 +64,7 @@ class UserController extends Controller
     {
         $rules = [
             'nik' => ['required', 'numeric'],
-            'password' => ['required'],
+            'password' => ['required',],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -80,7 +79,7 @@ class UserController extends Controller
                 session(["nik" => $user->nik]);
                 session(["user" => $user->fullname]);
 
-                return redirect('home');
+                return redirect()->route('home');
             } else {
 
                 $validator->errors()->add('nik', 'The nik or password is wrong.');
@@ -95,5 +94,39 @@ class UserController extends Controller
     {
         $request->session()->flush();
         return redirect("/");
+    }
+
+    public function profile()
+    {
+        return response()->view('user.profile', [
+            'title' => 'My profile',
+            'userService' => $this->userService,
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $rules = [
+            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), Rule::in($this->userService->niks())],
+            'fullname' => ['required', 'min:6', 'max:25'],
+            'department' => ['required', Rule::in($this->userService->departments())],
+            'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+            'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+            'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            $validated = $validator->safe()->except(['new_password_confirmation']);
+
+            // return response()->json($validated);
+
+            if ($this->userService->updateProfile($validated)) {
+                return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
+            }
+        } else {
+            return redirect()->back()->withErrors($validator);
+        }
     }
 }

@@ -1,12 +1,12 @@
 <!-- NAVBAR -->
-<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm">
+<nav class="sticky-top py-3 my-0 navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm">
     <div class="container">
-        <a class="text-white fw-medium me-xl-5 me-lg-3 navbar-brand" href="/">Fajar E-Maintenance</a>
+        <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">Fajar E-Maintenance</a>
         <button class="navbar-dark navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="mt-4 mt-lg-0 collapse navbar-collapse" id="navbarSupportedContent">
-            <form action="/search" method="post" class="mb-3 mb-lg-0 d-flex" role="search">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <form action="/search" method="post" class="my-4 mb-xl-0 my-xl-0 d-flex" role="search">
                 @csrf
                 <input id="search_data" name="search_data" class="search_input form-control me-2" type="search" placeholder="Search by Equipment" aria-label="Search">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
@@ -61,8 +61,7 @@
                         Account
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-bottom border-top dropdown-item" href="/change-name">Change Name</a></li>
-                        <li><a class="border-bottom dropdown-item" href="/change-password">Change Password</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/profile">My profile</a></li>
                         <li><a class="border-bottom text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
                     </ul>
                 </li>

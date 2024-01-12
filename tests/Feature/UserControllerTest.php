@@ -217,6 +217,42 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    public function testRegistrationFullnameInvalidMinLength()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => 'Ada',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'fullname' => 'The fullname field must be at least 6 characters.',
+            ]);
+    }
+
+    public function testRegistrationFullnameInvalidMaxLength()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => 'Ada',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'fullname' => 'The fullname field must not be greater than 25 characters.',
+            ]);
+    }
+
     public function testRegistrationDepartmentInvalid()
     {
         $data = [
@@ -301,7 +337,7 @@ class UserControllerTest extends TestCase
             'password' => 'rahasia'
         ])
             ->assertStatus(302)
-            ->assertRedirect('home');
+            ->assertRedirect('/');
     }
 
     public function testLoginEmpty()
@@ -368,5 +404,155 @@ class UserControllerTest extends TestCase
             ->assertSessionHasErrors([
                 'nik' => 'The nik field must be a number.',
             ]);
+    }
+
+    public function testGetProfile()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan',
+        ])
+            ->get('/profile')
+            ->assertSeeText('My profile')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('08983456945')
+            ->assertDontSeeText('Password')
+            ->assertSeeText('Doni Darmawan')
+            ->assertSeeText('Update profile')
+            ->assertSeeText('New password')
+            ->assertSeeText('New password confirmation')
+            ->assertSeeText('Submit');
+    }
+
+    public function testUpdateProfileSuccess()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'phone_number' => '08983456945',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('Your profile successfully updated.');
+    }
+
+    public function testUpdateProfileNikChanged()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000153',
+                'fullname' => 'Jamal Mirdad',
+                'department' => 'EI6',
+                'phone_number' => '08983456945',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('The selected nik is invalid.');
+    }
+
+    public function testUpdateProfileDepartmentInvalid()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI9',
+                'phone_number' => '08983456945',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('The selected department is invalid.');
+    }
+
+    public function testUpdateProfilePhoneNumberInvalidMin()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI9',
+                'phone_number' => '0898',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('The phone number field must be between 10 and 13 digits.');
+    }
+
+    public function testUpdateProfilePhoneNumberInvalidMax()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI9',
+                'phone_number' => '08983456945081',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('The phone number field must be between 10 and 13 digits.');
+    }
+
+    public function testUpdateProfilePhoneNumberInvalidType()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI9',
+                'phone_number' => '+628983456945',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@1234',
+            ])
+            ->assertSeeText('The phone number field must be between 10 and 13 digits.');
+    }
+
+    public function testUpdateProfilePasswordMissing()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'new_password' => '',
+                'new_password_confirmation' => '',
+            ])
+            ->assertSeeText('The new password field is required.')
+            ->assertSeeText('The new password confirmation field is required.');
+    }
+
+    public function testUpdateProfilePasswordMissmatching()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'new_password' => 'Rahasia@1234',
+                'new_password_confirmation' => 'Rahasia@12345',
+            ])
+            ->assertSeeText('The new password confirmation field must match new password.');
     }
 }
