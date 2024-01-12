@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
@@ -27,7 +28,6 @@ Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 });
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
-    Route::get('/', function () {
-        return 'Hello home';
-    });
+    Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 });

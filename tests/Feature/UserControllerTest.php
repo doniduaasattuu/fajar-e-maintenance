@@ -38,6 +38,17 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Already have an account ?');
     }
 
+    public function testGetRegistrationRedirect()
+    {
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/registration')
+            ->assertStatus(302)
+            ->assertRedirect('/');
+    }
+
     public function testRegistrationSuccess()
     {
         $data = [
@@ -83,7 +94,7 @@ class UserControllerTest extends TestCase
 
         $data = [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
@@ -101,7 +112,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '5500154',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
@@ -119,7 +130,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => 'abcdefgh',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
@@ -210,7 +221,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
             'phone_number' => '08983456945',
@@ -228,7 +239,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
             'phone_number' => 'abcdefgh',
@@ -246,7 +257,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234',
+            'password' => '44',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
             'phone_number' => '123456789',
@@ -257,6 +268,105 @@ class UserControllerTest extends TestCase
             ->assertStatus(302)
             ->assertSessionHasErrors([
                 'phone_number' => 'The phone number field must be between 10 and 13 digits.',
+            ]);
+    }
+
+    public function testGetLogin()
+    {
+        $this->get('/login')
+            ->assertSeeText('Login')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Password')
+            ->assertSeeText('Sign In')
+            ->assertSeeText("Don't have an account ?");
+    }
+
+    public function testGetLoginRedirect()
+    {
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/login')
+            ->assertStatus(302)
+            ->assertRedirect('/');
+    }
+
+    public function testLoginSuccess()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ])
+            ->assertStatus(302)
+            ->assertRedirect('home');
+    }
+
+    public function testLoginEmpty()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '',
+            'password' => ''
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik field is required.',
+                'password' => 'The password field is required.'
+            ]);
+    }
+
+    public function testLoginUnregisteredNik()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '55000123',
+            'password' => 'Rahasia@1234'
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik or password is wrong.',
+            ]);
+    }
+
+    public function testLoginWrongNik()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '55000123',
+            'password' => 'rahasia'
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik or password is wrong.',
+            ]);
+    }
+
+    public function testLoginWrongPassword()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234'
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik or password is wrong.',
+            ]);
+    }
+
+    public function testLoginInvalidNik()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => 'abcdefgh',
+            'password' => 'Rahasia@1234'
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik field must be a number.',
             ]);
     }
 }

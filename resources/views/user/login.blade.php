@@ -9,14 +9,14 @@
 
             @include('utility.alert')
 
-            @include('utility.errors')
+            @include('utility.error')
 
             <h2 class="mb-4">{{ $title }}</h2>
             <form action="login" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="NIK" class="form-label -mb-5">NIK</label>
-                    <input type="text" onkeypress="return onlynumber(event)" maxlength="8" id="NIK" name="NIK" class="form-control" aria-describedby="NIK">
+                    <label for="nik" class="form-label -mb-5">NIK</label>
+                    <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event)" maxlength="8" class="form-control" aria-describedby="nik">
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label -mb-5">Password</label>

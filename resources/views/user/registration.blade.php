@@ -22,7 +22,7 @@
                 <!-- PASSWORD -->
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input value="{{ old('password') }}" id="password" name="password" type="password" class="form-control">
+                    <input id="password" name="password" type="password" class="form-control">
                 </div>
 
                 <!-- FULLNAME -->

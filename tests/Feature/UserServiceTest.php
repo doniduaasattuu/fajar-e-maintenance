@@ -18,7 +18,7 @@ class UserServiceTest extends TestCase
         self::assertNotNull($userService);
     }
 
-    public function testUserServiceUserExist()
+    public function testUserServiceUserExists()
     {
         $this->seed(UserSeeder::class);
         $userService = $this->app->make(UserService::class);
@@ -39,5 +39,31 @@ class UserServiceTest extends TestCase
         ];
 
         self::assertEquals($userService->departments(), $departments);
+    }
+
+    public function testUserServiceLoginSuccess()
+    {
+        $this->seed(UserSeeder::class);
+        $userService = $this->app->make(UserService::class);
+
+        $validated = [
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ];
+
+        self::assertTrue($userService->login($validated));
+    }
+
+    public function testUserServiceLoginFailed()
+    {
+        $this->seed(UserSeeder::class);
+        $userService = $this->app->make(UserService::class);
+
+        $validated = [
+            'nik' => '55000154',
+            'password' => 'salah'
+        ];
+
+        self::assertFalse($userService->login($validated));
     }
 }

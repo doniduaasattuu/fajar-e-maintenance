@@ -32,4 +32,27 @@ class ViewTest extends TestCase
             ->assertSeeText('Sign Up')
             ->assertSeeText('Already have an account ?');
     }
+
+    public function testViewLogin()
+    {
+        $this->view('user.login', [
+            'title' => 'Login'
+        ])
+            ->assertSeeText('Login')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Password')
+            ->assertSeeText('Sign In')
+            ->assertSeeText("Don't have an account ?");
+    }
+
+    public function testViewHome()
+    {
+        $this->view('maintenance.home', [
+            'title' => 'Fajar E-Maintenance'
+        ])
+            ->assertSeeText('Fajar E-Maintenance')
+            ->assertSeeText('We make daily inspection checks easier')
+            ->assertSeeText('Scan QR Code')
+            ->assertSeeText('Search');
+    }
 }

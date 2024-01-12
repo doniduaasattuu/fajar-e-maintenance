@@ -7,7 +7,7 @@ use Exception;
 
 interface UserService
 {
-    public function login(string $nik, string $password): bool;
+    public function login(array $validated): bool;
 
     public function register(array $validated);
 

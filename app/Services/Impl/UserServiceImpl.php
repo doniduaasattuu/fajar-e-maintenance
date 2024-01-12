@@ -10,12 +10,15 @@ use Illuminate\Validation\ValidationException;
 
 class UserServiceImpl implements UserService
 {
-    public function login(string $nik, string $password): bool
+    public function login(array $validated): bool
     {
+        $nik = $validated['nik'];
+        $password = $validated['password'];
+
         $user = User::query()->find($nik);
 
         if (!is_null($user)) {
-            return $user->password == $password;
+            return $user->password === $password;
         } else {
             return false;
         }

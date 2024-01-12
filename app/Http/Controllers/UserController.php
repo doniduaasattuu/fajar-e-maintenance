@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Services\UserService;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
@@ -62,27 +63,37 @@ class UserController extends Controller
 
     public function doLogin(Request $request)
     {
-        $data = [
-            'nik' => $request->input('nik'),
-            'password' => $request->input('password'),
-        ];
-
         $rules = [
-            'nik' => ['required', 'size:8'],
+            'nik' => ['required', 'numeric'],
             'password' => ['required'],
         ];
 
-        $validator = Validator::make($data, $rules);
+        $validator = Validator::make($request->all(), $rules);
 
-        try {
-            $valid = $validator->validate()[0];
+        if ($validator->passes()) {
 
-            if ($this->userService->login($valid->nik, $valid->password)) {
-                return 'Hello world';
+            $validated = $validator->validated();
+
+            if ($this->userService->login($validated)) {
+
+                $user = User::query()->find($validated['nik']);
+                session(["nik" => $user->nik]);
+                session(["user" => $user->fullname]);
+
+                return redirect('home');
+            } else {
+
+                $validator->errors()->add('nik', 'The nik or password is wrong.');
+                return redirect()->back()->withErrors($validator)->withInput();
             }
-        } catch (ValidationException $exception) {
-            $message = $exception->validator->errors();
-            return $message;
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->flush();
+        return redirect("/");
     }
 }
