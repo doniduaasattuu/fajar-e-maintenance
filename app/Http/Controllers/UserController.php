@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Data\Alert;
 use App\Services\UserService;
-use Illuminate\Database\Query\Builder;
-use Illuminate\Database\QueryException;
+use App\Rules\UserExists;
+use App\Rules\ValidRegistrationCode;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -32,33 +31,32 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $rules = [
-            'nik' => ['required', 'size:8', !Rule::in($this->userService->niks())],
-            'password' => ['required', 'min:6'],
+            'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
+            'password' => ['required', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'fullname' => ['required'],
             'department' => ['required', Rule::in($this->userService->departments())],
-            'phone_number' => ['required', 'numeric', 'min:10'],
-            'registration_code' => ['required'],
+            'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+            'registration_code' => ['required', new ValidRegistrationCode()],
         ];
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if ($validator->passes()) {
+
+            $validated = $validator->safe()->except(['registration_code']);
+            $this->userService->register($validated);
+
+            return redirect('login')->with('alert', ['message' => 'User ' . $validated['nik'] . ' successfully registered.', 'variant' => 'alert-success']);
         } else {
 
-            // $this->userService->register($validator->validated());
-
-            try {
-            } catch (QueryException $error) {
-                return redirect()->back()->withErrors($error)->withInput();
-            }
+            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
     public function login()
     {
         return response()->view('user.login', [
-            'title' => 'Login'
+            'title' => 'Login',
         ]);
     }
 

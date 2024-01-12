@@ -11,6 +11,11 @@ class AppServiceProvider extends ServiceProvider
     public array $singletons = [
         UserService::class => UserServiceImpl::class,
     ];
+
+    public function provides()
+    {
+        return UserService::class;
+    }
     /**
      * Register any application services.
      */

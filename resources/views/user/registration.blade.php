@@ -8,19 +8,20 @@
         <div class="my-auto align-items-center p-4 mx-auto justify-content-center" style="min-width: 350px;">
 
             @include('utility.errors')
+
             <h2 class="mb-4">{{ $title }}</h2>
             <form action="registration" method="POST">
                 @csrf
 
                 <!-- NIK -->
                 <div class=" mb-3">
-                    <label for="exampleInputEmail1" class="form-label">NIK</label>
+                    <label for="nik" class="form-label">NIK</label>
                     <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event)" maxlength="8" class="form-control" aria-describedby="nik">
                 </div>
 
                 <!-- PASSWORD -->
                 <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <label for="password" class="form-label">Password</label>
                     <input value="{{ old('password') }}" id="password" name="password" type="password" class="form-control">
                 </div>
 
@@ -34,7 +35,7 @@
                 <div class="mb-3">
                     <label for="department" class="form-label">Department</label>
                     <select name="department" id="department" class="form-select" aria-label="Default select example">
-                        <option value=""></option>
+                        <option value="">-- Choose --</option>
                         @foreach ($userService->departments() as $department)
                         @if (old('department') == $department)
                         <option selected value="{{ $department }}">{{ $department }}</option>

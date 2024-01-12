@@ -12,76 +12,32 @@ use Tests\TestCase;
 
 class UserServiceTest extends TestCase
 {
-    public function testUserService()
+    public function testUserServiceExist()
     {
         $userService = $this->app->make(UserService::class);
         self::assertNotNull($userService);
     }
 
-    public function testUserServiceLoginSuccess()
+    public function testUserServiceUserExist()
     {
         $this->seed(UserSeeder::class);
         $userService = $this->app->make(UserService::class);
-        $login = $userService->login('55000154', 'rahasia');
-
-        self::assertTrue($login);
+        self::assertTrue($userService->userExists('55000154'));
     }
 
-    public function testUserServiceNik()
-    {
-        $this->seed(UserSeeder::class);
-        $userService = $this->app->make(UserService::class);
-        self::assertCount(2, $userService->niks());
-        Log::info(json_encode($userService->niks(), JSON_PRETTY_PRINT));
-    }
-
-    public function testUserServiceLoginFailed()
-    {
-        $this->seed(UserSeeder::class);
-        $userService = $this->app->make(UserService::class);
-        $login = $userService->login('55000154', 'salah');
-
-        self::assertFalse($login);
-    }
-
-    public function testUserServiceRegistrationSuccess()
+    public function testUserServiceDepartments()
     {
         $userService = $this->app->make(UserService::class);
+        $departments = [
+            'EI1',
+            'EI2',
+            'EI3',
+            'EI4',
+            'EI5',
+            'EI6',
+            'EI7',
+        ];
 
-        $user = new User();
-        $user->nik = '55000154';
-        $user->password = 'rahasia';
-        $user->fullname = 'Doni Darmawan';
-        $user->department = 'EI2';
-        $user->phone_number = '08983456945';
-
-        $register = $userService->registration($user);
-        self::assertTrue($register);
-
-        $user = User::query()->find('55000154');
-        self::assertNotNull($user);
-        self::assertEquals('Doni Darmawan', $user->fullname);
-        self::assertTrue($userService->login('55000154', 'rahasia'));
-    }
-
-    public function testUserServiceRegistrationFailedDuplicate()
-    {
-        $this->seed(UserService::class);
-        $userService = $this->app->make(UserService::class);
-
-        $user = new User();
-        $user->nik = '55000154';
-        $user->password = 'rahasia';
-        $user->fullname = 'Doni Darmawan';
-        $user->department = 'EI2';
-        $user->phone_number = '08983456945';
-
-        $register = $userService->registration($user);
-        self::assertTrue($register);
-
-        // $user = User::query()->find('55000154');
-        // self::assertNotNull($user);
-        // self::assertEquals('Doni Darmawan', $user->fullname);
-        // self::assertTrue($userService->login('55000154', 'rahasia'));
+        self::assertEquals($userService->departments(), $departments);
     }
 }

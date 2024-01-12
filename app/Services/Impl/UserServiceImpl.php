@@ -5,6 +5,8 @@ namespace App\Services\Impl;
 use App\Models\User;
 use App\Services\UserService;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class UserServiceImpl implements UserService
 {
@@ -19,15 +21,15 @@ class UserServiceImpl implements UserService
         }
     }
 
-    public function register(array $data): bool|Exception
+    public function register(array $validated)
     {
-        // $userExist = User::query()->find($user->id);
-
-        if (is_null(true)) {
-            // return $user->save();
-        } else {
-            return false;
-        }
+        $user = new User();
+        $user->nik = $validated['nik'];
+        $user->password = $validated['password'];
+        $user->fullname = $validated['fullname'];
+        $user->department = $validated['department'];
+        $user->phone_number = $validated['phone_number'];
+        $user->save();
     }
 
     public function departments(): array
@@ -47,5 +49,16 @@ class UserServiceImpl implements UserService
     {
         $niks = User::query()->pluck('nik');
         return $niks->toArray();
+    }
+
+    public function userExists(string $nik): bool
+    {
+        $user = User::query()->find($nik);
+
+        if (!is_null($user)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
