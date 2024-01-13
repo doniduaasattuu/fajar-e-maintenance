@@ -3,7 +3,7 @@
 <div class="py-4">
     <div class="mb-4">
         <h3 class="mb-3">{{ $title }}</h3>
-        <table class="rounded table mb-0 border border-1">
+        <table class="rounded table mb-0 border border-1 shadow-sm">
             <tbody>
                 @foreach ($userService->getTableColumns() as $column)
 
@@ -12,11 +12,11 @@
                 @else
                 <tr class="table-light">
                     @if ($column == 'nik')
-                    <td class="fw-semibold" scope="col">{{ strtoupper(str_replace('_', ' ', ucwords($column))) }}</td>
+                    <td style="line-height:30px" class="fw-semibold" scope="col">{{ strtoupper(str_replace('_', ' ', ucwords($column))) }}</td>
                     @else
-                    <td class="fw-semibold" scope="col">{{ str_replace('_', ' ', ucwords($column)) }}</td>
+                    <td style="line-height:30px" class="fw-semibold" scope="col">{{ str_replace('_', ' ', ucwords($column)) }}</td>
                     @endif
-                    <td scope="col">{{ $userService->user(session('nik'))->$column }}</td>
+                    <td style="line-height:30px" scope="col">{{ $userService->user(session('nik'))->$column }}</td>
                 </tr>
                 @endif
                 @endforeach
@@ -43,7 +43,7 @@
 
             <!-- FULLNAME -->
             <div class="mb-3">
-                <label for="fullname" class="form-label fw-semibold">Full Name</label>
+                <label for="fullname" class="form-label fw-semibold">Full name</label>
                 <input value="{{ $userService->user(session('nik'))->fullname }}" id="fullname" name="fullname" maxlength="150" type="text" class="form-control">
                 @error('fullname')
                 <div class="form-text text-danger">{{ $message }}</div>
@@ -69,7 +69,7 @@
 
             <!-- PHONE NUMBER -->
             <div class="mb-3">
-                <label for="phone_number" class="form-label fw-semibold">Phone Number</label>
+                <label for="phone_number" class="form-label fw-semibold">Phone number</label>
                 <input value="{{ $userService->user(session('nik'))->phone_number }}" id="phone_number" name="phone_number" onkeypress="return onlynumber(event)" maxlength="13" class="form-control" aria-describedby="phone_number">
                 @error('phone_number')
                 <div class="form-text text-danger">{{ $message }}</div>

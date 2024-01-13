@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
 
         $user1 = new User();
         $user1->nik = '55000154';
-        $user1->password = 'rahasia';
+        $user1->password = '@Fajarpaper123';
         $user1->fullname = 'Doni Darmawan';
         $user1->department = 'EI2';
         $user1->phone_number = '08983456945';
@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
 
         $user2 = new User();
         $user2->nik = '55000153';
-        $user2->password = 'rahasia';
+        $user2->password = '@Fajarpaper123';
         $user2->fullname = 'Jamal Mirdad';
         $user2->department = 'EI6';
         $user2->phone_number = '08983456945';

@@ -8,17 +8,17 @@ interface UserService
 {
     public function login(array $validated): bool;
 
-    public function register(array $validated);
-
-    public function departments(): array;
-
-    public function niks(): array;
+    public function register(array $validated): bool;
 
     public function userExists(string $nik): bool;
 
-    public function user(string $nik): User;
-
-    public function getTableColumns(): array;
-
     public function updateProfile(array $validated): bool;
+
+    public function niks(): array; // return all nik users
+
+    public function departments(): array; // return all department
+
+    public function user(string $nik): User; // return user
+
+    public function getTableColumns(): array; // return table columns
 }

@@ -18,7 +18,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Registration')
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
-            ->assertSeeText('Full Name')
+            ->assertSeeText('Full name')
             ->assertSeeText('Department')
             ->assertSeeText('EI1')
             ->assertSeeText('EI2')
@@ -27,10 +27,10 @@ class ViewTest extends TestCase
             ->assertSeeText('EI5')
             ->assertSeeText('EI6')
             ->assertSeeText('EI7')
-            ->assertSeeText('Phone Number')
-            ->assertSeeText('Registration Code')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Registration code')
             ->assertSeeText('Sign Up')
-            ->assertSeeText('Already have an account ?');
+            ->assertSeeText('Already have an account ?, Sign in here');
     }
 
     public function testViewLogin()
@@ -42,7 +42,7 @@ class ViewTest extends TestCase
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
             ->assertSeeText('Sign In')
-            ->assertSeeText("Don't have an account ?");
+            ->assertSeeText("Don't have an account ?, Register here");
     }
 
     public function testViewHome()

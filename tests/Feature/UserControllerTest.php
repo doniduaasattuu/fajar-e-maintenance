@@ -23,7 +23,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Registration')
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
-            ->assertSeeText('Full Name')
+            ->assertSeeText('Full name')
             ->assertSeeText('Department')
             ->assertSeeText('EI1')
             ->assertSeeText('EI2')
@@ -32,10 +32,10 @@ class UserControllerTest extends TestCase
             ->assertSeeText('EI5')
             ->assertSeeText('EI6')
             ->assertSeeText('EI7')
-            ->assertSeeText('Phone Number')
-            ->assertSeeText('Registration Code')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Registration code')
             ->assertSeeText('Sign Up')
-            ->assertSeeText('Already have an account ?');
+            ->assertSeeText('Already have an account ?, Sign in here');
     }
 
     public function testGetRegistrationRedirect()
@@ -54,7 +54,7 @@ class UserControllerTest extends TestCase
         $data = [
             'nik' => '55000154',
             'password' => 'Rahasia@1234',
-            'fullname' => 'Doni Darmawan',
+            'fullname' => 'dOnI dArMawAN',
             'department' => 'EI2',
             'phone_number' => '08983456945',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -63,6 +63,11 @@ class UserControllerTest extends TestCase
         $this->post('/registration', $data)
             ->assertStatus(302)
             ->assertRedirect('/login');
+
+        $userService = $this->app->make(UserService::class);
+        $user = $userService->user($data['nik']);
+
+        self::assertEquals('Doni Darmawan', $user->fullname);
     }
 
     public function testRegistrationEmpty()
@@ -253,6 +258,24 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    public function testRegistrationFullnameInvalidFormat()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni-Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => 'Ada',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'fullname' => 'The fullname field format is invalid.',
+            ]);
+    }
+
     public function testRegistrationDepartmentInvalid()
     {
         $data = [
@@ -334,7 +357,7 @@ class UserControllerTest extends TestCase
 
         $this->post('/login', [
             'nik' => '55000154',
-            'password' => 'rahasia'
+            'password' => '@Fajarpaper123'
         ])
             ->assertStatus(302)
             ->assertRedirect('/');
@@ -373,7 +396,7 @@ class UserControllerTest extends TestCase
 
         $this->post('/login', [
             'nik' => '55000123',
-            'password' => 'rahasia'
+            'password' => '@Fajarpaper123'
         ])
             ->assertSessionHasErrors([
                 'nik' => 'The nik or password is wrong.',

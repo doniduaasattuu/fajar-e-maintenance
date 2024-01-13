@@ -26,7 +26,7 @@
 
                 <!-- FULLNAME -->
                 <div class="mb-3">
-                    <label for="fullname" class="form-label fw-semibold">Full Name</label>
+                    <label for="fullname" class="form-label fw-semibold">Full name</label>
                     <input value="{{ old('fullname') }}" id="fullname" name="fullname" maxlength="150" type="text" class="form-control">
                 </div>
 
@@ -47,13 +47,13 @@
 
                 <!-- PHONE NUMBER -->
                 <div class="mb-3">
-                    <label for="phone_number" class="form-label fw-semibold">Phone Number</label>
+                    <label for="phone_number" class="form-label fw-semibold">Phone number</label>
                     <input value="{{ old('phone_number') }}" id="phone_number" name="phone_number" onkeypress="return onlynumber(event)" maxlength="13" class="form-control" aria-describedby="phone_number">
                 </div>
 
                 <!-- REGISTRATION CODE -->
                 <div class="mb-3">
-                    <label for="registration_code" class="form-label fw-semibold">Registration Code</label>
+                    <label for="registration_code" class="form-label fw-semibold">Registration code</label>
                     <input value="{{ old('registration_code') }}" id="registration_code" name="registration_code" type="text" class="form-control">
                 </div>
 

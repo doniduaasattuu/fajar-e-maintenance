@@ -3,18 +3,18 @@
 namespace App\Services\Impl;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use App\Services\UserService;
-use App\Traits\Utility;
-use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class UserServiceImpl implements UserService
 {
     public string $tableName;
+    private UserRepository $userRepository;
 
-    public function __construct()
+    public function __construct(UserRepository $userRepository)
     {
+        $this->userRepository = $userRepository;
         $this->tableName = app(User::class)->getTable();
     }
 
@@ -32,15 +32,9 @@ class UserServiceImpl implements UserService
         }
     }
 
-    public function register(array $validated)
+    public function register(array $validated): bool
     {
-        $user = new User();
-        $user->nik = $validated['nik'];
-        $user->password = $validated['password'];
-        $user->fullname = $validated['fullname'];
-        $user->department = $validated['department'];
-        $user->phone_number = $validated['phone_number'];
-        $user->save();
+        return $this->userRepository->insert($validated);
     }
 
     public function departments(): array
@@ -86,27 +80,7 @@ class UserServiceImpl implements UserService
 
     public function updateProfile(array $validated): bool
     {
-        DB::beginTransaction();
-
-        $nik = $validated['nik'];
-        $fullname = $validated['fullname'];
-        $department = $validated['department'];
-        $phone_number = $validated['phone_number'];
-        $new_password = $validated['new_password'];
-
-        $user = User::query()->find($nik);
-        $user->fullname = $fullname;
-        $user->department = $department;
-        $user->phone_number = $phone_number;
-        $user->password = $new_password;
-        $result = $user->save();
-
-        if ($result) {
-            DB::commit();
-            return $result;
-        } else {
-            DB::rollBack();
-            return false;
-        }
+        $user = $this->user($validated['nik']);
+        return $this->userRepository->update($user, $validated);
     }
 }

@@ -33,7 +33,7 @@ class UserController extends Controller
         $rules = [
             'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
             'password' => ['required', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-            'fullname' => ['required', 'min:6', 'max:25'],
+            'fullname' => ['required', 'regex:/^[\pL\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
@@ -46,9 +46,8 @@ class UserController extends Controller
             $validated = $validator->safe()->except(['registration_code']);
             $this->userService->register($validated);
 
-            return redirect('login')->with('alert', ['message' => 'User ' . $validated['nik'] . ' successfully registered.', 'variant' => 'alert-success']);
+            return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
         } else {
-
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
@@ -64,7 +63,7 @@ class UserController extends Controller
     {
         $rules = [
             'nik' => ['required', 'numeric'],
-            'password' => ['required',],
+            'password' => ['required'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -93,7 +92,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $request->session()->flush();
-        return redirect("/");
+        return redirect()->route('login');
     }
 
     public function profile()
@@ -108,7 +107,7 @@ class UserController extends Controller
     {
         $rules = [
             'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), Rule::in($this->userService->niks())],
-            'fullname' => ['required', 'min:6', 'max:25'],
+            'fullname' => ['required', 'regex:/^[\pL\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
@@ -118,13 +117,13 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->passes()) {
-            $validated = $validator->safe()->except(['new_password_confirmation']);
 
-            // return response()->json($validated);
+            $confirmed_password = $validator->validated()['new_password_confirmation'];
+            $validated = $validator->safe()->except(['new_password', 'new_password_confirmation']);
+            $validated['password'] = $confirmed_password;
 
-            if ($this->userService->updateProfile($validated)) {
-                return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
-            }
+            $this->userService->updateProfile($validated);
+            return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator);
         }

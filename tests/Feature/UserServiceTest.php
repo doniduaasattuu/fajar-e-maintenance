@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Services\UserService;
 use Database\Seeders\UserSeeder;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
@@ -61,7 +63,7 @@ class UserServiceTest extends TestCase
 
         $validated = [
             'nik' => '55000154',
-            'password' => 'rahasia'
+            'password' => '@Fajarpaper123'
         ];
 
         self::assertTrue($userService->login($validated));
@@ -103,5 +105,26 @@ class UserServiceTest extends TestCase
         $currentUser = $userService->user('55000154');
         self::assertNotNull($currentUser);
         Log::info(json_encode($currentUser, JSON_PRETTY_PRINT));
+    }
+
+    public function testUserServiceUpdate()
+    {
+        $this->seed(UserSeeder::class);
+
+        $userService = $this->app->make(UserService::class);
+        $validated = [
+            'nik' => '55000154',
+            'password' => '@Fajarpaper321',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+        ];
+
+        $user = User::query()->find($validated['nik']);
+        self::assertEquals('@Fajarpaper123', $user->password);
+
+        self::assertTrue($userService->updateProfile($validated));
+        $user = User::query()->find($validated['nik']);
+        self::assertEquals('@Fajarpaper321', $user->password);
     }
 }

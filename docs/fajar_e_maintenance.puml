@@ -1,0 +1,225 @@
+@startuml fajar_e_maintenance
+
+entity funclocs
+{
+    * id VARCHAR(150) <<PK>>
+    --
+      tag_name VARCHAR(150)
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
+}
+
+entity motors
+{
+    * id VARCHAR(9) <<PK>>
+    * status ENUM(["Installed", "Repaired", "Available"])
+      funcloc VARCHAR (150) <<FK>>
+      sort_field VARCHAR(150)
+    --
+      material_number VARCHAR(8)
+    * equipment_description VARCHAR(150)
+    * unique_id VARCHAR(6) UNIQUE
+    * qr_code_link VARCHAR(150) UNIQUE
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
+}
+
+entity motor_details {
+    * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+    * motor_detail VARCHAR(9) <<FK>>
+    --
+    manufacture VARCHAR(150)
+    serial_number VARCHAR(150)
+    type VARCHAR(150)
+    power_rate VARCHAR(25)
+    power_unit ENUM(["kW", "HP"])
+
+    voltage VARCHAR(25)
+    current_nominal VARCHAR(25)
+    frequency VARCHAR(25)
+    pole VARCHAR(25)
+    rpm VARCHAR(25)
+
+    bearing_de VARCHAR(50)
+    bearing_nde VARCHAR(50)
+    frame_type VARCHAR(50)
+    shaft_diameter VARCHAR(25)
+    phase_supply VARCHAR(25)
+
+    cos_phi VARCHAR(25)
+    efficiency VARCHAR(25)
+    ip_rating VARCHAR(25)
+    insulation_class VARCHAR(25)
+    duty VARCHAR(25)
+
+    connection_type VARCHAR(50)
+    nipple_grease ENUM(["Available", "Not Available"])
+    greasing_type VARCHAR(50)
+    greasing_qty_de VARCHAR(25)
+    greasing_qty_nde VARCHAR(25)
+
+    length VARCHAR(25)
+    width VARCHAR(25)
+    height VARCHAR(25)
+    weight VARCHAR(25)
+    cooling_fan ENUM(["Internal", "External", "Not Available"])
+
+    mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
+}
+
+entity emo_records {
+    * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+    * funcloc VARCHAR(150) <<FK>>
+    * emo VARCHAR(9) <<FK>>
+    * sort_field VARCHAR(150)
+    --
+    * motor_status ENUM(["Running", "Not Running"])
+    * clean_status ENUM(["Clean", "Dirty"])
+    * nipple_grease ENUM(["Available", "Not Available"])
+    * number_of_greasing TINYINT(3) 0
+
+    * temperature_de SMALLINT(5) UNSIGNED 0
+    * temperature_body SMALLINT(5) UNSIGNED 0
+    * temperature_nde SMALLINT(5) UNSIGNED 0
+      
+    * vibration_de_vertical_value DECIMAL(4,2) 0.00
+      vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+    * vibration_de_horizontal_value DECIMAL(4,2) 0.00
+      vibration_de_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+    * vibration_de_axial_value DECIMAL(4,2) 0.00
+      vibration_de_axial_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+    * vibration_de_frame_value DECIMAL(4,2) 0.00
+      vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      
+    * noise_de ENUM(["Normal", "Abnormal"])
+
+    * vibration_nde_vertical_value DECIMAL(4,2) 0.00
+      vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+     
+    * vibration_nde_horizontal_value DECIMAL(4,2) 0.00
+      vibration_nde_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+          
+    * vibration_nde_frame_value DECIMAL(4,2) 0.00
+      vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
+      
+    * noise_nde ENUM(["Normal", "Abnormal"])
+
+      comment TEXT NULL
+    * created_at TIMESTAMP CURRENT
+    * nik VARCHAR(8) <<FK>>
+}
+
+entity users {
+    * nik VARCHAR(8)
+    --
+    * password VARCHAR(50)
+    * fullname VARCHAR(150)
+    * department ENUM("EI1-EI7");
+    * phone_number VARCHAR(15)
+}
+
+entity administrators {
+    * admin_nik VARCHAR(8) <<FK>>
+    --
+}
+
+entity transformers {
+    * id VARCHAR(9) <<PK>>
+    * status ENUM(["Installed", "Repaired", "Available"])
+      funcloc VARCHAR (150) <<FK>>
+      sort_field VARCHAR(150)
+    --
+      material_number VARCHAR(8)
+    * equipment_description VARCHAR(150)
+    * unique_id VARCHAR(6) UNIQUE
+    * qr_code_link VARCHAR(150) UNIQUE
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
+}
+
+entity transformer_details {
+    * id BIGINT UNSIGNED AUTO_INCREMENT
+    * transformer_detail VARCHAR(9) <<FK>>
+    --
+    power_rate VARCHAR(25)
+    power_unit ENUM(["kVA"])
+
+    primary_voltage VARCHAR(25)
+    secondary_voltage VARCHAR(25)
+    
+    primary_current VARCHAR(25)
+    secondary_current VARCHAR(25)
+    
+    primary_connection_type VARCHAR(25)
+    secondary_connection_type VARCHAR(25)
+    
+    type ENUM(["Step Up", "Step Down"])
+    manufacturer VARCHAR(25)
+    year_of_manufacture VARCHAR(5)
+    serial_number VARCHAR(25)
+
+    vector_group VARCHAR(25)
+    frequency VARCHAR(25)
+    insulation_class VARCHAR(25)
+
+    type_of_cooling VARCHAR(25)
+    temp_rise_oil_winding VARCHAR(25)
+    weight VARCHAR(25)
+    weight_of_oil VARCHAR(25)
+    oil_type VARCHAR(25)
+    ip_rating VARCHAR(25)
+}
+
+entity transformer_records {
+    * id BIGINT UNSIGNED AUTO_INCREMENT
+    * funcloc VARCHAR(150) <<FK>>
+    * transformer VARCHAR(9) <<FK>>
+    * sort_field VARCHAR(150)
+    --
+    * transformer_status ENUM(["Online", "Offline"])
+
+    * primary_current_phase_r SMALLINT(5) UNSIGNED 0
+    * primary_current_phase_s SMALLINT(5) UNSIGNED 0
+    * primary_current_phase_t SMALLINT(5) UNSIGNED 0 
+
+    * secondary_current_phase_r SMALLINT(5) UNSIGNED 0
+    * secondary_current_phase_s SMALLINT(5) UNSIGNED 0
+    * secondary_current_phase_t SMALLINT(5) UNSIGNED 0
+    
+    * primary_voltage MEDIUMINT(8) UNSIGNED 0
+    * secondary_voltage MEDIUMINT(8) UNSIGNED 0
+
+    * oil_temperature SMALLINT(5) UNSIGNED 0
+    * winding_temperature SMALLINT(5) UNSIGNED 0
+
+    * clean_status ENUM(["Clean", "Dirty"])
+    * noise ENUM(["Normal", "Abnormal"])
+    * silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
+    * earthing_connection (["No Loose", "Loose"])
+    * oil_leakage (["No Leaks", "Leaks"])
+    * oil_level TINYINT(3) UNSIGNED 0
+    * blower_condition (["Running", "Not Running"])
+      comment TEXT NULL
+      
+    * created_at TIMESTAMP
+    * nik VARCHAR(8) <<FK>>
+}
+ 
+funclocs ||--o{ motors : Have
+funclocs ||--o{ emo_records : Have
+motors ||--o{ emo_records : Have
+motors ||--|| motor_details : Contain
+emo_records ||--|| users : Include
+administrators ||--|| users : Registered
+
+funclocs ||--o{ transformers : Have
+funclocs ||--o{ transformer_records : Have
+transformers ||--o{ transformer_records : Have
+transformers ||--|| transformer_details : Contain
+transformer_records ||--|| users : Include
+
+
+@enduml
