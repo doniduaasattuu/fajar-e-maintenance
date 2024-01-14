@@ -32,8 +32,8 @@ class UserController extends Controller
     {
         $rules = [
             'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
-            'password' => ['required', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-            'fullname' => ['required', 'regex:/^[\pL\s]+$/u', 'min:6', 'max:25'],
+            'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+            'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
@@ -106,8 +106,8 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $rules = [
-            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), Rule::in($this->userService->niks())],
-            'fullname' => ['required', 'regex:/^[\pL\s]+$/u', 'min:6', 'max:25'],
+            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), Rule::in($this->userService->registeredNiks())],
+            'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],

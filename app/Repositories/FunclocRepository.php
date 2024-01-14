@@ -2,9 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
-
-interface UserRepository
+interface FunclocRepository
 {
     public function insert(array $validated): bool;
 

@@ -2,16 +2,10 @@
 
 namespace Tests\Feature;
 
-use App\Http\Controllers\UserController;
 use App\Services\UserService;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Env;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -150,7 +144,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
-    public function testRegistrationPasswordInvalidLength()
+    public function testRegistrationPasswordInvalidLengthMin()
     {
         $data = [
             'nik' => '55000154',
@@ -165,6 +159,24 @@ class UserControllerTest extends TestCase
             ->assertStatus(302)
             ->assertSessionHasErrors([
                 'password' => 'The password field must be at least 8 characters.',
+            ]);
+    }
+
+    public function testRegistrationPasswordInvalidLengthMax()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => '@SangatRahasiaSekaliBahkanSampaiLupa12345',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => 'Ada',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'password' => 'The password field must not be greater than 25 characters.',
             ]);
     }
 
@@ -245,8 +257,8 @@ class UserControllerTest extends TestCase
         $data = [
             'nik' => '55000154',
             'password' => 'Rahasia@1234',
-            'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi',
-            'department' => 'EI2',
+            'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi Damara Putra Tan Malaka',
+            'department' => 'EI4',
             'phone_number' => '08983456945',
             'registration_code' => 'Ada',
         ];
@@ -254,7 +266,43 @@ class UserControllerTest extends TestCase
         $this->post('/registration', $data)
             ->assertStatus(302)
             ->assertSessionHasErrors([
-                'fullname' => 'The fullname field must not be greater than 25 characters.',
+                'fullname' => 'The fullname field must not be greater than 50 characters.',
+            ]);
+    }
+
+    public function testRegistrationFullnameInvalid()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni_Darmawan',
+            'department' => 'EI4',
+            'phone_number' => '08983456945',
+            'registration_code' => 'RG9uaSBEYXJtYXdhbg==',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'fullname' => 'The fullname field format is invalid.',
+            ]);
+    }
+
+    public function testRegistrationFullnameValid()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI4',
+            'phone_number' => '08983456945',
+            'registration_code' => 'RG9uaSBEYXJtYXdhbg==',
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasNoErrors([
+                'fullname' => 'The fullname field format is invalid.',
             ]);
     }
 

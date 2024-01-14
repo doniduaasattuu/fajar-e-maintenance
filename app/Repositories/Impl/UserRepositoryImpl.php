@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class UserRepositoryImpl implements UserRepository
 {
+    public array $tableColumns;
+
+    public function __construct()
+    {
+        $this->tableColumns = DB::getSchemaBuilder()->getColumnListing('users');
+    }
 
     private function adjustment($user, $validated)
     {
@@ -27,8 +33,10 @@ class UserRepositoryImpl implements UserRepository
         return $user->save();
     }
 
-    public function update(User $user, array $validated): bool
+    public function update(array $validated): bool
     {
+        $nik = $validated['nik'];
+        $user = User::query()->find($nik);
         $this->adjustment($user, $validated);
         return $user->save();
     }

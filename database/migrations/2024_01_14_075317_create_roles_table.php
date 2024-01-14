@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('funclocs', function (Blueprint $table) {
-            $table->string("id", 50)->nullable(false)->primary();
-            $table->string("description", 50)->nullable(true);
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string("nik", 8)->nullable(false);
+            $table->enum('role', ['employee', 'db_admin', 'admin'])->nullable(false);
             $table->timestamps();
+
+            $table->foreign('nik')->references('nik')->on('users');
         });
     }
 
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('funclocs');
+        Schema::dropIfExists('roles');
     }
 };

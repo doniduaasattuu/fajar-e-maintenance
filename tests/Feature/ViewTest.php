@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Funcloc;
+use App\Services\FunclocService;
 use App\Services\UserService;
+use Database\Seeders\FunclocSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -54,5 +57,22 @@ class ViewTest extends TestCase
             ->assertSeeText('We make daily inspection checks easier')
             ->assertSeeText('Scan QR Code')
             ->assertSeeText('Search');
+    }
+
+    public function testViewFuncloc()
+    {
+        $this->seed(FunclocSeeder::class);
+
+        $this->view('maintenance.funcloc.funcloc', [
+            'title' => 'Table funcloc',
+            'funclocService' => $this->app->make(FunclocService::class),
+        ])
+            ->assertSeeText('Table funcloc')
+            ->assertSeeText('Filter')
+            ->assertSeeText('The total registered funcloc is 11 records.')
+            ->assertSeeText('Description')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Edit')
+            ->assertSeeText('SP5.M-21/M');
     }
 }

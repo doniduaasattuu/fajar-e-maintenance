@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -27,7 +28,7 @@ class UserServiceTest extends TestCase
         self::assertTrue($userService->userExists('55000154'));
     }
 
-    public function testUserServiceNiks()
+    public function testUserServiceRegisteredNiks()
     {
         $this->seed(UserSeeder::class);
         $userService = $this->app->make(UserService::class);
@@ -37,7 +38,7 @@ class UserServiceTest extends TestCase
             '55000154'
         ];
 
-        self::assertEquals($niks, $userService->niks());
+        self::assertEquals($niks, $userService->registeredNiks());
     }
 
     public function testUserServiceDepartments()
@@ -126,5 +127,14 @@ class UserServiceTest extends TestCase
         self::assertTrue($userService->updateProfile($validated));
         $user = User::query()->find($validated['nik']);
         self::assertEquals('@Fajarpaper321', $user->password);
+    }
+
+    public function testQuery()
+    {
+        $this->seed(UserSeeder::class);
+        $users = User::query()->get();
+        $doni = $users->find('55000154');
+        self::assertNotNull($doni);
+        Log::info(json_encode($doni, JSON_PRETTY_PRINT));
     }
 }

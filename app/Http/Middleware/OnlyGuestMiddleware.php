@@ -15,7 +15,7 @@ class OnlyGuestMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $session = $request->session()->get("user");
+        $session = $request->session()->get("nik");
 
         if (isset($session)) {
             return redirect()->route('home');

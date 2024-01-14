@@ -14,7 +14,7 @@ interface UserService
 
     public function updateProfile(array $validated): bool;
 
-    public function niks(): array; // return all nik users
+    public function registeredNiks(): array; // return all nik users
 
     public function departments(): array; // return all department
 

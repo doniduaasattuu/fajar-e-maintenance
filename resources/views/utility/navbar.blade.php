@@ -1,6 +1,6 @@
 <!-- NAVBAR -->
-<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm">
-    <div class="container">
+<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm" style="min-width: 300px;">
+    <div class="container-md">
         <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">Fajar E-Maintenance</a>
         <button class="navbar-dark navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,13 +30,13 @@
                         </svg>
                         Trends</a>
                 </li>
-                <li class="nav-item me-2 me-md-3">
+                <!-- <li class="nav-item me-2 me-md-3">
                     <a id="navbar_logs" class="text-white nav-link" href="/summary">
                         <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-bar-graph-fill" viewBox="0 0 16 16">
                             <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm.5 10v-6a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5zm-2.5.5a.5.5 0 0 1-.5-.5v-4a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-1zm-3 0a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-1z" />
                         </svg>
                         Summary</a>
-                </li>
+                </li> -->
                 <li class="nav-item dropdown me-2 me-md-3">
                     <a class="text-white nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database-fill-check" viewBox="0 0 16 16">
@@ -46,10 +46,7 @@
                         Database
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-bottom border-top dropdown-item" href="/search-equipment">Edit Equipment</a></li>
-                        <li><a class="border-bottom dropdown-item" href="/install-dismantle">Instal Dismantle</a></li>
-                        <li><a class="border-bottom dropdown-item" href="/registry-funcloc">Registry Funcloc</a></li>
-                        <li><a class="border-bottom dropdown-item" href="/registry-motor">Registry Motor</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/funcloc">Funcloc</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

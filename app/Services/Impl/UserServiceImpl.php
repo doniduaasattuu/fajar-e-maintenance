@@ -50,7 +50,7 @@ class UserServiceImpl implements UserService
         ];
     }
 
-    public function niks(): array
+    public function registeredNiks(): array
     {
         $niks = User::query()->pluck('nik');
         return $niks->toArray();
@@ -75,12 +75,12 @@ class UserServiceImpl implements UserService
 
     public function getTableColumns(): array
     {
-        return DB::getSchemaBuilder()->getColumnListing($this->tableName);
+        $tableColumns = $this->userRepository->tableColumns;
+        return $tableColumns;
     }
 
     public function updateProfile(array $validated): bool
     {
-        $user = $this->user($validated['nik']);
-        return $this->userRepository->update($user, $validated);
+        return $this->userRepository->update($validated);
     }
 }

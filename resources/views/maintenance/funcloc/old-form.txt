@@ -1,0 +1,19 @@
+ @foreach ($funclocService->getTableColumns() as $column)
+        <div class="mb-3">
+            <!-- LABEL -->
+
+            <label for="{{ $column }}" class="form-label fw-semibold">{{ $column == 'id' ? 'Funcloc' : ucfirst(str_replace("_", " ", $column)) }}</label>
+            <!-- DESCRIPTION -->
+            @if ($column == 'description')
+            <input value="{{ isset($funcloc) ? $funcloc->$column : '' }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}">
+            <!-- CREATED AT, UPDATED AT -->
+            @else
+            <input value="{{ isset($funcloc) ? $funcloc->$column : '' }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}" @readonly(isset($funcloc))>
+            @endif
+            <!-- ERROR MESSAGE -->
+            @error($column)
+            <div class="form-text text-danger">{{ $message }}</div>
+            @enderror
+
+        </div>
+@endforeach

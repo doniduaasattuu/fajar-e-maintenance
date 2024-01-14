@@ -4,9 +4,10 @@
     {{ session('alert')['message'] }}
 
     <!-- button close alert -->
-    @if (ucwords(request()->path()) != 'Login')
+    @if (request()->path() != 'login')
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     @endif
+
 
 </div>
 @endif

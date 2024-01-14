@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::delete("delete from roles");
         DB::delete("delete from users");
 
         $user1 = new User();
@@ -31,5 +32,9 @@ class UserSeeder extends Seeder
         $user2->department = 'EI6';
         $user2->phone_number = '08983456945';
         $user2->save();
+
+        $this->call([
+            RoleSeeder::class
+        ]);
     }
 }

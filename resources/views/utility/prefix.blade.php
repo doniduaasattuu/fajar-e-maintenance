@@ -4,4 +4,6 @@
 
 <body>
     @include('utility.navbar')
-    <div class="container">
+    <div class="container-md" style="min-width: 300px;">
+
+        @include('utility.message')

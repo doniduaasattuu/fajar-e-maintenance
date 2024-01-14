@@ -2,9 +2,9 @@
 
 entity funclocs
 {
-    * id VARCHAR(150) <<PK>>
+    * id VARCHAR(50) <<PK>>
     --
-      tag_name VARCHAR(150)
+      description VARCHAR(50)
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
@@ -13,13 +13,13 @@ entity motors
 {
     * id VARCHAR(9) <<PK>>
     * status ENUM(["Installed", "Repaired", "Available"])
-      funcloc VARCHAR (150) <<FK>>
-      sort_field VARCHAR(150)
+      funcloc VARCHAR (50) <<FK>>
+      sort_field VARCHAR(50)
     --
       material_number VARCHAR(8)
-    * equipment_description VARCHAR(150)
+      equipment_description VARCHAR(50)
     * unique_id VARCHAR(6) UNIQUE
-    * qr_code_link VARCHAR(150) UNIQUE
+    * qr_code_link VARCHAR(100) UNIQUE
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
@@ -28,50 +28,47 @@ entity motor_details {
     * id BIGINT(20) UNSIGNED AUTO_INCREMENT
     * motor_detail VARCHAR(9) <<FK>>
     --
-    manufacture VARCHAR(150)
-    serial_number VARCHAR(150)
-    type VARCHAR(150)
-    power_rate VARCHAR(25)
+    manufacturer VARCHAR(50)
+    serial_number VARCHAR(50)
+    type VARCHAR(50)
+    power_rate VARCHAR(5)
     power_unit ENUM(["kW", "HP"])
-
-    voltage VARCHAR(25)
-    current_nominal VARCHAR(25)
-    frequency VARCHAR(25)
-    pole VARCHAR(25)
-    rpm VARCHAR(25)
-
-    bearing_de VARCHAR(50)
-    bearing_nde VARCHAR(50)
-    frame_type VARCHAR(50)
-    shaft_diameter VARCHAR(25)
-    phase_supply VARCHAR(25)
-
-    cos_phi VARCHAR(25)
-    efficiency VARCHAR(25)
-    ip_rating VARCHAR(25)
-    insulation_class VARCHAR(25)
-    duty VARCHAR(25)
-
-    connection_type VARCHAR(50)
+    voltage VARCHAR(10)
+    electrical_current ENUM(["AC", "DC"])
+    current_nominal VARCHAR(10)
+    frequency VARCHAR(10)
+    pole VARCHAR(5)
+    rpm VARCHAR(10)
+    bearing_de VARCHAR(10)
+    bearing_nde VARCHAR(10)
+    frame_type VARCHAR(10)
+    shaft_diameter VARCHAR(3) (mm)
+    phase_supply VARCHAR(3)
+    cos_phi VARCHAR(5)
+    efficiency VARCHAR(5)
+    ip_rating VARCHAR(10)
+    insulation_class VARCHAR(5)
+    duty VARCHAR(5)
+    connection_type VARCHAR(10)
     nipple_grease ENUM(["Available", "Not Available"])
-    greasing_type VARCHAR(50)
-    greasing_qty_de VARCHAR(25)
-    greasing_qty_nde VARCHAR(25)
-
-    length VARCHAR(25)
-    width VARCHAR(25)
-    height VARCHAR(25)
-    weight VARCHAR(25)
+    greasing_type VARCHAR(25)
+    greasing_qty_de VARCHAR(4) (grm)
+    greasing_qty_nde VARCHAR(4) (grm)
+    length VARCHAR(5) (mm)
+    width VARCHAR(5) (mm)
+    height VARCHAR(5) (mm) 
+    weight VARCHAR(5) (kg)
     cooling_fan ENUM(["Internal", "External", "Not Available"])
-
     mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
 }
 
-entity emo_records {
+entity motor_records {
     * id BIGINT(20) UNSIGNED AUTO_INCREMENT
-    * funcloc VARCHAR(150) <<FK>>
-    * emo VARCHAR(9) <<FK>>
-    * sort_field VARCHAR(150)
+    * funcloc VARCHAR (50) <<FK>>
+    * motor VARCHAR(9) <<FK>>
+    * sort_field VARCHAR(50)
     --
     * motor_status ENUM(["Running", "Not Running"])
     * clean_status ENUM(["Clean", "Dirty"])
@@ -107,30 +104,34 @@ entity emo_records {
       
     * noise_nde ENUM(["Normal", "Abnormal"])
 
-      comment TEXT NULL
     * created_at TIMESTAMP CURRENT
+    * updated_at TIMESTAMP NULL
+
     * nik VARCHAR(8) <<FK>>
 }
 
 entity users {
     * nik VARCHAR(8)
     --
-    * password VARCHAR(50)
-    * fullname VARCHAR(150)
+    * password VARCHAR(25)
+    * fullname VARCHAR(50)
     * department ENUM("EI1-EI7");
     * phone_number VARCHAR(15)
 }
 
-entity administrators {
-    * admin_nik VARCHAR(8) <<FK>>
-    --
+entity roles {
+    * id BIGINT(20) <<PK>>
+    * nik VARCHAR(8) <<FK>>
+    * role ENUM ['employee', 'db_admin', 'admin']
+      created_at TIMESTAMP NULL
+      updated_at TIMESTAMP NULL
 }
 
 entity transformers {
     * id VARCHAR(9) <<PK>>
     * status ENUM(["Installed", "Repaired", "Available"])
       funcloc VARCHAR (150) <<FK>>
-      sort_field VARCHAR(150)
+      sort_field VARCHAR(50)
     --
       material_number VARCHAR(8)
     * equipment_description VARCHAR(150)
@@ -175,9 +176,9 @@ entity transformer_details {
 
 entity transformer_records {
     * id BIGINT UNSIGNED AUTO_INCREMENT
-    * funcloc VARCHAR(150) <<FK>>
+    * funcloc VARCHAR (50) <<FK>>
     * transformer VARCHAR(9) <<FK>>
-    * sort_field VARCHAR(150)
+    * sort_field VARCHAR(50)
     --
     * transformer_status ENUM(["Online", "Offline"])
 
@@ -209,10 +210,10 @@ entity transformer_records {
 }
  
 funclocs ||--o{ motors : Have
-funclocs ||--o{ emo_records : Have
-motors ||--o{ emo_records : Have
+funclocs ||--o{ motor_records : Have
+motors ||--o{ motor_records : Have
 motors ||--|| motor_details : Contain
-emo_records ||--|| users : Include
+motor_records ||--|| users : Include
 administrators ||--|| users : Registered
 
 funclocs ||--o{ transformers : Have
