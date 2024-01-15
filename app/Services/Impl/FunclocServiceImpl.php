@@ -6,7 +6,6 @@ use App\Models\Funcloc;
 use App\Repositories\FunclocRepository;
 use App\Services\FunclocService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 
 class FunclocServiceImpl implements FunclocService
 {

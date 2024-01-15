@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MotorController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use App\Http\Middleware\RoleMiddleware;
+use App\Models\Motor;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
@@ -33,12 +35,18 @@ Route::middleware('member')->group(function () {
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::get('/funcloc', [FunclocController::class, 'funcloc'])->name('funcloc');
+    Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
+    Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
 
     Route::middleware('role:employee,db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');
         Route::post('/funcloc-update', [FunclocController::class, 'funclocUpdate'])->name('funcloc-update');
         Route::get('/funcloc-registration', [FunclocController::class, 'funclocRegistration'])->name('funcloc-registration');
         Route::post('/funcloc-register', [FunclocController::class, 'funclocRegister'])->name('funcloc-register');
+
+        Route::get('/motor-edit/{id}', [MotorController::class, 'motorEdit'])->name('motor-edit');
+        Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');
+        Route::get('/motor-registration', [MotorController::class, 'motorRegistration'])->name('motor-registration');
+        Route::post('/motor-register', [MotorController::class, 'motorRegister'])->name('motor-register');
     });
 });

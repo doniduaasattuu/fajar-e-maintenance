@@ -6,7 +6,7 @@
         <h3 class="mb-1">{{ $title }}</h3>
         <nav aria-label=" breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/funcloc">Table</a></li>
+                <li class="breadcrumb-item"><a href="/funclocs">Table</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ isset($funcloc) != null ? $funcloc->id : $title }}</li>
             </ol>
         </nav>

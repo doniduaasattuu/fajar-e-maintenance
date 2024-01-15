@@ -13,11 +13,10 @@ entity motors
 {
     * id VARCHAR(9) <<PK>>
     * status ENUM(["Installed", "Repaired", "Available"])
-      funcloc VARCHAR (50) <<FK>>
+      funcloc VARCHAR (50)
       sort_field VARCHAR(50)
-    --
+      description VARCHAR(50)
       material_number VARCHAR(8)
-      equipment_description VARCHAR(50)
     * unique_id VARCHAR(6) UNIQUE
     * qr_code_link VARCHAR(100) UNIQUE
       created_at TIMESTAMP NULL

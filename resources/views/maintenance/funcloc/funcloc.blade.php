@@ -8,18 +8,18 @@
             <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="grey" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
                 <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0" />
             </svg>
-            New Funcloc</a>
+            New funcloc</a>
     </div>
 
     <!-- FILTER FUNCLOC -->
     <div class="mb-3">
-        <label for="filter_funcloc" class="form-label fw-bold">Filter</label>
-        <input type="text" class="form-control" id="filter_funcloc" name="filter_funcloc" placeholder="Filter by funcloc">
+        <label for="filter" class="form-label fw-bold">Filter</label>
+        <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by funcloc">
         <div class="form-text">The total registered funcloc is {{ count($funclocService->getAll()) }} records.</div>
     </div>
 
     <!-- TABlE FUNCLOC -->
-    <div>
+    <div class="mb-3">
         <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm">
             <thead>
                 <tr>
@@ -30,6 +30,7 @@
                     <th style="line-height: 30px;" class="{{ $column }}" scope="col">{{ $column == 'id' ? 'Funcloc' : ucfirst(str_replace("_", " ", $column)) }}</th>
                     @endif
                     @endforeach
+
                     <!-- EDIT -->
                     <th style="line-height: 30px; width: 30px" scope="col">Edit</th>
                 </tr>
@@ -41,6 +42,7 @@
                     @if ($column == 'created_at')
                     @continue
                     @elseif ($column == 'id')
+                    <!-- ADD TOOLTIP FOR FUNCLOC ID -->
                     <td class="funcloc_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $funcloc->description }}">{{ $funcloc->$column }}</td>
                     @else
                     <td class="text-break {{ $column }}" scope="row">{{ $funcloc->$column }}</td>
@@ -48,7 +50,7 @@
                     @endforeach
 
                     <!-- EDIT -->
-                    <td style="width: 30px">
+                    <td class="text-center" style="width: 30px">
                         <a href="/funcloc-edit/{{ $funcloc->id }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                 <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -63,40 +65,30 @@
     </div>
 </div>
 
+@include('utility.script.hidecolumn')
 <script>
-    function hideColumnOnPhone(visibility, column) {
-        let columns = document.getElementsByClassName(column);
-        for (let i = 0; i < columns.length; i++) {
-            if (visibility == 'add') {
-                columns[i].classList.add('d-none');
-            } else if (visibility == 'remove') {
-                columns[i].classList.remove('d-none');
-            }
+    function doHideColumnOnPhone() {
+        if (window.innerWidth < 576) {
+            hideColumnOnPhone('add', 'updated_at');
+            hideColumnOnPhone('add', 'description');
+        } else if (window.innerWidth >= 576 && window.innerWidth < 992) {
+            hideColumnOnPhone('remove', 'description');
+            hideColumnOnPhone('add', 'updated_at');
+        } else if (window.innerWidth >= 992) {
+            hideColumnOnPhone('remove', 'updated_at');
         }
     }
 
     window.onresize = doHideColumnOnPhone;
 
-    function doHideColumnOnPhone() {
-        if (window.innerWidth < 576) {
-            hideColumnOnPhone('add', 'updated_at');
-            hideColumnOnPhone('add', 'description');
-        } else if (window.innerWidth > 576 && window.innerWidth < 992) {
-            hideColumnOnPhone('remove', 'description');
-            hideColumnOnPhone('add', 'updated_at');
-        } else if (window.innerWidth > 992) {
-            hideColumnOnPhone('remove', 'updated_at');
-        }
-    }
-
-    // FILTER FUNCLOC
+    // FILTER
     let table_rows = document.getElementsByClassName('table_row');
-    let filter_funcloc = document.getElementById('filter_funcloc');
+    let filter = document.getElementById('filter');
     let funclocs_id = document.getElementsByClassName('funcloc_id');
 
-    funclocs = [];
+    funclocsText = [];
     for (id of funclocs_id) {
-        funclocs.push(id.textContent);
+        funclocsText.push(id.textContent);
     }
 
     function resetFilter(table_rows) {
@@ -106,13 +98,13 @@
     }
 
     function doFilter() {
-        filter_funcloc.value = filter_funcloc.value.toUpperCase();
+        filter.value = filter.value.toUpperCase();
 
-        if (filter_funcloc.value.trim().length > 0) {
+        if (filter.value.trim().length > 0) {
             resetFilter(table_rows);
 
-            for (let i = 0; i < funclocs.length; i++) {
-                if (!funclocs[i].match(filter_funcloc.value.trim().toUpperCase())) {
+            for (let i = 0; i < funclocsText.length; i++) {
+                if (!funclocsText[i].match(filter.value.trim().toUpperCase())) {
                     table_rows[i].classList.add("d-none");
                 }
             }
@@ -121,7 +113,7 @@
         }
     }
 
-    filter_funcloc.oninput = () => {
+    filter.oninput = () => {
         doFilter();
     }
 

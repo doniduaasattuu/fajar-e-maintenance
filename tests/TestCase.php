@@ -14,6 +14,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
         DB::delete('delete from roles');
         DB::delete('delete from users');
+        DB::delete('delete from motors');
         DB::delete('delete from funclocs');
     }
 }

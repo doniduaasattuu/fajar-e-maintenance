@@ -15,8 +15,6 @@ class FunclocSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::delete('delete from funclocs');
-
         $funloc1 = new Funcloc();
         $funloc1->id = "FP-01-SP3-RJS-T092-P092";
         $funloc1->description = "PM3.SUM.P70";
@@ -82,5 +80,17 @@ class FunclocSeeder extends Seeder
         $funcloc11->description = "TR AUX GTG #1";
         $funcloc11->created_at = Carbon::now()->toDateTimeString();
         $funcloc11->save();
+
+        $funcloc12 = new Funcloc();
+        $funcloc12->id = "FP-01-BO3-CAS-COM2";
+        $funcloc12->description = "BO3.CAS.COM2/M";
+        $funcloc12->created_at = Carbon::now()->toDateTimeString();
+        $funcloc12->save();
+
+        $funcloc13 = new Funcloc();
+        $funcloc13->id = "FP-01-CH5-ALM-T098-P121";
+        $funcloc13->description = "5AL-PC-01/M";
+        $funcloc13->created_at = Carbon::now()->toDateTimeString();
+        $funcloc13->save();
     }
 }

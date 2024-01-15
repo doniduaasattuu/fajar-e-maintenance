@@ -18,7 +18,7 @@ class FunclocController extends Controller
         $this->funclocService = $funclocService;
     }
 
-    public function funcloc()
+    public function funclocs()
     {
         return response()->view('maintenance.funcloc.funcloc', [
             'title' => 'Table funcloc',

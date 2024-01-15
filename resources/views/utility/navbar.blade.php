@@ -46,7 +46,8 @@
                         Database
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-bottom border-top dropdown-item" href="/funcloc">Funcloc</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/funclocs">Funcloc</a></li>
+                        <li><a class="border-bottom dropdown-item" href="/motors">Motor</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

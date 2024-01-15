@@ -17,7 +17,7 @@ class FunclocControllerTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $this->get('/funcloc', [])
+        $this->get('/funclocs', [])
             ->assertRedirectToRoute('login');
     }
 
@@ -31,7 +31,7 @@ class FunclocControllerTest extends TestCase
         ])->get('/profile')
             ->assertSeeText('Update profile');
 
-        $this->get('/funcloc')
+        $this->get('/funclocs')
             ->assertSessionHasNoErrors([
                 'message' => ['header' => 'Oops!', 'message' => "You're not allowed."]
             ]);
@@ -44,7 +44,7 @@ class FunclocControllerTest extends TestCase
         $this->withSession([
             'nik' => '55000154',
             'user' => 'Doni Darmawan'
-        ])->get('/funcloc')
+        ])->get('/funclocs')
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')
             ->assertDontSeeText('Created at')
@@ -69,7 +69,7 @@ class FunclocControllerTest extends TestCase
         $this->withSession([
             'nik' => '55000153',
             'user' => 'Jamal Mirdad'
-        ])->get('/funcloc');
+        ])->get('/funclocs');
 
         $this->followingRedirects()
             ->get('/funcloc-registration')
