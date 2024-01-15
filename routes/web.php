@@ -37,6 +37,7 @@ Route::middleware('member')->group(function () {
 
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
+    Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
 
     Route::middleware('role:employee,db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');

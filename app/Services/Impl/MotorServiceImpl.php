@@ -43,4 +43,13 @@ class MotorServiceImpl implements MotorService
     {
         return $this->motorRepository->update($validated);
     }
+
+    public function statusEnum(): array
+    {
+        return [
+            'Installed',
+            'Repaired',
+            'Available'
+        ];
+    }
 }

@@ -15,4 +15,6 @@ interface MotorService
     public function registeredMotors(): array;
 
     public function updateMotor(array $validated): bool;
+
+    public function statusEnum(): array;
 }

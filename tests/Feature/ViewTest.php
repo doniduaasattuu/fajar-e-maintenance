@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Funcloc;
 use App\Services\FunclocService;
+use App\Services\MotorService;
 use App\Services\UserService;
+use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -59,7 +61,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Search');
     }
 
-    public function testViewFuncloc()
+    public function testViewFunclocs()
     {
         $this->seed(FunclocSeeder::class);
 
@@ -69,10 +71,31 @@ class ViewTest extends TestCase
         ])
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered funcloc is 11 records.')
+            ->assertSeeText('The total registered funcloc is 13 records.')
             ->assertSeeText('Description')
             ->assertSeeText('Updated at')
             ->assertSeeText('Edit')
             ->assertSeeText('SP5.M-21/M');
+    }
+
+    public function testViewMotors()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->view('maintenance.motor.motor', [
+            'title' => 'Table motor',
+            'motorService' => $this->app->make(MotorService::class),
+        ])
+            ->assertSeeText('Table motor')
+            ->assertSeeText('New motor')
+            ->assertSeeText('Motor status')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Sort field')
+            ->assertSeeText('Unique id')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Details')
+            ->assertSeeText('Edit')
+            ->assertSeeText('The total registered motor is 22 records.')
+            ->assertSeeText('MGM000481');
     }
 }

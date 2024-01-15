@@ -23,10 +23,9 @@ class FunclocServiceTest extends TestCase
         $funclocService = $this->app->make(FunclocService::class);
         $funclocs = $funclocService->getAll();
         self::assertNotNull($funclocs);
-        Log::info(json_encode($funclocs, JSON_PRETTY_PRINT));
     }
 
-    public function testGetTableColumns()
+    public function testFunclocServiceGetTableColumns()
     {
         $funclocService = $this->app->make(FunclocService::class);
         $columns = $funclocService->getTableColumns();
@@ -34,14 +33,14 @@ class FunclocServiceTest extends TestCase
         self::assertCount(4, $columns);
     }
 
-    public function testRegisteredFunclocs()
+    public function testFunclocServiceRegisteredFunclocs()
     {
         $this->seed(DatabaseSeeder::class);
 
         $funclocService = $this->app->make(FunclocService::class);
         $funclocs = $funclocService->registeredFunclocs();
         self::assertNotNull($funclocs);
-        self::assertCount(11, $funclocs);
+        self::assertCount(13, $funclocs);
     }
 
     public function testUpdateFuncloc()

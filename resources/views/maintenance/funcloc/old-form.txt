@@ -1,19 +1,33 @@
- @foreach ($funclocService->getTableColumns() as $column)
-        <div class="mb-3">
-            <!-- LABEL -->
+ @if (
+            $column == 'id' ||
+            $column == 'unique_id' ||
+            $column == 'qr_code_link'
+            )
+            <input readonly value="{{ $motor->$column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="9" class="form-control">
+            @include('utility.error-help')
 
-            <label for="{{ $column }}" class="form-label fw-semibold">{{ $column == 'id' ? 'Funcloc' : ucfirst(str_replace("_", " ", $column)) }}</label>
-            <!-- DESCRIPTION -->
-            @if ($column == 'description')
-            <input value="{{ isset($funcloc) ? $funcloc->$column : '' }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}">
-            <!-- CREATED AT, UPDATED AT -->
+            @elseif ($column == 'status')
+            <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
+                @foreach ($motorService->statusEnum() as $status )
+                @if ($status == $motor->$column)
+                <option selected value="{{ $motor->$column }}">{{ $motor->$column }}</option>
+                @else
+                <option value="{{ $status }}">{{ $status }}</option>
+                @endif
+                @endforeach
+            </select>
+            @include('utility.error-help')
+
+            @elseif ($column == 'funcloc' || $column == 'sort_field' || $column == 'description' )
+            <input value="{{ $motor->$column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+            @include('utility.error-help')
+
+            @elseif ($column == 'material_number')
+            <input value="{{ $motor->$column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="8" class="form-control" onkeypress="return onlynumber(event)">
+            @include('utility.error-help')
+
             @else
-            <input value="{{ isset($funcloc) ? $funcloc->$column : '' }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}" @readonly(isset($funcloc))>
+            <input value="{{ Carbon\Carbon::now() }}" type="text" maxlength="19" class="form-control">
+            @include('utility.error-help')
+            <!-- FOR EDIT MOTOR PAGE -->
             @endif
-            <!-- ERROR MESSAGE -->
-            @error($column)
-            <div class="form-text text-danger">{{ $message }}</div>
-            @enderror
-
-        </div>
-@endforeach

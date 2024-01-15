@@ -36,7 +36,7 @@
 
     <!-- TABlE MOTOR -->
     <div class="mb-3">
-        <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm">
+        <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm table-responsive-md">
             <thead>
                 <tr>
                     @foreach ($motorService->getTableColumns() as $column)
@@ -52,14 +52,15 @@
                     @endif
                     @endforeach
 
-                    <!-- TREND -->
-                    <th style="line-height: 30px; width: 50px;" scope="col">Trend</th>
+                    <!-- DETAILS -->
+                    <th style="line-height: 30px; width: 50px;" scope="col">Details</th>
 
                     <!-- EDIT -->
                     <th style="line-height: 30px; width: 40px" scope="col">Edit</th>
                 </tr>
             </thead>
             <tbody>
+                <!-- MOTOR -->
                 @foreach ($motorService->getAll() as $motor)
                 <tr class="table_row">
                     @foreach ($motorService->getTableColumns() as $column)
@@ -72,17 +73,17 @@
                     @continue
                     @elseif ($column == 'id')
                     <!-- ADD TOOLTIP FOR EQUIPMENT ID -->
-                    <td class="motor_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $motor->funcloc != null ? $motor->funcloc : $motor->status }}">{{ $motor->$column }}</td>
+                    <td class="motor_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $motor->funcloc != null ? $motor->funcloc : $motor->description }}">{{ $motor->$column }}</td>
                     @else
                     <td class="text-break {{ $column == 'status' ? 'motor_status' : $column }}" scope="row">{{ $motor->$column }}</td>
                     @endif
                     @endforeach
 
-                    <!-- TREND -->
-                    <td class="text-center text-danger" style="width: 50px">
-                        <a href="trend/{{ $motor->id }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="bi bi-graph-up" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
+                    <!-- DETAILS -->
+                    <td class="text-center text-danger" style="width: 50px" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Motor details">
+                        <a href="/motor-details/{{ $motor->id }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="grey" class="bi bi-info-square-fill" viewBox="0 0 16 16">
+                                <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.93 4.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
                             </svg>
                         </a>
                     </td>
@@ -108,6 +109,7 @@
 @include('utility.script.hidecolumn')
 <script>
     function doHideColumnOnPhone() {
+        console.log(window.innerWidth)
         if (window.innerWidth < 576) {
             hideColumnOnPhone('add', 'funcloc');
             hideColumnOnPhone('add', 'sort_field');
@@ -170,6 +172,7 @@
 
     filter.oninput = () => {
         doFilterById();
+        doFilterByMotorStatus();
     }
 
     // FILTER BY MOTOR STATUS
@@ -210,6 +213,7 @@
     // WINDOW
     window.onload = () => {
         doFilterById();
+        doFilterByMotorStatus()
         doHideColumnOnPhone()
     }
 </script>
