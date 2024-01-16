@@ -242,6 +242,20 @@ class FunclocControllerTest extends TestCase
             ->assertRedirectToRoute('login');
     }
 
+    public function testGetEditFunclocEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->followingRedirects()
+            ->withSession([
+                'nik' => '55000153',
+                'user' => 'Jamal Mirdad'
+            ])
+            ->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
+            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
     public function testGetFunclocUpdateAuthorized()
     {
         $this->seed(DatabaseSeeder::class);

@@ -55,11 +55,24 @@
                 <label for="department" class="form-label fw-semibold">Department</label>
                 <select name="department" id="department" class="form-select" aria-label="Default select example">
                     @foreach ($userService->departments() as $department)
+
+                    <!-- USING OLD VALUE WHEN SET DEPARMENT -->
+                    @if (null !== old('department'))
+                    @if (old('department') == $department)
+                    <option selected value="{{ $department }}">{{ $department }}</option>
+                    @else
+                    <option value="{{ $department }}">{{ $department }}</option>
+                    @endif
+
+                    <!-- USING NORMAL LOOPING -->
+                    @else
                     @if ($userService->user(session('nik'))->department == $department)
                     <option selected value="{{ $department }}">{{ $department }}</option>
                     @else
                     <option value="{{ $department }}">{{ $department }}</option>
                     @endif
+                    @endif
+
                     @endforeach
                 </select>
                 @error('department')

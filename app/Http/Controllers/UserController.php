@@ -125,7 +125,7 @@ class UserController extends Controller
             $this->userService->updateProfile($validated);
             return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
         } else {
-            return redirect()->back()->withErrors($validator);
+            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 }

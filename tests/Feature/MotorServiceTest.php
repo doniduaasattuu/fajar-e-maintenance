@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Motor;
 use App\Services\MotorService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,5 +39,26 @@ class MotorServiceTest extends TestCase
         $motors = $motorService->registeredMotors();
         self::assertNotNull($motors);
         self::assertCount(22, $motors);
+    }
+
+    public function testUpdateMotor()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->find('EMO000105');
+        self::assertNotNull($motor);
+        self::assertEquals('AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3', $motor->description);
+
+        $validated = [
+            'id' => $motor->id,
+            'description' => 'AC MOTOR;380V,50Hz,75kW,4P,132M,B3',
+        ];
+
+        $motorService = $this->app->make(motorService::class);
+        self::assertTrue($motorService->updateMotor($validated));
+
+        $motor = motor::query()->find('EMO000105');
+        self::assertNotEquals('AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3', $motor->description);
+        self::assertEquals('AC MOTOR;380V,50Hz,75kW,4P,132M,B3', $motor->description);
     }
 }

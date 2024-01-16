@@ -56,9 +56,9 @@ class MotorController extends Controller
             'status' => ['required', Rule::in($this->motorService->statusEnum())],
             'funcloc' => ['nullable', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'sort_field' => ['nullable', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
-            'description' => ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#]+$/u'],
-            'material_number' => ['required', 'digits:8', 'numeric'],
-            'unique_id' => ['required', 'exists:App\Models\Motor,unique_id'],
+            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#]+$/u'],
+            'material_number' => ['nullable', 'digits:8', 'numeric'],
+            'unique_id' => ['required', 'numeric', 'exists:App\Models\Motor,unique_id'],
             'qr_code_link' => ['required', 'exists:App\Models\Motor,qr_code_link'],
         ];
 
@@ -67,7 +67,6 @@ class MotorController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->validated();
-            // return response()->json($validated);
             $this->motorService->updateMotor($validated);
 
             return redirect()->back()->with('alert', ['message' => 'The motor successfully updated.', 'variant' => 'alert-success']);
@@ -83,5 +82,33 @@ class MotorController extends Controller
             'motorService' => $this->motorService,
             'action' => 'motor-register'
         ]);
+    }
+
+    public function motorRegister(Request $request)
+    {
+        $rules = [
+            'id' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
+            'status' => ['required', Rule::in($this->motorService->statusEnum())],
+            'funcloc' => ['nullable', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+            'sort_field' => ['nullable', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
+            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#]+$/u'],
+            'material_number' => ['nullable', 'digits:8', 'numeric'],
+            'unique_id' => ['required', 'numeric', 'exists:App\Models\Motor,unique_id'],
+            'qr_code_link' => ['required', 'exists:App\Models\Motor,qr_code_link'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+
+            $validated = $validator->validated();
+            return response()->json($validated);
+
+            // $this->motorService->register($validated);
+            return redirect()->back()->with('alert', ['message' => 'The motor successfully registered.', 'variant' => 'alert-success']);
+            // return response()->json($validated);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
     }
 }

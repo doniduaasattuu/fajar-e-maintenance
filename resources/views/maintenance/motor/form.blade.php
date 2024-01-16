@@ -74,8 +74,39 @@
 
             @else
             <!-- FOR INSERT MOTOR PAGE -->
-            <input value="{{ ($column == 'created_at' || $column == 'updated_at') ? Carbon\Carbon::now() : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+
+            @if ($column == 'created_at' || $column == 'updated_at')
+            <input readonly value="{{ Carbon\Carbon::now() }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
             @include('utility.error-help')
+
+            @elseif ($column == 'status')
+            <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
+                @if (null != old('status'))
+
+                <!-- USING OLD DATA -->
+                @foreach ($motorService->statusEnum() as $status )
+                @if (old('status') == $column)
+                <option selected value="{{ $status }}">{{ $status }}</option>
+                @else
+                <option value="{{ $status }}">{{ $status }}</option>
+                @endif
+                @endforeach
+
+                <!-- USING NORMAL LOOPING -->
+                @else
+                @foreach ($motorService->statusEnum() as $status )
+                <option value="{{ $status }}">{{ $status }}</option>
+                @endforeach
+
+                @endif
+            </select>
+            @include('utility.error-help')
+
+            @else
+            <input id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+            @include('utility.error-help')
+
+            @endif
             <!-- FOR INSERT MOTOR PAGE -->
             @endif
 
@@ -84,12 +115,7 @@
         @endforeach
 
         <!-- MOTOR DETAILS START -->
-        @foreach ($motorService->statusEnum() as $column )
-        <div class="mb-3">
-            <label for="{{ $column }}" class="form-label fw-semibold">{{ $column }}</label>
-            <input value="{{ $column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
-        </div>
-        @endforeach
+        <!-- FOREACH -->
         <!-- MOTOR DETAILS END -->
 
         @isset($action)

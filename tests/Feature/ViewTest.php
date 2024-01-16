@@ -3,13 +3,16 @@
 namespace Tests\Feature;
 
 use App\Models\Funcloc;
+use App\Models\Motor;
 use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\UserService;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class ViewTest extends TestCase
@@ -97,5 +100,62 @@ class ViewTest extends TestCase
             ->assertSeeText('Edit')
             ->assertSeeText('The total registered motor is 22 records.')
             ->assertSeeText('MGM000481');
+    }
+
+    public function testViewEditMotor()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->find('EMO001092');
+
+        $this->view('maintenance.motor.form', [
+            'title' => 'Motor details',
+            'motor' => $motor,
+            'readonly' => true,
+            'motorService' => $this->app->make(MotorService::class),
+        ])
+            ->assertDontSee('/motor-update')
+            ->assertSee('readonly')
+            ->assertSee('EMO001092')
+            ->assertSee('FP-01-SP5-OCC-FR01')
+            ->assertSee('SP5.M-21/M')
+            ->assertSee('2568');
+    }
+
+    public function testViewEditMotorNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->find('EMO000000');
+
+        try {
+            $this->view('maintenance.motor.form', [
+                'title' => 'Motor details',
+                'motor' => $motor,
+                'readonly' => true,
+                'motorService' => $this->app->make(MotorService::class),
+            ]);
+        } catch (Exception $error) {
+            self::assertEquals('Attempt to read property "id" on null (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\form.blade.php)', $error->getMessage());
+        }
+    }
+
+    public function testViewMotorDetails()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->find('EMO000105');
+
+        $this->view('maintenance.motor.form', [
+            'title' => 'Motor details',
+            'motor' => $motor,
+            'readonly' => true,
+            'motorService' => $this->app->make(MotorService::class),
+        ])
+            ->assertSee('Motor details')
+            ->assertSee('readonly')
+            ->assertSee('10010923')
+            ->assertSee('56')
+            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56');
     }
 }
