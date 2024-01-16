@@ -52,4 +52,16 @@ class MotorServiceImpl implements MotorService
             'Available'
         ];
     }
+
+    public function registeredUniqueIds(): array
+    {
+        $uniqueIds = Motor::query()->pluck('unique_id');
+        return $uniqueIds->toArray();
+    }
+
+    public function registeredQrCodeLinks(): array
+    {
+        $qrCodeLinks = Motor::query()->pluck('qr_code_link');
+        return $qrCodeLinks->toArray();
+    }
 }

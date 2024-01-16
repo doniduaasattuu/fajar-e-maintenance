@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Services\UserService;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -44,7 +45,12 @@ class UserController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->safe()->except(['registration_code']);
-            $this->userService->register($validated);
+
+            try {
+                $this->userService->register($validated);
+            } catch (Exception $error) {
+                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+            }
 
             return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
         } else {
@@ -122,7 +128,12 @@ class UserController extends Controller
             $validated = $validator->safe()->except(['new_password', 'new_password_confirmation']);
             $validated['password'] = $confirmed_password;
 
-            $this->userService->updateProfile($validated);
+            try {
+                $this->userService->updateProfile($validated);
+            } catch (Exception $error) {
+                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+            }
+
             return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();

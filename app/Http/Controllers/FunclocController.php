@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Funcloc;
 use App\Services\FunclocService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,6 +31,10 @@ class FunclocController extends Controller
     {
         $funcloc = Funcloc::query()->find($id);
 
+        if (is_null($funcloc)) {
+            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The funcloc $id is unregistered."]);
+        }
+
         return response()->view('maintenance.funcloc.form', [
             'title' => 'Edit funcloc',
             'funclocService' => $this->funclocService,
@@ -50,7 +55,12 @@ class FunclocController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->validated();
-            $this->funclocService->updateFuncloc($validated);
+
+            try {
+                $this->funclocService->updateFuncloc($validated);
+            } catch (Exception $error) {
+                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+            }
 
             return redirect()->back()->with('alert', ['message' => 'The funcloc successfully updated.', 'variant' => 'alert-success']);
         } else {
@@ -77,11 +87,16 @@ class FunclocController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->passes()) {
+
             $validated = $validator->validated();
 
-            $this->funclocService->register($validated);
+            try {
+                $this->funclocService->register($validated);
+            } catch (Exception $error) {
+                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+            }
+
             return redirect()->back()->with('alert', ['message' => 'The funcloc successfully registered.', 'variant' => 'alert-success']);
-            // return response()->json($validated);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }

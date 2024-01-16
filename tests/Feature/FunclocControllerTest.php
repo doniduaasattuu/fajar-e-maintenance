@@ -125,7 +125,7 @@ class FunclocControllerTest extends TestCase
         self::assertNull($funcloc);
     }
 
-    public function testRegisterFunclocAuthorized()
+    public function testRegisterFunclocAuthorizedSuccess()
     {
         $this->seed(DatabaseSeeder::class);
 
@@ -254,6 +254,20 @@ class FunclocControllerTest extends TestCase
             ->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertSeeText('[403] You are not authorized!')
             ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testGetEditFunclocUnregisteredAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->followingRedirects()
+            ->withSession([
+                'nik' => '55000154',
+                'user' => 'Doni Darmawan'
+            ])
+            ->get('/funcloc-edit/FP-01-PM9-OCC-PU01')
+            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('The funcloc FP-01-PM9-OCC-PU01 is unregistered.');
     }
 
     public function testGetFunclocUpdateAuthorized()

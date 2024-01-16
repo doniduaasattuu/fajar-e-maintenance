@@ -87,6 +87,28 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('You are not allowed to perform this operation!.');
     }
 
+    public function testGetEditMotorUregisteredAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-edit/EMO000008')
+            ->assertSeeText('Unique id')
+            ->assertSee('4592');
+
+        $this->followingRedirects()
+            ->withSession([
+                'nik' => '55000154',
+                'user' => 'Doni Darmawan'
+            ])
+            ->get('/motor-edit/EMO000001')
+            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('The motor EMO000001 is unregistered.');
+    }
+
     public function testGetEditMotorAuthorized()
     {
         $this->seed(DatabaseSeeder::class);
@@ -135,7 +157,6 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Motor details')
             ->assertSeeText('Status')
             ->assertDontSeeText('Installed')
-            ->assertDontSeeText('Available')
             ->assertSee('Repaired')
             ->assertSeeText('Funcloc')
             ->assertDontSee('FP-01')
@@ -163,7 +184,6 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Motor details')
             ->assertSeeText('Status')
             ->assertDontSeeText('Installed')
-            ->assertDontSeeText('Available')
             ->assertSee('Repaired')
             ->assertSeeText('Funcloc')
             ->assertDontSee('FP-01')
@@ -178,6 +198,28 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertSee('disabled');
+    }
+
+    public function testGetMotorDetailsUregisteredAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-edit/EMO000008')
+            ->assertSeeText('Unique id')
+            ->assertSee('4592');
+
+        $this->followingRedirects()
+            ->withSession([
+                'nik' => '55000154',
+                'user' => 'Doni Darmawan'
+            ])
+            ->get('/motor-edit/EMO000001')
+            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('The motor EMO000001 is unregistered.');
     }
 
     // UPDATE
@@ -765,6 +807,839 @@ class MotorControllerTest extends TestCase
             ])
             ->assertSessionHasErrors([
                 'qr_code_link' => 'The selected qr code link is invalid.',
+            ]);
+    }
+
+    // DO REGISTER
+    public function testRegisterMotorGuest()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->post('/motor-register', [])
+            ->assertRedirect('/login');
+    }
+
+    public function testRegisterMotorEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Installed',
+                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => 'SP3.SP-03/M',
+                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+                'material_number' => '10012345',
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testRegisterMotorAuthorizedSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Installed',
+                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => 'SP3.SP-03/M',
+                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+                'material_number' => '10012345',
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('The motor successfully registered.');
+    }
+
+    public function testRegisterMotorAuthorizedInvalidIdNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => null,
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'id' => 'The id field is required.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedInvalidIdLengthMin()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'id' => 'The id field must be 9 characters.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedDuplicate()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000124',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'id' => 'The selected id is invalid.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedStatusNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => null,
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'status' => 'The status field is required.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedFunclocNullSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Available',
+                'funcloc' => null,
+                'sort_field' => 'SP3.SP-03/M',
+                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+                'material_number' => '10012345',
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('The motor successfully registered.');
+    }
+
+    public function testRegisterMotorAuthorizedFunclocNullFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => null,
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'funcloc' => 'The funcloc field is required when status is Installed.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedFunclocInvalidPrefix()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-02-PM3-OCC',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'funcloc' => 'The funcloc field must start with one of the following: FP-01.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedFunclocInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-02-PM3-@OCC',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'funcloc' => 'The funcloc field must only contain letters, numbers, dashes, and underscores.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedFunclocUnregistered()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'funcloc' => 'The selected funcloc is invalid.'
+            ]);
+    }
+
+    // SORT FIELD
+    public function testRegisterMotorAuthorizedSortfieldNullSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Available',
+                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => null,
+                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+                'material_number' => '10012345',
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('The motor successfully registered.');
+    }
+
+    public function testRegisterMotorAuthorizedSortfieldNullFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => null,
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'sort_field' => 'The sort field field is required when status is Installed.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedSortfieldInvalidLengthMin()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'AU',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'sort_field' => 'The sort field field must be at least 3 characters.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedSortfieldInvalidLengthMax()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'THIS-SORT-FIELD-IS-TOO-LONG-MORE-THAN-FIFTY-CHARACTER-MAKE-THE-SORTFIELD-IS-INVALID',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'sort_field' => 'The sort field field must not be greater than 50 characters.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedSortfieldInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.@SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'sort_field' => 'The sort field field format is invalid.'
+            ]);
+    }
+
+    // DESCRIPTION
+    public function testRegisterMotorAuthorizedDescriptionNullSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Available',
+                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => 'SP3.SP-03/M',
+                'description' => null,
+                'material_number' => '10012345',
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('The motor successfully registered.');
+    }
+
+    public function testRegisterMotorAuthorizedDescriptionInvalidLengthMin()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'description' => 'The description field must be at least 3 characters.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedDescriptionInvalidLengthMax()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'THIS-DESCRIPTION-IS-TOO-LONG-MORE-THAN-FIFTY-CHARACTER-MAKE-THE-SORTFIELD-IS-INVALID',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'description' => 'The description field must not be greater than 50 characters.'
+            ]);
+    }
+
+    // MATERIAL NUMBER
+    public function testRegisterMotorAuthorizedMaterialNumberNullSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->followingRedirects()
+            ->post('/motor-register', [
+                'id' => 'EMO000123',
+                'status' => 'Available',
+                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => 'SP3.SP-03/M',
+                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+                'material_number' => null,
+                'unique_id' => '123',
+                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            ])
+            ->assertSeeText('The motor successfully registered.');
+    }
+
+    public function testRegisterMotorAuthorizedMaterialNumberInvalidLengthMin()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '1001219',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'material_number' => 'The material number field must be 8 digits.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedMaterialNumberInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '1001O110',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'material_number' => 'The material number field must be a number.'
+            ]);
+    }
+
+    // UNIQUE ID
+    public function testRegisterMotorAuthorizedUniqueIdNullFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => null,
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'unique_id' => 'The unique id field is required.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedUniqueIdInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '9999',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9999',
+        ])
+            ->assertSessionHasErrors([
+                'unique_id' => 'The selected unique id is invalid.'
+            ]);
+    }
+
+    // QR CODE LINK
+    public function testRegisterMotorAuthorizedQrCodeLinkNullFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => null
+        ])
+            ->assertSessionHasErrors([
+                'qr_code_link' => 'The qr code link field is required.'
+            ]);
+    }
+
+    public function testRegisterMotorAuthorizedQrCodeLinkInvalidPrefix()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'http://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+        ])
+            ->assertSessionHasErrors([
+                'qr_code_link' => 'The qr code link field must start with one of the following: https://www.safesave.info/MIC.php?id=Fajar-MotorList.'
+            ]);
+    }
+
+
+    public function testRegisterMotorAuthorizedQrCodeLinkInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ]);
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01-PM3-OCC-PU01',
+            'description' => 'SP3.SP-03/M',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this->post('/motor-register', [
+            'id' => 'EMO000123',
+            'status' => 'Installed',
+            'funcloc' => 'FP-01-PM3-OCC-PU01',
+            'sort_field' => 'SP3.SP-03/M',
+            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
+            'material_number' => '10012345',
+            'unique_id' => '123',
+            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9999',
+        ])
+            ->assertSessionHasErrors([
+                'qr_code_link' => 'The selected qr code link is invalid.'
             ]);
     }
 }

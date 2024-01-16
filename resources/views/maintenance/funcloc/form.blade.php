@@ -24,19 +24,14 @@
             <label for="{{ $column }}" class="form-label fw-semibold">{{ $column == 'id' ? 'Funcloc' : ucfirst(str_replace("_", " ", $column)) }}</label>
 
             @if (isset($funcloc))
-
             <!-- FOR EDIT FUNCLOC -->
-            <input @readonly($column !='description' ) value="{{ isset($funcloc) ? $funcloc->$column : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
-            @error($column)
-            <div class="form-text text-danger">{{ $message }}</div>
-            @enderror
+            <input @readonly($column !='description' ) value="{{ $column != 'updated_at' ? $funcloc->$column : Carbon\Carbon::now() }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+            @include('utility.error-help')
 
             @else
             <!-- FOR INSERT FUNCLOC -->
             <input value="{{ ($column == 'created_at' || $column == 'updated_at') ? Carbon\Carbon::now() : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
-            @error($column)
-            <div class="form-text text-danger">{{ $message }}</div>
-            @enderror
+            @include('utility.error-help')
             @endif
 
         </div>
