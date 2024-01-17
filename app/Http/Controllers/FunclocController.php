@@ -7,6 +7,7 @@ use App\Models\Funcloc;
 use App\Services\FunclocService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -99,6 +100,15 @@ class FunclocController extends Controller
             return redirect()->back()->with('alert', ['message' => 'The funcloc successfully registered.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+    }
+
+    public function funclocStatus(Request $request)
+    {
+        $funcloc = Funcloc::query()->find($request->input('id'));
+
+        if (is_null($funcloc)) {
+            return Session::flash('funcloc-status', 'Funcloc not registered');
         }
     }
 }

@@ -40,8 +40,8 @@ class MotorController extends Controller
         return response()->view('maintenance.motor.form', [
             'title' => 'Edit motor',
             'motorService' => $this->motorService,
+            'action' => 'motor-update',
             'motor' => $motor,
-            'action' => 'motor-update'
         ]);
     }
 
@@ -55,9 +55,8 @@ class MotorController extends Controller
 
         return response()->view('maintenance.motor.form', [
             'title' => 'Motor details',
-            'motor' => $motor,
-            'readonly' => true,
             'motorService' => $this->motorService,
+            'motor' => $motor,
         ]);
     }
 

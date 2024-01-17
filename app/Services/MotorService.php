@@ -19,6 +19,16 @@ interface MotorService
 
     public function statusEnum(): array;
 
+    public function powerUnitEnum(): array;
+
+    public function electricalCurrentEnum(): array;
+
+    public function nippleGreaseEnum(): array;
+
+    public function coolingFanEnum(): array;
+
+    public function mountingEnum(): array;
+
     public function registeredUniqueIds(): array;
 
     public function registeredQrCodeLinks(): array;

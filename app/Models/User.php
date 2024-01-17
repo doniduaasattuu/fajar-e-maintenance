@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -12,4 +13,9 @@ class User extends Authenticatable
     protected $keyType = "string";
     public $incrementing = false;
     public $timestamps = false;
+
+    public function hasRoleAdmin(): HasMany
+    {
+        return $this->hasMany(Role::class, 'nik', 'nik');
+    }
 }

@@ -44,6 +44,7 @@ Route::middleware('member')->group(function () {
         Route::post('/funcloc-update', [FunclocController::class, 'funclocUpdate'])->name('funcloc-update');
         Route::get('/funcloc-registration', [FunclocController::class, 'funclocRegistration'])->name('funcloc-registration');
         Route::post('/funcloc-register', [FunclocController::class, 'funclocRegister'])->name('funcloc-register');
+        Route::post('/funcloc-status', [FunclocController::class, 'funclocStatus']);
 
         Route::get('/motor-edit/{id}', [MotorController::class, 'motorEdit'])->name('motor-edit');
         Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');

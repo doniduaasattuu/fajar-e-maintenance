@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\DB;
 
 trait Utility
 {
-    public function getTableColumns(string $table)
+    public static function getColumns(string $table, array $skipped = [])
     {
-        return DB::getSchemaBuilder()->getColumnListing($table);
+        $columns =  DB::getSchemaBuilder()->getColumnListing($table);
+        return array_values(array_diff($columns, $skipped));
     }
 }

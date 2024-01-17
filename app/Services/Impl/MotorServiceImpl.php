@@ -6,11 +6,14 @@ use App\Models\Motor;
 use App\Models\MotorDetails;
 use App\Repositories\MotorRepository;
 use App\Services\MotorService;
+use App\Traits\Utility;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class MotorServiceImpl implements MotorService
 {
+    use Utility;
+
     private MotorRepository $motorRepository;
 
     public function __construct(MotorRepository $motorRepository)
@@ -52,6 +55,49 @@ class MotorServiceImpl implements MotorService
             'Installed',
             'Repaired',
             'Available'
+        ];
+    }
+
+    public function powerUnitEnum(): array
+    {
+        return  [
+            'kW',
+            'HP'
+        ];
+    }
+
+    public function electricalCurrentEnum(): array
+    {
+        return [
+            'AC',
+            'DC'
+        ];
+    }
+
+    public function nippleGreaseEnum(): array
+    {
+        return [
+            'Available',
+            'Not Available'
+        ];
+    }
+
+    public function coolingFanEnum(): array
+    {
+        return [
+            'Internal',
+            'External',
+            'Not Available'
+        ];
+    }
+
+    public function mountingEnum(): array
+    {
+        return [
+            'Horizontal',
+            'Vertical',
+            'V/H',
+            'MGM',
         ];
     }
 
