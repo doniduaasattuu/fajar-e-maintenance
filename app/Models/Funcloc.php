@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Funcloc extends Model
 {
@@ -17,5 +18,17 @@ class Funcloc extends Model
     public function Motors(): HasMany
     {
         return $this->hasMany(Motor::class, "funcloc", "id");
+    }
+
+    public function MotorDetail(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            MotorDetails::class,
+            Motor::class,
+            "funcloc",
+            "motor_detail",
+            "id",
+            "id",
+        );
     }
 }

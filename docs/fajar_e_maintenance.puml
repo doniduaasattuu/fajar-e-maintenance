@@ -24,23 +24,23 @@ entity motors
 }
 
 entity motor_details {
-    * id BIGINT(20) UNSIGNED AUTO_INCREMENT
-    * motor_detail VARCHAR(9) <<FK>>
+  * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+  * motor_detail VARCHAR(9) <<FK>>
     --
     manufacturer VARCHAR(50)
     serial_number VARCHAR(50)
     type VARCHAR(50)
-    power_rate VARCHAR(5)
-    power_unit ENUM(["kW", "HP"])
+    power_rate VARCHAR(10)
+  * power_unit ENUM(["kW", "HP"]) DEFAULT("kW")
     voltage VARCHAR(10)
-    electrical_current ENUM(["AC", "DC"])
+  * electrical_current ENUM(["AC", "DC"]) DEFAULT("AC")
     current_nominal VARCHAR(10)
     frequency VARCHAR(10)
     pole VARCHAR(5)
     rpm VARCHAR(10)
-    bearing_de VARCHAR(10)
-    bearing_nde VARCHAR(10)
-    frame_type VARCHAR(10)
+    bearing_de VARCHAR(25)
+    bearing_nde VARCHAR(25)
+    frame_type VARCHAR(25)
     shaft_diameter VARCHAR(3) (mm)
     phase_supply VARCHAR(3)
     cos_phi VARCHAR(5)
@@ -48,8 +48,8 @@ entity motor_details {
     ip_rating VARCHAR(10)
     insulation_class VARCHAR(5)
     duty VARCHAR(5)
-    connection_type VARCHAR(10)
-    nipple_grease ENUM(["Available", "Not Available"])
+    connection_type VARCHAR(25)
+  * nipple_grease ENUM(["Available", "Not Available"]) DEFAULT("Available")
     greasing_type VARCHAR(25)
     greasing_qty_de VARCHAR(4) (grm)
     greasing_qty_nde VARCHAR(4) (grm)
@@ -57,8 +57,8 @@ entity motor_details {
     width VARCHAR(5) (mm)
     height VARCHAR(5) (mm) 
     weight VARCHAR(5) (kg)
-    cooling_fan ENUM(["Internal", "External", "Not Available"])
-    mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")
+  * cooling_fan ENUM(["Internal", "External", "Not Available"]) DEFAULT("Internal")
+  * mounting ENUM("Horizontal", "Vertical", "V/H", "MGM")  DEFAULT("Horizontal")
     created_at TIMESTAMP NULL
     updated_at TIMESTAMP NULL
 }

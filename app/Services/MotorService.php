@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MotorDetails;
 use Illuminate\Database\Eloquent\Collection;
 
 interface MotorService
@@ -21,4 +22,6 @@ interface MotorService
     public function registeredUniqueIds(): array;
 
     public function registeredQrCodeLinks(): array;
+
+    public function motorCodes(): array;
 }

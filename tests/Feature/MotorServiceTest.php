@@ -7,6 +7,7 @@ use App\Services\MotorService;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -87,5 +88,18 @@ class MotorServiceTest extends TestCase
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList4592', $qrCodeLinks));
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList155', $qrCodeLinks));
         self::assertFalse(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList111', $qrCodeLinks));
+    }
+
+    public function testMotorCodes()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $allCodes = DB::table('motors')->select(DB::raw('DISTINCT LEFT (id, 3) as codes'))->get();
+        $motorCodes = array();
+        foreach ($allCodes as $value) {
+            array_push($motorCodes, $value->codes);
+        }
+        self::assertNotNull($motorCodes);
+        self::assertEquals(['EMO', 'MGM'], $motorCodes);
     }
 }

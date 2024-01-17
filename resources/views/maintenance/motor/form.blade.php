@@ -27,7 +27,6 @@
 
             @if (isset($motor) && !isset($readonly))
             <!-- FOR EDIT MOTOR PAGE -->
-
             @if (
             $column == 'id' ||
             $column == 'unique_id' ||
@@ -74,7 +73,6 @@
 
             @else
             <!-- FOR INSERT MOTOR PAGE -->
-
             @if ($column == 'created_at' || $column == 'updated_at')
             <input readonly value="{{ Carbon\Carbon::now() }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
             @include('utility.error-help')
@@ -124,14 +122,33 @@
 
             @endif
             <!-- FOR INSERT MOTOR PAGE -->
+
             @endif
 
         </div>
 
         @endforeach
 
+        <!-- ============================================ MOTOR DETAILS ============================================== -->
+
         <!-- MOTOR DETAILS START -->
-        <!-- FOREACH -->
+        <!-- FOR MOTOR DETAILS PAGE -->
+        @if (isset($motor->MotorDetail))
+        @foreach ($motor->MotorDetail->toArray() as $key => $value )
+
+        @if ($key == 'id' || $key == 'motor_detail')
+        @continue
+        @else
+        <div class="mb-3">
+            <label for="{{ $key }}" class="form-label fw-semibold">{{ str_replace('_', ' ', ucfirst($key)) }}</label>
+            <input disabled readonly value="{{ $value }}" id="{{ $value }}" name="{{ $value }}" type="text" maxlength="50" class="form-control">
+        </div>
+        @endif
+        @endforeach
+        <!-- FOR MOTOR DETAILS PAGE -->
+
+
+        @endif
         <!-- MOTOR DETAILS END -->
 
         @isset($action)
@@ -147,28 +164,22 @@
     let status = document.getElementById('status');
     let funcloc = document.getElementById('funcloc')
     let sort_field = document.getElementById('sort_field')
-    let forms = document.getElementById('forms')
     let current_funcloc = '';
     let current_sort_field = '';
 
-    for (let input of forms) {
-        if (input.getAttribute('id') == 'id' ||
-            input.getAttribute('id') == 'funcloc' ||
-            input.getAttribute('id') == 'sort_field' ||
-            input.getAttribute('id') == 'description'
-        ) {
-            input.oninput = () => {
-                input.value = input.value.toUpperCase();
+    if (<?php echo json_encode(isset($action)) ?>) {
+        for (let input of document.getElementById('forms')) {
+            if (input.getAttribute('id') == 'id' ||
+                input.getAttribute('id') == 'funcloc' ||
+                input.getAttribute('id') == 'sort_field' ||
+                input.getAttribute('id') == 'description'
+            ) {
+                input.oninput = () => {
+                    input.value = input.value.toUpperCase();
+                }
             }
         }
     }
-
-    // console.log(id)
-    // console.log(status)
-    // console.log(funcloc)
-    // console.log(sort_field)
-    // console.log(unique_id)
-    // console.log(qr_code_link)
 
     status.onchange = () => {
         if (status.value == 'Repaired' || status.value == 'Available') {

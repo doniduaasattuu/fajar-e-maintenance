@@ -3,9 +3,11 @@
 namespace App\Services\Impl;
 
 use App\Models\Motor;
+use App\Models\MotorDetails;
 use App\Repositories\MotorRepository;
 use App\Services\MotorService;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MotorServiceImpl implements MotorService
 {
@@ -63,5 +65,17 @@ class MotorServiceImpl implements MotorService
     {
         $qrCodeLinks = Motor::query()->pluck('qr_code_link');
         return $qrCodeLinks->toArray();
+    }
+
+    public function motorCodes(): array
+    {
+        $allCodes = DB::table('motors')->select(DB::raw('DISTINCT LEFT (id, 3) as codes'))->get();
+
+        $motorCodes = array();
+        foreach ($allCodes as $value) {
+            array_push($motorCodes, $value->codes);
+        }
+
+        return $motorCodes;
     }
 }

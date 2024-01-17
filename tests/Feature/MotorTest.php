@@ -32,4 +32,25 @@ class MotorTest extends TestCase
         $funcloc = $motor->Funcloc;
         self::assertNull($funcloc);
     }
+
+    public function testMotorRelationToMotorDetail()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->find('EMO000426');
+        $motorDetail = $motor->MotorDetail;
+        self::assertNotNull($motorDetail);
+        self::assertEquals('AEEBPA040100YW05T', $motorDetail->type);
+    }
+
+    public function testMotorQueryWithMotorDetail()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motor = Motor::query()->with(['MotorDetail'])->find('EMO000426');
+        $motorDetail = $motor->MotorDetail;
+        self::assertNotNull($motorDetail);
+        self::assertEquals('AEEBPA040100YW05T', $motorDetail->type);
+        Log::info(json_encode($motor, JSON_PRETTY_PRINT));
+    }
 }

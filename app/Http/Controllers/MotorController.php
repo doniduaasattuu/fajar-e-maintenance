@@ -104,7 +104,7 @@ class MotorController extends Controller
     public function motorRegister(Request $request)
     {
         $rules = [
-            'id' => ['required', 'size:9', Rule::notIn($this->motorService->registeredMotors())],
+            'id' => ['required', 'size:9', 'starts_with:EMO,MGM,MGB,MDO,MFB', Rule::notIn($this->motorService->registeredMotors())],
             'status' => ['required', Rule::in($this->motorService->statusEnum())],
             'funcloc' => ['nullable', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'sort_field' => ['nullable', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],

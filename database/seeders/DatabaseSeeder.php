@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('motor_details')->delete();
         DB::table('motors')->delete();
         DB::table('funclocs')->delete();
         DB::table('roles')->delete();
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             FunclocSeeder::class,
             MotorSeeder::class,
+            MotorDetailsSeeder::class,
         ]);
     }
 }

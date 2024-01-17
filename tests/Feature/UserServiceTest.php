@@ -129,7 +129,7 @@ class UserServiceTest extends TestCase
         self::assertEquals('@Fajarpaper321', $user->password);
     }
 
-    public function testQuery()
+    public function testQuerySuccess()
     {
         $this->seed(UserSeeder::class);
         $users = User::query()->get();

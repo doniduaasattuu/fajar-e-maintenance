@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Motor extends Model
 {
@@ -17,5 +18,10 @@ class Motor extends Model
     public function Funcloc(): BelongsTo
     {
         return $this->belongsTo(Funcloc::class, 'funcloc', 'id');
+    }
+
+    public function MotorDetail(): HasOne
+    {
+        return $this->hasOne(MotorDetails::class, 'motor_detail', 'id');
     }
 }

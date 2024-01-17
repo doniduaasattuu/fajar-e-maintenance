@@ -35,4 +35,23 @@ class FunclocTest extends TestCase
         self::assertNotNull($motors);
         self::assertCount(0, $motors);
     }
+
+    public function testFunclocRelationToMotorDetail()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
+        $motorDetail = $funcloc->MotorDetail;
+        self::assertNotNull($motorDetail);
+        self::assertEquals('AEEBPA040100YW05T', $motorDetail->type);
+    }
+
+    public function testFunclocRelationToMotorDetailNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
+        $motorDetail = $funcloc->MotorDetail;
+        self::assertNull($motorDetail);
+    }
 }

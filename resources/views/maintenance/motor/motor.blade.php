@@ -109,7 +109,6 @@
 @include('utility.script.hidecolumn')
 <script>
     function doHideColumnOnPhone() {
-        console.log(window.innerWidth)
         if (window.innerWidth < 576) {
             hideColumnOnPhone('add', 'funcloc');
             hideColumnOnPhone('add', 'sort_field');
