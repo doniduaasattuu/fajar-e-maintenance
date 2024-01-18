@@ -102,4 +102,14 @@ class MotorServiceTest extends TestCase
         self::assertNotNull($motorCodes);
         self::assertEquals(['EMO', 'MGM'], $motorCodes);
     }
+
+    public function testUtilityTrait()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motorService = $this->app->make(MotorService::class);
+        $columns = $motorService->getColumns('motors');
+        self::assertNotNull($columns);
+        self::assertCount(10, $columns);
+    }
 }

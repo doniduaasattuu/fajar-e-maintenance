@@ -15,13 +15,13 @@
                 @csrf
                 <!-- NIK -->
                 <div class="mb-3">
-                    <label for="nik" class="form-label fw-semibold">NIK</label>
+                    <label for="nik" class="form-label">NIK</label>
                     <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event)" maxlength="8" class="form-control" aria-describedby="nik">
                 </div>
 
                 <!-- PASSWORD -->
                 <div class="mb-3">
-                    <label for="password" class="form-label fw-semibold">Password</label>
+                    <label for="password" class="form-label">Password</label>
                     <input id="password" name="password" type="password" class="form-control">
                 </div>
 

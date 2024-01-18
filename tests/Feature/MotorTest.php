@@ -37,10 +37,12 @@ class MotorTest extends TestCase
     {
         $this->seed(DatabaseSeeder::class);
 
-        $motor = Motor::query()->find('EMO000426');
+        $motor = Motor::query()->find('MGM000481');
         $motorDetail = $motor->MotorDetail;
         self::assertNotNull($motorDetail);
-        self::assertEquals('AEEBPA040100YW05T', $motorDetail->type);
+        self::assertEquals('Vertical', $motorDetail->mounting);
+        self::assertEquals('IC-F/FB-B8', $motorDetail->type);
+        Log::info(json_encode($motor, JSON_PRETTY_PRINT));
     }
 
     public function testMotorQueryWithMotorDetail()

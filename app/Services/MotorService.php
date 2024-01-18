@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\MotorDetails;
+use App\Traits\Utility;
 use Illuminate\Database\Eloquent\Collection;
 
 interface MotorService

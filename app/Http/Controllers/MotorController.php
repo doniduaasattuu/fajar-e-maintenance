@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Motor;
 use App\Services\FunclocService;
 use App\Services\MotorService;
+use App\Traits\Utility;
+use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,7 @@ class MotorController extends Controller
 {
     private MotorService $motorService;
     private FunclocService $funclocService;
+    use Utility;
 
     public function __construct(MotorService $motorService, FunclocService $funclocService)
     {
@@ -31,7 +34,7 @@ class MotorController extends Controller
 
     public function motorEdit(string $id)
     {
-        $motor = Motor::query()->find($id);
+        $motor = Motor::query()->with(['MotorDetail'])->find($id);
 
         if (is_null($motor)) {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor $id is unregistered."]);
@@ -47,7 +50,7 @@ class MotorController extends Controller
 
     public function motorDetails(string $id)
     {
-        $motor = Motor::query()->find($id);
+        $motor = Motor::query()->with(['MotorDetail'])->find($id);
 
         if (is_null($motor)) {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor $id is unregistered."]);
@@ -100,6 +103,23 @@ class MotorController extends Controller
         ]);
     }
 
+    public function motorRegisters(Request $request)
+    {
+        // return response()->json($request->input('motor_detail.motor_detail'));
+        $rules = [
+            'motor_detail.motor_detail' => ['required'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            $validated = $validator->validated();
+            return response()->json($validated);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    }
+
     public function motorRegister(Request $request)
     {
         $rules = [
@@ -111,6 +131,39 @@ class MotorController extends Controller
             'material_number' => ['nullable', 'numeric', 'digits:8'],
             'unique_id' => ['required', 'numeric', Rule::notIn($this->motorService->registeredUniqueIds())],
             'qr_code_link' => ['required', 'starts_with:https://www.safesave.info/MIC.php?id=Fajar-MotorList', Rule::notIn($this->motorService->registeredQrCodeLinks())],
+
+            'manufacturer' => ['nullable', 'max:50'],
+            'serial_number' => ['nullable', 'max:50'],
+            'type' => ['nullable', 'max:50'],
+            'power_rate' => ['nullable', 'max:10'],
+            'power_unit' => ['nullable', Rule::in($this->motorService->powerUnitEnum())],
+            'voltage' => ['nullable', 'max:10'],
+            'electrical_current' => ['nullable', Rule::in($this->motorService->electricalCurrentEnum())],
+            'current_nominal' => ['nullable', 'max:10'],
+            'frequency' => ['nullable', 'max:10'],
+            'pole' => ['nullable', 'max:5'],
+            'rpm' => ['nullable', 'max:10'],
+            'bearing_de' => ['nullable', 'max:25'],
+            'bearing_nde' => ['nullable', 'max:25'],
+            'frame_type' => ['nullable', 'max:25'],
+            'shaft_diameter' => ['nullable', 'max:3'],
+            'phase_supply' => ['nullable', 'max:3'],
+            'cos_phi' => ['nullable', 'max:5'],
+            'efficiency' => ['nullable', 'max:5'],
+            'ip_rating' => ['nullable', 'max:10'],
+            'insulation_class' => ['nullable', 'max:5'],
+            'duty' => ['nullable', 'max:5'],
+            'connection_type' => ['nullable', 'max:25'],
+            'nipple_grease' => ['nullable', Rule::in($this->motorService->nippleGreaseEnum())],
+            'greasing_type' => ['nullable', 'max:25'],
+            'greasing_qty_de' => ['nullable', 'max:4'],
+            'greasing_qty_nde' => ['nullable', 'max:4'],
+            'length' => ['nullable', 'max:5'],
+            'width' => ['nullable', 'max:5'],
+            'height' => ['nullable', 'max:5'],
+            'weight' => ['nullable', 'max:5'],
+            'cooling_fan' => ['nullable', Rule::in($this->motorService->coolingFanEnum())],
+            'mounting' => ['nullable', Rule::in($this->motorService->mountingEnum())],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -119,8 +172,13 @@ class MotorController extends Controller
 
             $validated = $validator->validated();
 
+            $validated_motor_detail = $this->filterValidatedData($validated, $this->getColumns('motors'));
+            $validated_motor = $this->filterValidatedData(array_values($validated), $this->getColumns('motor_detail'));
+
+            // return response()->json($validated_motor);
+
             try {
-                $this->motorService->register($validated);
+                $this->motorService->register($validated_motor);
             } catch (Exception $error) {
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
