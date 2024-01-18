@@ -27,6 +27,8 @@ class MotorRepositoryImpl implements MotorRepository
     {
         $motor = new Motor();
         $this->adjustment($motor, $validated);
+        $motor->created_at = Carbon::now()->toDateTimeString();
+        $motor->updated_at = Carbon::now()->toDateTimeString();
         return $motor->save();
     }
 

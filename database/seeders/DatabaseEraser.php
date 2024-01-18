@@ -13,9 +13,15 @@ class DatabaseEraser extends Seeder
      */
     public function run(): void
     {
+        DB::table('motor_details')->delete();
         DB::table('motors')->delete();
         DB::table('funclocs')->delete();
         DB::table('roles')->delete();
         DB::table('users')->delete();
+
+        $this->call([
+            UserSeeder::class,
+            RoleSeeder::class,
+        ]);
     }
 }

@@ -135,7 +135,7 @@ class ViewTest extends TestCase
                 'motorService' => $this->app->make(MotorService::class),
             ]);
         } catch (Exception $error) {
-            self::assertEquals('Attempt to read property "id" on null (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php) (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php)', $error->getMessage());
+            self::assertEquals('Attempt to read property "MotorDetail" on null (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php) (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php)', $error->getMessage());
         }
     }
 

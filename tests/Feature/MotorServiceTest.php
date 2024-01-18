@@ -112,4 +112,85 @@ class MotorServiceTest extends TestCase
         self::assertNotNull($columns);
         self::assertCount(10, $columns);
     }
+
+
+    public function testFilterValidatedValueRaw()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motorService = $this->app->make(MotorService::class);
+
+        $motorColumns = $motorService->getColumns('motors');
+        self::assertNotNull($motorColumns);
+        self::assertCount(10, $motorColumns);
+
+        $motorDetailColumns = $motorService->getColumns('motor_details');
+        self::assertNotNull($motorDetailColumns);
+        self::assertCount(36, $motorDetailColumns);
+
+        $mergedColumns = array_merge($motorColumns, $motorDetailColumns);
+        self::assertCount(46, $mergedColumns);
+        Log::info(json_encode($mergedColumns, JSON_PRETTY_PRINT));
+
+        $filteredMotorColumns = array_values(array_diff($mergedColumns, $motorDetailColumns));
+        self::assertCount(7, $filteredMotorColumns);
+        self::assertEquals($filteredMotorColumns, [
+            "status",
+            "funcloc",
+            "sort_field",
+            "description",
+            "material_number",
+            "unique_id",
+            "qr_code_link"
+        ]);
+    }
+
+    public function testMotorServiceFilterValidatedValue()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $motorService = $this->app->make(MotorService::class);
+
+        $motorColumns = $motorService->getColumns('motors');
+        self::assertNotNull($motorColumns);
+
+
+        $motorDetailColumns = $motorService->getColumns('motor_details', ['id']);
+        self::assertNotNull($motorDetailColumns);
+
+        $mergedColumns = array_merge($motorColumns, $motorDetailColumns);
+        self::assertNotNull($mergedColumns);
+
+        $filteredMotorColumns = $motorService->filterValidatedData($mergedColumns, $motorDetailColumns);
+        Log::info(json_encode($filteredMotorColumns, JSON_PRETTY_PRINT));
+    }
+
+    public function testMergeRules()
+    {
+        $rules = [
+            'id' => ['satu', 'dua', 'tiga'],
+            'status' => ['satu', 'dua', 'tiga'],
+            'funcloc' => ['satu', 'dua', 'tiga'],
+            'sort_field' => ['satu', 'dua', 'tiga'],
+        ];
+
+        $rules1 = [
+            'bearing_de' => ['satu', 'dua', 'tiga'],
+            'bearing_nde' => ['satu', 'dua', 'tiga'],
+            'frame_type' => ['satu', 'dua', 'tiga'],
+            'shaft_diameter' => ['satu', 'dua', 'tiga'],
+        ];
+
+        $rules = array_merge($rules, $rules1);
+        self::assertEquals($rules, [
+            'id' => ['satu', 'dua', 'tiga'],
+            'status' => ['satu', 'dua', 'tiga'],
+            'funcloc' => ['satu', 'dua', 'tiga'],
+            'sort_field' => ['satu', 'dua', 'tiga'],
+            'bearing_de' => ['satu', 'dua', 'tiga'],
+            'bearing_nde' => ['satu', 'dua', 'tiga'],
+            'frame_type' => ['satu', 'dua', 'tiga'],
+            'shaft_diameter' => ['satu', 'dua', 'tiga'],
+        ]);
+    }
 }
