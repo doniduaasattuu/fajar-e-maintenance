@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string("bearing_de", 25)->nullable(true);
             $table->string("bearing_nde", 25)->nullable(true);
             $table->string("frame_type", 25)->nullable(true);
-            $table->string("shaft_diameter", 3)->nullable(true);
+            $table->string("shaft_diameter", 10)->nullable(true);
             $table->string("phase_supply", 3)->nullable(true);
             $table->string("cos_phi", 5)->nullable(true);
             $table->string("efficiency", 5)->nullable(true);
@@ -38,12 +38,12 @@ return new class extends Migration
             $table->string("connection_type", 25)->nullable(true);
             $table->enum("nipple_grease", (["Available", "Not Available"]))->nullable(true);
             $table->string("greasing_type", 25)->nullable(true);
-            $table->string("greasing_qty_de", 4)->nullable(true);
-            $table->string("greasing_qty_nde", 4)->nullable(true);
-            $table->string("length", 5)->nullable(true);
-            $table->string("width", 5)->nullable(true);
-            $table->string("height", 5)->nullable(true);
-            $table->string("weight", 5)->nullable(true);
+            $table->string("greasing_qty_de", 10)->nullable(true);
+            $table->string("greasing_qty_nde", 10)->nullable(true);
+            $table->string("length", 10)->nullable(true);
+            $table->string("width", 10)->nullable(true);
+            $table->string("height", 10)->nullable(true);
+            $table->string("weight", 10)->nullable(true);
             $table->enum("cooling_fan", (["Internal", "External", "Not Available"]))->nullable(true);
             $table->enum("mounting", ["Horizontal", "Vertical", "V/H", "MGM"])->nullable(true);
             $table->timestamps();
