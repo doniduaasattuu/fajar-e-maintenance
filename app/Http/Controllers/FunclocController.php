@@ -47,8 +47,8 @@ class FunclocController extends Controller
     public function funclocUpdate(Request $request)
     {
         $rules = [
-            'id' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
+            'id' => ['required', 'regex:/^[A-Z\d\-]+$/u', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[A-Z\s\.\d\/\-\#]+$/u'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -81,7 +81,7 @@ class FunclocController extends Controller
     public function funclocRegister(Request $request)
     {
         $rules = [
-            'id' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::notIn($this->funclocService->registeredFunclocs())],
+            'id' => ['required', 'regex:/^[A-Z\d\-]+$/u', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::notIn($this->funclocService->registeredFunclocs())],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
         ];
 

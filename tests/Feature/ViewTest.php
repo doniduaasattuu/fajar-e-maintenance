@@ -116,10 +116,12 @@ class ViewTest extends TestCase
         ])
             ->assertDontSee('/motor-update')
             ->assertSee('readonly')
+            ->assertSee('disabled')
             ->assertSee('EMO001092')
             ->assertSee('FP-01-SP5-OCC-FR01')
             ->assertSee('SP5.M-21/M')
-            ->assertSee('2568');
+            ->assertSee('2568')
+            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList2568');
     }
 
     public function testViewEditMotorNull()
@@ -153,6 +155,7 @@ class ViewTest extends TestCase
         ])
             ->assertSee('Motor details')
             ->assertSee('readonly')
+            ->assertSee('disabled')
             ->assertSee('10010923')
             ->assertSee('56')
             ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56');

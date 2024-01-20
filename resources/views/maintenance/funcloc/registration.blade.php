@@ -21,10 +21,10 @@
         @foreach ($funclocService->getTableColumns() as $column)
         <div class="mb-3">
             <label for="{{ $column }}" class="form-label fw-semibold">{{ $column == 'id' ? 'Funcloc' : ucfirst(str_replace("_", " ", $column)) }}</label>
-            @if ($column == 'description')
-            <input id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}">
+            @if ($column == 'id')
+            <input id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}" onkeypress="return /[a-zA-Z0-9-]/i.test(event.key)" oninput="toupper(this)">
             @else
-            <input id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}">
+            <input id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" aria-describedby="{{ $column }}" oninput="toupper(this)">
             @endif
             @error($column)
             <div class="form-text text-danger">{{ $message }}</div>
@@ -38,4 +38,5 @@
     </form>
 </div>
 
+@include('utility.script.toupper')
 @include('utility.suffix')

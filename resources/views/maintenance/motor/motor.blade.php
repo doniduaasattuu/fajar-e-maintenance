@@ -73,7 +73,7 @@
                     @continue
                     @elseif ($column == 'id')
                     <!-- ADD TOOLTIP FOR EQUIPMENT ID -->
-                    <td class="motor_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $motor->funcloc != null ? $motor->funcloc : $motor->description }}">{{ $motor->$column }}</td>
+                    <td class="motor_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $motor->funcloc != null ? $motor->funcloc : $motor->status }}">{{ $motor->$column }}</td>
                     @else
                     <td class="text-break {{ $column == 'status' ? 'motor_status' : $column }}" scope="row">{{ $motor->$column }}</td>
                     @endif

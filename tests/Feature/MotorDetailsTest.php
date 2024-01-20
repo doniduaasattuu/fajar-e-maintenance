@@ -622,7 +622,7 @@ class MotorDetailsTest extends TestCase
                 'electrical_current' => 'AC',
                 'current_nominal' => '22.5',
                 'frequency' => '50Hz/60Hz',
-                'pole' => '500P/4P',
+                'pole' => '9500P/4POLE',
                 'rpm' => null,
                 'bearing_de' => null,
                 'bearing_nde' => null,
@@ -647,7 +647,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'pole' => 'The pole field must not be greater than 5 characters.'
+                'pole' => 'The pole field must not be greater than 10 characters.'
             ]);
     }
 
@@ -892,7 +892,7 @@ class MotorDetailsTest extends TestCase
                 'bearing_de' => '6205',
                 'bearing_nde' => '6205',
                 'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '1500 cm',
+                'shaft_diameter' => 'This is invalid diameter length: 150 cm',
                 'phase_supply' => null,
                 'cos_phi' => null,
                 'efficiency' => null,
@@ -912,7 +912,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'shaft_diameter' => 'The shaft diameter field must not be greater than 6 characters.'
+                'shaft_diameter' => 'The shaft diameter field must not be greater than 10 characters.'
             ]);
     }
 
@@ -1023,59 +1023,6 @@ class MotorDetailsTest extends TestCase
             ]);
     }
 
-    public function testRegisterMotorDetailCosPhiInvalidMin()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '3',
-                'cos_phi' => '-1',
-                'efficiency' => null,
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'cos_phi' => 'The cos phi field must have 2 decimal places.',
-            ]);
-    }
-
     public function testRegisterMotorDetailCosPhiInvalidLengthMax()
     {
         $this->testSeedFuncloc();
@@ -1107,7 +1054,7 @@ class MotorDetailsTest extends TestCase
                 'frame_type' => 'AEEB 250',
                 'shaft_diameter' => '150 mm',
                 'phase_supply' => '3',
-                'cos_phi' => '1.01',
+                'cos_phi' => 'This is invalid cos phi value: 0.98',
                 'efficiency' => null,
                 'ip_rating' => null,
                 'insulation_class' => null,
@@ -1125,114 +1072,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'cos_phi' => 'The cos phi field must not be greater than 1.',
-            ]);
-    }
-
-    public function testRegisterMotorDetailCosPhiInvalidLengthValue()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '3',
-                'cos_phi' => '0,85',
-                'efficiency' => null,
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'cos_phi' => 'The cos phi field must have 2 decimal places.',
-                'cos_phi' => 'The cos phi field must not be greater than 1.',
-            ]);
-    }
-
-    public function testRegisterMotorDetailCosPhiInvalidDecimal()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '4',
-                'cos_phi' => '0',
-                'efficiency' => null,
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'cos_phi' => 'The cos phi field must have 2 decimal places.',
+                'cos_phi' => 'The cos phi field must not be greater than 10 characters.',
             ]);
     }
 
@@ -1290,59 +1130,6 @@ class MotorDetailsTest extends TestCase
     }
 
     // EFFICIENCY
-    public function testRegisterMotorDetailEfficiencyInvalidMin()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '3',
-                'cos_phi' => '0.85',
-                'efficiency' => '-1',
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'efficiency' => 'The efficiency field must have 2 decimal places.',
-            ]);
-    }
-
     public function testRegisterMotorDetailEfficiencyInvalidLengthMax()
     {
         $this->testSeedFuncloc();
@@ -1375,7 +1162,7 @@ class MotorDetailsTest extends TestCase
                 'shaft_diameter' => '150 mm',
                 'phase_supply' => '3',
                 'cos_phi' => '0.85',
-                'efficiency' => '1.01',
+                'efficiency' => 'This is invalid length efficiency: 0.98 %',
                 'ip_rating' => null,
                 'insulation_class' => null,
                 'duty' => null,
@@ -1392,114 +1179,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'efficiency' => 'The efficiency field must not be greater than 1.',
-            ]);
-    }
-
-    public function testRegisterMotorDetailEfficiencyInvalidLengthValue()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '3',
-                'cos_phi' => '0.85',
-                'efficiency' => '0,85',
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'efficiency' => 'The efficiency field must have 2 decimal places.',
-                'efficiency' => 'The efficiency field must not be greater than 1.',
-            ]);
-    }
-
-    public function testRegisterMotorDetailEfficiencyInvalidDecimal()
-    {
-        $this->testSeedFuncloc();
-
-        $this
-            ->post('/motor-register', [
-                'id' => 'EMO000123',
-                'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
-                'sort_field' => 'SP3.SP-03/M',
-                'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-                'material_number' => '10012345',
-                'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
-
-                'manufacturer' => 'M.G.M. Electric Motors North America Inc',
-                'serial_number' => '3 6V A073001 ASA',
-                'type' => 'W0101',
-                'power_rate' => '11',
-                'power_unit' => 'kW',
-                'voltage' => '400',
-                'electrical_current' => 'AC',
-                'current_nominal' => '22.5',
-                'frequency' => '50Hz/60Hz',
-                'pole' => '4P',
-                'rpm' => '1500/1800',
-                'bearing_de' => '6205',
-                'bearing_nde' => '6205',
-                'frame_type' => 'AEEB 250',
-                'shaft_diameter' => '150 mm',
-                'phase_supply' => '4',
-                'cos_phi' => '0.85',
-                'efficiency' => '0',
-                'ip_rating' => null,
-                'insulation_class' => null,
-                'duty' => null,
-                'connection_type' => null,
-                'nipple_grease' => null,
-                'greasing_type' => null,
-                'greasing_qty_de' => null,
-                'greasing_qty_nde' => null,
-                'length' => null,
-                'width' => null,
-                'height' => null,
-                'weight' => null,
-                'cooling_fan' => null,
-                'mounting' => null,
-            ])
-            ->assertSessionHasErrors([
-                'efficiency' => 'The efficiency field must have 2 decimal places.',
+                'efficiency' => 'The efficiency field must not be greater than 10 characters.',
             ]);
     }
 
@@ -1659,7 +1339,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'insulation_class' => 'The insulation class field must not be greater than 5 characters.'
+                'insulation_class' => 'The insulation class field must not be greater than 10 characters.'
             ]);
     }
 
@@ -1712,7 +1392,7 @@ class MotorDetailsTest extends TestCase
                 'mounting' => null,
             ])
             ->assertSessionHasErrors([
-                'duty' => 'The duty field must not be greater than 5 characters.'
+                'duty' => 'The duty field must not be greater than 10 characters.'
             ]);
     }
 

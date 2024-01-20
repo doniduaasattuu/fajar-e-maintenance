@@ -25,12 +25,20 @@
 
             @if (isset($funcloc))
             <!-- FOR EDIT FUNCLOC -->
+            @if ($column == 'description')
+            <input @readonly($column !='description' ) value="{{ $column != 'updated_at' ? $funcloc->$column : Carbon\Carbon::now() }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" oninput="toupper(this)">
+            @else
             <input @readonly($column !='description' ) value="{{ $column != 'updated_at' ? $funcloc->$column : Carbon\Carbon::now() }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+            @endif
             @include('utility.error-help')
 
             @else
             <!-- FOR INSERT FUNCLOC -->
-            <input value="{{ ($column == 'created_at' || $column == 'updated_at') ? Carbon\Carbon::now() : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control">
+            @if ($column == 'id')
+            <input value="{{ ($column == 'created_at' || $column == 'updated_at') ? Carbon\Carbon::now() : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" onkeypress="return /[a-zA-Z0-9-]/i.test(event.key)" oninput="toupper(this)">
+            @else
+            <input value="{{ ($column == 'created_at' || $column == 'updated_at') ? Carbon\Carbon::now() : old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="50" class="form-control" oninput="toupper(this)">
+            @endif
             @include('utility.error-help')
             @endif
 
@@ -43,4 +51,5 @@
     </form>
 </div>
 
+@include('utility.script.toupper')
 @include('utility.suffix')

@@ -159,7 +159,24 @@ class FunclocControllerTest extends TestCase
             'id' => 'FP-01 PM3-OCC-PU01',
             'description' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
-            'id' => 'The id field must only contain letters, numbers, dashes, and underscores.'
+            'id' => 'The id field must only contain letters, numbers, and dashes.'
+        ]);
+    }
+
+    public function testRegisterFunclocInvalidUnderscore()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/funcloc-registration');
+
+        $this->post('/funcloc-register', [
+            'id' => 'FP-01_PM3_OCC- PU01',
+            'description' => 'SP3.SP-03/M',
+        ])->assertSessionHasErrors([
+            'id' => 'The id field format is invalid.'
         ]);
     }
 

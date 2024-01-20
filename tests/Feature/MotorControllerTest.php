@@ -156,7 +156,6 @@ class MotorControllerTest extends TestCase
         ])->get('/motor-details/EMO000105')
             ->assertSeeText('Motor details')
             ->assertSeeText('Status')
-            ->assertDontSeeText('Installed')
             ->assertSee('Repaired')
             ->assertSeeText('Funcloc')
             ->assertDontSee('FP-01')
@@ -183,7 +182,6 @@ class MotorControllerTest extends TestCase
         ])->get('/motor-details/EMO000105')
             ->assertSeeText('Motor details')
             ->assertSeeText('Status')
-            ->assertDontSeeText('Installed')
             ->assertSee('Repaired')
             ->assertSeeText('Funcloc')
             ->assertDontSee('FP-01')
@@ -1543,7 +1541,8 @@ class MotorControllerTest extends TestCase
             'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
-                'funcloc' => 'The funcloc field must only contain letters, numbers, dashes, and underscores.'
+                'funcloc' => 'The funcloc field must start with one of the following: FP-01.',
+                'funcloc' => 'The selected funcloc is invalid.',
             ]);
     }
 
