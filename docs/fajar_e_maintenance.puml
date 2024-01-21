@@ -121,7 +121,7 @@ entity users {
 entity roles {
     * id BIGINT(20) <<PK>>
     * nik VARCHAR(8) <<FK>>
-    * role ENUM ['employee', 'db_admin', 'admin']
+    * role ENUM ['db_admin', 'admin']
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }

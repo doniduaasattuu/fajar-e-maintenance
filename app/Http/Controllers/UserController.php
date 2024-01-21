@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
 use App\Rules\UserExists;
@@ -137,6 +138,40 @@ class UserController extends Controller
             return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+    }
+
+    public function users()
+    {
+        $users = User::query()->get();
+
+        return response()->view('user.users', [
+            'title' => 'User Management',
+            'userService' => $this->userService,
+            'users' => $users,
+        ]);
+    }
+
+    public function userDelete(string $nik)
+    {
+        $user = User::query()->find($nik);
+
+        if ($nik == '55000154') {
+            return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => "You are not allowed to delete yourself!."]);
+        }
+
+        if (!is_null($user)) {
+
+            $roles = Role::query()->where('nik', '=', $nik)->get();
+
+            foreach ($roles as $role) {
+                $role->delete();
+            }
+
+            $user->delete();
+            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => "User successfully deleted!."]);
+        } else {
+            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
         }
     }
 }

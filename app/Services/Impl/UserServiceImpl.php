@@ -5,10 +5,12 @@ namespace App\Services\Impl;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\UserService;
+use App\Traits\Utility;
 use Illuminate\Support\Facades\DB;
 
 class UserServiceImpl implements UserService
 {
+    use Utility;
     public string $tableName;
     private UserRepository $userRepository;
 

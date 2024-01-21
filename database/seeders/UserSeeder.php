@@ -29,5 +29,13 @@ class UserSeeder extends Seeder
         $user2->department = 'EI6';
         $user2->phone_number = '08983456945';
         $user2->save();
+
+        $user2 = new User();
+        $user2->nik = '31811016';
+        $user2->password = '@Fajarpaper123';
+        $user2->fullname = 'Prima Hendra Kusuma';
+        $user2->department = 'EI5';
+        $user2->phone_number = '0851599633630';
+        $user2->save();
     }
 }

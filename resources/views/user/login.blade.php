@@ -16,7 +16,7 @@
                 <!-- NIK -->
                 <div class="mb-3">
                     <label for="nik" class="form-label">NIK</label>
-                    <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event)" maxlength="8" class="form-control" aria-describedby="nik">
+                    <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event, 48, 57)" maxlength="8" class="form-control" aria-describedby="nik">
                 </div>
 
                 <!-- PASSWORD -->

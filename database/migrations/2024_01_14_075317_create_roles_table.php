@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string("nik", 8)->nullable(false);
-            $table->enum('role', ['employee', 'db_admin', 'admin'])->nullable(false);
+            $table->enum('role', ['db_admin', 'admin'])->nullable(false);
             $table->timestamps();
 
             $table->foreign('nik')->references('nik')->on('users');

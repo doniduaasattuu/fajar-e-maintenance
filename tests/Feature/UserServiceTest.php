@@ -34,8 +34,9 @@ class UserServiceTest extends TestCase
         $userService = $this->app->make(UserService::class);
 
         $niks = [
+            '31811016',
             '55000153',
-            '55000154'
+            '55000154',
         ];
 
         self::assertEquals($niks, $userService->registeredNiks());

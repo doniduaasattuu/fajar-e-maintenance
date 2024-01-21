@@ -5,11 +5,7 @@
         <h3 class="mb-3">{{ $title }}</h3>
         <table class="rounded table mb-0 border border-1 shadow-sm">
             <tbody>
-                @foreach ($userService->getTableColumns() as $column)
-
-                @if ($column == 'password')
-                @continue
-                @else
+                @foreach ($userService->getColumns('users', ['password']) as $column)
                 <tr class="table-light">
                     @if ($column == 'nik')
                     <td style="line-height:30px" class="fw-semibold" scope="col">{{ strtoupper(str_replace('_', ' ', ucwords($column))) }}</td>
@@ -18,7 +14,6 @@
                     @endif
                     <td style="line-height:30px" scope="col">{{ $userService->user(session('nik'))->$column }}</td>
                 </tr>
-                @endif
                 @endforeach
             </tbody>
         </table>
@@ -29,7 +24,7 @@
 
         @include('utility.alert')
 
-        <form action="/update-profile" method="post">
+        <form action="/update-profile" method="post"> <!-- UPDATE PROFILE -->
             @csrf
 
             <!-- NIK -->
@@ -108,8 +103,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-
+        </form> <!-- UPDATE PROFILE -->
     </div>
 </div>
 

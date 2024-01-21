@@ -46,6 +46,9 @@
                         Tables
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
+                        @if (session('nik') == 55000154)
+                        <li><a class="border-top dropdown-item" href="/users">User</a></li>
+                        @endif
                         <li><a class="border-bottom border-top dropdown-item" href="/funclocs">Funcloc</a></li>
                         <li><a class="border-bottom dropdown-item" href="/motors">Motor</a></li>
                     </ul>

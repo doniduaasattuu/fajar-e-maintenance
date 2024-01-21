@@ -39,7 +39,7 @@ Route::middleware('member')->group(function () {
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
 
-    Route::middleware('role:employee,db_admin')->group(function () {
+    Route::middleware('role:db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');
         Route::post('/funcloc-update', [FunclocController::class, 'funclocUpdate'])->name('funcloc-update');
         Route::get('/funcloc-registration', [FunclocController::class, 'funclocRegistration'])->name('funcloc-registration');
@@ -50,5 +50,10 @@ Route::middleware('member')->group(function () {
         Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');
         Route::get('/motor-registration', [MotorController::class, 'motorRegistration'])->name('motor-registration');
         Route::post('/motor-register', [MotorController::class, 'motorRegister'])->name('motor-register');
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users', [UserController::class, 'users']);
+        Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
     });
 });

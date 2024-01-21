@@ -17,16 +17,18 @@ class RoleSeeder extends Seeder
     {
         $users = User::query()->get();
 
-        // EMPLOYEE
-        foreach ($users as $user) {
-            $assign = new Role();
-            $assign->nik = $user->nik;
-            $assign->role = 'employee';
-            $assign->save();
-        }
+        $assign = new Role();
+        $assign->nik = $users->find('55000154')->nik;
+        $assign->role = 'db_admin';
+        $assign->save();
 
         $assign = new Role();
         $assign->nik = $users->find('55000154')->nik;
+        $assign->role = 'admin';
+        $assign->save();
+
+        $assign = new Role();
+        $assign->nik = $users->find('31811016')->nik;
         $assign->role = 'db_admin';
         $assign->save();
     }
