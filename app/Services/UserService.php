@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 interface UserService
 {
@@ -16,9 +17,15 @@ interface UserService
 
     public function registeredNiks(): array; // return all nik users
 
+    public function availableRole(): array;
+
     public function departments(): array; // return all department
 
     public function user(string $nik): User; // return user
 
     public function getTableColumns(): array; // return table columns
+
+    public function isAdmin(string $nik): bool;
+
+    public function whoIsAdmin(): Collection;
 }

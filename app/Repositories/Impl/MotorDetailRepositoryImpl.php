@@ -30,7 +30,7 @@ class MotorDetailRepositoryImpl implements MotorDetailRepository
         $motor_detail = MotorDetails::query()->where('motor_detail', '=', $validated['motor_detail'])->first();
         if (!is_null($motor_detail)) {
             $this->adjustment($motor_detail, $validated);
-            return $motor_detail->save();
+            return $motor_detail->update();
         } else {
             return $this->insert($validated);
         }

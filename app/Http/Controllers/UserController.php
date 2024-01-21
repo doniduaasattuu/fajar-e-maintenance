@@ -62,7 +62,7 @@ class UserController extends Controller
     public function login()
     {
         return response()->view('user.login', [
-            'title' => 'Login',
+            'title' => 'Login'
         ]);
     }
 
@@ -172,6 +172,53 @@ class UserController extends Controller
             return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => "User successfully deleted!."]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
+        }
+    }
+
+    public function userReset(string $nik)
+    {
+        $user = User::query()->find($nik);
+
+        if ($nik == '55000154') {
+            return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => "You are not allowed to reset yourself!."]);
+        }
+
+        if (!is_null($user)) {
+
+            $user->password = '@Fajarpaper123';
+            $user->update();
+
+            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
+        } else {
+            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
+        }
+    }
+
+    public function userAssignment(Request $request)
+    {
+        $nik = $request->input('nik');
+        $role = $request->input('role');
+
+        $rules = [
+            'nik' => ['required', Rule::in($this->userService->registeredNiks())],
+            'role' => ['required', Rule::in($this->userService->availableRole())]
+        ];
+
+        $data = [
+            'nik' => $nik,
+            'role' => $role,
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->passes()) {
+            try {
+                return redirect()->back()->with('alert', ['message' => 'User successfully assigned.', 'variant' => 'alert-success']);
+            } catch (Exception $error) {
+                return redirect()->back()->withErrors($error)->withInput();
+            }
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 }

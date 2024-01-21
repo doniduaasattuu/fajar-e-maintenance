@@ -12,9 +12,9 @@ class User extends Authenticatable
     protected $primaryKey = "nik";
     protected $keyType = "string";
     public $incrementing = false;
-    public $timestamps = false;
+    public $timestamps = true;
 
-    public function hasRoleAdmin(): HasMany
+    public function roles(): HasMany
     {
         return $this->hasMany(Role::class, 'nik', 'nik');
     }

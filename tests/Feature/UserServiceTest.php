@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Services\UserService;
+use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\UserSeeder;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -94,6 +95,8 @@ class UserServiceTest extends TestCase
             'fullname',
             'department',
             'phone_number',
+            'created_at',
+            'updated_at',
         ];
 
         self::assertEquals($columns, $userService->getTableColumns());
@@ -130,12 +133,19 @@ class UserServiceTest extends TestCase
         self::assertEquals('@Fajarpaper321', $user->password);
     }
 
-    public function testQuerySuccess()
+    public function testIsAdminTrue()
     {
-        $this->seed(UserSeeder::class);
-        $users = User::query()->get();
-        $doni = $users->find('55000154');
-        self::assertNotNull($doni);
-        Log::info(json_encode($doni, JSON_PRETTY_PRINT));
+        $this->seed(DatabaseSeeder::class);
+        $userService = $this->app->make(UserService::class);
+        $admin = $userService->isAdmin('55000154');
+        self::assertTrue($admin);
+    }
+
+    public function testIsAdminFalse()
+    {
+        $this->seed(DatabaseSeeder::class);
+        $userService = $this->app->make(UserService::class);
+        $admin = $userService->isAdmin('55000153');
+        self::assertFalse($admin);
     }
 }

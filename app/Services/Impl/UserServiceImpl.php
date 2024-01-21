@@ -2,10 +2,12 @@
 
 namespace App\Services\Impl;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\UserService;
 use App\Traits\Utility;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class UserServiceImpl implements UserService
@@ -58,6 +60,14 @@ class UserServiceImpl implements UserService
         return $niks->toArray();
     }
 
+    public function availableRole(): array
+    {
+        return [
+            'db_admin',
+            'admin'
+        ];
+    }
+
     public function userExists(string $nik): bool
     {
         $user = User::query()->find($nik);
@@ -84,5 +94,28 @@ class UserServiceImpl implements UserService
     public function updateProfile(array $validated): bool
     {
         return $this->userRepository->update($validated);
+    }
+
+    public function isAdmin(string $nik): bool
+    {
+        $user = User::query()->with(['roles'])->find($nik);
+        $roles = $user->roles;
+
+        if (!is_null($user) && !is_null($roles)) {
+
+            $roles = $roles->map(function ($value, $key) {
+                return $value->role;
+            });
+
+            return $roles->contains('admin');
+        } else {
+            return false;
+        }
+    }
+
+    public function whoIsAdmin(): Collection
+    {
+        $adminRoles = Role::query()->with(['User'])->where('role', '=', 'admin')->get();
+        return $adminRoles;
     }
 }

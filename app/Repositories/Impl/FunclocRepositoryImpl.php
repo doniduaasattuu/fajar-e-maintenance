@@ -35,7 +35,6 @@ class FunclocRepositoryImpl implements FunclocRepository
         $id = $validated['id'];
         $funcloc = Funcloc::query()->find($id);
         $this->adjustment($funcloc, $validated);
-        $funcloc->updated_at = Carbon::now()->toDateTimeString();
-        return $funcloc->save();
+        return $funcloc->update();
     }
 }

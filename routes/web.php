@@ -55,5 +55,7 @@ Route::middleware('member')->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('/users', [UserController::class, 'users']);
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
+        Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);
+        Route::post('/user-assignment', [UserController::class, 'userAssignment']);
     });
 });

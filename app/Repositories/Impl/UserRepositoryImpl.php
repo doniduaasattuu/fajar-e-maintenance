@@ -38,6 +38,6 @@ class UserRepositoryImpl implements UserRepository
         $nik = $validated['nik'];
         $user = User::query()->find($nik);
         $this->adjustment($user, $validated);
-        return $user->save();
+        return $user->update();
     }
 }
