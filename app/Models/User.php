@@ -18,4 +18,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Role::class, 'nik', 'nik');
     }
+
+    public function isAdmin(): bool
+    {
+        $userRoles = $this->roles;
+        $roles = $userRoles->map(function ($value, $key) {
+            return $value->role;
+        });
+
+        return $roles->contains('admin');
+    }
+
+    public function isDbAdmin(): bool
+    {
+        $userRoles = $this->roles;
+        $roles = $userRoles->map(function ($value, $key) {
+            return $value->role;
+        });
+
+        return $roles->contains('db_admin');
+    }
 }

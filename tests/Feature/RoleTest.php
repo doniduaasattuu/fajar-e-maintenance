@@ -59,11 +59,11 @@ class RoleTest extends TestCase
     public function testAdminRoleRelationToUser()
     {
         $this->seed(DatabaseSeeder::class);
-        $roles = Role::query()->with(['User'])->where('role', '=', 'admin')->get();
+        $roles = Role::query()->with(['User'])->where('role', '=', 'db_admin')->get();
         self::assertNotNull($roles);
-        self::assertCount(1, $roles);
+        self::assertCount(2, $roles);
         foreach ($roles as $role) {
-            Log::info(json_encode($role, JSON_PRETTY_PRINT));
+            Log::info(json_encode($role->user, JSON_PRETTY_PRINT));
         }
     }
 }

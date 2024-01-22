@@ -35,7 +35,15 @@ class UserServiceTest extends TestCase
         $userService = $this->app->make(UserService::class);
 
         $niks = [
+            '31100019',
+            '31100156',
+            '31100171',
             '31811016',
+            '31903007',
+            '32007012',
+            '55000092',
+            '55000093',
+            '55000135',
             '55000153',
             '55000154',
         ];

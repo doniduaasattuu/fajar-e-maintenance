@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\UserService;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
+use App\Services\RoleService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,10 +17,12 @@ use Illuminate\Validation\Rules\Password;
 class UserController extends Controller
 {
     private UserService $userService;
+    private RoleService $roleService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
+        $this->roleService = $roleService;
     }
 
     public function registration()
@@ -146,7 +149,7 @@ class UserController extends Controller
         $users = User::query()->get();
 
         return response()->view('user.users', [
-            'title' => 'User Management',
+            'title' => 'User management',
             'userService' => $this->userService,
             'users' => $users,
         ]);
@@ -213,9 +216,11 @@ class UserController extends Controller
 
         if ($validator->passes()) {
             try {
+                $validated = $validator->validated();
+                $this->roleService->assigment($validated['nik'], $validated['role']);
                 return redirect()->back()->with('alert', ['message' => 'User successfully assigned.', 'variant' => 'alert-success']);
             } catch (Exception $error) {
-                return redirect()->back()->withErrors($error)->withInput();
+                return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();

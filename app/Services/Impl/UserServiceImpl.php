@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Services\UserService;
 use App\Traits\Utility;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class UserServiceImpl implements UserService
@@ -116,6 +116,24 @@ class UserServiceImpl implements UserService
     public function whoIsAdmin(): Collection
     {
         $adminRoles = Role::query()->with(['User'])->where('role', '=', 'admin')->get();
-        return $adminRoles;
+        $users = [];
+
+        foreach ($adminRoles as $role) {
+            array_push($users, $role->user);
+        }
+
+        return collect($users);
+    }
+
+    public function whoIsDbAdmin(): Collection
+    {
+        $DbAdminRoles = Role::query()->with(['User'])->where('role', '=', 'db_admin')->get();
+        $users = [];
+
+        foreach ($DbAdminRoles as $role) {
+            array_push($users, $role->user);
+        }
+
+        return collect($users);
     }
 }

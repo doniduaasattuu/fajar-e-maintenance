@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface UserService
 {
@@ -28,4 +28,6 @@ interface UserService
     public function isAdmin(string $nik): bool;
 
     public function whoIsAdmin(): Collection;
+
+    public function whoIsDbAdmin(): Collection;
 }

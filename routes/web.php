@@ -3,6 +3,7 @@
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
@@ -57,5 +58,7 @@ Route::middleware('member')->group(function () {
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
         Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);
         Route::post('/user-assignment', [UserController::class, 'userAssignment']);
+        Route::get('/role-delete/db_admin/{nik}', [RoleController::class, 'roleDeleteDbAdmin']);
+        Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
     });
 });

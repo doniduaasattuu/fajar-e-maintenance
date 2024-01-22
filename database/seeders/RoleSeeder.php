@@ -18,6 +18,11 @@ class RoleSeeder extends Seeder
         $users = User::query()->get();
 
         $assign = new Role();
+        $assign->nik = $users->find('31811016')->nik;
+        $assign->role = 'db_admin';
+        $assign->save();
+
+        $assign = new Role();
         $assign->nik = $users->find('55000154')->nik;
         $assign->role = 'db_admin';
         $assign->save();
@@ -25,11 +30,6 @@ class RoleSeeder extends Seeder
         $assign = new Role();
         $assign->nik = $users->find('55000154')->nik;
         $assign->role = 'admin';
-        $assign->save();
-
-        $assign = new Role();
-        $assign->nik = $users->find('31811016')->nik;
-        $assign->role = 'db_admin';
         $assign->save();
     }
 }
