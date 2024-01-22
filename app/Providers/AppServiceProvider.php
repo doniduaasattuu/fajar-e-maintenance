@@ -6,9 +6,11 @@ use App\Repositories\FunclocRepository;
 use App\Repositories\Impl\FunclocRepositoryImpl;
 use App\Repositories\Impl\MotorDetailRepositoryImpl;
 use App\Repositories\Impl\MotorRepositoryImpl;
+use App\Repositories\Impl\RoleRepositoryImpl;
 use App\Repositories\Impl\UserRepositoryImpl;
 use App\Repositories\MotorDetailRepository;
 use App\Repositories\MotorRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
 use App\Services\FunclocService;
 use App\Services\Impl\FunclocServiceImpl;
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
         MotorDetailService::class => MotorDetailServiceImpl::class,
         MotorDetailRepository::class => MotorDetailRepositoryImpl::class,
         RoleService::class => RoleServiceImpl::class,
+        RoleRepository::class => RoleRepositoryImpl::class,
     ];
 
     /**

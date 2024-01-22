@@ -46,6 +46,7 @@
                         Tables
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
+                        @inject('userService', 'App\Services\UserService')
                         @if (isset($userService) && $userService->isAdmin(session('nik')))
                         <li><a class="border-top dropdown-item" href="/users">User</a></li>
                         @endif
