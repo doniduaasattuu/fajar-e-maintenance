@@ -36,9 +36,14 @@ Route::middleware('member')->group(function () {
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+    // TABLES
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
+
+    // CHECKING FORM
+    Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
+    Route::get('/checking-form', [HomeController::class, 'checkingForm']);
 
     Route::middleware('role:db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');

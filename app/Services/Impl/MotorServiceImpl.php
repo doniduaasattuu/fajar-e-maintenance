@@ -101,6 +101,40 @@ class MotorServiceImpl implements MotorService
         ];
     }
 
+    public function motorStatusEnum(): array
+    {
+        return [
+            'Running',
+            'Not Running',
+        ];
+    }
+
+    public function vibrationDescriptionEnum(): array
+    {
+        return [
+            'Good',
+            'Satisfactory',
+            'Unsatisfactory',
+            'Unacceptable',
+        ];
+    }
+
+    public function cleanlinessEnum(): array
+    {
+        return [
+            'Clean',
+            'Dirty',
+        ];
+    }
+
+    public function noiseEnum(): array
+    {
+        return [
+            'Normal',
+            'Abnormal',
+        ];
+    }
+
     public function registeredUniqueIds(): array
     {
         $uniqueIds = Motor::query()->pluck('unique_id');

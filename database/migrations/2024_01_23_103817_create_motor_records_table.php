@@ -42,8 +42,8 @@ return new class extends Migration
             $table->string("nik", 8)->nullable(false);
             $table->timestamps();
 
-            $table->foreign('funcloc')->references('id')->on('funcloc');
-            $table->foreign('motor')->references('id')->on('motor');
+            $table->foreign('funcloc')->references('id')->on('funclocs');
+            $table->foreign('motor')->references('id')->on('motors');
             $table->foreign("nik")->references("nik")->on("users");
         });
     }

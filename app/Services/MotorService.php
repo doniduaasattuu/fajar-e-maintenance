@@ -30,6 +30,14 @@ interface MotorService
 
     public function mountingEnum(): array;
 
+    public function motorStatusEnum(): array;
+
+    public function vibrationDescriptionEnum(): array;
+
+    public function cleanlinessEnum(): array;
+
+    public function noiseEnum(): array;
+
     public function registeredUniqueIds(): array;
 
     public function registeredQrCodeLinks(): array;
