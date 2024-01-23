@@ -12,6 +12,7 @@ entity funclocs
 entity motors
 {
     * id VARCHAR(9) <<PK>>
+    --
     * status ENUM(["Installed", "Repaired", "Available"])
       funcloc VARCHAR (50)
       sort_field VARCHAR(50)
@@ -25,8 +26,8 @@ entity motors
 
 entity motor_details {
   * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+  --
     motor_detail VARCHAR(9) <<FK>> UNIQUE
-    --
     manufacturer VARCHAR(50)
     serial_number VARCHAR(50)
     type VARCHAR(50)
@@ -64,49 +65,37 @@ entity motor_details {
 }
 
 entity motor_records {
-    * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+    * id VARCHAR() <<PK>> UNIQUEID
     * funcloc VARCHAR (50) <<FK>>
     * motor VARCHAR(9) <<FK>>
     * sort_field VARCHAR(50)
     --
-    * motor_status ENUM(["Running", "Not Running"])
-    * clean_status ENUM(["Clean", "Dirty"])
-    * nipple_grease ENUM(["Available", "Not Available"])
-    * number_of_greasing TINYINT(3) 0
-
-    * temperature_de SMALLINT(5) UNSIGNED 0
-    * temperature_body SMALLINT(5) UNSIGNED 0
-    * temperature_nde SMALLINT(5) UNSIGNED 0
-      
-    * vibration_de_vertical_value DECIMAL(4,2) 0.00
-      vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-     
-    * vibration_de_horizontal_value DECIMAL(4,2) 0.00
-      vibration_de_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-     
-    * vibration_de_axial_value DECIMAL(4,2) 0.00
-      vibration_de_axial_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-     
-    * vibration_de_frame_value DECIMAL(4,2) 0.00
-      vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-      
-    * noise_de ENUM(["Normal", "Abnormal"])
-
-    * vibration_nde_vertical_value DECIMAL(4,2) 0.00
-      vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-     
-    * vibration_nde_horizontal_value DECIMAL(4,2) 0.00
-      vibration_nde_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-          
-    * vibration_nde_frame_value DECIMAL(4,2) 0.00
-      vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) NULL
-      
-    * noise_nde ENUM(["Normal", "Abnormal"])
-
-    * created_at TIMESTAMP CURRENT
-    * updated_at TIMESTAMP NULL
-
-    * nik VARCHAR(8) <<FK>>
+      motor_status ENUM(["Running", "Not Running"])
+      cleanliness ENUM(["Clean", "Dirty"])
+      nipple_grease ENUM(["Available", "Not Available"])
+      number_of_greasing UNSIGNED TINYINT(3) 0
+      temperature_de SMALLINT(5) DECIMAL(5,2) 0.00
+      temperature_body SMALLINT(5) DECIMAL(5,2) 0.00
+      temperature_nde SMALLINT(5) DECIMAL(5,2) 0.00    
+      vibration_de_vertical_value DECIMAL(4,2) 0.00
+      vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
+      vibration_de_horizontal_value DECIMAL(4,2) 0.00
+      vibration_de_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
+      vibration_de_axial_value DECIMAL(4,2) 0.00
+      vibration_de_axial_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])  
+      vibration_de_frame_value DECIMAL(4,2) 0.00
+      vibration_de_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
+      noise_de ENUM(["Normal", "Abnormal"])
+      vibration_nde_vertical_value DECIMAL(4,2) 0.00
+      vibration_nde_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
+      vibration_nde_horizontal_value DECIMAL(4,2) 0.00
+      vibration_nde_horizontal_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])   
+      vibration_nde_frame_value DECIMAL(4,2) 0.00
+      vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])   
+      noise_nde ENUM(["Normal", "Abnormal"])
+      nik VARCHAR(8) <<FK>>
+      created_at TIMESTAMP CURRENT
+      updated_at TIMESTAMP NULL
 }
 
 entity users {
