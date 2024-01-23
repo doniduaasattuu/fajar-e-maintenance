@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\DatabaseEraser;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -53,6 +54,8 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorsAuthorizedEmptyDb()
     {
+        $this->seed(DatabaseEraser::class);
+
         $this->withSession([
             'nik' => '55000154',
             'user' => 'Doni Darmawan'

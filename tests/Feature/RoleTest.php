@@ -17,7 +17,7 @@ class RoleTest extends TestCase
 
         $roles = Role::query()->where(['role' => 'db_admin'])->get();
         self::assertNotEmpty($roles);
-        self::assertCount(2, $roles);
+        self::assertCount(3, $roles);
 
         $nik = '55000154';
         $user = $roles->firstWhere('nik', $nik);
@@ -52,7 +52,7 @@ class RoleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $roles = Role::query()->with(['User'])->where('role', '=', 'db_admin')->get();
         self::assertNotNull($roles);
-        self::assertCount(2, $roles);
+        self::assertCount(3, $roles);
         Log::info(json_encode($roles, JSON_PRETTY_PRINT));
     }
 
@@ -61,7 +61,7 @@ class RoleTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $roles = Role::query()->with(['User'])->where('role', '=', 'db_admin')->get();
         self::assertNotNull($roles);
-        self::assertCount(2, $roles);
+        self::assertCount(3, $roles);
         foreach ($roles as $role) {
             Log::info(json_encode($role->user, JSON_PRETTY_PRINT));
         }

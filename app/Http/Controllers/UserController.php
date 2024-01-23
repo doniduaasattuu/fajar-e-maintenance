@@ -172,9 +172,9 @@ class UserController extends Controller
             }
 
             $user->delete();
-            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => "User successfully deleted!."]);
+            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'User successfully deleted!.']);
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
+            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'User not found!.']);
         }
     }
 
@@ -194,36 +194,6 @@ class UserController extends Controller
             return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
-        }
-    }
-
-    public function userAssignment(Request $request)
-    {
-        $nik = $request->input('nik');
-        $role = $request->input('role');
-
-        $rules = [
-            'nik' => ['required', Rule::in($this->userService->registeredNiks())],
-            'role' => ['required', Rule::in($this->userService->availableRole())]
-        ];
-
-        $data = [
-            'nik' => $nik,
-            'role' => $role,
-        ];
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->passes()) {
-            try {
-                $validated = $validator->validated();
-                $this->roleService->assigment($validated['nik'], $validated['role']);
-                return redirect()->back()->with('alert', ['message' => 'User successfully assigned.', 'variant' => 'alert-success']);
-            } catch (Exception $error) {
-                return redirect()->back()->withErrors($error->getMessage())->withInput();
-            }
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 }

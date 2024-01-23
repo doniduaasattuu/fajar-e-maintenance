@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use App\Services\UserService;
+use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -625,5 +627,167 @@ class UserControllerTest extends TestCase
                 'new_password_confirmation' => 'Rahasia@12345',
             ])
             ->assertSeeText('The new password confirmation field must match new password.');
+    }
+
+    // USERS MANAGEMENT PAGE FOR ADMINISTRATOR
+    public function testGetUserManagementGuest()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->get('/users')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testGetUserManagementEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])->followingRedirects()
+            ->get('/users')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testGetUserManagementAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/users')
+            ->assertSeeText('User management')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Name')
+            ->assertSeeText('Dept')
+            ->assertSeeText('DB')
+            ->assertSeeText('Admin')
+            ->assertSeeText('Reset')
+            ->assertSeeText('55000154')
+            ->assertSeeText('EI2');
+    }
+
+    // DELETE USER
+    public function testDeleteUserGuest()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this
+            ->get('/user-delete/55000153')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testDeleteUserEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])->followingRedirects()
+            ->get('/user-delete/31903007')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testDeleteUserAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/users')
+            ->assertSeeText('Yuan Lucky P');
+
+        $this->followingRedirects()
+            ->get('/user-delete/31903007')
+            ->assertSeeText('User successfully deleted!.');
+
+        $this->get('/users')
+            ->assertDontSeeText('Yuan Lucky P');
+    }
+
+    public function testDeleteUserAuthorizedTheCreator()
+    {
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/');
+
+        $this->followingRedirects()
+            ->get('/role-assign/admin/31903007')
+            ->assertSeeText('User assigned as database administrator.');
+
+        $this->withSession([
+            'nik' => '31903007',
+            'user' => 'Yuan Lucky P'
+        ])->followingRedirects()
+            ->get('/user-delete/55000154')
+            ->assertSeeText('You cannot delete the creator!.');
+    }
+
+    // RESET PASSWORD
+    public function testResetPasswordGuest()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->get('/user-reset/55000153')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testResetPasswordEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])->followingRedirects()
+            ->get('/user-reset/55000153')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testResetPasswordAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $user = User::query()->find('55000153');
+        $user->password = '@JamalMirdad123';
+        $user->update();
+
+        self::assertEquals($user->password, '@JamalMirdad123');
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->get('/user-reset/55000153')
+            ->assertSeeText('User password reset successfully.');
+
+        $user = User::query()->find('55000153');
+        self::assertNotEquals($user->password, '@JamalMirdad123');
+    }
+
+    public function testResetPasswordAuthorizedTheCreator()
+    {
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/');
+
+        $this->followingRedirects()
+            ->get('/role-assign/admin/31903007')
+            ->assertSeeText('User assigned as database administrator.');
+
+        $this->withSession([
+            'nik' => '31903007',
+            'user' => 'Yuan Lucky P'
+        ])->followingRedirects()
+            ->get('/user-reset/55000154')
+            ->assertSeeText('You cannot reset the creator!.');
     }
 }
