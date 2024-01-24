@@ -235,7 +235,7 @@
                         <label for="vibration_de_horizontal_value" class="vibrations_label fw-bold form-label">DEH (Horizontal)</label>
                         <input disabled type="number" step="0.01" min="0.00" max="45" onkeypress="return /[0-9-.]/i.test(event.key)" class="form-control vibration_value unrequired" placeholder="Vibration value (mm/s)" name="vibration_de_horizontal_value" id="vibration_de_horizontal_value">
                     </div>
-                    <select disabled id="vibration_de_horizontal_desc" name="vibration_de_horizontal_desc" class="vibration form-select vibration_description" aria-label="Default select example">
+                    <select id="vibration_de_horizontal_desc" name="vibration_de_horizontal_desc" class="vibration form-select vibration_description bg-success" aria-label="Default select example">
                         <option value="">--Status--</option>
                         <option value="Good">Good</option>
                         <option value="Satisfactory">Satisfactory</option>

@@ -15,9 +15,9 @@
                     <tbody>
 
                         @isset($motorDetail)
-                        @foreach ($motorDetail->keys() as $column)
+                        @foreach ($motorService->getColumns('motor_details', ['id', 'motor_detail']) as $column)
                         <tr>
-                            <th>{{ $column }}</th>
+                            <th>{{ ucfirst(str_replace('_' , ' ', $column)) }}</th>
                             <td>{{ $motorDetail->$column }}</td>
                         </tr>
                         @endforeach

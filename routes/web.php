@@ -3,6 +3,7 @@
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
+use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
@@ -43,6 +44,9 @@ Route::middleware('member')->group(function () {
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
+
+    Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm']);
+    Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
     Route::get('/checking-form', [HomeController::class, 'checkingForm']);
 
     Route::middleware('role:db_admin')->group(function () {
