@@ -2,22 +2,21 @@
     function changeVibrationDescriptionColor(id) {
         let input = document.getElementById(id);
         let select = document.getElementById(id.replace('value', 'desc'));
-        let power = 45;
+        let power_rate = Number(<?php echo json_encode($power_rate) != null ? json_encode($power_rate) : 45 ?>)
 
         if (Number(input.value) > 45) {
             input.value = '';
         }
 
-        if (power <= 15) {
+        if (power_rate <= 15) {
             smallMachines(input, select)
-        } else if (power > 15 && power <= 300) {
+        } else if (power_rate > 15 && power_rate <= 300) {
             mediumMachines(input, select)
-        } else if (power > 300 && power <= 600) {
+        } else if (power_rate > 300 && power_rate <= 600) {
             largeRigidFoundation(input, select)
         } else {
             largeSoftFoundation(input, select)
         }
-
     }
 </script>
 

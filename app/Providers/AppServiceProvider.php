@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Repositories\FunclocRepository;
 use App\Repositories\Impl\FunclocRepositoryImpl;
 use App\Repositories\Impl\MotorDetailRepositoryImpl;
+use App\Repositories\Impl\MotorRecordRepositoryImpl;
 use App\Repositories\Impl\MotorRepositoryImpl;
 use App\Repositories\Impl\RoleRepositoryImpl;
 use App\Repositories\Impl\UserRepositoryImpl;
 use App\Repositories\MotorDetailRepository;
+use App\Repositories\MotorRecordRepository;
 use App\Repositories\MotorRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
@@ -40,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         RoleService::class => RoleServiceImpl::class,
         RoleRepository::class => RoleRepositoryImpl::class,
         MotorRecordService::class => MotorRecordServiceImpl::class,
+        MotorRecordRepository::class => MotorRecordRepositoryImpl::class,
     ];
 
     /**

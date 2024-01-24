@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        DB::delete('delete from motor_records');
         DB::delete('delete from roles');
         DB::delete('delete from users');
         DB::delete('delete from motor_details');

@@ -13,7 +13,22 @@ $skipped = [
 'vibration_nde_frame_desc',
 'nik',
 'created_at',
-'updated_at']
+'updated_at'];
+
+$motorDetail = $motor->MotorDetail;
+
+if ($motorDetail !== null) {
+$power_rate = $motorDetail->power_rate;
+$power_unit = $motorDetail->power_unit;
+
+if ($power_unit == 'HP') {
+$power_rate = $power_rate * 0.7475;
+}
+
+} else {
+$power_rate = 45;
+}
+
 @endphp
 
 @include('utility.prefix')
@@ -32,12 +47,14 @@ $skipped = [
     </div>
     @endif
 
+    @include('utility.alert-with-link')
+
     <!-- TRENDS -->
     <form action="/equipment-trends" method="post" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" id="sort_field" name="sort_field" value="@{{ $motor->sort_field }}">
+        <!-- <input type="hidden" id="sort_field" name="sort_field" value="@{{ $motor->sort_field }}">
         <input type="hidden" id="equipment_id" name="equipment_id" value="@{{ $equipment_id }}">
-        <input type="hidden" id="funcloc" name="funcloc" value="@{{ $motor->funcloc }}">
+        <input type="hidden" id="funcloc" name="funcloc" value="@{{ $motor->funcloc }}"> -->
         <button class="btn btn-success fw-bold mb-2 text-white">
             <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
@@ -46,9 +63,6 @@ $skipped = [
         </button>
     </form>
 
-    <?php
-    $motorDetail = $motor->MotorDetail;
-    ?>
     @if (!is_null($motorDetail))
     @include('utility.motor-detail-accordion')
     @endif
@@ -59,9 +73,8 @@ $skipped = [
     <form id="myform" action="/record-motor" method="post" enctype="multipart/form-data"> <!-- CHECKING FORM -->
         @csrf
 
-        <input type="hidden" name="id" id="id" value="{{ uniqid() }}">
         <input type="hidden" name="funcloc" id="funcloc" value="{{ isset($motor) ? $motor->funcloc : '' }}">
-        <input type="hidden" name="motor" id="motor" value="{{ isset($motor) ? $motor->motor : '' }}">
+        <input type="hidden" name="motor" id="motor" value="{{ isset($motor) ? $motor->id : '' }}">
         <input type="hidden" name="sort_field" id="sort_field" value="{{ isset($motor) ? $motor->sort_field : '' }}">
 
         <div> <!-- MOTOR RECORD WRAPPER -->
@@ -124,8 +137,8 @@ $skipped = [
             </div>
             @endif
 
-            @switch($column)
             {{-- MOTOR STATUS --}}
+            @switch($column)
             @case('motor_status')
             @case('cleanliness')
             @case('nipple_grease')
@@ -149,6 +162,9 @@ $skipped = [
                     @break
 
                     @case('noise_de')
+                    @include('utility.looping-option', ['array' => $motorService->noiseEnum()])
+                    @break
+
                     @case('noise_nde')
                     @include('utility.looping-option', ['array' => $motorService->noiseEnum()])
                     @break
@@ -184,7 +200,7 @@ $skipped = [
             @default
             <div class="mb-3">
                 <label for="{{ $column }}" class="fw-bold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
-                <input inputmode="numeric" class="form-control" name="{{ $column }}" id="{{ $column }}" type="text" step="10" min="0" max="255" onkeypress="return onlynumber(event, 48, 57)" oninput="return preventmax(this.id, 255)" pattern="\d*" maxlength="4">
+                <input value="{{ old($column) }}" inputmode="numeric" class="form-control" name="{{ $column }}" id="{{ $column }}" type="text" step="10" min="0" max="255" onkeypress="return onlynumber(event, 48, 57)" oninput="return preventmax(this.id, 255)" pattern="\d*" maxlength="4">
                 @include('utility.error-help')
             </div>
 
@@ -196,7 +212,7 @@ $skipped = [
         <!-- FINDING TEXT -->
         <div class="mb-3">
             <label for="finding_text" class="fw-bold form-label">Finding</label>
-            <textarea placeholder="Description of findings if any" class="form-control" name="finding_text" id="finding_text" cols="30" rows="5"></textarea>
+            <textarea value="{{ old('finding_text') }}" placeholder="Description of findings if any" class="form-control" name="finding_text" id="finding_text" cols="30" rows="5"></textarea>
             @include('utility.error-help')
         </div>
 
@@ -217,6 +233,7 @@ $skipped = [
         @endif
         @endisset
 
+        {{-- IF MOTOR IS NOT INSTALLED --}}
         @isset($motor)
         @if ($motor->status != 'Installed')
         <script>

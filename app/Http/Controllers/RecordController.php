@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Motor;
+use App\Services\MotorRecordService;
 use App\Services\MotorService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class RecordController extends Controller
 {
     private MotorService $motorService;
+    private MotorRecordService $motorRecordService;
 
-    public function __construct(MotorService $motorService)
-    {
+    public function __construct(
+        MotorService $motorService,
+        MotorRecordService $motorRecordService,
+    ) {
         $this->motorService = $motorService;
+        $this->motorRecordService = $motorRecordService;
     }
 
     public function checkingForm(string $equipment_id)
@@ -26,7 +35,11 @@ class RecordController extends Controller
 
             if (!is_null($motor)) {
 
-                return $this->motorForm($motor);
+                return response()->view('maintenance.motor.checking-form', [
+                    'title' => 'Checking form',
+                    'motorService' => $this->motorService,
+                    'motor' => $motor,
+                ]);
             } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The motor with id ' . $unique_id . ' was not found.']);
             }
@@ -37,12 +50,61 @@ class RecordController extends Controller
         }
     }
 
-    public function motorForm(Motor $motor)
+    public function saveRecordMotor(Request $request)
     {
-        return response()->view('maintenance.motor.checking-form', [
-            'title' => 'Checking form',
-            'motorService' => $this->motorService,
-            'motor' => $motor,
-        ]);
+        $request->merge(['id' => uniqid(), 'nik' => session('nik')]);
+        $data = $request->all();
+
+        $rules = [
+            'id' => ['required', 'size:13'],
+            'funcloc' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+            'motor' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
+            'sort_field' => ['required'],
+            'motor_status' => ['required', Rule::in($this->motorService->motorStatusEnum())],
+            'cleanliness' => ['required', Rule::in($this->motorService->cleanlinessEnum())],
+            'nipple_grease' => ['required', Rule::in($this->motorService->nippleGreaseEnum())],
+            'number_of_greasing' => ['nullable', 'decimal:0,2', 'integer', 'max:255', 'prohibited_if:nipple_grease,Not Available'],
+            'temperature_de' => ['nullable', 'decimal:0,2', 'min:10', 'max:255'],
+            'temperature_body' => ['nullable', 'decimal:0,2', 'min:10', 'max:255'],
+            'temperature_nde' => ['nullable', 'decimal:0,2', 'min:10', 'max:255'],
+            'vibration_de_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_axial_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_axial_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'noise_de' => ['required', Rule::in($this->motorService->noiseEnum())],
+            'vibration_nde_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_nde_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_nde_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
+            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
+            // 'finding_text' => ['nullable', 'min:15'],
+            // 'finding_image' => ['nullable', 'prohibited:finding_text,null', File::types(['png', 'jpeg', 'jpg'])],
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->passes()) {
+
+            $validated = $validator->validated();
+
+            // return response()->json($validated);
+
+            try {
+                $this->motorRecordService->save($validated);
+            } catch (Exception $error) {
+                return redirect()->back()->withErrors($error->getMessage())->withInput();
+            }
+
+            return redirect()->back()->with('alert', ['message' => 'The motor record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated['id']]);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
     }
 }

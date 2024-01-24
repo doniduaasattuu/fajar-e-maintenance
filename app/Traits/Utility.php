@@ -16,4 +16,11 @@ trait Utility
     {
         return array_values(array_diff($validated, $skipped));
     }
+
+    private function dataAssigment($model, $validated)
+    {
+        foreach ($validated as $key => $value) {
+            $model->$key = $value;
+        }
+    }
 }
