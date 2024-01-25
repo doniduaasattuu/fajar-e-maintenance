@@ -4,7 +4,7 @@ $vibration_description = str_replace('value', 'desc', $column);
 
 <div class="mb-3">
     <div class="mb-2">
-        <label for="{{ $column }}" class="fw-bold form-label">{{ str_replace(' value', '', ucfirst(str_replace('_', ' ', $column))) }}</label>
+        <label for="{{ $column }}" class="fw-semibold form-label">{{ str_replace(' value', '', ucfirst(str_replace('_', ' ', $column))) }}</label>
         <input value="{{ old($column) }}" inputmode="numeric" type="text" step="0.01" min="0.00" max="45.0" maxlength="5" onkeypress="return onlynumbercoma(event)" oninput="return changeVibrationDescriptionColor(this.id)" class="form-control" placeholder="Vibration value (mm/s)" name="{{ $column }}" id="{{ $column }}">
     </div>
     <select id="{{ $vibration_description }}" name="{{ $vibration_description }}" class="form-select vibration_description" aria-label="Default select example">

@@ -47,6 +47,7 @@ Route::middleware('member')->group(function () {
 
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm']);
     Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
+    Route::get('/record-edit/{uniqid}', [RecordController::class, 'editRecordMotor']);
     Route::get('/checking-form', [HomeController::class, 'checkingForm']);
 
     Route::middleware('role:db_admin')->group(function () {

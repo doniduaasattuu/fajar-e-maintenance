@@ -7,10 +7,7 @@
     Click <a href="/record-edit/{{ session('alert')['record_id'] }}" class="alert-link">here</a> to edit.
     @endif
 
-    <!-- button close alert -->
-    @if (request()->path() != 'login')
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    @endif
+    <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->
 
 </div>
 @endif

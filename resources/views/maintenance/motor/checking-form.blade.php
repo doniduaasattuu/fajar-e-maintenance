@@ -34,7 +34,7 @@ $power_rate = 45;
 @include('utility.prefix')
 <div class="py-4">
 
-    <!-- HEADER  -->
+    <!-- HEADER -->
     @if ($motor != null)
     <div class="mb-3">
         @if ($motor->status != 'Installed')
@@ -48,6 +48,11 @@ $power_rate = 45;
     @endif
 
     @include('utility.alert-with-link')
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible" role=" alert">
+        The data you submitted is invalid.
+    </div>
+    @endif
 
     <!-- TRENDS -->
     <form action="/equipment-trends" method="post" enctype="multipart/form-data">
@@ -55,7 +60,7 @@ $power_rate = 45;
         <!-- <input type="hidden" id="sort_field" name="sort_field" value="@{{ $motor->sort_field }}">
         <input type="hidden" id="equipment_id" name="equipment_id" value="@{{ $equipment_id }}">
         <input type="hidden" id="funcloc" name="funcloc" value="@{{ $motor->funcloc }}"> -->
-        <button class="btn btn-success fw-bold mb-2 text-white">
+        <button class="btn btn-success mb-2 text-white">
             <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
             </svg>
@@ -145,7 +150,7 @@ $power_rate = 45;
             @case('noise_de')
             @case('noise_nde')
             <div class="mb-3">
-                <label for="{{ $column }}" class="fw-bold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
+                <label for="{{ $column }}" class="fw-semibold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
                 <select name="{{ $column }}" id="{{ $column }}" class="form-select" aria-label="Default select example">
                     @switch($column)
 
@@ -162,9 +167,6 @@ $power_rate = 45;
                     @break
 
                     @case('noise_de')
-                    @include('utility.looping-option', ['array' => $motorService->noiseEnum()])
-                    @break
-
                     @case('noise_nde')
                     @include('utility.looping-option', ['array' => $motorService->noiseEnum()])
                     @break
@@ -199,7 +201,7 @@ $power_rate = 45;
             {{-- DEFAULT INPUT FORM --}}
             @default
             <div class="mb-3">
-                <label for="{{ $column }}" class="fw-bold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
+                <label for="{{ $column }}" class="fw-semibold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
                 <input value="{{ old($column) }}" inputmode="numeric" class="form-control" name="{{ $column }}" id="{{ $column }}" type="text" step="10" min="0" max="255" onkeypress="return onlynumber(event, 48, 57)" oninput="return preventmax(this.id, 255)" pattern="\d*" maxlength="4">
                 @include('utility.error-help')
             </div>
@@ -211,16 +213,20 @@ $power_rate = 45;
 
         <!-- FINDING TEXT -->
         <div class="mb-3">
-            <label for="finding_text" class="fw-bold form-label">Finding</label>
+            <label for="finding_text" class="fw-semibold form-label">Finding</label>
             <textarea value="{{ old('finding_text') }}" placeholder="Description of findings if any" class="form-control" name="finding_text" id="finding_text" cols="30" rows="5"></textarea>
-            @include('utility.error-help')
+            @error('finding_text')
+            <div class="form-text text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- FINDING IMAGE -->
         <div class="mb-3">
-            <label for="finding_image" class="fw-bold form-label">Finding attachment</label>
+            <label for="finding_image" class="fw-semibold form-label">Finding attachment</label>
             <input class="form-control" type="file" id="finding_image" name="finding_image" accept="image/png, image/jpeg, image/jpg">
-            @include('utility.error-help')
+            @error('finding_image')
+            <div class="form-text text-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         @isset($motor)
@@ -271,6 +277,33 @@ $power_rate = 45;
             } else {
                 unacceptable(vibration_descriptions[i]);
             }
+        }
+    }
+
+    // CHANGE COLOR ON SELECT CHANGED
+    let vibration_descriptions = document.getElementsByClassName('vibration_description');
+    for (let i = 0; i < vibration_descriptions.length; i++) {
+        vibration_descriptions[i].onchange = () => {
+            select = vibration_descriptions[i];
+
+            switch (select.value) {
+                case 'Good':
+                    good(select)
+                    break;
+
+                case 'Satisfactory':
+                    satisfactory(select)
+                    break;
+
+                case 'Unsatisfactory':
+                    unsatisfactory(select)
+                    break;
+
+                default:
+                    unacceptable(select)
+                    break;
+            }
+
         }
     }
 </script>
