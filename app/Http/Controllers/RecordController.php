@@ -40,6 +40,7 @@ class RecordController extends Controller
                     'title' => 'Checking form',
                     'motorService' => $this->motorService,
                     'motor' => $motor,
+                    'motorDetail' => $motor->MotorDetail,
                 ]);
             } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The motor with id ' . $unique_id . ' was not found.']);
@@ -53,7 +54,7 @@ class RecordController extends Controller
 
     public function saveRecordMotor(Request $request)
     {
-        $request->merge(['id' => uniqid(), 'nik' => session('nik')]);
+        $request->mergeIfMissing(['id' => uniqid()]);
         $data = $request->all();
 
         $rules = [
@@ -96,11 +97,18 @@ class RecordController extends Controller
             $validated_record = $validator->safe()->except(['finding_text', 'finding_image']);
             $validated_finding = $validator->safe()->except(['id', 'finding_text', 'finding_image']);
 
-            $image = $request->file('finding_image');
-            // return response()->json($validated_record);
-
             try {
-                $this->motorRecordService->save($validated_record);
+
+                $record = MotorRecord::query()->find($validated_record['id']);
+
+                if (is_null($record)) {
+                    // SAVE RECORD
+                    $this->motorRecordService->save($validated_record);
+                } else {
+                    // UPDATE RECORD
+                    $this->motorRecordService->update($record, $validated_record);
+                    return redirect()->back()->with('alert', ['message' => 'The motor record successfully updated.', 'variant' => 'alert-success'])->withInput();
+                }
             } catch (Exception $error) {
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
@@ -115,14 +123,12 @@ class RecordController extends Controller
     {
         $record = MotorRecord::query()->find($uniqid);
 
-        // return response()->json($record);
-
         if (!is_null($record)) {
 
-            return response()->view('maintenance.motor.record-edit', [
-                'title' => 'Edit record',
-                'record' => $record,
+            return response()->view('maintenance.motor.checking-form', [
+                'title' => 'Motor record edit',
                 'motorService' => $this->motorService,
+                'record' => $record,
             ]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);

@@ -2,7 +2,7 @@
     function changeVibrationDescriptionColor(id) {
         let input = document.getElementById(id);
         let select = document.getElementById(id.replace('value', 'desc'));
-        let power_rate = Number(<?php echo json_encode($power_rate) != null ? json_encode($power_rate) : 45 ?>)
+        let power_rate = Number(<?php 45 ?>)
 
         if (Number(input.value) > 45) {
             input.value = '';
