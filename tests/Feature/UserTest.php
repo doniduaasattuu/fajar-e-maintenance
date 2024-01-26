@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
@@ -78,5 +79,37 @@ class UserTest extends TestCase
         self::assertNotNull($user);
         $isDbAdmin = $user->isDbAdmin();
         self::assertFalse($isDbAdmin);
+    }
+
+    public function testtestAbbreviatedNameNormal()
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::query()->find('55000154');
+        self::assertNotNull($user->abbreviated_name);
+        self::assertEquals('Doni Darmawan', $user->abbreviated_name);
+        self::assertEquals($user->fullname, $user->abbreviated_name);
+        Log::info($user->abbreviated_name);
+    }
+
+    public function testAbbreviatedNameExcees()
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::query()->find('31811016');
+        self::assertNotNull($user->abbreviated_name);
+        self::assertNotEquals($user->fullname, $user->abbreviated_name);
+        self::assertEquals('Prima Hendra K', $user->abbreviated_name);
+    }
+
+    public function testAbbreviatedNameExceesFour()
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::query()->find('31903007');
+        self::assertNotNull($user->abbreviated_name);
+        self::assertNotEquals($user->fullname, $user->abbreviated_name);
+        self::assertEquals('Yuan Lucky Prasetyo Winarno', $user->fullname);
+        self::assertEquals('Yuan Lucky P', $user->abbreviated_name);
     }
 }

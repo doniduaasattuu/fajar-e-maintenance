@@ -115,6 +115,21 @@ entity roles {
       updated_at TIMESTAMP NULL
 }
 
+entity findings {
+  * id VARCHAR() <<PK>>
+  --
+  * area VARCHAR(20)
+  * description TEXT
+    image VARCHAR(20)
+    status ENUM(["Open", "Closed"])
+    equipment VARCHAR(8)
+    funcloc VARCHAR(50)
+    notification VARCHAR(8)
+    reporter VARCHAR(50)
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
+}
+
 entity transformers {
     * id VARCHAR(9) <<PK>>
     * status ENUM(["Installed", "Repaired", "Available"])

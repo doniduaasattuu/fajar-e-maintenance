@@ -35,7 +35,9 @@ $skipped = [
     {{-- HEADER FOR RECORD EDIT --}}
     @isset($record)
     <div class="mb-3">
-        <h3 class="text-break lh-sm mb-0">{{ $title }}</h3>
+        <h4 class="text-break lh-sm">{{ $title }}</h4>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->sort_field }}</p>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->funcloc }}</p>
         <p class="text-break lh-sm mb-0 text-secondary">{{ $record->motor }}</p>
     </div>
     @endisset
@@ -214,6 +216,8 @@ $skipped = [
             @include('utility.vibration-input')
             @break
 
+            @include('utility.errors')
+
             {{-- DEFAULT INPUT FORM --}}
             @default
             <div class="mb-3">
@@ -227,11 +231,11 @@ $skipped = [
 
         </div> <!-- MOTOR RECORD WRAPPER -->
 
-        {{-- FINDING TEXT --}}
+        {{-- FINDING DESCRIPTION --}}
         <div class="mb-3">
-            <label for="finding_text" class="fw-semibold form-label">Finding</label>
-            <textarea value="{{ isset($finding) ? $finding->text : old('finding_text') }}" placeholder="Description of findings if any" class="form-control" name="finding_text" id="finding_text" cols="30" rows="5"></textarea>
-            @error('finding_text')
+            <label for="finding_description" class="fw-semibold form-label">Finding</label>
+            <textarea value="{{ isset($finding) ? $finding->description : old('finding_description') }}" placeholder="Description of findings if any" class="form-control" name="finding_description" id="finding_description" cols="30" rows="5"></textarea>
+            @error('finding_description')
             <div class="form-text text-danger">{{ $message }}</div>
             @enderror
         </div>
@@ -325,6 +329,16 @@ $skipped = [
                     break;
             }
 
+        }
+    }
+
+    // DELETE NUMBER OF GREASING WHEN NIPPLE GREASE IS NOT AVAILABLE
+    let nipple_grease = document.getElementById('nipple_grease');
+    let number_of_greasing = document.getElementById('number_of_greasing');
+
+    nipple_grease.onchange = () => {
+        if (nipple_grease.value !== 'Available') {
+            number_of_greasing.value = '';
         }
     }
 </script>

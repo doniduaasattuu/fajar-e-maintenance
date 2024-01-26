@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Funcloc;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FunclocSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
@@ -53,5 +54,14 @@ class FunclocTest extends TestCase
         $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
         $motorDetail = $funcloc->MotorDetail;
         self::assertNull($motorDetail);
+    }
+
+    public function testGetAreaFromFuncloc()
+    {
+        $this->seed(FunclocSeeder::class);
+
+        $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
+        $area = $funcloc->area;
+        self::assertEquals('BO3', $area);
     }
 }

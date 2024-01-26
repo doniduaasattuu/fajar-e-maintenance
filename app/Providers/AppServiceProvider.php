@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\FindingRepository;
 use App\Repositories\FunclocRepository;
+use App\Repositories\Impl\FindingRepositoryImpl;
 use App\Repositories\Impl\FunclocRepositoryImpl;
 use App\Repositories\Impl\MotorDetailRepositoryImpl;
 use App\Repositories\Impl\MotorRecordRepositoryImpl;
@@ -14,7 +16,9 @@ use App\Repositories\MotorRecordRepository;
 use App\Repositories\MotorRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
+use App\Services\FindingService;
 use App\Services\FunclocService;
+use App\Services\Impl\FindingServiceImpl;
 use App\Services\Impl\FunclocServiceImpl;
 use App\Services\Impl\MotorDetailServiceImpl;
 use App\Services\Impl\MotorRecordServiceImpl;
@@ -43,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
         RoleRepository::class => RoleRepositoryImpl::class,
         MotorRecordService::class => MotorRecordServiceImpl::class,
         MotorRecordRepository::class => MotorRecordRepositoryImpl::class,
+        FindingService::class => FindingServiceImpl::class,
+        FindingRepository::class => FindingRepositoryImpl::class,
     ];
 
     /**

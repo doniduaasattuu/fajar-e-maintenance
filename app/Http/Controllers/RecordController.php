@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Motor;
 use App\Models\MotorRecord;
+use App\Models\User;
+use App\Services\FindingService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -16,13 +19,16 @@ class RecordController extends Controller
 {
     private MotorService $motorService;
     private MotorRecordService $motorRecordService;
+    private FindingService $findingService;
 
     public function __construct(
         MotorService $motorService,
         MotorRecordService $motorRecordService,
+        FindingService $findingService,
     ) {
         $this->motorService = $motorService;
         $this->motorRecordService = $motorRecordService;
+        $this->findingService = $findingService;
     }
 
     public function checkingForm(string $equipment_id)
@@ -86,25 +92,50 @@ class RecordController extends Controller
             'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
             'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
             'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
-            'finding_text' => ['nullable', 'min:15'],
-            'finding_image' => ['nullable', 'prohibited:finding_text,null', File::types(['png', 'jpeg', 'jpg'])],
+            'finding_description' => ['nullable', 'min:15'],
+            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', File::types(['png', 'jpeg', 'jpg'])],
         ];
 
         $validator = Validator::make($data, $rules);
 
         if ($validator->passes()) {
 
-            $validated_record = $validator->safe()->except(['finding_text', 'finding_image']);
-            $validated_finding = $validator->safe()->except(['id', 'finding_text', 'finding_image']);
+            $validated = $validator->validated();
+            $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
 
             try {
 
                 $record = MotorRecord::query()->find($validated_record['id']);
 
                 if (is_null($record)) {
+
                     // SAVE RECORD
                     $this->motorRecordService->save($validated_record);
+
+                    // SAVE FINDING
+                    if (!empty($validated['finding_description'])) {
+
+                        $validated_finding = [
+                            'area' => explode('-', $validated['funcloc'])[2],
+                            'description' => $validated['finding_description'] ?? null,
+                            'equipment' => $validated['motor'],
+                            'funcloc' => $validated['funcloc'],
+                            'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
+                        ];
+
+                        if ($request->hasFile('finding_image')) {
+
+                            $image_url = $validated['id'];
+                            array_push($validated_finding, ['image' => $image_url]);
+
+                            $image = $request->finding_image;
+                            $this->findingService->saveImage($image, $image_url);
+                        }
+
+                        $this->findingService->insert($validated_finding);
+                    }
                 } else {
+
                     // UPDATE RECORD
                     $this->motorRecordService->update($record, $validated_record);
                     return redirect()->back()->with('alert', ['message' => 'The motor record successfully updated.', 'variant' => 'alert-success'])->withInput();
