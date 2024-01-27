@@ -711,6 +711,25 @@ class UserControllerTest extends TestCase
             ->assertDontSeeText('Yuan Lucky P');
     }
 
+    public function testDeleteUserSelf()
+    {
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/');
+
+        $this->followingRedirects()
+            ->get('/role-assign/admin/31903007')
+            ->assertSeeText('User assigned as database administrator.');
+
+        $this->withSession([
+            'nik' => '31903007',
+            'user' => 'Yuan Lucky P'
+        ])->followingRedirects()
+            ->get('/user-delete/31903007')
+            ->assertSeeText('You cannot delete your self, this action causes an error.');
+    }
+
     public function testDeleteUserAuthorizedTheCreator()
     {
         $this->withSession([

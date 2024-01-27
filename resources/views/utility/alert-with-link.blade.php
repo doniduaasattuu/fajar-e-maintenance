@@ -4,7 +4,8 @@
     {{ session('alert')['message'] }}
 
     @if (session('alert')['record_id'])
-    Click <a href="/record-edit/{{ session('alert')['record_id'] }}" class="alert-link">here</a> to edit.
+    </br>
+    <a href="/record-edit/{{ session('alert')['record_id'] }}" class="alert-link">Click here</a> to edit.
     @endif
 
     <!-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> -->

@@ -115,7 +115,7 @@ class RoleControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->get('/role-delete/admin/55000154')
-            ->assertSeeText('You cannot delete the creator!.');
+            ->assertSeeText('You cannot delete your self, this action causes an error.');
     }
 
     // ASSIGN DB ADMIN

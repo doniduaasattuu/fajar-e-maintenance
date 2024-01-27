@@ -44,7 +44,8 @@ $skipped = [
 
     @if ($errors->any())
     <div class="alert alert-danger alert-dismissible" role="alert">
-        The data you submitted is invalid.
+        <!-- The data you submitted is invalid. -->
+        {{ $errors->first() }}
     </div>
     @endif
 
@@ -234,7 +235,13 @@ $skipped = [
         {{-- FINDING DESCRIPTION --}}
         <div class="mb-3">
             <label for="finding_description" class="fw-semibold form-label">Finding</label>
-            <textarea value="{{ isset($finding) ? $finding->description : old('finding_description') }}" placeholder="Description of findings if any" class="form-control" name="finding_description" id="finding_description" cols="30" rows="5"></textarea>
+            <textarea placeholder="Description of findings if any (min 15 character)." class="form-control" name="finding_description" id="finding_description" cols="30" rows="5">{{ isset($finding) ? $finding->description : old('finding_description') }}</textarea>
+
+            @if (!$errors->any() && !isset($motor))
+            <div class="form-text text-secondary">To delete findings that have been submitted, leave the finding description blank.</div>
+            @endif
+
+
             @error('finding_description')
             <div class="form-text text-danger">{{ $message }}</div>
             @enderror
@@ -243,7 +250,16 @@ $skipped = [
         {{-- FINDING IMAGE --}}
         <div class="mb-3">
             <label for="finding_image" class="fw-semibold form-label">Finding attachment</label>
-            <input class="form-control" type="file" id="finding_image" name="finding_image" accept="image/png, image/jpeg, image/jpg">
+            <div class="input-group">
+                <input class="form-control" type="file" id="finding_image" aria-label="Upload" name="finding_image" accept="image/png, image/jpeg, image/jpg">
+                @if( isset($finding) && $finding->image !== null)
+                <button class="btn btn-outline-secondary" type="button" id="image"><a target="_blank" class="text-reset text-decoration-none" href="/storage/findings/{{ $finding->image }}">Existing</a></button>
+                @endif
+            </div>
+            @unless ($errors->any())
+            <div class="form-text text-secondary">Maximum upload file size: 5 MB.</div>
+            @endunless
+
             @error('finding_image')
             <div class="form-text text-danger">{{ $message }}</div>
             @enderror
@@ -269,8 +285,6 @@ $skipped = [
         @isset($motor)
         @if ($motor->status != 'Installed')
         <script>
-            let myform = document.getElementById('myform');
-
             for (input of myform) {
                 input.setAttribute('disabled', true);
             }
@@ -289,6 +303,15 @@ $skipped = [
 @include('utility.script.onlynumbercoma')
 
 <script>
+    // PREVENT SUBMIT ON ENTER
+    let myform = document.getElementById('myform');
+    myform.onkeypress = (event) => {
+        let key = event.keyCode || event.charChode || 0;
+        if (key == 13) {
+            return false;
+        }
+    }
+
     window.onload = () => {
         let vibration_descriptions = document.getElementsByClassName('vibration_description');
 
@@ -328,7 +351,6 @@ $skipped = [
                     unacceptable(select)
                     break;
             }
-
         }
     }
 

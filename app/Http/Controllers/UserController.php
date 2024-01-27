@@ -159,6 +159,10 @@ class UserController extends Controller
     {
         $user = User::query()->find($nik);
 
+        if ($nik == session('nik')) {
+            return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete your self, this action causes an error.']);
+        }
+
         if ($nik == '55000154') {
             return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete the creator!.']);
         }

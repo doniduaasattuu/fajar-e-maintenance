@@ -17,4 +17,11 @@ class FindingRepositoryImpl implements FindingRepository
         $result = $finding->save();
         return $result;
     }
+
+    public function update(array $validated): void
+    {
+        $finding = Finding::query()->find($validated['id']);
+        $this->dataAssigment($finding, $validated);
+        $finding->update();
+    }
 }

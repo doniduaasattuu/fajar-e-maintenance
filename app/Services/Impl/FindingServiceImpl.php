@@ -6,6 +6,7 @@ use App\Models\Finding;
 use App\Repositories\FindingRepository;
 use App\Services\FindingService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class FindingServiceImpl implements FindingService
 {
@@ -21,8 +22,34 @@ class FindingServiceImpl implements FindingService
         return $this->findingRepository->insert($validated);
     }
 
-    public function saveImage(UploadedFile $image, string $image_url): void
+    public function saveImage(UploadedFile $image, string $image_name): void
     {
-        $image->storePubliclyAs('findings', $image->getClientOriginalName(), 'public');
+        $image->storePubliclyAs('findings', $image_name . '.' . $image->getClientOriginalExtension(), 'public');
+    }
+
+    public function insertWithImage(UploadedFile $image, array $validated): void
+    {
+        $this->insert($validated);
+        $this->saveImage($image, $validated['id']);
+    }
+
+    public function update(array $validated): void
+    {
+        $this->findingRepository->update($validated);
+    }
+
+    public function updateWithImage(UploadedFile $image, array $validated): void
+    {
+        $id = $validated['id'];
+        $existing_finding = Finding::query()->find($id);
+        Storage::disk('public')->delete("/findings/" . $existing_finding->image);
+
+        $this->update($validated);
+        $this->saveImage($image, $id);
+    }
+
+    public function deleteImage($finding): void
+    {
+        Storage::disk('public')->delete("/findings/" . $finding->image);
     }
 }

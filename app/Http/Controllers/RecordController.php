@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finding;
 use App\Models\Motor;
 use App\Models\MotorRecord;
 use App\Models\User;
@@ -93,7 +94,7 @@ class RecordController extends Controller
             'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
             'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
             'finding_description' => ['nullable', 'min:15'],
-            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', File::types(['png', 'jpeg', 'jpg'])],
+            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
         ];
 
         $validator = Validator::make($data, $rules);
@@ -102,6 +103,15 @@ class RecordController extends Controller
 
             $validated = $validator->validated();
             $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
+            $image = $request->file('finding_image');
+            $validated_finding = [
+                'id' => $validated['id'],
+                'area' => explode('-', $validated['funcloc'])[2],
+                'description' => $validated['finding_description'],
+                'equipment' => $validated['motor'],
+                'funcloc' => $validated['funcloc'],
+                'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
+            ];
 
             try {
 
@@ -113,31 +123,50 @@ class RecordController extends Controller
                     $this->motorRecordService->save($validated_record);
 
                     // SAVE FINDING
-                    if (!empty($validated['finding_description'])) {
+                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+                        if (!is_null($image) && $image->isValid()) {
 
-                        $validated_finding = [
-                            'area' => explode('-', $validated['funcloc'])[2],
-                            'description' => $validated['finding_description'] ?? null,
-                            'equipment' => $validated['motor'],
-                            'funcloc' => $validated['funcloc'],
-                            'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
-                        ];
-
-                        if ($request->hasFile('finding_image')) {
-
-                            $image_url = $validated['id'];
-                            array_push($validated_finding, ['image' => $image_url]);
-
-                            $image = $request->finding_image;
-                            $this->findingService->saveImage($image, $image_url);
+                            $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                            $this->findingService->insertWithImage($image, $validated_finding);
+                        } else {
+                            $this->findingService->insert($validated_finding);
                         }
-
-                        $this->findingService->insert($validated_finding);
                     }
                 } else {
 
                     // UPDATE RECORD
                     $this->motorRecordService->update($record, $validated_record);
+
+                    // UPDATE FINDING
+                    $finding = Finding::query()->find($validated['id']);
+
+                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+
+                        if (is_null($finding)) {
+                            if (!is_null($image) && $image->isValid()) {
+
+                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                                $this->findingService->insertWithImage($image, $validated_finding);
+                            } else {
+                                $this->findingService->insert($validated_finding);
+                            }
+                        } else {
+                            if (!is_null($image) && $image->isValid()) {
+
+                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                                $this->findingService->updateWithImage($image, $validated_finding);
+                            } else {
+                                $this->findingService->update($validated_finding);
+                            }
+                        }
+                    } else {
+
+                        if (!is_null($finding)) {
+                            $this->findingService->deleteImage($finding);
+                            $finding->delete();
+                        }
+                    }
+
                     return redirect()->back()->with('alert', ['message' => 'The motor record successfully updated.', 'variant' => 'alert-success'])->withInput();
                 }
             } catch (Exception $error) {
@@ -153,6 +182,7 @@ class RecordController extends Controller
     public function editRecordMotor(string $uniqid)
     {
         $record = MotorRecord::query()->find($uniqid);
+        $finding = Finding::query()->find($uniqid);
 
         if (!is_null($record)) {
 
@@ -160,6 +190,7 @@ class RecordController extends Controller
                 'title' => 'Motor record edit',
                 'motorService' => $this->motorService,
                 'record' => $record,
+                'finding' => $finding,
             ]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);

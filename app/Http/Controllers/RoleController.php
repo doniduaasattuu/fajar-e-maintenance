@@ -44,6 +44,10 @@ class RoleController extends Controller
 
     public function roleDeleteAdmin(string $nik)
     {
+        if ($nik == session('nik')) {
+            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot delete your self, this action causes an error.']);
+        }
+
         if ($nik == '55000154') {
             return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot delete the creator!.']);
         }

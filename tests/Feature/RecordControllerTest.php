@@ -2,14 +2,28 @@
 
 namespace Tests\Feature;
 
+use App\Models\Finding;
+use App\Models\Motor;
+use App\Models\MotorRecord;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\Testing\FileFactory;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Testing\Fakes\Fake;
 use Tests\TestCase;
 
 class RecordControllerTest extends TestCase
 {
+    public function clearFindingImages()
+    {
+        $files = new Filesystem();
+        $files->cleanDirectory('storage/app/public/findings');
+    }
+
     public function testGetCheckingFormNotFound()
     {
         $this->withSession([
@@ -131,6 +145,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -178,10 +194,12 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
-            ->assertSeeText('The data you submitted is invalid.');
+            ->assertSeeText('The funcloc field is required.');
     }
 
 
@@ -225,10 +243,12 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
-            ->assertSeeText('The data you submitted is invalid.');
+            ->assertSeeText('The selected funcloc is invalid.');
     }
 
     // ID MOTOR
@@ -272,10 +292,12 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
-            ->assertSeeText('The data you submitted is invalid.');
+            ->assertSeeText('The motor field is required.');
     }
 
     public function testPostRecordMotorIdMotorInvalid()
@@ -318,10 +340,12 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
-            ->assertSeeText('The data you submitted is invalid.');
+            ->assertSeeText('The selected motor is invalid.');
     }
 
     // SORT FIELD
@@ -365,10 +389,12 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
-            ->assertSeeText('The data you submitted is invalid.');
+            ->assertSeeText('The sort field field is required.');
     }
 
     // MOTOR STATUS
@@ -412,6 +438,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -458,6 +486,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -504,6 +534,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -550,6 +582,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -597,6 +631,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -643,6 +679,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -689,6 +727,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -735,6 +775,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -782,6 +824,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -829,6 +873,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -876,6 +922,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -922,6 +970,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -969,6 +1019,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1015,6 +1067,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1061,6 +1115,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1107,6 +1163,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1153,6 +1211,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1199,6 +1259,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1247,6 +1309,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1293,6 +1357,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1340,6 +1406,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1387,6 +1455,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1435,6 +1505,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1481,6 +1553,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1528,6 +1602,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1575,6 +1651,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1623,6 +1701,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1669,6 +1749,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1716,6 +1798,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1763,6 +1847,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1811,6 +1897,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1857,6 +1945,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1904,6 +1994,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1951,6 +2043,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -1999,6 +2093,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2046,6 +2142,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2094,6 +2192,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2140,6 +2240,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2187,6 +2289,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2234,6 +2338,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2282,6 +2388,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2329,6 +2437,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2377,6 +2487,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2423,6 +2535,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2517,6 +2631,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2565,6 +2681,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2612,6 +2730,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2660,6 +2780,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2706,6 +2828,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2753,6 +2877,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2800,6 +2926,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2848,6 +2976,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2895,6 +3025,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2943,6 +3075,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -2990,6 +3124,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3038,6 +3174,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3085,6 +3223,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3132,6 +3272,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3179,6 +3321,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3227,6 +3371,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3274,6 +3420,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3322,6 +3470,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3368,6 +3518,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3415,6 +3567,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3462,6 +3616,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3510,6 +3666,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3557,6 +3715,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3605,6 +3765,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3651,6 +3813,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3698,6 +3862,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3745,6 +3911,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3793,6 +3961,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => null,
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3840,6 +4010,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => 'Lumayan',
                 'noise_nde' => "Abnormal",
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3888,6 +4060,8 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => null,
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
@@ -3935,10 +4109,430 @@ class RecordControllerTest extends TestCase
                 'vibration_nde_frame_desc' => "Unacceptable",
                 'noise_nde' => 'Kasar',
                 'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ])
             ->assertSeeText('The selected noise nde is invalid.')
             ->assertDontSeeText('The motor record successfully saved.');
+    }
+
+    // =====================================================
+    // ================== POST WITH IMAGE ==================
+    // =====================================================
+    public function testPostRecordWithTextAndImageSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $image = UploadedFile::fake()->image('photo.jpg');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => 'This is valid finding_description',
+                'finding_image' => $image,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(1, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithTextSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => 'This is valid finding_description',
+                'finding_image' => null,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(1, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithoutTextAndImageSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => null,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(0, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithTextAndWithoutImageSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => 'This is valid finding description',
+                'finding_image' => null,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(1, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithoutTextAndWithImageFailed()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $image = UploadedFile::fake()->image('photo.jpg');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => null,
+                'finding_image' => $image,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The finding image field is prohibited when finding description is empty.')
+            ->assertDontSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(0, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithTextAndImageFailedMaxSize()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $image = UploadedFile::fake()->create('photo', 5500, 'jpg');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => 'This is valid description finding',
+                'finding_image' => $image,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The finding image field must not be greater than 5000 kilobytes.')
+            ->assertDontSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(0, $findings);
+        $this->clearFindingImages();
+    }
+
+    public function testPostRecordWithTextAndImageInvalidFormat()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-MotorList2100');
+
+        $image = UploadedFile::fake()->create('photo', 2500, 'gif');
+
+        $this->followingRedirects()
+            ->post('/record-motor', [
+                'id' => uniqid(),
+                'funcloc' => "FP-01-PM3-REL-PPRL-PRAR",
+                'motor' => "MGM000481",
+                'sort_field' => "PM3.REEL.PRAR/GM",
+                'motor_status' => "Running",
+                'cleanliness' => "Clean",
+                'nipple_grease' => "Available",
+                'number_of_greasing' => "123",
+                'temperature_de' => "30.09",
+                'temperature_body' => "30.09",
+                'temperature_nde' => "30.09",
+                'vibration_de_vertical_value' => "0.71",
+                'vibration_de_vertical_desc' => "Good",
+                'vibration_de_horizontal_value' => "1.80",
+                'vibration_de_horizontal_desc' => "Satisfactory",
+                'vibration_de_axial_value' => "4.50",
+                'vibration_de_axial_desc' => "Unsatisfactory",
+                'vibration_de_frame_value' => "45",
+                'vibration_de_frame_desc' => "Unacceptable",
+                'noise_de' => "Normal",
+                'vibration_nde_vertical_value' => "1.80",
+                'vibration_nde_vertical_desc' => "Satisfactory",
+                'vibration_nde_horizontal_value' => "4.50",
+                'vibration_nde_horizontal_desc' => "Unsatisfactory",
+                'vibration_nde_frame_value' => "45",
+                'vibration_nde_frame_desc' => "Unacceptable",
+                'noise_nde' => "Abnormal",
+                'nik' => "55000154",
+                'finding_description' => 'This is valid description finding',
+                'finding_image' => $image,
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ])
+            ->assertSeeText('The finding image field must be a file of type: png, jpeg, jpg.')
+            ->assertDontSeeText('The motor record successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertCount(0, $findings);
+        $this->clearFindingImages();
+    }
+
+    // ===============================================
+    // ================== EDIT FUNCLOC =============== 
+    // ===============================================
+
+    public function testGetEditRecord()
+    {
+        $this->testPostRecordMotorSuccess();
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
+
+        $id = $records->first()->id;
+
+        $this->get("/record-edit/$id")
+            ->assertSeeText('Motor record edit')
+            ->assertSeeText('Maximum upload file size: 5 MB.')
+            ->assertDontSeeText('Existing');
+    }
+
+    public function testGetEditRecordWithFinding()
+    {
+        $this->testPostRecordWithTextAndImageSuccess();
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(1, $findings);
+
+        self::assertEquals($records->first()->id, $findings->first()->id);
+        $id = $records->first()->id;
+
+        $this->get("/record-edit/$id")
+            ->assertSeeText('Motor record edit')
+            ->assertSeeText('Existing');
     }
 }

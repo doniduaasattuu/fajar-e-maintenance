@@ -10,6 +10,10 @@ class Finding extends Model
     protected $table = "findings";
     protected $primaryKey = "id";
     protected $keyType = "string";
-    public $incrementing = true;
+    public $incrementing = false;
     public $timestamps = true;
+
+    protected $attributes = [
+        'status' => 'Open'
+    ];
 }
