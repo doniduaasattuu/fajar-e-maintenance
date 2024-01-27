@@ -35,7 +35,7 @@ class RoleControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->get('/role-delete/db_admin/31811016')
-            ->assertSeeText('User deleted from database administrator.');
+            ->assertSeeText('User removed from database administrator.');
     }
 
     public function testDeleteDbAdminAuthorizedTheCreator()
@@ -103,7 +103,7 @@ class RoleControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->get('/role-delete/admin/31811016')
-            ->assertSeeText('User deleted from administrator.');
+            ->assertSeeText('User removed from administrator.');
     }
 
     public function testDeleteAdminAuthorizedTheCreator()
@@ -115,7 +115,7 @@ class RoleControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->get('/role-delete/admin/55000154')
-            ->assertSeeText('You cannot delete your self, this action causes an error.');
+            ->assertSeeText('You cannot unassign yourself, this action causes an error.');
     }
 
     // ASSIGN DB ADMIN

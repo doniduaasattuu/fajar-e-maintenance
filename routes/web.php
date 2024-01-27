@@ -32,6 +32,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('member')->group(function () {
+    // SEARCH 
+    Route::post('/search', [HomeController::class, 'search'])->name('search');
+
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');

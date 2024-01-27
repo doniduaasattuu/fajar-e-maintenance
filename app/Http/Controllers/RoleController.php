@@ -29,7 +29,7 @@ class RoleController extends Controller
         } catch (Exception $error) {
             return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
         }
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User deleted from database administrator."]);
+        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from database administrator."]);
     }
 
     public function roleAssignDbAdmin(string $nik)
@@ -45,7 +45,7 @@ class RoleController extends Controller
     public function roleDeleteAdmin(string $nik)
     {
         if ($nik == session('nik')) {
-            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot delete your self, this action causes an error.']);
+            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot unassign yourself, this action causes an error.']);
         }
 
         if ($nik == '55000154') {
@@ -57,7 +57,7 @@ class RoleController extends Controller
         } catch (Exception $error) {
             return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
         }
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User deleted from administrator."]);
+        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from administrator."]);
     }
 
     public function roleAssignAdmin(string $nik)
