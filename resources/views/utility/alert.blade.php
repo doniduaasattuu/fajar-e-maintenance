@@ -1,6 +1,6 @@
 <!-- alert -->
 @if (session('alert'))
-<div class="alert {{ session('alert')['variant'] }} alert-dismissible" role=" alert">
+<div class="alert {{ session('alert')['variant'] }} alert-dismissible" role="alert">
     {{ session('alert')['message'] }}
 
     <!-- button close alert -->

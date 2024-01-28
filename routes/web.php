@@ -45,6 +45,7 @@ Route::middleware('member')->group(function () {
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
+    Route::get('/motor-install-dismantle', [MotorController::class, 'motorInstallDismantle'])->name('motor-install-dismantle');
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
@@ -56,6 +57,9 @@ Route::middleware('member')->group(function () {
 
     // TREND
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
+
+    // INSTALL - DISMANTLE
+    Route::post('/installed-motor', [MotorController::class, 'installedMotor']);
 
     Route::middleware('role:db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');

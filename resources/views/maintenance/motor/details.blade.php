@@ -7,7 +7,7 @@ $motorDetail = $motor->MotorDetail;
 @foreach ($motorService->getTableColumns() as $column) {{-- MOTOR FORM --}}
 <div class="mb-3">
     <label for="{{ $column }}" class="form-label fw-semibold">{{ $column == 'id' ? 'Motor' : ucfirst(str_replace("_", " ", $column)) }}</label>
-    <input disabled readonly value="{{ $motor->$column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="9" class="form-control">
+    <input readonly value="{{ $motor->$column }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="9" class="form-control">
 </div>
 @endforeach {{-- MOTOR FORM --}}
 <!-- MOTOR -->
@@ -21,7 +21,7 @@ $motorDetail = $motor->MotorDetail;
 @else
 <div class="mb-3">
     <label for="{{ $key }}" class="form-label fw-semibold">{{ $key == 'id' ? 'Motor' : ucfirst(str_replace("_", " ", $key)) }}</label>
-    <input disabled value="{{ $value }}" id="{{ $key }}" name="{{ $key }}" type="text" class="form-control">
+    <input readonly value="{{ $value }}" id="{{ $key }}" name="{{ $key }}" type="text" class="form-control">
 </div>
 @endif
 @endforeach
@@ -35,7 +35,7 @@ $motorDetail = $motor->MotorDetail;
 
 <div class="mb-3">
     <label for="{{ $column }}" class="form-label fw-semibold">{{ ucfirst(str_replace("_", " ", $column)) }}</label>
-    <input value="Not set" disabled id="{{ $column }}" name="{{ $column }}" type="text" class="form-control">
+    <input value="Not set" readonly id="{{ $column }}" name="{{ $column }}" type="text" class="form-control">
 </div>
 
 @endforeach

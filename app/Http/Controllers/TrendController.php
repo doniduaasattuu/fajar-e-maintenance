@@ -25,9 +25,9 @@ class TrendController extends Controller
         $end_date = Carbon::now()->addDays(1);
         $start_date = Carbon::now()->addYears(-1)->addDays(-1);
 
-        if (in_array($equipment_code, $this->motorService->motorCodes())) {
-            // MOTOR
+        if (in_array($equipment_code, $this->motorService->motorCodes()) && in_array($equipment, $this->motorService->registeredMotors())) {
 
+            // MOTOR
             $collection = collect([
                 'equipment' => $equipment,
                 'table' => 'motor_records',
@@ -37,8 +37,6 @@ class TrendController extends Controller
             ]);
 
             $trends = $this->queryTrend($collection);
-            // $temperature_de = $this->getValueOf($trends, 'created_at');
-            // return response()->json($temperature_de);
             return response()->view('maintenance.trends.motor', [
                 'equipment' => $equipment,
                 'title' => 'Equipment trend',
@@ -76,10 +74,19 @@ class TrendController extends Controller
                 }),
                 'number_of_greasing' => $this->getValueOf($trends, 'number_of_greasing'),
                 'nik' => $this->getValueOf($trends, 'nik'),
-
             ]);
         } else if (in_array($equipment_code, ['ETF'])) {
+
             // TRAFO
+            $collection = collect([
+                'equipment' => $equipment,
+                'table' => 'trafo_records',
+                'type' => 'trafo',
+                'start_date' => $start_date,
+                'end_date' => $end_date,
+            ]);
+
+            $trends = $this->queryTrend($collection);
 
             return redirect('/');
         } else {

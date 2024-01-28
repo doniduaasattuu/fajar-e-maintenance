@@ -11,8 +11,10 @@ use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use PhpParser\Node\Expr\FuncCall;
 
 class MotorController extends Controller
 {
@@ -211,5 +213,19 @@ class MotorController extends Controller
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
+    }
+
+    public function motorInstallDismantle()
+    {
+        return response()->view('maintenance.motor.install-dismantle', [
+            'title' => 'Install dismantle'
+        ]);
+    }
+
+    public function installedMotor(Request $request)
+    {
+        $equipment = $request->input('equipment');
+        $motor = Motor::query()->with(['MotorDetail'])->find($equipment);
+        return response()->json($motor);
     }
 }

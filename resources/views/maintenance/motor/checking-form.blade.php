@@ -253,16 +253,12 @@ $skipped = [
 @include('utility.script.changevibrationdescriptioncolor')
 @include('utility.script.onlynumber')
 @include('utility.script.onlynumbercoma')
+@include('utility.script.prevent-submit-form')
 
 <script>
     // PREVENT SUBMIT ON ENTER
     let myform = document.getElementById('myform');
-    myform.onkeypress = (event) => {
-        let key = event.keyCode || event.charChode || 0;
-        if (key == 13) {
-            return false;
-        }
-    }
+    preventSubmitForm(myform);
 
     window.onload = () => {
         let vibration_descriptions = document.getElementsByClassName('vibration_description');
