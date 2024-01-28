@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 trait Utility
@@ -40,5 +43,38 @@ trait Utility
     {
         $equipment_code = preg_replace('/[0-9]/i', '', $equipment);
         return $equipment_code;
+    }
+
+    // TREND
+    public function getValueOf(Collection $trends, $column): Collection
+    {
+        $data = [];
+
+        if ($column == 'created_at') {
+            foreach ($trends as $trend) {
+
+                array_push($data, $this->formatDDMMYY($trend->$column));
+            }
+        } else if ($column == 'nik') {
+
+            foreach ($trends as $trend) {
+                $user = User::query()->find($trend->$column);
+                array_push($data, $user->abbreviated_name);
+            }
+        } else {
+            foreach ($trends as $trend) {
+                array_push($data, $trend->$column);
+            }
+        }
+
+        return collect($data);
+    }
+
+    public function formatDDMMYY(string $date)
+    {
+        $dates = explode('-', Carbon::create($date)->toDateString());
+        $ddmmyy = "$dates[2]/$dates[1]/" . substr($dates[0], 2, 3);
+
+        return $ddmmyy;
     }
 }

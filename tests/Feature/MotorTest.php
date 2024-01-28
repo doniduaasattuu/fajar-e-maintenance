@@ -3,9 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Motor;
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorDetailsSeeder;
+use Database\Seeders\MotorSeeder;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -13,7 +13,7 @@ class MotorTest extends TestCase
 {
     public function testMotorRelationToFuncloc()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motor = Motor::query()->find('EMO000426');
         self::assertNotNull($motor);
@@ -24,7 +24,7 @@ class MotorTest extends TestCase
 
     public function testMotorRelationToFunclocNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motor = Motor::query()->find('EMO000008');
         self::assertNotNull($motor);
@@ -35,7 +35,7 @@ class MotorTest extends TestCase
 
     public function testMotorRelationToMotorDetail()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         $motor = Motor::query()->find('MGM000481');
         $motorDetail = $motor->MotorDetail;
@@ -47,7 +47,7 @@ class MotorTest extends TestCase
 
     public function testMotorQueryWithMotorDetail()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         $motor = Motor::query()->with(['MotorDetail'])->find('EMO000426');
         $motorDetail = $motor->MotorDetail;

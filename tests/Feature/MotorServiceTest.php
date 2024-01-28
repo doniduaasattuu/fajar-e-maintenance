@@ -4,9 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Motor;
 use App\Services\MotorService;
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -35,7 +34,7 @@ class MotorServiceTest extends TestCase
 
     public function testMotorServiceRegisteredMotors()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $motors = $motorService->registeredMotors();
@@ -45,7 +44,7 @@ class MotorServiceTest extends TestCase
 
     public function testUpdateMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motor = Motor::query()->find('EMO000105');
         self::assertNotNull($motor);
@@ -66,7 +65,7 @@ class MotorServiceTest extends TestCase
 
     public function testRegisteredUniqueIds()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $uniqueIds = $motorService->registeredUniqueIds();
@@ -79,7 +78,7 @@ class MotorServiceTest extends TestCase
 
     public function testRegisteredQrCodeLinks()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $qrCodeLinks = $motorService->registeredQrCodeLinks();
@@ -92,7 +91,7 @@ class MotorServiceTest extends TestCase
 
     public function testMotorCodes()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $allCodes = DB::table('motors')->select(DB::raw('DISTINCT LEFT (id, 3) as codes'))->get();
         $motorCodes = array();
@@ -105,7 +104,7 @@ class MotorServiceTest extends TestCase
 
     public function testUtilityTrait()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $columns = $motorService->getColumns('motors');
@@ -116,7 +115,7 @@ class MotorServiceTest extends TestCase
 
     public function testFilterValidatedValueRaw()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
 
@@ -147,7 +146,7 @@ class MotorServiceTest extends TestCase
 
     public function testMotorServiceFilterValidatedValue()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
 

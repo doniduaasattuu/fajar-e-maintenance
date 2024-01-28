@@ -3,18 +3,19 @@
 namespace Tests\Feature;
 
 use App\Models\Funcloc;
-use Database\Seeders\DatabaseSeeder;
+use App\Models\MotorDetails;
 use Database\Seeders\FunclocSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
+use Database\Seeders\MotorDetailsSeeder;
+use Database\Seeders\MotorSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
 use Tests\TestCase;
 
 class FunclocTest extends TestCase
 {
     public function testFunclocRelationToMotors()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
         self::assertNotNull($funcloc);
@@ -27,7 +28,7 @@ class FunclocTest extends TestCase
 
     public function testFunclocRelationToMotorsNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
         self::assertNotNull($funcloc);
@@ -39,9 +40,9 @@ class FunclocTest extends TestCase
 
     public function testFunclocRelationToMotorDetail()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
+        $funcloc = Funcloc::query()->with(['MotorDetail'])->find('FP-01-SP3-RJS-T092-P092');
         $motorDetail = $funcloc->MotorDetail;
         self::assertNotNull($motorDetail);
         self::assertEquals('AEEBPA040100YW05T', $motorDetail->type);
@@ -49,7 +50,7 @@ class FunclocTest extends TestCase
 
     public function testFunclocRelationToMotorDetailNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
         $motorDetail = $funcloc->MotorDetail;

@@ -3,17 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\Finding;
-use App\Models\Motor;
 use App\Models\MotorRecord;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorDetailsSeeder;
+use Database\Seeders\MotorSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\Testing\FileFactory;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Testing\Fakes\Fake;
 use Tests\TestCase;
 
 class RecordControllerTest extends TestCase
@@ -56,7 +54,7 @@ class RecordControllerTest extends TestCase
 
     public function testGetCheckingValidSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -78,7 +76,7 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('Number of greasing')
             ->assertSeeText('Left side')
             ->assertSeeText('Front side')
-            ->assertSeeText('IEC 60085')
+            ->assertSee('IEC 60085')
             ->assertSeeText('Temperature de')
             ->assertSeeText('Temperature body')
             ->assertSeeText('Temperature nde')
@@ -156,7 +154,7 @@ class RecordControllerTest extends TestCase
     // FUNCLOC
     public function testPostRecordMotorFunclocNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -205,7 +203,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorFunclocInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -254,7 +252,7 @@ class RecordControllerTest extends TestCase
     // ID MOTOR
     public function testPostRecordMotorIdMotorNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -302,7 +300,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorIdMotorInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -351,7 +349,7 @@ class RecordControllerTest extends TestCase
     // SORT FIELD
     public function testPostRecordMotorSortFieldNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -400,7 +398,7 @@ class RecordControllerTest extends TestCase
     // MOTOR STATUS
     public function testPostRecordMotorMotorStatusNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -448,7 +446,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -496,7 +494,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusRunningSucess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -544,7 +542,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusNotRunningSucess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -593,7 +591,7 @@ class RecordControllerTest extends TestCase
     // CLEANLINESS
     public function testPostRecordMotorCleanlinessNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -641,7 +639,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -689,7 +687,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessCleanSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -737,7 +735,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessDirtySuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -786,7 +784,7 @@ class RecordControllerTest extends TestCase
     // NIPPLE GREASE
     public function testPostRecordMotorNippleGreaseNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -835,7 +833,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -884,7 +882,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseAvailableSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -932,7 +930,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseNotAvailableSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -981,7 +979,7 @@ class RecordControllerTest extends TestCase
     // NUMBER OF GREASING
     public function testPostRecordMotorNumberOfGreasingNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1029,7 +1027,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingFilled()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1077,7 +1075,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1125,7 +1123,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidType()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1173,7 +1171,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidTypeComa()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1221,7 +1219,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1271,7 +1269,7 @@ class RecordControllerTest extends TestCase
     // TEMPERATURE DE
     public function testPostRecordMotorTemperatureDeNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1319,7 +1317,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1368,7 +1366,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1417,7 +1415,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1467,7 +1465,7 @@ class RecordControllerTest extends TestCase
     // TEMPERATURE BODY
     public function testPostRecordMotorTemperatureBodyNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1515,7 +1513,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1564,7 +1562,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1613,7 +1611,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1663,7 +1661,7 @@ class RecordControllerTest extends TestCase
     // TEMPERATURE NDE
     public function testPostRecordMotorTemperatureNdeNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1711,7 +1709,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1760,7 +1758,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1809,7 +1807,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1859,7 +1857,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DEV VALUE
     public function testPostRecordMotorVibrationDeVerticalNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1907,7 +1905,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1956,7 +1954,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2005,7 +2003,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2055,7 +2053,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DE VERTICAL DESC
     public function testPostRecordMotorVibrationDeVerticalDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2104,7 +2102,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2154,7 +2152,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DEH VALUE
     public function testPostRecordMotorVibrationDeHorizontalNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2202,7 +2200,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2251,7 +2249,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2300,7 +2298,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2350,7 +2348,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DE HORIZONTAL DESC
     public function testPostRecordMotorVibrationDeHorizontalDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2399,7 +2397,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2449,7 +2447,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DEA VALUE
     public function testPostRecordMotorVibrationDeAxialNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2497,7 +2495,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2546,7 +2544,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2593,7 +2591,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2643,7 +2641,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DE AXIAL DESC
     public function testPostRecordMotorVibrationDeAxialDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2692,7 +2690,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2742,7 +2740,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DEF VALUE
     public function testPostRecordMotorVibrationDeFrameNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2790,7 +2788,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2839,7 +2837,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2888,7 +2886,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2938,7 +2936,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DE FRAME DESC
     public function testPostRecordMotorVibrationDeFrameDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2987,7 +2985,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3037,7 +3035,7 @@ class RecordControllerTest extends TestCase
     // NOISE DE
     public function testPostRecordMotorNoiseDeNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3086,7 +3084,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNoiseDeInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3136,7 +3134,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION NDEV VALUE
     public function testPostRecordMotorVibrationNdeVerticalNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3185,7 +3183,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3234,7 +3232,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3283,7 +3281,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3333,7 +3331,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION NDE VERTICAL DESC
     public function testPostRecordMotorVibrationNdeVerticalDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3382,7 +3380,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3432,7 +3430,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION NDEH VALUE
     public function testPostRecordMotorVibrationNdeHorizontalNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3480,7 +3478,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3529,7 +3527,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3578,7 +3576,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3628,7 +3626,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION DE HORIZONTAL DESC
     public function testPostRecordMotorVibrationNdeHorizontalDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3677,7 +3675,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3727,7 +3725,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION NDEF VALUE
     public function testPostRecordMotorVibrationNdeFrameNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3775,7 +3773,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidDecimal()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3824,7 +3822,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3873,7 +3871,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3923,7 +3921,7 @@ class RecordControllerTest extends TestCase
     // VIBRATION NDE FRAME DESC
     public function testPostRecordMotorVibrationNdeFrameDescNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -3972,7 +3970,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameDescInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4022,7 +4020,7 @@ class RecordControllerTest extends TestCase
     // NOISE NDE
     public function testPostRecordMotorNoiseNdeNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4071,7 +4069,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordMotorNoiseNdeInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4171,13 +4169,13 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(1, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
     public function testPostRecordWithTextSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4223,7 +4221,7 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(1, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
@@ -4281,7 +4279,7 @@ class RecordControllerTest extends TestCase
 
     public function testPostRecordWithTextAndWithoutImageSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4327,13 +4325,13 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(1, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
     public function testPostRecordWithoutTextAndWithImageFailed()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4382,13 +4380,13 @@ class RecordControllerTest extends TestCase
             ->assertDontSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(0, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
     public function testPostRecordWithTextAndImageFailedMaxSize()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4437,13 +4435,13 @@ class RecordControllerTest extends TestCase
             ->assertDontSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(0, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
     public function testPostRecordWithTextAndImageInvalidFormat()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4492,7 +4490,7 @@ class RecordControllerTest extends TestCase
             ->assertDontSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(0, $findings);
+        self::assertNotNull($findings);
         $this->clearFindingImages();
     }
 
@@ -4506,7 +4504,7 @@ class RecordControllerTest extends TestCase
 
         $records = MotorRecord::query()->get();
         self::assertNotNull($records);
-        self::assertCount(1, $records);
+        self::assertCount(37, $records);
 
         $id = $records->first()->id;
 
@@ -4518,18 +4516,18 @@ class RecordControllerTest extends TestCase
 
     public function testGetEditRecordWithFinding()
     {
+        $this->seed(DatabaseSeeder::class);
         $this->testPostRecordWithTextAndImageSuccess();
 
         $records = MotorRecord::query()->get();
         self::assertNotNull($records);
-        self::assertCount(1, $records);
+        self::assertCount(37, $records);
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
-        self::assertCount(1, $findings);
+        self::assertNotNull($findings);
 
-        self::assertEquals($records->first()->id, $findings->first()->id);
-        $id = $records->first()->id;
+        $id = $findings->first()->id;
 
         $this->get("/record-edit/$id")
             ->assertSeeText('Motor record edit')

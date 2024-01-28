@@ -4,14 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Services\UserService;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
-use Exception;
-use Illuminate\Database\QueryException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase
@@ -117,7 +111,6 @@ class UserServiceTest extends TestCase
         $userService = $this->app->make(UserService::class);
         $currentUser = $userService->user('55000154');
         self::assertNotNull($currentUser);
-        Log::info(json_encode($currentUser, JSON_PRETTY_PRINT));
     }
 
     public function testUserServiceUpdate()
@@ -143,7 +136,7 @@ class UserServiceTest extends TestCase
 
     public function testIsAdminTrue()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
         $userService = $this->app->make(UserService::class);
         $admin = $userService->isAdmin('55000154');
         self::assertTrue($admin);
@@ -151,7 +144,7 @@ class UserServiceTest extends TestCase
 
     public function testIsAdminFalse()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
         $userService = $this->app->make(UserService::class);
         $admin = $userService->isAdmin('55000153');
         self::assertFalse($admin);

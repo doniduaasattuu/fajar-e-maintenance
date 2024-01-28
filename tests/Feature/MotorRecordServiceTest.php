@@ -3,9 +3,6 @@
 namespace Tests\Feature;
 
 use App\Services\MotorRecordService;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class MotorRecordServiceTest extends TestCase
@@ -17,6 +14,5 @@ class MotorRecordServiceTest extends TestCase
         $columns = $motorRecordService->getColumns('motor_records');
         self::assertNotNull($columns);
         self::assertCount(30, $columns);
-        Log::info(json_encode($columns, JSON_PRETTY_PRINT));
     }
 }

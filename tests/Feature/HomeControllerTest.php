@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
 use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
@@ -65,7 +66,7 @@ class HomeControllerTest extends TestCase
 
     public function testSearchGuestMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->post('/search', [
             'equipment' => 'EMO000426'
@@ -75,7 +76,7 @@ class HomeControllerTest extends TestCase
 
     public function testSearchMemberMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -89,7 +90,7 @@ class HomeControllerTest extends TestCase
 
     public function testSearchMemberMotorNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000154',
@@ -103,7 +104,7 @@ class HomeControllerTest extends TestCase
 
     public function testSearchMemberMotorInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000154',
@@ -117,7 +118,7 @@ class HomeControllerTest extends TestCase
 
     public function testSearchMemberTrafo()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000154',

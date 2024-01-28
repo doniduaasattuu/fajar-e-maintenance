@@ -9,15 +9,17 @@ use App\Models\User;
 use App\Services\FindingService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
+use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
 class RecordController extends Controller
 {
+    use Utility;
+
     private MotorService $motorService;
     private MotorRecordService $motorRecordService;
     private FindingService $findingService;

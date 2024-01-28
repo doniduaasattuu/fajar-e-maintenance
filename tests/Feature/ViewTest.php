@@ -2,18 +2,17 @@
 
 namespace Tests\Feature;
 
-use App\Models\Funcloc;
 use App\Models\Motor;
 use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\UserService;
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorDetailsSeeder;
+use Database\Seeders\MotorSeeder;
 use Exception;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
+
+use function Termwind\ask;
 
 class ViewTest extends TestCase
 {
@@ -83,7 +82,7 @@ class ViewTest extends TestCase
 
     public function testViewMotors()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $this->view('maintenance.motor.motor', [
             'title' => 'Table motor',
@@ -104,7 +103,7 @@ class ViewTest extends TestCase
 
     public function testViewEditMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motor = Motor::query()->find('EMO001092');
 
@@ -126,7 +125,7 @@ class ViewTest extends TestCase
 
     public function testViewEditMotorNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         $motor = Motor::query()->find('EMO000000');
 
@@ -143,7 +142,7 @@ class ViewTest extends TestCase
 
     public function testViewMotorDetails()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         $motor = Motor::query()->find('EMO000105');
 

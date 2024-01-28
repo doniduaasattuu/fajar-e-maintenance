@@ -61,16 +61,14 @@ $skipped = [
 
     {{-- TREND --}}
     @isset($motor)
-    <form action="/equipment-trends" method="post" enctype="multipart/form-data">
-        @csrf
-
+    <a target="_blank" href="/equipment-trend/{{ isset($motor) ? $motor->id : '' }}" title="Year to date">
         <button class="btn btn-success mb-2 text-white">
             <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
             </svg>
             <div class="d-inline fw-semibold">TRENDS</div>
         </button>
-    </form>
+    </a>
     @endisset
 
     {{-- MOTOR DETAIL --}}
@@ -107,58 +105,12 @@ $skipped = [
 
             {{-- IMAGE FOR TEMPERATURE --}}
             @if ($loop->iteration == 5)
-            <div class="mb-3">
-                <div class="row mb-3">
-
-                    <!-- IMAGE LEFT SIDE -->
-                    <div class="col-sm">
-                        <figure>
-                            <img class="img-fluid" src="/storage/assets/images/left-side.jpeg" alt="Left Side">
-                            <figcaption class="figure-caption text-center">Left side</figcaption>
-                        </figure>
-                    </div>
-
-                    <!-- IMAGE FRONT SIDE -->
-                    <div class="col-sm">
-                        <figure>
-                            <img class="img-fluid" src="/storage/assets/images/front-side.jpeg" alt="Front Side">
-                            <figcaption class="figure-caption text-center">Front side</figcaption>
-                        </figure>
-                    </div>
-                </div>
-
-                <!-- IMAGE IEC 60085 -->
-                <div class="mb-3">
-                    <div class="col-md">
-                        <figure>
-                            <img class="img-fluid mx-auto d-block" src="/storage/assets/images/temp_iso_IEC_60085.png" alt="Temperature">
-                            <figcaption class="figure-caption text-center">IEC 60085</figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
+            @include('utility.image-temperature')
             @endif
 
             {{-- IMAGE FOR VIBRATION --}}
             @if ($loop->iteration == 8)
-            <div class="mb-3">
-                <div class="row">
-                    <!-- IMAGE VIBRATION SEVERITY TABLE -->
-                    <div class="col-sm">
-                        <figure>
-                            <img class="img-fluid mx-auto d-block" src="/storage/assets/images/vibration-iso-10816.jpg" alt="Vibration">
-                            <figcaption id="figcaption_vibrations" class="figure-caption text-center">Vibration standard</figcaption>
-                        </figure>
-                    </div>
-                    <!-- IMAGE VIBRATION INSPECTION GUIDE -->
-                    <div class="col-sm">
-                        <figure>
-                            <img class="img-fluid mx-auto d-block" src="/storage/assets/images/vibration-inspection-guide.png" alt="Vibration inspection guide">
-                            <figcaption id="figcaption_vibration" class="figure-caption text-center">Vibration inspection guide</figcaption>
-                        </figure>
-                    </div>
-                </div>
-            </div>
+            @include('utility.image-vibration')
             @endif
 
             {{-- MOTOR STATUS --}}

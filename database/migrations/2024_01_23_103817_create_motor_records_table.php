@@ -41,10 +41,6 @@ return new class extends Migration
             $table->enum("noise_nde", ["Normal", "Abnormal"])->nullable(true);
             $table->string("nik", 8)->nullable(false);
             $table->timestamps();
-
-            $table->foreign('funcloc')->references('id')->on('funclocs');
-            $table->foreign('motor')->references('id')->on('motors');
-            $table->foreign("nik")->references("nik")->on("users");
         });
     }
 

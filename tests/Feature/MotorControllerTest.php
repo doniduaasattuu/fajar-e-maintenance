@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Database\Seeders\DatabaseEraser;
 use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class MotorControllerTest extends TestCase

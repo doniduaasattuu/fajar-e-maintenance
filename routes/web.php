@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
@@ -52,6 +53,9 @@ Route::middleware('member')->group(function () {
     Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
     Route::get('/record-edit/{uniqid}', [RecordController::class, 'editRecordMotor']);
     Route::get('/checking-form', [HomeController::class, 'checkingForm']);
+
+    // TREND
+    Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
     Route::middleware('role:db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');

@@ -2,9 +2,8 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
 use Tests\TestCase;
 
 class RoleControllerTest extends TestCase
@@ -28,7 +27,7 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteDbAdminAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -40,7 +39,7 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteDbAdminAuthorizedTheCreator()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -96,7 +95,7 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteAdminAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -108,7 +107,7 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteAdminAuthorizedTheCreator()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',

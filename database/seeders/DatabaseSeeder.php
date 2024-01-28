@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             FunclocSeeder::class,
             MotorSeeder::class,
             MotorDetailsSeeder::class,
-            // MotorRecordSeeder::class,
+            MotorRecordSeeder::class,
         ]);
     }
 }

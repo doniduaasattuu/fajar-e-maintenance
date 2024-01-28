@@ -4,10 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Services\UserService;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -632,7 +630,7 @@ class UserControllerTest extends TestCase
     // USERS MANAGEMENT PAGE FOR ADMINISTRATOR
     public function testGetUserManagementGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->get('/users')
             ->assertRedirectToRoute('login');
@@ -640,7 +638,7 @@ class UserControllerTest extends TestCase
 
     public function testGetUserManagementEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -652,7 +650,7 @@ class UserControllerTest extends TestCase
 
     public function testGetUserManagementAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -673,7 +671,7 @@ class UserControllerTest extends TestCase
     // DELETE USER
     public function testDeleteUserGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this
             ->get('/user-delete/55000153')
@@ -682,7 +680,7 @@ class UserControllerTest extends TestCase
 
     public function testDeleteUserEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -694,7 +692,7 @@ class UserControllerTest extends TestCase
 
     public function testDeleteUserAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -752,7 +750,7 @@ class UserControllerTest extends TestCase
     // RESET PASSWORD
     public function testResetPasswordGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->get('/user-reset/55000153')
             ->assertRedirectToRoute('login');
@@ -760,7 +758,7 @@ class UserControllerTest extends TestCase
 
     public function testResetPasswordEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(UserSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -770,11 +768,12 @@ class UserControllerTest extends TestCase
             ->assertSeeText('You are not allowed to perform this operation!.');
     }
 
-    public function testResetPasswordAuthorized()
+    public function testResetPasswordAuthorizedSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
         $user = User::query()->find('55000153');
+        self::assertNotNull($user);
         $user->password = '@JamalMirdad123';
         $user->update();
 

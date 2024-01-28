@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Funcloc;
 use App\Services\FunclocService;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Log;
@@ -35,7 +37,7 @@ class FunclocServiceTest extends TestCase
 
     public function testFunclocServiceRegisteredFunclocs()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $funclocService = $this->app->make(FunclocService::class);
         $funclocs = $funclocService->registeredFunclocs();
@@ -45,7 +47,7 @@ class FunclocServiceTest extends TestCase
 
     public function testUpdateFuncloc()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
         self::assertNotNull($funcloc);
