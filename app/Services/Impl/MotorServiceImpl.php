@@ -158,4 +158,22 @@ class MotorServiceImpl implements MotorService
 
         return $motorCodes;
     }
+
+    public function installDismantle(string $dismantle, string $install): void
+    {
+        $motor_dismantle = Motor::query()->find($dismantle);
+        $motor_install = Motor::query()->find($install);
+
+        if ($motor_dismantle->status == 'Installed' && $motor_install->status == 'Available') {
+            $motor_install->status = $motor_dismantle->status;
+            $motor_install->funcloc = $motor_dismantle->funcloc;
+            $motor_install->sort_field = $motor_dismantle->sort_field;
+            $motor_install->update();
+
+            $motor_dismantle->status = 'Repaired';
+            $motor_dismantle->funcloc = null;
+            $motor_dismantle->sort_field = null;
+            $motor_dismantle->update();
+        }
+    }
 }

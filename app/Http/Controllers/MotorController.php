@@ -7,14 +7,10 @@ use App\Services\FunclocService;
 use App\Services\MotorDetailService;
 use App\Services\MotorService;
 use App\Traits\Utility;
-use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use PhpParser\Node\Expr\FuncCall;
 
 class MotorController extends Controller
 {
@@ -80,7 +76,7 @@ class MotorController extends Controller
             'status' => ['required', Rule::in($this->motorService->statusEnum())],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#]+$/u'],
+            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
             'material_number' => ['nullable', 'digits:8', 'numeric'],
             'unique_id' => ['required', 'numeric', 'exists:App\Models\Motor,unique_id'],
             'qr_code_link' => ['required', 'exists:App\Models\Motor,qr_code_link'],
@@ -155,7 +151,7 @@ class MotorController extends Controller
             'status' => ['required', Rule::in($this->motorService->statusEnum())],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#]+$/u'],
+            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
             'material_number' => ['nullable', 'numeric', 'digits:8'],
             'unique_id' => ['required', 'numeric', Rule::notIn($this->motorService->registeredUniqueIds())],
             'qr_code_link' => ['required', 'starts_with:https://www.safesave.info/MIC.php?id=Fajar-MotorList', Rule::notIn($this->motorService->registeredQrCodeLinks())],
@@ -222,10 +218,49 @@ class MotorController extends Controller
         ]);
     }
 
-    public function installedMotor(Request $request)
+    public function equipmentMotor(Request $request)
     {
         $equipment = $request->input('equipment');
+        $status = $request->input('status');
+
         $motor = Motor::query()->with(['MotorDetail'])->find($equipment);
-        return response()->json($motor);
+
+        if (!is_null($motor)) {
+            if ($motor->status == $status) {
+                return response()->json($motor);
+            } else {
+                return response()->json(null);
+            }
+        } else {
+            return response()->json($motor);
+        }
+    }
+
+    public function doMotorInstallDismantle(Request $request)
+    {
+        $rules = [
+            'id_dismantle' => ['required', 'size:9', 'different:id_install', Rule::in($this->motorService->registeredMotors())],
+            'id_install' => ['required', 'size:9', 'different:id_dismantle', Rule::in($this->motorService->registeredMotors())],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+
+            $validated = $validator->validated();
+            $dismantle = $validated['id_dismantle'];
+            $install = $validated['id_install'];
+
+            try {
+                $this->motorService->installDismantle($dismantle, $install);
+            } catch (Exception $error) {
+
+                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error.', 'message' => $error->getMessage()]);
+            }
+
+            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor was successfully swapped."]);
+        } else {
+            return redirect()->back()->with('message', ['header' => '[403] Forbidden.', 'message' => $validator->errors()->first()]);
+        }
     }
 }

@@ -192,5 +192,41 @@ class MotorDetailsSeeder extends Seeder
         $motorDetails5->cooling_fan = 'Internal';
         $motorDetails5->mounting = 'Horizontal';
         $motorDetails5->save();
+
+        $motorDetails16 = new MotorDetails();
+        $motorDetails16->motor_detail = 'EMO000075';
+        $motorDetails16->manufacturer = 'TECO';
+        $motorDetails16->serial_number = 'P9543291';
+        $motorDetails16->type = 'AEEBPA040100YW05T';
+        $motorDetails16->power_rate = '75';
+        $motorDetails16->power_unit = 'kW';
+        $motorDetails16->voltage = '380';
+        $motorDetails16->electrical_current = 'AC';
+        $motorDetails16->current_nominal = '140';
+        $motorDetails16->frequency = '50';
+        $motorDetails16->pole = '4';
+        $motorDetails16->rpm = '1475';
+        $motorDetails16->bearing_de = 'NU216';
+        $motorDetails16->bearing_nde = '6213';
+        $motorDetails16->frame_type = '250 M';
+        $motorDetails16->shaft_diameter = null;
+        $motorDetails16->phase_supply = '3';
+        $motorDetails16->cos_phi = null;
+        $motorDetails16->efficiency = null;
+        $motorDetails16->ip_rating = '55';
+        $motorDetails16->insulation_class = 'F';
+        $motorDetails16->duty = 'S1';
+        $motorDetails16->connection_type = null;
+        $motorDetails16->nipple_grease = null;
+        $motorDetails16->greasing_type = null;
+        $motorDetails16->greasing_qty_de = null;
+        $motorDetails16->greasing_qty_nde = null;
+        $motorDetails16->length = null;
+        $motorDetails16->width = null;
+        $motorDetails16->height = '250';
+        $motorDetails16->weight = null;
+        $motorDetails16->cooling_fan = 'Internal';
+        $motorDetails16->mounting = 'Horizontal';
+        $motorDetails16->save();
     }
 }

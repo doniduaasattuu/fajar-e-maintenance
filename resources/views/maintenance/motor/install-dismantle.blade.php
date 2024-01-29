@@ -2,19 +2,27 @@
 
 <div class="py-4">
 
+    <div class="mb-3">
+        <h3 class="mb-1">{{ $title }}</h3>
+        <nav aria-label=" breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/motors">Table</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
+            </ol>
+        </nav>
+    </div>
 
-    <form id="installDismantleForm" style="min-width: 370px;">
+    <form id="installDismantleForm" action="/motor-install-dismantle" method="post">
+        @csrf
+
         <div class="row">
-
-            <!-- HEADER -->
-            <h3 class="mb-3">{{ $title }}</h3>
-            <!-- HEADER -->
 
             <!-- FORM DISMANTLED -->
             <div class="pe-1 col">
                 <div>
                     <!-- SEARCH FORM -->
                     <div class="form-group row mb-3">
+                        <!-- LABEL -->
                         <label for="equipment_to_dismantle" class="col-form-label col-xl-10 fw-bold">
                             <svg class="mb-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#dc3545" class="bi bi-box-arrow-up" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
@@ -22,8 +30,9 @@
                             </svg>
                             Dismantle
                         </label>
+                        <!-- INPUT -->
                         <div class="input-group col-xl-10">
-                            <input id="equipment_to_dismantle" oninput="return toupper(this)" maxlength="9" type="text" class="form-control" style="border-width: 1px; border-color: #dc3545" placeholder="Equipment">
+                            <input id="equipment_to_dismantle" oninput="return toupper(this)" maxlength="9" type="text" class="form-control pe-0" style="border-width: 1px; border-color: #dc3545" placeholder="Equipment">
                             <div id="button_search_dismantle" class="btn btn-danger">
                                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -48,6 +57,7 @@
                 <div>
                     <!-- SEARCH FORM -->
                     <div class="form-group row mb-3">
+                        <!-- LABEL -->
                         <label for="equipment_to_install" class="col-form-label col-xl-10 fw-bold">
                             <svg class="mb-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#0d6efd" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
@@ -55,8 +65,9 @@
                             </svg>
                             Install
                         </label>
+                        <!-- INPUT -->
                         <div class="input-group col-xl-10">
-                            <input id="equipment_to_install" oninput="return toupper(this)" maxlength="9" type="text" class="form-control" style="border-width: 1px; border-color: #0d6efd" placeholder="Equipment">
+                            <input id="equipment_to_install" oninput="return toupper(this)" maxlength="9" type="text" class="form-control pe-0" style="border-width: 1px; border-color: #0d6efd" placeholder="Equipment">
                             <div id="button_search_install" class="btn btn-primary">
                                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
@@ -75,15 +86,16 @@
             <!-- FORM INSTALLED -->
         </div>
 
-        <div id="button_submit" class="d-none">
-            <button type="submit" class="mt-4 btn btn-primary">
-                <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
-                    <path d="M11 2H9v3h2V2Z" />
-                    <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0ZM1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5Zm3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4v4.5ZM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5V15Z" />
+        <!-- BUTTON SUBMIT -->
+        <div id="do_install_dismantle" class="d-none mb-3">
+            <button class="w-100 btn btn-primary">
+                <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
                 </svg>
-                Change
+                Swap
             </button>
         </div>
+
     </form>
 </div>
 
@@ -103,19 +115,30 @@
     // BUTTON DISMANTLE
     let button_search_dismantle = document.getElementById('button_search_dismantle');
     button_search_dismantle.onclick = () => {
-        removeAllChildren(dismantle_form)
-        createAjaxRequest(equipment_to_dismantle, '/installed-motor', dismantle_form)
+        doAjaxRequest(dismantle_form, equipment_to_dismantle, 'Installed');
     }
 
     // BUTTON INSTALL
     let button_search_install = document.getElementById('button_search_install');
     button_search_install.onclick = () => {
-        removeAllChildren(install_form)
-        createAjaxRequest(equipment_to_install, '/installed-motor', install_form)
+        doAjaxRequest(install_form, equipment_to_install, 'Available');
     }
 
+    // DO REQUEST
+    function doAjaxRequest(form, input, status) {
+        removeAllChildren(form)
+        if (input.value.length == 9) {
+            createAjaxRequest(input, '/equipment-motor', form, status)
+        }
+        setTimeout(() => {
+            enableButtonSubmit();
+        }, 1000);
+    }
+</script>
+
+<script>
     // GET MOTOR USING AJAX
-    function createAjaxRequest(input, url, form) {
+    function createAjaxRequest(input, url, form, status) {
 
         ajax = new XMLHttpRequest();
         ajax.open("POST", url);
@@ -162,12 +185,14 @@
                 } else {
 
                     // CREATE ALERT
-                    createAlert(form);
+                    createAlert(form, 'Not found.');
                 }
+
             }
         }
 
-        ajax.send(`equipment=${input.value}`)
+
+        ajax.send(`equipment=${input.value}&status=${status}`);
     }
 </script>
 
@@ -192,6 +217,16 @@
         input.setAttribute('class', 'form-control');
         input.setAttribute('value', value ?? '');
         input.setAttribute('readonly', true);
+        if (key == 'id') {
+            switch (form.id) {
+                case 'dismantle_form':
+                    input.setAttribute('name', key + '_dismantle');
+                    break;
+                case 'install_form':
+                    input.setAttribute('name', key + '_install');
+                    break;
+            }
+        }
 
         div.appendChild(label)
         div.appendChild(input)
@@ -204,12 +239,40 @@
         }
     }
 
-    function createAlert(form) {
+    function createAlert(form, message) {
         let alert = document.createElement('div');
         alert.setAttribute('class', 'alert alert-primary alert-dismissible');
         alert.setAttribute('role', 'alert');
-        alert.textContent = 'Not found.';
+        alert.textContent = message;
         form.appendChild(alert);
+    }
+
+    // function enableButton(input) {
+    //     let buttonSearch = input.nextElementSibling;
+    //     let svg = buttonSearch.firstElementChild
+    //     if (input.value.length == 9) {
+    //         svg.classList.remove('d-none');
+    //     }
+    // }
+
+    // window.onload = () => {
+    //     doAjaxRequest(dismantle_form, equipment_to_dismantle, 'Installed');
+    //     doAjaxRequest(install_form, equipment_to_install, 'Available');
+    // }
+
+    function enableButtonSubmit() {
+
+        let buttonSubmit = do_install_dismantle;
+        let dismantledEquipment = dismantle_form.firstElementChild?.lastElementChild ?? null;
+        let installedEquipment = install_form.firstElementChild?.lastElementChild ?? null;
+        let installDismantleForm = document.getElementById('installDismantleForm');
+
+        if (dismantledEquipment != null && installedEquipment != null) {
+            buttonSubmit.classList.remove('d-none');
+        } else {
+            buttonSubmit.classList.add('d-none');
+        }
+
     }
 </script>
 

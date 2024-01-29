@@ -43,4 +43,6 @@ interface MotorService
     public function registeredQrCodeLinks(): array;
 
     public function motorCodes(): array;
+
+    public function installDismantle(string $dismantle, string $install): void;
 }

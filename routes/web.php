@@ -45,7 +45,6 @@ Route::middleware('member')->group(function () {
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
-    Route::get('/motor-install-dismantle', [MotorController::class, 'motorInstallDismantle'])->name('motor-install-dismantle');
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
@@ -58,9 +57,6 @@ Route::middleware('member')->group(function () {
     // TREND
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
-    // INSTALL - DISMANTLE
-    Route::post('/installed-motor', [MotorController::class, 'installedMotor']);
-
     Route::middleware('role:db_admin')->group(function () {
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');
         Route::post('/funcloc-update', [FunclocController::class, 'funclocUpdate'])->name('funcloc-update');
@@ -72,6 +68,10 @@ Route::middleware('member')->group(function () {
         Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');
         Route::get('/motor-registration', [MotorController::class, 'motorRegistration'])->name('motor-registration');
         Route::post('/motor-register', [MotorController::class, 'motorRegister'])->name('motor-register');
+        // INSTALL - DISMANTLE
+        Route::post('/equipment-motor', [MotorController::class, 'equipmentMotor']);
+        Route::get('/motor-install-dismantle', [MotorController::class, 'motorInstallDismantle']);
+        Route::post('/motor-install-dismantle', [MotorController::class, 'doMotorInstallDismantle']);
     });
 
     Route::middleware('role:admin')->group(function () {
