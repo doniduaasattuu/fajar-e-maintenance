@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Finding;
 use App\Services\MotorService;
 use App\Traits\Utility;
 use Carbon\Carbon;

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Finding;
 use App\Models\MotorRecord;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             MotorSeeder::class,
             MotorDetailsSeeder::class,
             MotorRecordSeeder::class,
+            FindingSeeder::class,
         ]);
     }
 }

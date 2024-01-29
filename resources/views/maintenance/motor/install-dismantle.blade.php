@@ -15,6 +15,15 @@
     <form id="installDismantleForm" action="/motor-install-dismantle" method="post">
         @csrf
 
+        <div class="alert alert-dismissible alert-info" role="alert">
+            <ul class="px-3 m-0 pe-0">
+                <li>Dismantled motor automatically changes status to repair.</li>
+                <li>Only available motors can be installed.</li>
+            </ul>
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="row">
 
             <!-- FORM DISMANTLED -->
@@ -23,7 +32,7 @@
                     <!-- SEARCH FORM -->
                     <div class="form-group row mb-3">
                         <!-- LABEL -->
-                        <label for="equipment_to_dismantle" class="col-form-label col-xl-10 fw-bold">
+                        <label for="equipment_to_dismantle" class="col-form-label col-xl-10 fw-semibold">
                             <svg class="mb-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#dc3545" class="bi bi-box-arrow-up" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
                                 <path fill-rule="evenodd" d="M7.646.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 1.707V10.5a.5.5 0 0 1-1 0V1.707L5.354 3.854a.5.5 0 1 1-.708-.708z" />
@@ -58,7 +67,7 @@
                     <!-- SEARCH FORM -->
                     <div class="form-group row mb-3">
                         <!-- LABEL -->
-                        <label for="equipment_to_install" class="col-form-label col-xl-10 fw-bold">
+                        <label for="equipment_to_install" class="col-form-label col-xl-10 fw-semibold">
                             <svg class="mb-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#0d6efd" class="bi bi-box-arrow-in-down" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd" d="M3.5 6a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5v-8a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 1 0-1h2A1.5 1.5 0 0 1 14 6.5v8a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 14.5v-8A1.5 1.5 0 0 1 3.5 5h2a.5.5 0 0 1 0 1z" />
                                 <path fill-rule="evenodd" d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
@@ -87,8 +96,8 @@
         </div>
 
         <!-- BUTTON SUBMIT -->
-        <div id="do_install_dismantle" class="d-none mb-3">
-            <button class="w-100 btn btn-primary">
+        <div id="do_install_dismantle" class="d-none mt-2 mb-3">
+            <button class="w-100 py-2 btn btn-danger">
                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5" />
                 </svg>
@@ -115,13 +124,13 @@
     // BUTTON DISMANTLE
     let button_search_dismantle = document.getElementById('button_search_dismantle');
     button_search_dismantle.onclick = () => {
-        doAjaxRequest(dismantle_form, equipment_to_dismantle, 'Installed');
+        onclickButtonSearch(dismantle_form, equipment_to_dismantle, 'Installed');
     }
 
     // BUTTON INSTALL
     let button_search_install = document.getElementById('button_search_install');
     button_search_install.onclick = () => {
-        doAjaxRequest(install_form, equipment_to_install, 'Available');
+        onclickButtonSearch(install_form, equipment_to_install, 'Available');
     }
 
     // DO REQUEST
@@ -185,7 +194,7 @@
                 } else {
 
                     // CREATE ALERT
-                    createAlert(form, 'Not found.');
+                    createAlert(form, 'Not found.', 'alert-primary');
                 }
 
             }
@@ -211,7 +220,11 @@
 
         let label = document.createElement('label');
         label.setAttribute('class', 'fw-semibold form-label');
-        label.textContent = myucfirst(key).split('_').join(' ');
+        if (key == 'id') {
+            label.textContent = 'Motor';
+        } else {
+            label.textContent = myucfirst(key).split('_').join(' ');
+        }
 
         let input = document.createElement('input');
         input.setAttribute('class', 'form-control');
@@ -239,14 +252,22 @@
         }
     }
 
-    function createAlert(form, message) {
+    function createAlert(form, message, variant) {
         let alert = document.createElement('div');
-        alert.setAttribute('class', 'alert alert-primary alert-dismissible');
+        alert.setAttribute('class', 'alert alert-dismissible px-3' + ` ${variant}`);
         alert.setAttribute('role', 'alert');
         alert.textContent = message;
         form.appendChild(alert);
     }
 
+    function onclickButtonSearch(form, input, status) {
+        if (input.value.length == 9) {
+            doAjaxRequest(form, input, status);
+        } else {
+            removeAllChildren(form)
+            createAlert(form, 'Equipment is invalid.', 'alert-warning');
+        }
+    }
     // function enableButton(input) {
     //     let buttonSearch = input.nextElementSibling;
     //     let svg = buttonSearch.firstElementChild
@@ -272,7 +293,6 @@
         } else {
             buttonSubmit.classList.add('d-none');
         }
-
     }
 </script>
 

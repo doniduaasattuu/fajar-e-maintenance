@@ -2,8 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Models\Motor;
+use App\Models\MotorDetails;
 use Database\Seeders\DatabaseEraser;
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\MotorDetailsSeeder;
+use Database\Seeders\MotorSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class MotorControllerTest extends TestCase
@@ -2454,5 +2462,330 @@ class MotorControllerTest extends TestCase
             ->assertSessionHasErrors([
                 'qr_code_link' => 'The selected qr code link is invalid.'
             ]);
+    }
+
+    // ==========================================
+    // =========== INSTALL DISMANTLE ============
+    // ==========================================
+    public function testGetInstallDismantlePageGuest()
+    {
+        $this->get('/motor-install-dismantle')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testGetInstallDismantlePageEmployee()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])->followingRedirects()
+            ->get('/motor-install-dismantle')
+            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testGetInstallDismantlePageAuthorized()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle')
+            ->assertSeeText('Install dismantle')
+            ->assertSeeText('Table')
+            ->assertSeeText('Dismantle')
+            ->assertSeeText('Dismantled equipment')
+            ->assertSeeText('Install')
+            ->assertSeeText('Installed equipment');
+    }
+
+    // POST
+    public function testDoInstallDismantleSuccess()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $dismantle = Motor::query()->find('EMO000426');
+        self::assertEquals($dismantle->status, 'Installed');
+        self::assertEquals($dismantle->funcloc, 'FP-01-SP3-RJS-T092-P092');
+        self::assertEquals($dismantle->sort_field, 'SP3.P.70/M');
+
+        $install = Motor::query()->find('EMO000075');
+        self::assertEquals($install->status, 'Available');
+        self::assertNull($install->funcloc);
+        self::assertNull($install->sort_field);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000426',
+                'id_install' => 'EMO000075',
+            ])
+            ->assertSeeText('[200] Success')
+            ->assertSeeText('The motor was successfully swapped.');
+
+        $dismantled = Motor::query()->find('EMO000426');
+        self::assertNotEquals($dismantled->status, 'Installed');
+        self::assertNotEquals($dismantled->funcloc, 'FP-01-SP3-RJS-T092-P092');
+        self::assertNotEquals($dismantled->sort_field, 'SP3.P.70/M');
+
+        $installed = Motor::query()->find('EMO000075');
+        self::assertEquals($installed->status, 'Installed');
+        self::assertEquals($installed->funcloc, 'FP-01-SP3-RJS-T092-P092');
+        self::assertEquals($installed->sort_field, 'SP3.P.70/M');
+    }
+
+    public function testDoInstallDismantleNull()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => null,
+                'id_install' => null,
+            ])
+            ->assertSeeText('The id dismantle field is required.');
+    }
+
+    public function testDoInstallDismantleNullDismantleField()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => null,
+                'id_install' => 'EMO000075',
+            ])
+            ->assertSeeText('The id dismantle field is required.');
+    }
+
+    public function testDoInstallDismantleNullInstallField()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000426',
+                'id_install' => null,
+            ])
+            ->assertSeeText('The id install field is required.');
+    }
+
+    public function testDoInstallDismantleDismantleInvalid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000000',
+                'id_install' => 'EMO000075',
+            ])
+            ->assertSeeText('The selected id dismantle is invalid.');
+    }
+
+    public function testDoInstallDismantleInstallInvalid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000426',
+                'id_install' => 'EMO000000',
+            ])
+            ->assertSeeText('The selected id install is invalid.');
+    }
+
+    public function testDoInstallDismantleInstallDismantleNotDifferent()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000426',
+                'id_install' => 'EMO000426',
+            ])
+            ->assertSeeText('The id dismantle field and id install must be different.');
+    }
+
+    public function testDoInstallDismantleInstallInvalidSize()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO00046',
+                'id_install' => 'EMO000426',
+            ])
+            ->assertSeeText('The id dismantle field must be 9 characters.');
+    }
+
+    public function testDoInstallDismantleDismantleInvalidSize()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->followingRedirects()
+            ->post('/motor-install-dismantle', [
+                'id_dismantle' => 'EMO000426',
+                'id_install' => 'EMO00057',
+            ])
+            ->assertSeeText('The id install field must be 9 characters.');
+    }
+
+    // GET EQUIPMENT MOTOR AJAX
+    // DISMANTLE
+    public function testGetEquipmentDismantleValid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000426',
+            'status' => 'Installed',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEquals($motor->funcloc, 'FP-01-SP3-RJS-T092-P092');
+        self::assertEquals($motor->material_number, '10010668');
+        self::assertEquals($motor->unique_id, '1804');
+    }
+
+    public function testGetEquipmentDismantleInvalid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000000',
+            'status' => 'Installed',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEmpty($motor);
+    }
+
+    public function testGetEquipmentDismantleRepairedMotor()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000105', // repaired
+            'status' => 'Installed',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEmpty($motor);
+    }
+
+    // INSTALL
+    public function testGetEquipmentInstallValid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000075',
+            'status' => 'Available',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEquals($motor->status, 'Available');
+        self::assertNull($motor->funcloc);
+        self::assertNull($motor->sort_field);
+        self::assertEquals($motor->material_number, '10011051');
+        self::assertEquals($motor->unique_id, '273');
+    }
+
+    public function testGetEquipmentInstallInvalid()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000000',
+            'status' => 'Available',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEmpty($motor);
+    }
+
+    public function testGetEquipmentInstallRepairedMotor()
+    {
+        $this->seed(DatabaseSeeder::class);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/motor-install-dismantle');
+
+        $response = $this->post('/equipment-motor', [
+            'equipment' => 'EMO000113', // repaired
+            'status' => 'Installed',
+        ]);
+
+        self::assertNotNull($response);
+        $motor = $response->baseResponse->original;
+        self::assertEmpty($motor);
     }
 }

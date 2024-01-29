@@ -9,6 +9,7 @@ use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
+use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
@@ -4121,7 +4122,7 @@ class RecordControllerTest extends TestCase
     // =====================================================
     public function testPostRecordWithTextAndImageSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4169,7 +4170,7 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertNotNull($findings);
+        self::assertCount(1, $findings);
         $this->clearFindingImages();
     }
 
@@ -4273,7 +4274,7 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(0, $findings);
+        self::assertCount(2, $findings);
         $this->clearFindingImages();
     }
 
@@ -4516,12 +4517,11 @@ class RecordControllerTest extends TestCase
 
     public function testGetEditRecordWithFinding()
     {
-        $this->seed(DatabaseSeeder::class);
         $this->testPostRecordWithTextAndImageSuccess();
 
         $records = MotorRecord::query()->get();
         self::assertNotNull($records);
-        self::assertCount(37, $records);
+        self::assertCount(1, $records);
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);

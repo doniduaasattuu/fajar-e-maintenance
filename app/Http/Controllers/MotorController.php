@@ -255,12 +255,12 @@ class MotorController extends Controller
                 $this->motorService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
 
-                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error.', 'message' => $error->getMessage()]);
+                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error', 'message' => $error->getMessage()]);
             }
 
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor was successfully swapped."]);
+            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "The motor was successfully swapped."]);
         } else {
-            return redirect()->back()->with('message', ['header' => '[403] Forbidden.', 'message' => $validator->errors()->first()]);
+            return redirect()->back()->with('message', ['header' => '[403] Forbidden', 'message' => $validator->errors()->first()]);
         }
     }
 }
