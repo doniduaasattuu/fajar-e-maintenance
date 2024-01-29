@@ -31,7 +31,7 @@ class FindingSeeder extends Seeder
         $finding2->id = uniqid();
         $finding2->area = 'PM3';
         $finding2->description = 'Cover kipas lepas';
-        $finding2->image = $finding2->id . '.jpg';
+        $finding2->image = null;
         $finding2->status = 'Open';
         $finding2->equipment = 'MGM000481';
         $finding2->funcloc = 'FP-01-PM3-REL-PPRL-PRAR';

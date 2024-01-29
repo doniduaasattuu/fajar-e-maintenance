@@ -37,8 +37,12 @@ class TrendController extends Controller
                 'end_date' => $end_date,
             ]);
 
+            // FNDING
+            $findings = DB::table('findings')->select(['description', 'image', 'reporter', 'created_at'])->get();
+
             $trends = $this->queryTrend($collection);
             return response()->view('maintenance.trends.motor', [
+                'motorService' => $this->motorService,
                 'equipment' => $equipment,
                 'title' => 'Equipment trend',
                 'created_at' => $this->getValueOf($trends, 'created_at'),
@@ -75,6 +79,7 @@ class TrendController extends Controller
                 }),
                 'number_of_greasing' => $this->getValueOf($trends, 'number_of_greasing'),
                 'nik' => $this->getValueOf($trends, 'nik'),
+                'findings' => $findings,
             ]);
         } else if (in_array($equipment_code, ['ETF'])) {
 
