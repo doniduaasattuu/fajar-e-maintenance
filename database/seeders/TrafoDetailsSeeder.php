@@ -25,7 +25,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail1->primary_connection_type = 'Delta';
         $trafo_detail1->secondary_connection_type = 'Star';
         $trafo_detail1->frequency = '50';
-        $trafo_detail1->type = 'Step Down';
+        $trafo_detail1->type = 'Step down';
         $trafo_detail1->manufacturer = 'Unindo';
         $trafo_detail1->year_of_manufacture = '2012';
         $trafo_detail1->serial_number = 'P050LEC692';
@@ -52,7 +52,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail2->primary_connection_type = null;
         $trafo_detail2->secondary_connection_type = null;
         $trafo_detail2->frequency = '50';
-        $trafo_detail2->type = 'Step Up';
+        $trafo_detail2->type = 'Step up';
         $trafo_detail2->manufacturer = 'Pauwels Trafo';
         $trafo_detail2->year_of_manufacture = '1995';
         $trafo_detail2->serial_number = '94.4.6289';
@@ -79,7 +79,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail3->primary_connection_type = null;
         $trafo_detail3->secondary_connection_type = null;
         $trafo_detail3->frequency = '50';
-        $trafo_detail3->type = 'Step Up';
+        $trafo_detail3->type = 'Step up';
         $trafo_detail3->manufacturer = 'Pauwels Trafo';
         $trafo_detail3->year_of_manufacture = '2006';
         $trafo_detail3->serial_number = '510063';
@@ -106,7 +106,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail4->primary_connection_type = null;
         $trafo_detail4->secondary_connection_type = null;
         $trafo_detail4->frequency = '50';
-        $trafo_detail4->type = 'Step Down';
+        $trafo_detail4->type = 'Step down';
         $trafo_detail4->manufacturer = 'Pauwels Trafo';
         $trafo_detail4->year_of_manufacture = '1995';
         $trafo_detail4->serial_number = '3417186';
@@ -133,7 +133,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail5->primary_connection_type = null;
         $trafo_detail5->secondary_connection_type = null;
         $trafo_detail5->frequency = '50';
-        $trafo_detail5->type = 'Step Down';
+        $trafo_detail5->type = 'Step down';
         $trafo_detail5->manufacturer = 'Trafindo';
         $trafo_detail5->year_of_manufacture = '2005';
         $trafo_detail5->serial_number = '5331629';
@@ -160,7 +160,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail6->primary_connection_type = null;
         $trafo_detail6->secondary_connection_type = null;
         $trafo_detail6->frequency = '50';
-        $trafo_detail6->type = 'Step Down';
+        $trafo_detail6->type = 'Step down';
         $trafo_detail6->manufacturer = 'Schneider';
         $trafo_detail6->year_of_manufacture = '2016';
         $trafo_detail6->serial_number = '33162210003';
@@ -187,7 +187,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail7->primary_connection_type = null;
         $trafo_detail7->secondary_connection_type = null;
         $trafo_detail7->frequency = '50';
-        $trafo_detail7->type = 'Step Down';
+        $trafo_detail7->type = 'Step down';
         $trafo_detail7->manufacturer = 'Schneider';
         $trafo_detail7->year_of_manufacture = '1997';
         $trafo_detail7->serial_number = '58201';
@@ -214,7 +214,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail8->primary_connection_type = null;
         $trafo_detail8->secondary_connection_type = null;
         $trafo_detail8->frequency = '50';
-        $trafo_detail8->type = 'Step Down';
+        $trafo_detail8->type = 'Step down';
         $trafo_detail8->manufacturer = 'Trafindo';
         $trafo_detail8->year_of_manufacture = '2010';
         $trafo_detail8->serial_number = '10338949';
@@ -241,7 +241,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail9->primary_connection_type = null;
         $trafo_detail9->secondary_connection_type = null;
         $trafo_detail9->frequency = '50';
-        $trafo_detail9->type = 'Step Down';
+        $trafo_detail9->type = 'Step down';
         $trafo_detail9->manufacturer = 'Unindo';
         $trafo_detail9->year_of_manufacture = '1994';
         $trafo_detail9->serial_number = '60952';
@@ -268,7 +268,7 @@ class TrafoDetailsSeeder extends Seeder
         $trafo_detail10->primary_connection_type = null;
         $trafo_detail10->secondary_connection_type = null;
         $trafo_detail10->frequency = '50';
-        $trafo_detail10->type = 'Step Up';
+        $trafo_detail10->type = 'Step up';
         $trafo_detail10->manufacturer = 'Fujian Longking';
         $trafo_detail10->year_of_manufacture = '2011';
         $trafo_detail10->serial_number = '2011466';

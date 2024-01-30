@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('primary_connection_type', 50)->nullable(true);
             $table->string('secondary_connection_type', 50)->nullable(true);
             $table->string('frequency', 50)->nullable(true);
-            $table->enum('type', ['Step Up', 'Step Down'])->nullable(true);
+            $table->enum('type', ['Step up', 'Step down'])->nullable(true);
             $table->string('manufacturer', 50)->nullable(true);
             $table->string('year_of_manufacture', 4)->nullable(true);
             $table->string('serial_number', 50)->nullable(true);

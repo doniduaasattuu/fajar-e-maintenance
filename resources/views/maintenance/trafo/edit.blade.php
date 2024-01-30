@@ -72,12 +72,13 @@ $trafoDetail = $trafo->TrafoDetail;
 
             {{-- NUMERIC TYPE --}}
             @case('power_rate')
-            <input value="{{ null != old($column) ? old($column) : (null != $trafoDetail ? $trafoDetail->$column : null) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" onkeypress="return onlynumber(event, 46, 57)">
+            <input value="{{ null != old($column) ? old($column) : (null != $trafoDetail ? $trafoDetail->$column : null) }}" id="{{ $column }}" name="{{ $column }}" type="text" maxlength="8" class="form-control" onkeypress="return onlynumber(event, 46, 57)">
             @break
             {{-- NUMERIC TYPE --}}
 
             {{-- ENUM TYPE --}}
             @case('power_unit')
+            @case('type')
             <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
 
                 @if ($column == 'power_unit')
@@ -88,7 +89,16 @@ $trafoDetail = $trafo->TrafoDetail;
                 <option @selected(old($column)==$option) value="{{ $option }}">{{ $option }}</option>
                 @endif
                 @endforeach
+                @endif
 
+                @if ($column == 'type')
+                @foreach ($trafoService->typeEnum as $option )
+                @if (null != $trafoDetail && null == old($column))
+                <option @selected($trafoDetail->$column==$option) value="{{ $option }}">{{ $option }}</option>
+                @else
+                <option @selected(old($column)==$option) value="{{ $option }}">{{ $option }}</option>
+                @endif
+                @endforeach
                 @endif
             </select>
             @break
@@ -99,9 +109,9 @@ $trafoDetail = $trafo->TrafoDetail;
             @endswitch
             @include('utility.error-help')
         </div>
-        @endforeach <!-- FORM trafo DETAILS -->
+        @endforeach <!-- FORM TRAFO DETAILS -->
     </div>
 
     <button type="submit" class="btn btn-primary">{{ isset($trafo) ? 'Update' : 'Submit' }}</button>
 </form>
-<!-- ============================ FOR EDIT trafo PAGE END =========================== -->
+<!-- ============================ FOR EDIT TRAFO PAGE END =========================== -->

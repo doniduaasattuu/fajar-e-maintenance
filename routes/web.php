@@ -47,6 +47,7 @@ Route::middleware('member')->group(function () {
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/trafos', [TrafoController::class, 'trafos'])->name('trafos');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
+    Route::get('/trafo-details/{id}', [TrafoController::class, 'trafoDetails'])->name('trafo-details');
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
@@ -71,7 +72,7 @@ Route::middleware('member')->group(function () {
         Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');
         Route::get('/motor-registration', [MotorController::class, 'motorRegistration'])->name('motor-registration');
         Route::post('/motor-register', [MotorController::class, 'motorRegister'])->name('motor-register');
-        // INSTALL - DISMANTLE
+        // MOTOR INSTALL - DISMANTLE
         Route::post('/equipment-motor', [MotorController::class, 'equipmentMotor']);
         Route::get('/motor-install-dismantle', [MotorController::class, 'motorInstallDismantle']);
         Route::post('/motor-install-dismantle', [MotorController::class, 'doMotorInstallDismantle']);
@@ -81,6 +82,10 @@ Route::middleware('member')->group(function () {
         Route::post('/trafo-update', [TrafoController::class, 'trafoUpdate'])->name('trafo-update');
         Route::get('/trafo-registration', [TrafoController::class, 'trafoRegistration'])->name('trafo-registration');
         Route::post('/trafo-register', [TrafoController::class, 'trafoRegister'])->name('trafo-register');
+        // TRAFO INSTALL - DISMANTLE
+        Route::post('/equipment-trafo', [TrafoController::class, 'equipmentTrafo']);
+        Route::get('/trafo-install-dismantle', [TrafoController::class, 'trafoInstallDismantle']);
+        Route::post('/trafo-install-dismantle', [TrafoController::class, 'doTrafoInstallDismantle']);
     });
 
     Route::middleware('role:admin')->group(function () {

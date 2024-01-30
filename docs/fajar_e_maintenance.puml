@@ -157,7 +157,7 @@ entity trafo_details {
     primary_connection_type VARCHAR(50)
     secondary_connection_type VARCHAR(50)
     frequency VARCHAR(50)
-    type ENUM(["Step Up", "Step Down"])
+    type ENUM(["Step up", "Step down"])
     manufacturer VARCHAR(50)
     year_of_manufacture VARCHAR(4)
     serial_number VARCHAR(50)

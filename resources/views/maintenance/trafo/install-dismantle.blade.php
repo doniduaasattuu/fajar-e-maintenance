@@ -6,20 +6,20 @@
         <h3 class="mb-1">{{ $title }}</h3>
         <nav aria-label=" breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/motors">Table</a></li>
+                <li class="breadcrumb-item"><a href="/trafos">Table</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $title }}</li>
             </ol>
         </nav>
     </div>
 
-    <form id="installDismantleForm" action="/motor-install-dismantle" method="post">
+    <form id="installDismantleForm" action="/trafo-install-dismantle" method="post">
         @csrf
 
         <div class="alert alert-dismissible alert-info" role="alert">
             <ul class="px-3 m-0 pe-0">
-                <li>Dismantled motor automatically changes status to repair.</li>
-                <li>Only installed motors can be dismantled.</li>
-                <li>Only available motors can be installed.</li>
+                <li>Dismantled trafo automatically changes status to repair.</li>
+                <li>Only installed trafos can be dismantled.</li>
+                <li>Only available trafos can be installed.</li>
             </ul>
 
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -138,7 +138,7 @@
     function doAjaxRequest(form, input, status) {
         removeAllChildren(form)
         if (input.value.length == 9) {
-            createAjaxRequest(input, '/equipment-motor', form, status)
+            createAjaxRequest(input, '/equipment-trafo', form, status)
         }
         setTimeout(() => {
             enableButtonSubmit();
@@ -147,7 +147,7 @@
 </script>
 
 <script>
-    // GET MOTOR USING AJAX
+    // GET trafo USING AJAX
     function createAjaxRequest(input, url, form, status) {
 
         ajax = new XMLHttpRequest();
@@ -163,13 +163,13 @@
                     for (const [key, value] of Object.entries(response_object)) {
 
                         //  RENDER DATA
-                        if (key == 'motor_detail' && value != null) {
+                        if (key == 'trafo_detail' && value != null) {
                             for (const [detail_key, detail_value] of Object.entries(value)) {
 
-                                // CREATE ELEMENT MOTOR DETAIL
+                                // CREATE ELEMENT trafo DETAIL
                                 if (
                                     detail_key == 'id' ||
-                                    detail_key == 'motor_detail' ||
+                                    detail_key == 'trafo_detail' ||
                                     detail_key == 'created_at' ||
                                     detail_key == 'updated_at'
                                 ) {
@@ -180,8 +180,8 @@
                             }
                         } else {
 
-                            // CREATE ELEMENT MOTOR
-                            if (key == 'motor_detail' && value == null) {
+                            // CREATE ELEMENT trafo
+                            if (key == 'trafo_detail' && value == null) {
                                 continue;
                             } else if (key == 'created_at' || key == 'updated_at') {
                                 continue;
@@ -222,7 +222,7 @@
         let label = document.createElement('label');
         label.setAttribute('class', 'fw-semibold form-label');
         if (key == 'id') {
-            label.textContent = 'Motor';
+            label.textContent = 'Trafo';
         } else {
             label.textContent = myucfirst(key).split('_').join(' ');
         }

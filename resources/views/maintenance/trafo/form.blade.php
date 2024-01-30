@@ -69,7 +69,7 @@
 
     unique_id.oninput = () => {
         qr_code_link.value = "";
-        let link = "https://www.safesave.info/MIC.php?id=Fajar-trafoList";
+        let link = "id=Fajar-TrafoList";
         qr_code_link.value = link + unique_id.value;
     }
 
