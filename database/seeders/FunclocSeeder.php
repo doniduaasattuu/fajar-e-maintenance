@@ -96,7 +96,7 @@ class FunclocSeeder extends Seeder
         // TRAFO
         $funcloc15 = new Funcloc();
         $funcloc15->id = "FP-01-ENC-TRF-PLN1";
-        $funcloc15->description = "Trafo";
+        $funcloc15->description = "Trafo PLN1";
         $funcloc15->created_at = Carbon::now()->toDateTimeString();
         $funcloc15->save();
 

@@ -5,10 +5,12 @@ namespace Tests\Feature;
 use App\Models\Motor;
 use App\Services\FunclocService;
 use App\Services\MotorService;
+use App\Services\TrafoService;
 use App\Services\UserService;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
+use Database\Seeders\TrafoSeeder;
 use Exception;
 use Tests\TestCase;
 
@@ -158,5 +160,27 @@ class ViewTest extends TestCase
             ->assertSee('10010923')
             ->assertSee('56')
             ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56');
+    }
+
+    // TRAFO
+    public function testViewTrafos()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class]);
+
+        $this->view('maintenance.trafo.trafo', [
+            'title' => 'Table trafo',
+            'trafoService' => $this->app->make(TrafoService::class),
+        ])
+            ->assertSeeText('Table trafo')
+            ->assertSeeText('New trafo')
+            ->assertSeeText('Trafo status')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Sort field')
+            ->assertSeeText('Unique id')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Details')
+            ->assertSeeText('Edit')
+            ->assertSeeText('The total registered trafo is 11 records.')
+            ->assertSeeText('ETF001234');
     }
 }

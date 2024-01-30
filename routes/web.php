@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TrafoController;
 use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
@@ -44,6 +45,7 @@ Route::middleware('member')->group(function () {
     // TABLES
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
+    Route::get('/trafos', [TrafoController::class, 'trafos'])->name('trafos');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
 
     // CHECKING FORM
@@ -64,6 +66,7 @@ Route::middleware('member')->group(function () {
         Route::post('/funcloc-register', [FunclocController::class, 'funclocRegister'])->name('funcloc-register');
         Route::post('/funcloc-status', [FunclocController::class, 'funclocStatus']);
 
+        // MOTOR
         Route::get('/motor-edit/{id}', [MotorController::class, 'motorEdit'])->name('motor-edit');
         Route::post('/motor-update', [MotorController::class, 'motorUpdate'])->name('motor-update');
         Route::get('/motor-registration', [MotorController::class, 'motorRegistration'])->name('motor-registration');
@@ -72,6 +75,12 @@ Route::middleware('member')->group(function () {
         Route::post('/equipment-motor', [MotorController::class, 'equipmentMotor']);
         Route::get('/motor-install-dismantle', [MotorController::class, 'motorInstallDismantle']);
         Route::post('/motor-install-dismantle', [MotorController::class, 'doMotorInstallDismantle']);
+
+        // TRAFO
+        Route::get('/trafo-edit/{id}', [TrafoController::class, 'trafoEdit'])->name('trafo-edit');
+        Route::post('/trafo-update', [TrafoController::class, 'trafoUpdate'])->name('trafo-update');
+        Route::get('/trafo-registration', [TrafoController::class, 'trafoRegistration'])->name('trafo-registration');
+        Route::post('/trafo-register', [TrafoController::class, 'trafoRegister'])->name('trafo-register');
     });
 
     Route::middleware('role:admin')->group(function () {

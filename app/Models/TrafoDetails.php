@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class TrafoDetails extends Model
 {
@@ -17,5 +18,17 @@ class TrafoDetails extends Model
     public function Trafo(): BelongsTo
     {
         return $this->belongsTo(Trafo::class, 'trafo_detail', 'id');
+    }
+
+    public function Funcloc(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Funcloc::class,
+            Trafo::class,
+            'id',
+            'id',
+            'trafo_detail',
+            'funcloc',
+        );
     }
 }

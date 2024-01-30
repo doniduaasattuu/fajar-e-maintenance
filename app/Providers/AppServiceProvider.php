@@ -24,11 +24,13 @@ use App\Services\Impl\MotorDetailServiceImpl;
 use App\Services\Impl\MotorRecordServiceImpl;
 use App\Services\Impl\MotorServiceImpl;
 use App\Services\Impl\RoleServiceImpl;
+use App\Services\Impl\TrafoServiceImpl;
 use App\Services\Impl\UserServiceImpl;
 use App\Services\MotorDetailService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
 use App\Services\RoleService;
+use App\Services\TrafoService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -49,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         MotorRecordRepository::class => MotorRecordRepositoryImpl::class,
         FindingService::class => FindingServiceImpl::class,
         FindingRepository::class => FindingRepositoryImpl::class,
+        TrafoService::class => TrafoServiceImpl::class
     ];
 
     /**

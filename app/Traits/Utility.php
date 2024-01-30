@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 trait Utility
 {
+    public array $equipmentStatus = ['Installed', 'Available', 'Repaired'];
+
     public function getColumns(string $table, array $skipped = [])
     {
         $columns =  DB::getSchemaBuilder()->getColumnListing($table);
