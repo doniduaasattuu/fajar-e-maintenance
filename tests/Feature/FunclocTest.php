@@ -8,7 +8,10 @@ use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\TrafoDetailsSeeder;
+use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class FunclocTest extends TestCase
@@ -57,12 +60,72 @@ class FunclocTest extends TestCase
         self::assertNull($motorDetail);
     }
 
-    public function testGetAreaFromFuncloc()
+    public function testFunclocRelationToTrafos()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        $funcloc = Funcloc::query()->find('FP-01-GT1-TRF-PWP1');
+        self::assertNotNull($funcloc);
+
+        $trafos = $funcloc->Trafos;
+        self::assertNotNull($trafos);
+        self::assertCount(1, $trafos);
+        self::assertEquals('ETF000060', $trafos->first()->id);
+    }
+
+    public function testFunclocRelationToTrafosMany()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        $funcloc = Funcloc::query()->find('FP-01-IN1');
+        self::assertNotNull($funcloc);
+
+        $trafos = $funcloc->Trafos;
+        self::assertNotNull($trafos);
+        self::assertCount(2, $trafos);
+        self::assertEquals('ETF000091', $trafos->last()->id);
+    }
+
+    public function testFunclocRelationToTrafosNull()
+    {
+        $this->seed(FunclocSeeder::class);
+
+        $funcloc = Funcloc::query()->find('FP-01-SP1-UKP-RF07');
+        self::assertNotNull($funcloc);
+
+        $trafos = $funcloc->Trafos;
+        self::assertNotNull($trafos);
+        self::assertCount(0, $trafos);
+    }
+
+    public function testFunclocRelationToTrafoDetail()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        $funcloc = Funcloc::query()->with(['TrafoDetail'])->find('FP-01-GT1-TRF-PWP1');
+        $trafoDetail = $funcloc->TrafoDetail;
+        self::assertNotNull($trafoDetail);
+        Log::info(json_encode($trafoDetail, JSON_PRETTY_PRINT));
+        self::assertEquals('8470', $trafoDetail->weight_of_oil);
+    }
+
+    public function testFunclocRelationToTrafoDetailMany()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        $funcloc = Funcloc::query()->with(['TrafoDetail'])->find('FP-01-IN1');
+        $firstTrafoDetail = $funcloc->TrafoDetail;
+        self::assertNotNull($firstTrafoDetail);
+        self::assertEquals('ETF000085', $firstTrafoDetail->trafo_detail);
+        self::assertEquals('P050LEC692', $firstTrafoDetail->serial_number);
+    }
+
+    public function testFunclocRelationToTrafoDetailNull()
     {
         $this->seed(FunclocSeeder::class);
 
         $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
-        $area = $funcloc->area;
-        self::assertEquals('BO3', $area);
+        $trafoDetail = $funcloc->trafoDetail;
+        self::assertNull($trafoDetail);
     }
 }

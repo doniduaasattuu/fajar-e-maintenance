@@ -38,7 +38,11 @@ class TrendController extends Controller
             ]);
 
             // FNDING
-            $findings = DB::table('findings')->select(['description', 'image', 'reporter', 'created_at'])->get();
+            $findings = DB::table('findings')
+                ->select(['description', 'image', 'reporter', 'created_at'])
+                ->where('equipment', '=', $equipment)
+                ->orderBy('created_at', 'desc')
+                ->get();
 
             $trends = $this->queryTrend($collection);
             return response()->view('maintenance.trends.motor', [

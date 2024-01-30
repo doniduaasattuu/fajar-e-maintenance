@@ -39,9 +39,10 @@
     </div>
 
     {{-- FINDINGS --}}
-    @if ($findings != null)
-    <div class="mb-3">
-        <h6 class="text-center text-secondary">Findings of {{ $equipment }}</h6>
+    @if ( (count($findings) > 0) && !is_null($findings))
+    <div class="mb-3 mt-4">
+        <h6 class="text-center text-secondary mb-1">Findings of {{ $equipment }}</h6>
+        <div class="text-center text-secondary form-text">The top one is the newest.</div>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -373,7 +374,7 @@
                 y: {
                     title: {
                         display: true,
-                        text: '0.56 ~ 3.10 grams per Pump',
+                        text: 'Pump (0.56 ~ 3.10 grams per pump)',
                     },
                     min: 0,
                     max: 200,

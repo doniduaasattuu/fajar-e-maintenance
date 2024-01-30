@@ -42,7 +42,7 @@ class FunclocServiceTest extends TestCase
         $funclocService = $this->app->make(FunclocService::class);
         $funclocs = $funclocService->registeredFunclocs();
         self::assertNotNull($funclocs);
-        self::assertCount(13, $funclocs);
+        self::assertCount(19, $funclocs);
     }
 
     public function testUpdateFuncloc()
@@ -64,5 +64,14 @@ class FunclocServiceTest extends TestCase
         $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
         self::assertNotEquals('PM3.SUM.P70', $funcloc->description);
         self::assertEquals('PM3.SUM.P-70', $funcloc->description);
+    }
+
+    public function testGetAreaFromFuncloc()
+    {
+        $this->seed(FunclocSeeder::class);
+
+        $funcloc = Funcloc::query()->find('FP-01-BO3-CAS-COM2');
+        $area = $funcloc->area;
+        self::assertEquals('BO3', $area);
     }
 }

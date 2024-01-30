@@ -73,7 +73,7 @@ class ViewTest extends TestCase
         ])
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered funcloc is 13 records.')
+            ->assertSeeText('The total registered funcloc is 19 records.')
             ->assertSeeText('Description')
             ->assertSeeText('Updated at')
             ->assertSeeText('Edit')

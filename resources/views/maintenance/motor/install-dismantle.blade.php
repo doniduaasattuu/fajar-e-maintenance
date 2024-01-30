@@ -18,6 +18,7 @@
         <div class="alert alert-dismissible alert-info" role="alert">
             <ul class="px-3 m-0 pe-0">
                 <li>Dismantled motor automatically changes status to repair.</li>
+                <li>Only installed motors can be dismantled.</li>
                 <li>Only available motors can be installed.</li>
             </ul>
 
@@ -252,11 +253,19 @@
         }
     }
 
-    function createAlert(form, message, variant) {
+    function createAlert(form, message, variant, buttonClose = null) {
         let alert = document.createElement('div');
         alert.setAttribute('class', 'alert alert-dismissible px-3' + ` ${variant}`);
         alert.setAttribute('role', 'alert');
         alert.textContent = message;
+        if (buttonClose == true) {
+            closeButton = document.createElement('button');
+            closeButton.setAttribute('type', 'button');
+            closeButton.setAttribute('class', 'btn-close');
+            closeButton.setAttribute('data-bs-dismiss', 'alert');
+            closeButton.setAttribute('aria-label', 'Close');
+            alert.appendChild(closeButton);
+        }
         form.appendChild(alert);
     }
 
@@ -288,7 +297,11 @@
         let installedEquipment = install_form.firstElementChild?.lastElementChild ?? null;
         let installDismantleForm = document.getElementById('installDismantleForm');
 
-        if (dismantledEquipment != null && installedEquipment != null) {
+        if (dismantledEquipment != null &&
+            installedEquipment != null &&
+            dismantledEquipment.value.length == 9 &&
+            installedEquipment.value.length == 9
+        ) {
             buttonSubmit.classList.remove('d-none');
         } else {
             buttonSubmit.classList.add('d-none');

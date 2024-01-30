@@ -92,5 +92,42 @@ class FunclocSeeder extends Seeder
         $funcloc13->description = "5AL-PC-01/M";
         $funcloc13->created_at = Carbon::now()->toDateTimeString();
         $funcloc13->save();
+
+        // TRAFO
+        $funcloc15 = new Funcloc();
+        $funcloc15->id = "FP-01-ENC-TRF-PLN1";
+        $funcloc15->description = "Trafo";
+        $funcloc15->created_at = Carbon::now()->toDateTimeString();
+        $funcloc15->save();
+
+        $funcloc17 = new Funcloc();
+        $funcloc17->id = "FP-01-GT1-TRF-PWP1";
+        $funcloc17->description = "Trafo";
+        $funcloc17->created_at = Carbon::now()->toDateTimeString();
+        $funcloc17->save();
+
+        $funcloc18 = new Funcloc();
+        $funcloc18->id = "FP-01-GT1";
+        $funcloc18->description = "Trafo";
+        $funcloc18->created_at = Carbon::now()->toDateTimeString();
+        $funcloc18->save();
+
+        $funcloc19 = new Funcloc();
+        $funcloc19->id = "FP-01-GT2-TRF-UTY2";
+        $funcloc19->description = "Trafo";
+        $funcloc19->created_at = Carbon::now()->toDateTimeString();
+        $funcloc19->save();
+
+        $funcloc20 = new Funcloc();
+        $funcloc20->id = "FP-01-GT1-TRF-UTY1";
+        $funcloc20->description = "Trafo";
+        $funcloc20->created_at = Carbon::now()->toDateTimeString();
+        $funcloc20->save();
+
+        $funcloc21 = new Funcloc();
+        $funcloc21->id = "FP-01-IN1-TRF";
+        $funcloc21->description = "Trafo";
+        $funcloc21->created_at = Carbon::now()->toDateTimeString();
+        $funcloc21->save();
     }
 }

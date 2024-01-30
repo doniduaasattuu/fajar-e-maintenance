@@ -130,51 +130,47 @@ entity findings {
     updated_at TIMESTAMP NULL
 }
 
-entity transformers {
+entity trafos {
     * id VARCHAR(9) <<PK>>
-    * status ENUM(["Installed", "Repaired", "Available"])
-      funcloc VARCHAR (150) <<FK>>
-      sort_field VARCHAR(50)
     --
+    * status ENUM(["Installed", "Repaired", "Available"])
+      funcloc VARCHAR (50) <<FK>>
+      sort_field VARCHAR(50)
+      description VARCHAR(50)
       material_number VARCHAR(8)
-    * equipment_description VARCHAR(150)
     * unique_id VARCHAR(6) UNIQUE
-    * qr_code_link VARCHAR(150) UNIQUE
+    * qr_code_link VARCHAR(100) UNIQUE
       created_at TIMESTAMP NULL
       updated_at TIMESTAMP NULL
 }
 
-entity transformer_details {
+entity trafo_details {
     * id BIGINT UNSIGNED AUTO_INCREMENT
-    * transformer_detail VARCHAR(9) <<FK>>
     --
+    * trafo_detail VARCHAR(9) <<FK>>
     power_rate VARCHAR(25)
-    power_unit ENUM(["kVA"])
-
-    primary_voltage VARCHAR(25)
-    secondary_voltage VARCHAR(25)
-    
-    primary_current VARCHAR(25)
-    secondary_current VARCHAR(25)
-    
-    primary_connection_type VARCHAR(25)
-    secondary_connection_type VARCHAR(25)
-    
+    power_unit ENUM(["VA", "kVA", "MVA"])
+    primary_voltage VARCHAR(50)
+    secondary_voltage VARCHAR(50)  
+    primary_current VARCHAR(50)
+    secondary_current VARCHAR(50)
+    primary_connection_type VARCHAR(50)
+    secondary_connection_type VARCHAR(50)
+    frequency VARCHAR(50)
     type ENUM(["Step Up", "Step Down"])
-    manufacturer VARCHAR(25)
-    year_of_manufacture VARCHAR(5)
-    serial_number VARCHAR(25)
-
-    vector_group VARCHAR(25)
-    frequency VARCHAR(25)
-    insulation_class VARCHAR(25)
-
-    type_of_cooling VARCHAR(25)
-    temp_rise_oil_winding VARCHAR(25)
-    weight VARCHAR(25)
-    weight_of_oil VARCHAR(25)
-    oil_type VARCHAR(25)
-    ip_rating VARCHAR(25)
+    manufacturer VARCHAR(50)
+    year_of_manufacture VARCHAR(4)
+    serial_number VARCHAR(50)
+    vector_group VARCHAR(50)
+    insulation_class VARCHAR(50)
+    type_of_cooling VARCHAR(50)
+    temp_rise_oil_winding VARCHAR(50)
+    weight VARCHAR(50)
+    weight_of_oil VARCHAR(50)
+    oil_type VARCHAR(50)
+    ip_rating VARCHAR(50)
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
 }
 
 entity transformer_records {
@@ -217,12 +213,12 @@ funclocs ||--o{ motor_records : Have
 motors ||--o{ motor_records : Have
 motors ||--|| motor_details : Contain
 motor_records ||--|| users : Include
-administrators ||--|| users : Registered
+roles ||--|| users : Registered
 
-funclocs ||--o{ transformers : Have
+funclocs ||--o{ trafos : Have
 funclocs ||--o{ transformer_records : Have
-transformers ||--o{ transformer_records : Have
-transformers ||--|| transformer_details : Contain
+trafos ||--o{ transformer_records : Have
+trafos ||--|| trafo_details : Contain
 transformer_records ||--|| users : Include
 
 

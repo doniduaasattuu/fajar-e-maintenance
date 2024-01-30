@@ -33,6 +33,23 @@ class Funcloc extends Model
         );
     }
 
+    public function Trafos(): HasMany
+    {
+        return $this->hasMany(Trafo::class, "funcloc", "id");
+    }
+
+    public function TrafoDetail(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            TrafoDetails::class,
+            Trafo::class,
+            "funcloc",
+            "trafo_detail",
+            "id",
+            "id",
+        );
+    }
+
     public function area(): Attribute
     {
         return new Attribute(
