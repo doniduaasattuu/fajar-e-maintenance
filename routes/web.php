@@ -8,11 +8,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrafoController;
 use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\OnlyGuestMiddleware;
-use App\Http\Middleware\OnlyMemberMiddleware;
-use App\Http\Middleware\RoleMiddleware;
-use App\Models\Motor;
-use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,7 +50,7 @@ Route::middleware('member')->group(function () {
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm']);
     Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
     Route::get('/record-edit/{uniqid}', [RecordController::class, 'editRecordMotor']);
-    Route::get('/checking-form', [HomeController::class, 'checkingForm']);
+    // Route::get('/checking-form', [HomeController::class, 'checkingForm']);
 
     // TREND
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');

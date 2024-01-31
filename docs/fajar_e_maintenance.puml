@@ -65,9 +65,9 @@ entity motor_details {
 }
 
 entity motor_records {
-    * id VARCHAR() <<PK>> UNIQUEID
-    * funcloc VARCHAR (50) <<FK>>
-    * motor VARCHAR(9) <<FK>>
+    * id VARCHAR() <<PK>>
+    * funcloc VARCHAR (50)
+    * motor VARCHAR(9)
     * sort_field VARCHAR(50)
     --
       motor_status ENUM(["Running", "Not Running"])
@@ -93,7 +93,7 @@ entity motor_records {
       vibration_nde_frame_value DECIMAL(4,2) 0.00
       vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])   
       noise_nde ENUM(["Normal", "Abnormal"])
-      nik VARCHAR(8) <<FK>>
+    * nik VARCHAR(8)
       created_at TIMESTAMP CURRENT
       updated_at TIMESTAMP NULL
 }
@@ -173,39 +173,33 @@ entity trafo_details {
     updated_at TIMESTAMP NULL
 }
 
-entity transformer_records {
+entity trafo_records {
     * id BIGINT UNSIGNED AUTO_INCREMENT
-    * funcloc VARCHAR (50) <<FK>>
-    * transformer VARCHAR(9) <<FK>>
+    * funcloc VARCHAR (50)
+    * trafo VARCHAR(9)
     * sort_field VARCHAR(50)
     --
-    * transformer_status ENUM(["Online", "Offline"])
-
-    * primary_current_phase_r SMALLINT(5) UNSIGNED 0
-    * primary_current_phase_s SMALLINT(5) UNSIGNED 0
-    * primary_current_phase_t SMALLINT(5) UNSIGNED 0 
-
-    * secondary_current_phase_r SMALLINT(5) UNSIGNED 0
-    * secondary_current_phase_s SMALLINT(5) UNSIGNED 0
-    * secondary_current_phase_t SMALLINT(5) UNSIGNED 0
-    
-    * primary_voltage MEDIUMINT(8) UNSIGNED 0
-    * secondary_voltage MEDIUMINT(8) UNSIGNED 0
-
-    * oil_temperature SMALLINT(5) UNSIGNED 0
-    * winding_temperature SMALLINT(5) UNSIGNED 0
-
-    * clean_status ENUM(["Clean", "Dirty"])
-    * noise ENUM(["Normal", "Abnormal"])
-    * silica_gel(["Dark Blue", "Light Blue", "Pink", "Brown"])
-    * earthing_connection (["No Loose", "Loose"])
-    * oil_leakage (["No Leaks", "Leaks"])
-    * oil_level TINYINT(3) UNSIGNED 0
-    * blower_condition (["Running", "Not Running"])
-      comment TEXT NULL
-      
-    * created_at TIMESTAMP
-    * nik VARCHAR(8) <<FK>>
+    trafo_status ENUM(["Online", "Offline"])
+    primary_current_phase_r DECIMAL(7,2)
+    primary_current_phase_s DECIMAL(7,2)
+    primary_current_phase_t DECIMAL(7,2) 
+    secondary_current_phase_r DECIMAL(7,2)
+    secondary_current_phase_s DECIMAL(7,2)
+    secondary_current_phase_t DECIMAL(7,2)
+    primary_voltage DECIMAL(8,2)
+    secondary_voltage DECIMAL(8,2)
+    oil_temperature DECIMAL(5,2) 
+    winding_temperature DECIMAL(5,2) 
+    cleanliness ENUM(["Clean", "Dirty"])
+    noise ENUM(["Normal", "Abnormal"])
+    silica_gel(["Dark blue", "Light blue", "Pink", "Brown"])
+    earthing_connection (["Tight", "Loose"])
+    oil_leakage (["No leaks", "Leaks"])
+    oil_level UNISIGNED TINYINT(3)
+    blower_condition (["Good", "Not good"])
+  * nik VARCHAR(8)
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
 }
  
 funclocs ||--o{ motors : Have
@@ -216,10 +210,9 @@ motor_records ||--|| users : Include
 roles ||--|| users : Registered
 
 funclocs ||--o{ trafos : Have
-funclocs ||--o{ transformer_records : Have
-trafos ||--o{ transformer_records : Have
+funclocs ||--o{ trafo_records : Have
+trafos ||--o{ trafo_records : Have
 trafos ||--|| trafo_details : Contain
-transformer_records ||--|| users : Include
-
+trafo_records ||--|| users : Include
 
 @enduml

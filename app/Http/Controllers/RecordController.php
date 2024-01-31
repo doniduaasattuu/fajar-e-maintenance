@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Finding;
 use App\Models\Motor;
 use App\Models\MotorRecord;
+use App\Models\Trafo;
 use App\Models\User;
 use App\Services\FindingService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
+use App\Services\TrafoService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
@@ -23,15 +25,18 @@ class RecordController extends Controller
     private MotorService $motorService;
     private MotorRecordService $motorRecordService;
     private FindingService $findingService;
+    private TrafoService $trafoService;
 
     public function __construct(
         MotorService $motorService,
         MotorRecordService $motorRecordService,
         FindingService $findingService,
+        TrafoService $trafoService,
     ) {
         $this->motorService = $motorService;
         $this->motorRecordService = $motorRecordService;
         $this->findingService = $findingService;
+        $this->trafoService = $trafoService;
     }
 
     public function checkingForm(string $equipment_id)
@@ -55,7 +60,23 @@ class RecordController extends Controller
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The motor with id ' . $unique_id . ' was not found.']);
             }
         } else if ($equipment_type == 'Fajar-TrafoList') {
-            echo 'Trafo';
+
+            $unique_id = preg_replace('/[a-zA-Z\-]/i', '', $equipment_id);
+            $trafo = Trafo::query()->with(['TrafoDetail'])->where('unique_id', '=', $unique_id)->first();
+
+            if (!is_null($trafo)) {
+
+                return response()->json($trafo);
+
+                // return response()->view('maintenance.trafo.checking-form', [
+                //     'title' => 'Checking form',
+                //     'trafoService' => $this->trafoService,
+                //     'trafo' => $trafo,
+                //     'trafoDetail' => $trafo->TrafoDetail,
+                // ]);
+            } else {
+                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The trafo with id ' . $unique_id . ' was not found.']);
+            }
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The scanned qr code not found.']);
         }
