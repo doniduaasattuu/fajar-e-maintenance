@@ -51,7 +51,6 @@ class MotorDetailsTest extends TestCase
         self::assertNull($motorDetail);
     }
 
-    // MOTOR CONTROLLER
     public function testSeedFuncloc()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
@@ -71,6 +70,7 @@ class MotorDetailsTest extends TestCase
             ->assertSeeText('Submit');
     }
 
+    // MOTOR CONTROLLER
     public function testRegisterMotorDetailSuccess()
     {
         $this->testSeedFuncloc();
