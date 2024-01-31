@@ -24,7 +24,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorsEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000153',
@@ -42,7 +42,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorsAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -84,7 +84,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetEditMotorEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->followingRedirects()
             ->withSession([
@@ -98,7 +98,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetEditMotorUregisteredAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -120,7 +120,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetEditMotorAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -149,7 +149,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorDetailsGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->get('/motor-details/EMO000105')
             ->assertRedirect('/login');
@@ -157,7 +157,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorDetailsEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000153',
@@ -183,7 +183,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorDetailsAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -209,7 +209,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetMotorDetailsUregisteredAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -242,7 +242,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorUnregistered()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -253,7 +253,7 @@ class MotorControllerTest extends TestCase
         $this
             ->post('/motor-update', [
                 'id' => 'EMO000000',
-                'status' => 'Installed',
+                'status' => 'Available',
                 'funcloc' => null,
                 'sor_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
@@ -268,7 +268,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorInvalidIdLength()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -294,7 +294,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorInstalledFunclocAndSortfieldNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -354,7 +354,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorRepairedFunclocAndSortfieldNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -411,7 +411,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorAvailableFunclocAndSortfieldNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -468,7 +468,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorFunclocInvalidPrefix()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -494,7 +494,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorFunclocInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -520,7 +520,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorFunclocInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -544,9 +544,9 @@ class MotorControllerTest extends TestCase
             ]);
     }
 
-    public function testUpdateMotorSortfieldNull()
+    public function testUpdateMotorSortfieldNullStatusInstalled()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -571,7 +571,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorSortfieldInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -596,7 +596,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorSortfieldInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -619,9 +619,9 @@ class MotorControllerTest extends TestCase
             ]);
     }
 
-    public function testUpdateMotorDescriptionNull()
+    public function testUpdateMotorDescriptionNullSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -678,7 +678,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorDescriptionInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -703,7 +703,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorDescriptionInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -728,7 +728,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorMaterialNumberNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -785,7 +785,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorMaterialNumberInvalidType()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -810,7 +810,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorMaterialNumberInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -835,7 +835,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorMaterialNumberInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -860,7 +860,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorUniqueIdNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -885,7 +885,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorUniqueIdInvalidType()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -910,7 +910,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorUniqueIdUnregistered()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -935,7 +935,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorQrCodeLinkNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -960,7 +960,7 @@ class MotorControllerTest extends TestCase
 
     public function testUpdateMotorQrCodeLinkUnregistered()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -986,7 +986,7 @@ class MotorControllerTest extends TestCase
     // REGISTER
     public function testRegisterMotorGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->post('/motor-register', [])
             ->assertRedirect('/login');
@@ -994,7 +994,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000153',
@@ -1016,7 +1016,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1080,16 +1080,11 @@ class MotorControllerTest extends TestCase
     // PROHIBITED FUNCLOC AND SORTFIELD
     public function testRegisterMotorAuthorizedProhibitedFunclocAvailable()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
             'user' => 'Doni Darmawan'
-        ]);
-
-        $this->post('/funcloc-register', [
-            'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
         ]);
 
         $this->get('/motor-registration');
@@ -1143,7 +1138,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedProhibitedSortFieldAvailable()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1207,7 +1202,7 @@ class MotorControllerTest extends TestCase
     // PROHIBITED REPAIRED STATUS
     public function testRegisterMotorAuthorizedProhibitedFunclocRepaired()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1270,7 +1265,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedProhibitedSortFieldRepaired()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1333,7 +1328,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedInvalidIdNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1397,7 +1392,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedInvalidIdLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1459,9 +1454,9 @@ class MotorControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterMotorAuthorizedDuplicate()
+    public function testRegisterMotorAuthorizedIdDuplicate()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1523,9 +1518,9 @@ class MotorControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterMotorAuthorizedInvalidPrefix()
+    public function testRegisterMotorAuthorizedIdInvalidPrefix()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1590,7 +1585,7 @@ class MotorControllerTest extends TestCase
     // STATUS
     public function testRegisterMotorAuthorizedStatusNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1621,7 +1616,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedFunclocNullSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1684,7 +1679,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedFunclocNullFailed()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1748,7 +1743,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedFunclocInvalidPrefix()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1779,7 +1774,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedFunclocInvalidFormat()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1811,7 +1806,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedFunclocUnregistered()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1838,7 +1833,7 @@ class MotorControllerTest extends TestCase
     // SORT FIELD
     public function testRegisterMotorAuthorizedSortfieldNullSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1901,7 +1896,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedSortfieldNullFailed()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1932,7 +1927,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedSortfieldInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1963,7 +1958,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedSortfieldInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -1994,7 +1989,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedSortfieldInvalidFormat()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2026,7 +2021,7 @@ class MotorControllerTest extends TestCase
     // DESCRIPTION
     public function testRegisterMotorAuthorizedDescriptionNullSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2089,7 +2084,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedDescriptionInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2120,7 +2115,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedDescriptionInvalidLengthMax()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2152,7 +2147,7 @@ class MotorControllerTest extends TestCase
     // MATERIAL NUMBER
     public function testRegisterMotorAuthorizedMaterialNumberNullSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2215,7 +2210,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedMaterialNumberInvalidLengthMin()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2246,7 +2241,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedMaterialNumberInvalidFormat()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2278,7 +2273,7 @@ class MotorControllerTest extends TestCase
     // UNIQUE ID
     public function testRegisterMotorAuthorizedUniqueIdNullFailed()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2309,7 +2304,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedUniqueIdInvalidFormat()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2340,7 +2335,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedUniqueIdDuplicate()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2372,7 +2367,7 @@ class MotorControllerTest extends TestCase
     // QR CODE LINK
     public function testRegisterMotorAuthorizedQrCodeLinkNullFailed()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2403,7 +2398,7 @@ class MotorControllerTest extends TestCase
 
     public function testRegisterMotorAuthorizedQrCodeLinkInvalidPrefix()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2432,10 +2427,9 @@ class MotorControllerTest extends TestCase
             ]);
     }
 
-
-    public function testRegisterMotorAuthorizedQrCodeLinkInvalidFormat()
+    public function testRegisterMotorAuthorizedQrCodeLinkDuplicate()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2467,15 +2461,15 @@ class MotorControllerTest extends TestCase
     // ==========================================
     // =========== INSTALL DISMANTLE ============
     // ==========================================
-    public function testGetInstallDismantlePageGuest()
+    public function testMotorGetInstallDismantlePageGuest()
     {
         $this->get('/motor-install-dismantle')
             ->assertRedirectToRoute('login');
     }
 
-    public function testGetInstallDismantlePageEmployee()
+    public function testMotorGetInstallDismantlePageEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000153',
@@ -2488,7 +2482,7 @@ class MotorControllerTest extends TestCase
 
     public function testGetInstallDismantlePageAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2504,9 +2498,9 @@ class MotorControllerTest extends TestCase
     }
 
     // POST
-    public function testDoInstallDismantleSuccess()
+    public function testMotorDoInstallDismantleSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $dismantle = Motor::query()->find('EMO000426');
         self::assertEquals($dismantle->status, 'Installed');
@@ -2540,9 +2534,9 @@ class MotorControllerTest extends TestCase
         self::assertEquals($installed->sort_field, 'SP3.P.70/M');
     }
 
-    public function testDoInstallDismantleNull()
+    public function testMotorDoInstallDismantleNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2555,9 +2549,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The id dismantle field is required.');
     }
 
-    public function testDoInstallDismantleNullDismantleField()
+    public function testMotorDoInstallDismantleNullDismantleField()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2570,9 +2564,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The id dismantle field is required.');
     }
 
-    public function testDoInstallDismantleNullInstallField()
+    public function testMotorDoInstallDismantleNullInstallField()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2585,9 +2579,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The id install field is required.');
     }
 
-    public function testDoInstallDismantleDismantleInvalid()
+    public function testMotorDoInstallDismantleDismantleInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2600,9 +2594,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The selected id dismantle is invalid.');
     }
 
-    public function testDoInstallDismantleInstallInvalid()
+    public function testMotorDoInstallDismantleInstallInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2615,9 +2609,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The selected id install is invalid.');
     }
 
-    public function testDoInstallDismantleInstallDismantleNotDifferent()
+    public function testMotorDoInstallDismantleInstallDismantleNotDifferent()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2630,9 +2624,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The id dismantle field and id install must be different.');
     }
 
-    public function testDoInstallDismantleInstallInvalidSize()
+    public function testMotorDoInstallDismantleInstallInvalidSize()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2645,9 +2639,9 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('The id dismantle field must be 9 characters.');
     }
 
-    public function testDoInstallDismantleDismantleInvalidSize()
+    public function testMotorDoInstallDismantleDismantleInvalidSize()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2662,9 +2656,9 @@ class MotorControllerTest extends TestCase
 
     // GET EQUIPMENT MOTOR AJAX
     // DISMANTLE
-    public function testGetEquipmentDismantleValid()
+    public function testMotorGetEquipmentDismantleValid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2684,9 +2678,9 @@ class MotorControllerTest extends TestCase
         self::assertEquals($motor->unique_id, '1804');
     }
 
-    public function testGetEquipmentDismantleInvalid()
+    public function testMotorGetEquipmentDismantleInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2704,9 +2698,9 @@ class MotorControllerTest extends TestCase
         self::assertEmpty($motor);
     }
 
-    public function testGetEquipmentDismantleRepairedMotor()
+    public function testMotorGetEquipmentDismantleRepairedMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2725,9 +2719,9 @@ class MotorControllerTest extends TestCase
     }
 
     // INSTALL
-    public function testGetEquipmentInstallValid()
+    public function testMotorGetEquipmentInstallValid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2749,9 +2743,9 @@ class MotorControllerTest extends TestCase
         self::assertEquals($motor->unique_id, '273');
     }
 
-    public function testGetEquipmentInstallInvalid()
+    public function testMotorGetEquipmentInstallInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -2769,9 +2763,9 @@ class MotorControllerTest extends TestCase
         self::assertEmpty($motor);
     }
 
-    public function testGetEquipmentInstallRepairedMotor()
+    public function testMotorGetEquipmentInstallRepairedMotor()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',

@@ -180,7 +180,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('The total registered trafo is 11 records.')
+            ->assertSeeText('The total registered trafo is 12 records.')
             ->assertSeeText('ETF001234');
     }
 }

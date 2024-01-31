@@ -157,5 +157,19 @@ class TrafoSeeder extends Seeder
         $trafo10->created_at = Carbon::now()->toDateTimeString();
         $trafo10->updated_at = Carbon::now()->toDateTimeString();
         $trafo10->save();
+
+        // AVAILABLE
+        $trafo10 = new Trafo();
+        $trafo10->id = 'ETF004321';
+        $trafo10->status = 'Repaired';
+        $trafo10->funcloc = null;
+        $trafo10->sort_field = null;
+        $trafo10->description = null;
+        $trafo10->material_number = null;
+        $trafo10->unique_id = '12';
+        $trafo10->qr_code_link = 'id=Fajar-TrafoList12';
+        $trafo10->created_at = Carbon::now()->toDateTimeString();
+        $trafo10->updated_at = Carbon::now()->toDateTimeString();
+        $trafo10->save();
     }
 }
