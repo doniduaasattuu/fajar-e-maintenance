@@ -19,9 +19,12 @@ class MotorServiceTest extends TestCase
     }
     public function testMotorServiceGetAll()
     {
+        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
+
         $motorService = $this->app->make(MotorService::class);
         $motors = $motorService->getAll();
         self::assertNotNull($motors);
+        self::assertNotEmpty($motors);
     }
 
     public function testMotorServiceGetTableColumns()
@@ -32,17 +35,17 @@ class MotorServiceTest extends TestCase
         self::assertCount(10, $columns);
     }
 
-    public function testMotorServiceRegisteredMotors()
+    public function testMotorServiceGetRegisteredMotors()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $motors = $motorService->registeredMotors();
-        self::assertNotNull($motors);
+        self::assertNotEmpty($motors);
         self::assertCount(22, $motors);
     }
 
-    public function testUpdateMotor()
+    public function testUpdateMotorSuccess()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
@@ -63,26 +66,28 @@ class MotorServiceTest extends TestCase
         self::assertEquals('AC MOTOR;380V,50Hz,75kW,4P,132M,B3', $motor->description);
     }
 
-    public function testRegisteredUniqueIds()
+    public function testMotorRegisteredUniqueIds()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $uniqueIds = $motorService->registeredUniqueIds();
         self::assertNotNull($uniqueIds);
+        self::assertNotEmpty($uniqueIds);
         self::assertCount(22, $uniqueIds);
         self::assertTrue(in_array('2100', $uniqueIds));
         self::assertTrue(in_array('9999', $uniqueIds));
         self::assertFalse(in_array('1010', $uniqueIds));
     }
 
-    public function testRegisteredQrCodeLinks()
+    public function testMotorRegisteredQrCodeLinks()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
         $motorService = $this->app->make(MotorService::class);
         $qrCodeLinks = $motorService->registeredQrCodeLinks();
         self::assertNotNull($qrCodeLinks);
+        self::assertNotEmpty($qrCodeLinks);
         self::assertCount(22, $qrCodeLinks);
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList4592', $qrCodeLinks));
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList155', $qrCodeLinks));
