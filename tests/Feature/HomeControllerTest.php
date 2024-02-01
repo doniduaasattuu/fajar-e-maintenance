@@ -115,21 +115,4 @@ class HomeControllerTest extends TestCase
             ])
             ->assertSeeText('The submitted equipment is invalid.');
     }
-
-    public function testSearchMemberTrafo()
-    {
-        $this->seed(UserSeeder::class);
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->post('/search', [
-                'equipment' => 'ETF000085'
-            ])
-            ->assertJson([
-                'id' => 'id',
-                'equipment' => 'ETF000085',
-            ]);
-    }
 }

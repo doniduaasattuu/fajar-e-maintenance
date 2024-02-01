@@ -46,11 +46,13 @@ Route::middleware('member')->group(function () {
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
-
+    // MOTOR & TRAFO
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm']);
-    Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
     Route::get('/record-edit/{uniqid}', [RecordController::class, 'editRecordMotor']);
-    // Route::get('/checking-form', [HomeController::class, 'checkingForm']);
+    // MOTOR
+    Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
+    // TRAFO
+    Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo']);
 
     // TREND
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');

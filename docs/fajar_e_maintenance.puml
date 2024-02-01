@@ -193,7 +193,7 @@ entity trafo_records {
     cleanliness ENUM(["Clean", "Dirty"])
     noise ENUM(["Normal", "Abnormal"])
     silica_gel(["Dark blue", "Light blue", "Pink", "Brown"])
-    earthing_connection (["Tight", "Loose"])
+    earthing_connection (["No loose", "Loose"])
     oil_leakage (["No leaks", "Leaks"])
     oil_level UNISIGNED TINYINT(3)
     blower_condition (["Good", "Not good"])

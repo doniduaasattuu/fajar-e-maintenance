@@ -6,10 +6,12 @@ use App\Models\Finding;
 use App\Models\Motor;
 use App\Models\MotorRecord;
 use App\Models\Trafo;
+use App\Models\TrafoRecord;
 use App\Models\User;
 use App\Services\FindingService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
+use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
 use App\Traits\Utility;
 use Exception;
@@ -26,17 +28,20 @@ class RecordController extends Controller
     private MotorRecordService $motorRecordService;
     private FindingService $findingService;
     private TrafoService $trafoService;
+    private TrafoRecordService $trafoRecordService;
 
     public function __construct(
         MotorService $motorService,
         MotorRecordService $motorRecordService,
         FindingService $findingService,
         TrafoService $trafoService,
+        TrafoRecordService $trafoRecordService,
     ) {
         $this->motorService = $motorService;
         $this->motorRecordService = $motorRecordService;
         $this->findingService = $findingService;
         $this->trafoService = $trafoService;
+        $this->trafoRecordService = $trafoRecordService;
     }
 
     public function checkingForm(string $equipment_id)
@@ -66,14 +71,12 @@ class RecordController extends Controller
 
             if (!is_null($trafo)) {
 
-                return response()->json($trafo);
-
-                // return response()->view('maintenance.trafo.checking-form', [
-                //     'title' => 'Checking form',
-                //     'trafoService' => $this->trafoService,
-                //     'trafo' => $trafo,
-                //     'trafoDetail' => $trafo->TrafoDetail,
-                // ]);
+                return response()->view('maintenance.trafo.checking-form', [
+                    'title' => 'Checking form',
+                    'trafoService' => $this->trafoService,
+                    'trafo' => $trafo,
+                    'trafoDetail' => $trafo->TrafoDetail,
+                ]);
             } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The trafo with id ' . $unique_id . ' was not found.']);
             }
@@ -217,6 +220,125 @@ class RecordController extends Controller
             ]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);
+        }
+    }
+
+
+    public function saveRecordTrafo(Request $request)
+    {
+        $request->mergeIfMissing(['id' => uniqid()]);
+        $data = $request->all();
+
+        $rules = [
+            'id' => ['required', 'size:13'],
+            'funcloc' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+            'trafo' => ['required', 'size:9', 'exists:App\Models\Trafo,id'],
+            'sort_field' => ['required'],
+            'trafo_status' => ['required', Rule::in($this->trafoService->trafoStatusEnum)],
+            'primary_current_phase_r' => ['nullable'],
+            'primary_current_phase_s' => ['nullable'],
+            'primary_current_phase_t' => ['nullable'],
+            'secondary_current_phase_r' => ['nullable'],
+            'secondary_current_phase_s' => ['nullable'],
+            'secondary_current_phase_t' => ['nullable'],
+            'primary_voltage' => ['nullable'],
+            'secondary_voltage' => ['nullable'],
+            'oil_temperature' => ['nullable'],
+            'winding_temperature' => ['nullable'],
+            'cleanliness' => ['required', Rule::in($this->trafoService->cleanlinessEnum)],
+            'noise' => ['required', Rule::in($this->trafoService->noiseEnum)],
+            'silica_gel' => ['required', Rule::in($this->trafoService->silicaGelEnum)],
+            'earthing_connection' => ['required', Rule::in($this->trafoService->earthingConnectionEnum)],
+            'oil_leakage' => ['required', Rule::in($this->trafoService->oilLeakageEnum)],
+            'oil_level' => ['nullable'],
+            'blower_condition' => ['required', Rule::in($this->trafoService->blowerConditionEnum)],
+            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
+            'finding_description' => ['nullable', 'min:15'],
+            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->passes()) {
+
+            $validated = $validator->validated();
+            return response()->json($validated);
+            // return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated['id']]);
+
+            $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
+            $image = $request->file('finding_image');
+            $validated_finding = [
+                'id' => $validated['id'],
+                'area' => explode('-', $validated['funcloc'])[2],
+                'description' => $validated['finding_description'],
+                'equipment' => $validated['trafo'],
+                'funcloc' => $validated['funcloc'],
+                'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
+            ];
+
+            try {
+
+                $record = TrafoRecord::query()->find($validated_record['id']);
+
+                if (is_null($record)) {
+
+                    // SAVE RECORD
+                    $this->trafoRecordService->save($validated_record);
+
+                    // SAVE FINDING
+                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+                        if (!is_null($image) && $image->isValid()) {
+
+                            $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                            $this->findingService->insertWithImage($image, $validated_finding);
+                        } else {
+                            $this->findingService->insert($validated_finding);
+                        }
+                    }
+                } else {
+
+                    // UPDATE RECORD
+                    $this->trafoRecordService->update($record, $validated_record);
+
+                    // UPDATE FINDING
+                    $finding = Finding::query()->find($validated['id']);
+
+                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+
+                        if (is_null($finding)) {
+                            if (!is_null($image) && $image->isValid()) {
+
+                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                                $this->findingService->insertWithImage($image, $validated_finding);
+                            } else {
+                                $this->findingService->insert($validated_finding);
+                            }
+                        } else {
+                            if (!is_null($image) && $image->isValid()) {
+
+                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                                $this->findingService->updateWithImage($image, $validated_finding);
+                            } else {
+                                $this->findingService->update($validated_finding);
+                            }
+                        }
+                    } else {
+
+                        if (!is_null($finding)) {
+                            $this->findingService->deleteImage($finding);
+                            $finding->delete();
+                        }
+                    }
+
+                    return redirect()->back()->with('alert', ['message' => 'The trafo record successfully updated.', 'variant' => 'alert-success'])->withInput();
+                }
+            } catch (Exception $error) {
+                return redirect()->back()->withErrors($error->getMessage())->withInput();
+            }
+
+            return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated_record['id']]);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 }

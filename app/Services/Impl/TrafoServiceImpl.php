@@ -13,6 +13,14 @@ class TrafoServiceImpl implements TrafoService
     use Utility;
     public array $powerUnitEnum = ['VA', 'kVA', 'MVA'];
     public array $typeEnum = ['Step down', 'Step up'];
+    public array $trafoStatusEnum = ['Online', 'Offline'];
+    public array $cleanlinessEnum = ['Clean', 'Dirty'];
+    public array $noiseEnum = ['Normal', 'Abnormal'];
+    public array $silicaGelEnum = ['Dark blue', 'Light blue', 'Pink', 'Brown'];
+    public array $earthingConnectionEnum = ['No loose', 'Loose'];
+    public array $oilLeakageEnum = ['No leaks', 'Leaks'];
+    public array $blowerConditionEnum = ['Good', 'Not good'];
+
     private TrafoRepository $trafoRepository;
 
     public function __construct(TrafoRepository $trafoRepository)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Motor;
+use App\Models\Trafo;
 use App\Services\MotorService;
 use App\Services\UserService;
 use App\Traits\Utility;
@@ -67,12 +68,20 @@ class HomeController extends Controller
                 } else {
                     return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
                 }
-            } else if (in_array($equipment_code, ['ETF']))
-                return response()->json([
-                    'id' => 'id',
-                    'equipment' => $equipment,
-                ]);
-            else {
+            } else if (in_array($equipment_code, ['ETF'])) {
+
+                $trafo = Trafo::query()->find($equipment);
+
+                if (!is_null($trafo)) {
+                    $equipment_id = $this->getEquipmentId($trafo->qr_code_link);
+
+                    return redirect()->action([RecordController::class, 'checkingForm'], [
+                        'equipment_id' => $equipment_id
+                    ]);
+                } else {
+                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
+                }
+            } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
             }
         } else {
