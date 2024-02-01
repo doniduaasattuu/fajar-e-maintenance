@@ -4509,7 +4509,7 @@ class RecordControllerTest extends TestCase
 
         $id = $records->first()->id;
 
-        $this->get("/record-edit/$id")
+        $this->get("/record-edit/motor/$id")
             ->assertSeeText('Motor record edit')
             ->assertSeeText('Maximum upload file size: 5 MB.')
             ->assertDontSeeText('Existing');
@@ -4529,7 +4529,7 @@ class RecordControllerTest extends TestCase
 
         $id = $findings->first()->id;
 
-        $this->get("/record-edit/$id")
+        $this->get("/record-edit/motor/$id")
             ->assertSeeText('Motor record edit')
             ->assertSeeText('Existing');
     }

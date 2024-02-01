@@ -33,12 +33,32 @@ $skipped = [
     </div>
     @endisset
 
+    {{-- HEADER FOR RECORD EDIT --}}
+    @isset($record)
+    <div class="mb-3">
+        <h4 class="text-break lh-sm">{{ $title }}</h4>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->sort_field }}</p>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->funcloc }}</p>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->motor }}</p>
+    </div>
+    @endisset
+
     @if ($errors->any())
     <div class="alert alert-danger alert-dismissible" role="alert">
         <!-- The data you submitted is invalid. -->
         {{ $errors->first() }}
     </div>
     @endif
+
+    {{-- ALERT SUCCESS CHECKING FORM --}}
+    @isset($trafo)
+    @include('utility.alert-with-link')
+    @endisset
+
+    {{-- ALERT SUCCESS FOR UPDATE RECORD --}}
+    @isset($record)
+    @include('utility.alert')
+    @endisset
 
     {{-- TREND --}}
     @isset($trafo)

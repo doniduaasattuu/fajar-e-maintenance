@@ -12,9 +12,9 @@ class TrafoRecordRepositoryImpl implements TrafoRecordRepository
 
     public function insert(array $validated): bool
     {
-        $motor_record = new TrafoRecord();
-        $this->dataAssigment($motor_record, $validated);
-        $result = $motor_record->save();
+        $trafo_record = new TrafoRecord();
+        $this->dataAssigment($trafo_record, $validated);
+        $result = $trafo_record->save();
 
         return $result;
     }

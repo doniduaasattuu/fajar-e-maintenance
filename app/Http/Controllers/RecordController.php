@@ -199,7 +199,7 @@ class RecordController extends Controller
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
 
-            return redirect()->back()->with('alert', ['message' => 'The motor record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated_record['id']]);
+            return redirect()->back()->with('alert', ['message' => 'The motor record successfully saved.', 'variant' => 'alert-success', 'record_id' => 'motor/' .  $validated_record['id']]);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -223,7 +223,7 @@ class RecordController extends Controller
         }
     }
 
-
+    // TRAFO
     public function saveRecordTrafo(Request $request)
     {
         $request->mergeIfMissing(['id' => uniqid()]);
@@ -235,22 +235,22 @@ class RecordController extends Controller
             'trafo' => ['required', 'size:9', 'exists:App\Models\Trafo,id'],
             'sort_field' => ['required'],
             'trafo_status' => ['required', Rule::in($this->trafoService->trafoStatusEnum)],
-            'primary_current_phase_r' => ['nullable'],
-            'primary_current_phase_s' => ['nullable'],
-            'primary_current_phase_t' => ['nullable'],
-            'secondary_current_phase_r' => ['nullable'],
-            'secondary_current_phase_s' => ['nullable'],
-            'secondary_current_phase_t' => ['nullable'],
-            'primary_voltage' => ['nullable'],
-            'secondary_voltage' => ['nullable'],
-            'oil_temperature' => ['nullable'],
-            'winding_temperature' => ['nullable'],
+            'primary_current_phase_r' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'primary_current_phase_s' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'primary_current_phase_t' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'secondary_current_phase_r' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'secondary_current_phase_s' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'secondary_current_phase_t' => ['nullable', 'decimal:0,2', 'min:0', 'max:99999'],
+            'primary_voltage' => ['nullable', 'decimal:0,2', 'min:0', 'max:999999'],
+            'secondary_voltage' => ['nullable', 'decimal:0,2', 'min:0', 'max:999999'],
+            'oil_temperature' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+            'winding_temperature' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
             'cleanliness' => ['required', Rule::in($this->trafoService->cleanlinessEnum)],
             'noise' => ['required', Rule::in($this->trafoService->noiseEnum)],
             'silica_gel' => ['required', Rule::in($this->trafoService->silicaGelEnum)],
             'earthing_connection' => ['required', Rule::in($this->trafoService->earthingConnectionEnum)],
             'oil_leakage' => ['required', Rule::in($this->trafoService->oilLeakageEnum)],
-            'oil_level' => ['nullable'],
+            'oil_level' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'blower_condition' => ['required', Rule::in($this->trafoService->blowerConditionEnum)],
             'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
             'finding_description' => ['nullable', 'min:15'],
@@ -262,7 +262,7 @@ class RecordController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->validated();
-            return response()->json($validated);
+            // return response()->json($validated);
             // return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated['id']]);
 
             $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
@@ -336,9 +336,27 @@ class RecordController extends Controller
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
 
-            return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated_record['id']]);
+            return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => 'trafo/' . $validated_record['id']]);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+    }
+
+    public function editRecordTrafo(string $uniqid)
+    {
+        $record = TrafoRecord::query()->find($uniqid);
+        $finding = Finding::query()->find($uniqid);
+
+        if (!is_null($record)) {
+
+            return response()->view('maintenance.trafo.checking-form', [
+                'title' => 'Trafo record edit',
+                'trafoService' => $this->trafoService,
+                'record' => $record,
+                'finding' => $finding,
+            ]);
+        } else {
+            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);
         }
     }
 }
