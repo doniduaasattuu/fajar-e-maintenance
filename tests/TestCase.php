@@ -14,6 +14,7 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
         DB::delete('delete from findings');
+        DB::delete('delete from trafo_records');
         DB::delete('delete from trafo_details');
         DB::delete('delete from trafos');
         DB::delete('delete from motor_records');

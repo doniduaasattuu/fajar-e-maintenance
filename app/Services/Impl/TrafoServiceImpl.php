@@ -20,6 +20,7 @@ class TrafoServiceImpl implements TrafoService
     public array $earthingConnectionEnum = ['No loose', 'Loose'];
     public array $oilLeakageEnum = ['No leaks', 'Leaks'];
     public array $blowerConditionEnum = ['Good', 'Not good'];
+    public array $phaseEnum = ['R', 'S', 'T'];
 
     private TrafoRepository $trafoRepository;
 

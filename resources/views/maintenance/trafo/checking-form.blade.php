@@ -108,24 +108,19 @@ $skipped = [
             <div class="mb-3">
                 <label class="fw-semibold form-label">Primary current</label>
                 <div class="row">
-                    <div class="col">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase R" name="primary_current_phase_r" id="primary_current_phase_r">
-                        @error('primary_current_phase_r')
+
+                    @foreach ($trafoService->phaseEnum as $phase)
+                    @php
+                    $primary_col = 'primary_current_phase_' . strtolower($phase);
+                    @endphp
+                    <div class="col {{ $phase == 'S' ? 'px-0' : '' }} ">
+                        <input value="{{ isset($record) ? $record->$primary_col : old($primary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercomma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $primary_col }}" id="{{ $primary_col }}" maxlength="9">
+                        @error($primary_col)
                         <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col px-0">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase S" name="primary_current_phase_s" id="primary_current_phase_s">
-                        @error('primary_current_phase_s')
-                        <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase T" name="primary_current_phase_t" id="primary_current_phase_t">
-                        @error('primary_current_phase_t')
-                        <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @endforeach
+
                 </div>
             </div>
             @endif
@@ -135,24 +130,19 @@ $skipped = [
             <div class="mb-3">
                 <label class="fw-semibold form-label">Secondary current</label>
                 <div class="row">
-                    <div class="col">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase R" name="secondary_current_phase_r" id="secondary_current_phase_r">
-                        @error('secondary_current_phase_r')
+
+                    @foreach ($trafoService->phaseEnum as $phase)
+                    @php
+                    $secondary_col = 'secondary_current_phase_' . strtolower($phase);
+                    @endphp
+                    <div class="col {{ $phase == 'S' ? 'px-0' : '' }} ">
+                        <input value="{{ isset($record) ? $record->$secondary_col : old($secondary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercomma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $secondary_col }}" id="{{ $secondary_col }}" maxlength="9">
+                        @error($secondary_col)
                         <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="col px-0">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase S" name="secondary_current_phase_s" id="secondary_current_phase_s">
-                        @error('secondary_current_phase_s')
-                        <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="col">
-                        <input type="number" onkeypress="return onlynumber(event)" min="0" class="form-control" placeholder="Phase T" name="secondary_current_phase_t" id="secondary_current_phase_t">
-                        @error('secondary_current_phase_t')
-                        <div class="form-text text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @endforeach
+
                 </div>
             </div>
             @endif
@@ -206,11 +196,21 @@ $skipped = [
             </div>
             @break
 
+            {{-- DEFAULT --}}
             @default
             <div class="mb-3">
                 <label for="{{ $column }}" class="fw-semibold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
-                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" class="form-control" name="{{ $column }}" id="{{ $column }}" type="text" step="10" min="0" max="255" onkeypress="return onlynumber(event, 48, 57)" oninput="return preventmax(this.id, 255)" pattern="\d*" maxlength="4">
+                @if (explode('_', $column)[1] == 'temperature')
+                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" type="text" class="form-control" name="{{ $column }}" id="{{ $column }}" onkeypress="return onlynumbercoma(event)" maxlength="6" placeholder="°C">
+                @elseif (explode('_', $column)[1] == 'voltage')
+                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" type="text" class="form-control" name="{{ $column }}" id="{{ $column }}" onkeypress="return onlynumbercoma(event)" maxlength="9" placeholder="V">
+                @elseif ($column == 'oil_level')
+                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" type="text" class="form-control" name="{{ $column }}" id="{{ $column }}" onkeypress="return onlynumber(event, 48, 57)" pattern="\d*" maxlength="3" placeholder="%">
                 @include('utility.error-help')
+                @else
+                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" type="text" class="form-control" name="{{ $column }}" id="{{ $column }}" onkeypress="return onlynumbercoma(event)" maxlength="9">
+                @include('utility.error-help')
+                @endif
             </div>
             @endswitch
             @endforeach {{-- CHECKING FORM --}}
@@ -236,4 +236,8 @@ $skipped = [
 
     </form>
 </div>
+
+@include('utility.script.onlynumber')
+@include('utility.script.preventmax')
+@include('utility.script.onlynumbercoma')
 @include('utility.suffix')

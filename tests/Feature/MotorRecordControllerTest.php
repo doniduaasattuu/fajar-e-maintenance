@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Finding;
+use App\Models\Funcloc;
+use App\Models\MotorDetails;
 use App\Models\MotorRecord;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
@@ -15,7 +17,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
-class RecordControllerTest extends TestCase
+class MotorRecordControllerTest extends TestCase
 {
     public function clearFindingImages()
     {
@@ -38,8 +40,9 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor with id 987 was not found.');
     }
 
-    public function testGetCheckingFormInvalid()
+    public function testGetCheckingFormMotorInvalid()
     {
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
         $this->withSession([
             'nik' => '55000154',
             'user' => 'Doni Darmawan'
@@ -48,7 +51,7 @@ class RecordControllerTest extends TestCase
         $this->get('/scanner');
 
         $this->followingRedirects()
-            ->get('/checking-form/Fajar-Invalid123')
+            ->get('/checking-form/Fajar-MotorI23')
             ->assertSeeText('[404] Not found.')
             ->assertSeeText('The scanned qr code not found.');
     }
@@ -106,7 +109,7 @@ class RecordControllerTest extends TestCase
     // POST
     public function testPostRecordMotorSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4120,7 +4123,7 @@ class RecordControllerTest extends TestCase
     // =====================================================
     // ================== POST WITH IMAGE ==================
     // =====================================================
-    public function testPostRecordWithTextAndImageSuccess()
+    public function testPostMotorRecordWithTextAndImageSuccess()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
 
@@ -4170,13 +4173,18 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
+        self::assertNotNull($findings);
         self::assertCount(1, $findings);
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithTextSuccess()
+    public function testPostMotorRecordWithTextOnlySuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4223,12 +4231,18 @@ class RecordControllerTest extends TestCase
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
+        self::assertCount(1, $findings);
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
+
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithoutTextAndImageSuccess()
+    public function testPostMotorRecordWithoutTextAndImageSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4274,13 +4288,19 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The motor record successfully saved.');
 
         $findings = Finding::query()->get();
-        self::assertCount(2, $findings);
+        self::assertCount(0, $findings);
+        $this->clearFindingImages();
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
+
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithTextAndWithoutImageSuccess()
+    public function testPostMotorRecordWithTextAndWithoutImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4327,12 +4347,18 @@ class RecordControllerTest extends TestCase
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
+        self::assertCount(1, $findings);
+
+        $records = MotorRecord::query()->get();
+        self::assertNotNull($records);
+        self::assertCount(1, $records);
+
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithoutTextAndWithImageFailed()
+    public function testPostMotorRecordWithoutTextAndWithImageFailed()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -4380,12 +4406,15 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The finding image field is prohibited when finding description is empty.')
             ->assertDontSeeText('The motor record successfully saved.');
 
+        $records = MotorRecord::query()->get();
+        self::assertCount(0, $records);
+
         $findings = Finding::query()->get();
-        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithTextAndImageFailedMaxSize()
+    public function testPostMotorRecordWithTextAndImageFailedMaxSize()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
@@ -4440,7 +4469,7 @@ class RecordControllerTest extends TestCase
         $this->clearFindingImages();
     }
 
-    public function testPostRecordWithTextAndImageInvalidFormat()
+    public function testPostMotorRecordWithTextAndImageInvalidFormat()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
 
@@ -4490,8 +4519,12 @@ class RecordControllerTest extends TestCase
             ->assertSeeText('The finding image field must be a file of type: png, jpeg, jpg.')
             ->assertDontSeeText('The motor record successfully saved.');
 
+        $records = MotorRecord::query()->get();
+        self::assertCount(0, $records);
+
         $findings = Finding::query()->get();
-        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+
         $this->clearFindingImages();
     }
 
@@ -4499,13 +4532,13 @@ class RecordControllerTest extends TestCase
     // ================== EDIT FUNCLOC =============== 
     // ===============================================
 
-    public function testGetEditRecord()
+    public function testGetEditRecordMotor()
     {
         $this->testPostRecordMotorSuccess();
 
         $records = MotorRecord::query()->get();
         self::assertNotNull($records);
-        self::assertCount(37, $records);
+        self::assertCount(1, $records);
 
         $id = $records->first()->id;
 
@@ -4515,9 +4548,9 @@ class RecordControllerTest extends TestCase
             ->assertDontSeeText('Existing');
     }
 
-    public function testGetEditRecordWithFinding()
+    public function testGetEditRecordMotorWithFinding()
     {
-        $this->testPostRecordWithTextAndImageSuccess();
+        $this->testPostMotorRecordWithTextAndImageSuccess();
 
         $records = MotorRecord::query()->get();
         self::assertNotNull($records);
@@ -4525,7 +4558,7 @@ class RecordControllerTest extends TestCase
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
-        self::assertNotNull($findings);
+        self::assertCount(1, $findings);
 
         $id = $findings->first()->id;
 
