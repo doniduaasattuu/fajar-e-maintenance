@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Finding;
 use App\Services\MotorService;
+use App\Services\TrafoService;
 use App\Traits\Utility;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,10 +15,12 @@ class TrendController extends Controller
 {
     use Utility;
     private MotorService $motorService;
+    private TrafoService $trafoService;
 
-    public function __construct(MotorService $motorService)
+    public function __construct(MotorService $motorService, TrafoService $trafoService)
     {
         $this->motorService = $motorService;
+        $this->trafoService = $trafoService;
     }
 
     public function equipmentTrend(string $equipment)
@@ -38,13 +41,9 @@ class TrendController extends Controller
             ]);
 
             // FNDING
-            $findings = DB::table('findings')
-                ->select(['description', 'image', 'reporter', 'created_at'])
-                ->where('equipment', '=', $equipment)
-                ->orderBy('created_at', 'desc')
-                ->get();
-
+            $findings = $this->queryFinding($equipment);
             $trends = $this->queryTrend($collection);
+
             return response()->view('maintenance.trends.motor', [
                 'motorService' => $this->motorService,
                 'equipment' => $equipment,
@@ -96,9 +95,36 @@ class TrendController extends Controller
                 'end_date' => $end_date,
             ]);
 
+            // FNDING
+            $findings = $this->queryFinding($equipment);
             $trends = $this->queryTrend($collection);
 
-            return redirect('/');
+            return response()->view('maintenance.trends.trafo', [
+                'trafoService' => $this->trafoService,
+                'equipment' => $equipment,
+                'title' => 'Equipment trend',
+                'created_at' => $this->getValueOf($trends, 'created_at'),
+                'trafo_status' => $this->getValueOf($trends, 'trafo_status'),
+                'primary_current_phase_r' => $this->getValueOf($trends, 'primary_current_phase_r'),
+                'primary_current_phase_s' => $this->getValueOf($trends, 'primary_current_phase_s'),
+                'primary_current_phase_t' => $this->getValueOf($trends, 'primary_current_phase_t'),
+                'secondary_current_phase_r' => $this->getValueOf($trends, 'secondary_current_phase_r'),
+                'secondary_current_phase_s' => $this->getValueOf($trends, 'secondary_current_phase_s'),
+                'secondary_current_phase_t' => $this->getValueOf($trends, 'secondary_current_phase_t'),
+                'primary_voltage' => $this->getValueOf($trends, 'primary_voltage'),
+                'secondary_voltage' => $this->getValueOf($trends, 'secondary_voltage'),
+                'oil_temperature' => $this->getValueOf($trends, 'oil_temperature'),
+                'winding_temperature' => $this->getValueOf($trends, 'winding_temperature'),
+                'cleanliness' => $this->getValueOf($trends, 'cleanliness'),
+                'noise' => $this->getValueOf($trends, 'noise'),
+                'silica_gel' => $this->getValueOf($trends, 'silica_gel'),
+                'earthing_connection' => $this->getValueOf($trends, 'earthing_connection'),
+                'oil_leakage' => $this->getValueOf($trends, 'oil_leakage'),
+                'oil_level' => $this->getValueOf($trends, 'oil_level'),
+                'blower_condition' => $this->getValueOf($trends, 'blower_condition'),
+                'nik' => $this->getValueOf($trends, 'nik'),
+                'findings' => $findings,
+            ]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The $equipment trend is not found."]);
         }
@@ -112,5 +138,16 @@ class TrendController extends Controller
             ->get();
 
         return $trends;
+    }
+
+    public function queryFinding(string $equipment)
+    {
+        $findings = DB::table('findings')
+            ->select(['description', 'image', 'reporter', 'created_at'])
+            ->where('equipment', '=', $equipment)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return $findings;
     }
 }

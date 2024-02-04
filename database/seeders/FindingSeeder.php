@@ -3,21 +3,33 @@
 namespace Database\Seeders;
 
 use App\Models\Finding;
+use App\Services\FindingService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Http\UploadedFile;
 
 class FindingSeeder extends Seeder
 {
+    private FindingService $findingService;
+
+    public function __construct(FindingService $findingService)
+    {
+        $this->findingService = $findingService;
+    }
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
+        $id = uniqid();
+        $image = UploadedFile::fake()->image("$id.jpg");
+        $this->findingService->saveImage($image, $id);
+
         $finding1 = new Finding();
-        $finding1->id = uniqid();
+        $finding1->id = $id;
         $finding1->area = 'PM3';
         $finding1->description = 'Motor panas tertutup buburan';
-        $finding1->image = $finding1->id . '.jpg';
+        $finding1->image = "$id.jpg";
         $finding1->status = 'Open';
         $finding1->equipment = 'MGM000481';
         $finding1->funcloc = 'FP-01-PM3-REL-PPRL-PRAR';

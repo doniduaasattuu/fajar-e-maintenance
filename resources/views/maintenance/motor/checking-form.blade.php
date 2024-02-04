@@ -203,20 +203,20 @@ $skipped = [
         </div>
         @endisset
 
-        {{-- IF MOTOR IS NOT INSTALLED FORM WILL BE DISABLED--}}
-        @isset($motor)
-        @if ($motor->status != 'Installed')
-        <script>
-            for (input of myform) {
-                input.setAttribute('disabled', true);
-            }
-        </script>
-        @endif
-        @endisset
-
     </form> <!-- CHECKING FORM -->
 
 </div>
+
+{{-- IF MOTOR IS NOT INSTALLED FORM WILL BE DISABLED--}}
+@isset($motor)
+@if ($motor->status != 'Installed')
+<script>
+    for (input of myform) {
+        input.setAttribute('disabled', true);
+    }
+</script>
+@endif
+@endisset
 
 <!-- CHECKING FORM END -->
 @include('utility.script.preventmax')

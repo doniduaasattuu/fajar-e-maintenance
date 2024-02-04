@@ -106,7 +106,7 @@ $skipped = [
             {{-- PRIMARY CURRENT --}}
             @if ($loop->iteration == 2)
             <div class="mb-3">
-                <label class="fw-semibold form-label">Primary current</label>
+                <label for="primary_current_phase_r" class="fw-semibold form-label">Primary current</label>
                 <div class="row">
 
                     @foreach ($trafoService->phaseEnum as $phase)
@@ -114,7 +114,7 @@ $skipped = [
                     $primary_col = 'primary_current_phase_' . strtolower($phase);
                     @endphp
                     <div class="col {{ $phase == 'S' ? 'px-0' : '' }} ">
-                        <input value="{{ isset($record) ? $record->$primary_col : old($primary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercomma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $primary_col }}" id="{{ $primary_col }}" maxlength="9">
+                        <input value="{{ isset($record) ? $record->$primary_col : old($primary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercoma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $primary_col }}" id="{{ $primary_col }}" maxlength="9">
                         @error($primary_col)
                         <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -128,7 +128,7 @@ $skipped = [
             {{-- SECONDARY CURRENT --}}
             @if ($loop->iteration == 2)
             <div class="mb-3">
-                <label class="fw-semibold form-label">Secondary current</label>
+                <label for="secondary_current_phase_r" class="fw-semibold form-label">Secondary current</label>
                 <div class="row">
 
                     @foreach ($trafoService->phaseEnum as $phase)
@@ -136,7 +136,7 @@ $skipped = [
                     $secondary_col = 'secondary_current_phase_' . strtolower($phase);
                     @endphp
                     <div class="col {{ $phase == 'S' ? 'px-0' : '' }} ">
-                        <input value="{{ isset($record) ? $record->$secondary_col : old($secondary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercomma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $secondary_col }}" id="{{ $secondary_col }}" maxlength="9">
+                        <input value="{{ isset($record) ? $record->$secondary_col : old($secondary_col) }}" inputmode="numeric" type="text" onkeypress="return onlynumbercoma(event)" min="0" class="form-control" placeholder="Phase {{ $phase }}" name="{{ $secondary_col }}" id="{{ $secondary_col }}" maxlength="9">
                         @error($secondary_col)
                         <div class="form-text text-danger">{{ $message }}</div>
                         @enderror
@@ -145,6 +145,11 @@ $skipped = [
 
                 </div>
             </div>
+            @endif
+
+            {{-- IMAGE FOR TRAFO --}}
+            @if ($loop->iteration == 4)
+            @include('utility.image-trafo')
             @endif
 
             @switch($column)
@@ -235,7 +240,19 @@ $skipped = [
             @endisset
 
     </form>
+
 </div>
+
+{{-- IF TRAFO IS NOT INSTALLED FORM WILL BE DISABLED--}}
+@isset($trafo)
+@if ($trafo->status != 'Installed')
+<script>
+    for (input of myform) {
+        input.setAttribute('disabled', true);
+    }
+</script>
+@endif
+@endisset
 
 @include('utility.script.onlynumber')
 @include('utility.script.preventmax')

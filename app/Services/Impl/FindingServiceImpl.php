@@ -5,11 +5,13 @@ namespace App\Services\Impl;
 use App\Models\Finding;
 use App\Repositories\FindingRepository;
 use App\Services\FindingService;
+use App\Traits\Utility;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class FindingServiceImpl implements FindingService
 {
+    use Utility;
     private FindingRepository $findingRepository;
 
     public function __construct(FindingRepository $findingRepository)

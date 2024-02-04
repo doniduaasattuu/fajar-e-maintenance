@@ -487,12 +487,12 @@ class TrafoRecordControllerTest extends TestCase
                 'trafo' => 'ETF000085',
                 'sort_field' => 'TRAFO PLN',
                 'trafo_status' => 'Offline',
-                'primary_current_phase_r' => '45.25',
-                'primary_current_phase_s' => '49.85',
-                'primary_current_phase_t' => '44.58',
-                'secondary_current_phase_r' => '654.8',
-                'secondary_current_phase_s' => '684.23',
-                'secondary_current_phase_t' => '652.71',
+                'primary_current_phase_r' => null,
+                'primary_current_phase_s' => null,
+                'primary_current_phase_t' => null,
+                'secondary_current_phase_r' => null,
+                'secondary_current_phase_s' => null,
+                'secondary_current_phase_t' => null,
                 'primary_voltage' => '20215',
                 'secondary_voltage' => '401',
                 'oil_temperature' => '38.5',
@@ -509,6 +509,52 @@ class TrafoRecordControllerTest extends TestCase
                 'finding_image' => null,
             ])
             ->assertSeeText('The trafo record successfully saved.');
+    }
+
+    public function testPostRecordTrafoTrafoStatusOfflineFailed()
+    {
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->get('/checking-form/Fajar-TrafoList1');
+
+        $this->followingRedirects()
+            ->post('/record-trafo', [
+                'id' => uniqid(),
+                'funcloc' => 'FP-01-IN1',
+                'trafo' => 'ETF000085',
+                'sort_field' => 'TRAFO PLN',
+                'trafo_status' => 'Offline',
+                'primary_current_phase_r' => '45.4',
+                'primary_current_phase_s' => '45.8',
+                'primary_current_phase_t' => '45.2',
+                'secondary_current_phase_r' => '102.43',
+                'secondary_current_phase_s' => '103.13',
+                'secondary_current_phase_t' => '102.63',
+                'primary_voltage' => '20215',
+                'secondary_voltage' => '401',
+                'oil_temperature' => '38.5',
+                'winding_temperature' => '48.5',
+                'cleanliness' => 'Clean',
+                'noise' => 'Normal',
+                'silica_gel' => 'Light blue',
+                'earthing_connection' => 'No loose',
+                'oil_leakage' => 'No leaks',
+                'oil_level' => '85',
+                'blower_condition' => 'Good',
+                'nik' => '55000154',
+                'finding_description' => null,
+                'finding_image' => null,
+            ])
+            ->assertSeeText('The primary current phase r field is prohibited when trafo status is Offline.')
+            ->assertSeeText('The primary current phase s field is prohibited when trafo status is Offline.')
+            ->assertSeeText('The primary current phase t field is prohibited when trafo status is Offline.')
+            ->assertSeeText('The secondary current phase r field is prohibited when trafo status is Offline.')
+            ->assertSeeText('The secondary current phase s field is prohibited when trafo status is Offline.')
+            ->assertSeeText('The secondary current phase t field is prohibited when trafo status is Offline.');
     }
 
     // PRIMARY CURRENT
