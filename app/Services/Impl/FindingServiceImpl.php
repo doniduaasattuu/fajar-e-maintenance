@@ -6,6 +6,7 @@ use App\Models\Finding;
 use App\Repositories\FindingRepository;
 use App\Services\FindingService;
 use App\Traits\Utility;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +18,12 @@ class FindingServiceImpl implements FindingService
     public function __construct(FindingRepository $findingRepository)
     {
         $this->findingRepository = $findingRepository;
+    }
+
+    public function getAll(): Collection
+    {
+        $findings = Finding::query()->get();
+        return $findings;
     }
 
     public function insert(array $validated): bool

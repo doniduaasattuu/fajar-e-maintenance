@@ -3,11 +3,14 @@
 namespace App\Services;
 
 use App\Models\Finding;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\UploadedFile;
 
 interface FindingService
 {
     public function insert(array $validated): bool;
+
+    public function getAll(): Collection;
 
     public function saveImage(UploadedFile $image, string $image_name): void;
 
