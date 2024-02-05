@@ -14,6 +14,7 @@ class FindingServiceImpl implements FindingService
 {
     use Utility;
     private FindingRepository $findingRepository;
+    public array $findingStatusEnum = ['Open', 'Closed'];
 
     public function __construct(FindingRepository $findingRepository)
     {

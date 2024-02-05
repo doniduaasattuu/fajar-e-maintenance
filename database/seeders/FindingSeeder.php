@@ -52,5 +52,75 @@ class FindingSeeder extends Seeder
         $finding2->created_at = '2023-06-01 14:11:53';
         $finding2->updated_at = null;
         $finding2->save();
+
+        $finding3 = new Finding();
+        $finding3->id = uniqid();
+        $finding3->area = 'IN1';
+        $finding3->description = 'Oil leakage';
+        $finding3->image = null;
+        $finding3->status = 'Open';
+        $finding3->equipment = 'ETF000085';
+        $finding3->funcloc = 'FP-01-IN1';
+        $finding3->notification = null;
+        $finding3->reporter = 'Jiyantoro';
+        $finding3->created_at = '2024-06-01 14:11:53';
+        $finding3->updated_at = null;
+        $finding3->save();
+
+        $finding4 = new Finding();
+        $finding4->id = uniqid();
+        $finding4->area = 'IN1';
+        $finding4->description = 'Noise trafo PLN';
+        $finding4->image = null;
+        $finding4->status = 'Open';
+        $finding4->equipment = 'ETF000085';
+        $finding4->funcloc = 'FP-01-IN1';
+        $finding4->notification = null;
+        $finding4->reporter = 'Jiyantoro';
+        $finding4->created_at = '2024-03-01 14:11:53';
+        $finding4->updated_at = null;
+        $finding4->save();
+
+        $finding5 = new Finding();
+        $finding5->id = uniqid();
+        $finding5->area = 'ENC';
+        $finding5->description = 'Noise trafo ENC';
+        $finding5->image = null;
+        $finding5->status = 'Closed';
+        $finding5->equipment = 'ETF000006';
+        $finding5->funcloc = 'FP-01-ENC';
+        $finding5->notification = null;
+        $finding5->reporter = 'Suryanto';
+        $finding5->created_at = '2023-03-01 14:11:53';
+        $finding5->updated_at = null;
+        $finding5->save();
+
+        $finding6 = new Finding();
+        $finding6->id = uniqid();
+        $finding6->area = 'PM3';
+        $finding6->description = 'Motor noise';
+        $finding6->image = null;
+        $finding6->status = 'Open';
+        $finding6->equipment = 'EMO000428';
+        $finding6->funcloc = 'FP-01-PM3';
+        $finding6->notification = null;
+        $finding6->reporter = 'Edi Supriadi';
+        $finding6->created_at = '2023-01-01 14:11:53';
+        $finding6->updated_at = null;
+        $finding6->save();
+
+        $finding7 = new Finding();
+        $finding7->id = uniqid();
+        $finding7->area = 'PM3';
+        $finding7->description = 'Area basah';
+        $finding7->image = null;
+        $finding7->status = 'Closed';
+        $finding7->equipment = null;
+        $finding7->funcloc = null;
+        $finding7->notification = null;
+        $finding7->reporter = 'Edi Supriadi';
+        $finding7->created_at = '2023-01-01 14:11:53';
+        $finding7->updated_at = null;
+        $finding7->save();
     }
 }

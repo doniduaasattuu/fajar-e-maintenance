@@ -27,6 +27,8 @@ interface UserService
 
     public function isAdmin(string $nik): bool;
 
+    public function isDbAdmin(string $nik): bool;
+
     public function whoIsAdmin(): Collection;
 
     public function whoIsDbAdmin(): Collection;

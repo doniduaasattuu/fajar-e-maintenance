@@ -113,6 +113,23 @@ class UserServiceImpl implements UserService
         }
     }
 
+    public function isDbAdmin(string $nik): bool
+    {
+        $user = User::query()->with(['roles'])->find($nik);
+        $roles = $user->roles;
+
+        if (!is_null($user) && !is_null($roles)) {
+
+            $roles = $roles->map(function ($value, $key) {
+                return $value->role;
+            });
+
+            return $roles->contains('db_admin');
+        } else {
+            return false;
+        }
+    }
+
     public function whoIsAdmin(): Collection
     {
         $adminRoles = Role::query()->with(['User'])->where('role', '=', 'admin')->get();
