@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Models\Funcloc;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -78,5 +79,16 @@ trait Utility
         $ddmmyy = "$dates[2]/$dates[1]/" . substr($dates[0], 2, 3);
 
         return $ddmmyy;
+    }
+
+    public function areas(): array
+    {
+        $funcloc = Funcloc::query()->pluck('id');
+        $areas = $funcloc->map(function ($value, $key) {
+            return explode('-', $value)[2];
+        });
+
+        $areasUnique = $areas->unique()->values()->all();
+        return $areasUnique;
     }
 }

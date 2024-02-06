@@ -7,6 +7,8 @@ use App\Models\Finding;
 use App\Services\FindingService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class FindingController extends Controller
 {
@@ -35,5 +37,47 @@ class FindingController extends Controller
             'equipments' => $equipments->whereNotNull()->all(),
             'findingService' => $this->findingService,
         ]);
+    }
+
+    public function findingRegistration()
+    {
+        return response()->view('maintenance.finding.form', [
+            'title' => 'Finding registration',
+            'findingService' => $this->findingService,
+            'action' => 'finding-register'
+        ]);
+    }
+
+    public function findingRegister(Request $request)
+    {
+        $rules = [
+            'id' => ['nullable'],
+            'area' => ['nullable'],
+            'description' => ['nullable'],
+            'image' => ['nullable'],
+            'status' => ['nullable'],
+            'equipment' => ['nullable'],
+            'funcloc' => ['nullable'],
+            'notification' => ['nullable'],
+            'reporter' => ['nullable'],
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->passes()) {
+            return redirect()->back()->with('alert', ['message' => 'The finding successfully saved.', 'variant' => 'alert-success']);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    }
+
+    public function findingEdit(string $id)
+    {
+        return "Finding edit $id";
+    }
+
+    public function findingDelete(string $id)
+    {
+        return "Finding delete $id";
     }
 }

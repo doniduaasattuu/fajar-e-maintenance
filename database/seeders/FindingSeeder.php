@@ -72,7 +72,7 @@ class FindingSeeder extends Seeder
         $finding4->area = 'IN1';
         $finding4->description = 'Noise trafo PLN';
         $finding4->image = null;
-        $finding4->status = 'Open';
+        $finding4->status = 'Closed';
         $finding4->equipment = 'ETF000085';
         $finding4->funcloc = 'FP-01-IN1';
         $finding4->notification = null;

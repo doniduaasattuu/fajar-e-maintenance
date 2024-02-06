@@ -128,4 +128,16 @@ class FunclocTest extends TestCase
         $trafoDetail = $funcloc->trafoDetail;
         self::assertNull($trafoDetail);
     }
+
+    public function testAreas()
+    {
+        $this->seed(FunclocSeeder::class);
+
+        $funcloc = Funcloc::query()->pluck('id');
+        $areas = $funcloc->map(function ($value, $key) {
+            return explode('-', $value)[2];
+        });
+        self::assertNotNull($areas);
+        Log::info(json_encode(array_unique($areas->toArray()), JSON_PRETTY_PRINT));
+    }
 }

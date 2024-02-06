@@ -42,9 +42,15 @@ Route::middleware('member')->group(function () {
     Route::get('/funclocs', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
     Route::get('/trafos', [TrafoController::class, 'trafos'])->name('trafos');
-    Route::get('/findings', [FindingController::class, 'findings'])->name('findings');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
     Route::get('/trafo-details/{id}', [TrafoController::class, 'trafoDetails'])->name('trafo-details');
+
+    // FINDINGS
+    Route::get('/findings', [FindingController::class, 'findings'])->name('findings');
+    Route::get('/finding-registration', [FindingController::class, 'findingRegistration']);
+    Route::post('/finding-register', [FindingController::class, 'findingRegister']);
+    Route::get('/finding-edit/{id}', [FindingController::class, 'findingEdit']);
+    Route::get('/finding-delete/{id}', [FindingController::class, 'findingDelete']);
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');

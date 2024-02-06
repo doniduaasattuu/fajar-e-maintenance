@@ -8,6 +8,8 @@
 
 <div class="py-4">
 
+    @include('utility.confirmation')
+
     <h3 class="mb-3">{{ $title }}</h3>
 
     {{-- REGISTRY NEW FINDING --}}
@@ -63,11 +65,11 @@
                 <div>
                     @if (null != $finding->image)
                     <a href="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" @disabled(null==$finding->image)>
-                        <img class="finding-image card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="...">
+                        <img class="finding-image card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
                     </a>
                     @else
                     <div>
-                        <img class="card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="...">
+                        <img class="card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
                     </div>
                     @endif
                 </div>
@@ -102,12 +104,9 @@
                     </div>
 
                     {{-- ACTION BUTTON --}}
-                    @inject('userService', 'App\Services\UserService')
-                    @if (isset($userService) && (session('nik') != null) && $userService->isDbAdmin(session('nik')))
-
                     <div class="row mt-3">
                         <div class="col">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">
+                            <a href="/finding-edit/{{ $finding->id }}" class="btn btn-outline-primary btn-sm w-100">
                                 <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
@@ -116,17 +115,15 @@
                             </a>
                         </div>
                         <div class="col">
-                            <a href="#" class="btn btn-outline-danger btn-sm w-100">
+                            <div url="/finding-delete/{{ $finding->id }}" class="btn btn-outline-danger btn-sm w-100 button_delete">
                                 <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
                                 </svg>
                                 Delete
-                            </a>
+                            </div>
                         </div>
                     </div>
-
-                    @endif
 
                 </div>
             </div>
@@ -141,21 +138,78 @@
     const findings = document.getElementsByClassName('finding');
     const filter_status = document.getElementById('filter_status');
     const filter_equipment = document.getElementById('filter_equipment');
+    const button_deletes = document.getElementsByClassName('button_delete');
+
+    // DO CONFIRMATION BEFORE DELETE
+    function doConfirmation(buttons) {
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].style.cursor = 'pointer';
+            buttons[i].onclick = () => {
+                let confirm_url = buttons[i].getAttribute('url');
+                let modal_url = document.getElementById('confirmation_url');
+                modal_url.setAttribute('href', confirm_url);
+            }
+        }
+    }
+
+    doConfirmation(button_deletes);
+
+    // DO FILTER
+    function doFilter() {
+        doFilterByFindingStatus();
+        doFilterByFindingEquipment();
+    }
+
+    // FILTER BY FINDING EQUIPMENT
+    filter_equipment.onchange = () => {
+        if (filter_status.value != 'All') {
+            doFilterByFindingEquipment();
+            filterByFindingStatus(findings, filter_status.value);
+        } else {
+            doFilterByFindingEquipment();
+        }
+    }
+
+    function doFilterByFindingEquipment() {
+
+        if (filter_equipment.value != 'All') {
+            showAllFinding();
+            filterByFindingEquipment(findings, filter_equipment.value);
+        } else {
+            showAllFinding();
+        }
+    }
+
+    function filterByFindingEquipment(findings, equipment) {
+        for (let i = 0; i < findings.length; i++) {
+
+            let finding_equipment = findings[i].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.lastElementChild.textContent;
+
+            if (finding_equipment != equipment) {
+                findings[i].classList.add('d-none')
+            }
+        }
+    }
 
     // FILTER BY FINDING STATUS
     filter_status.onchange = () => {
-        doFilterByFindingStatus();
+        if (filter_equipment.value != 'All') {
+            doFilterByFindingStatus();
+            filterByFindingEquipment(findings, filter_equipment.value)
+        } else {
+            doFilterByFindingStatus();
+        }
     }
 
     function doFilterByFindingStatus() {
         if (filter_status.value == 'Open') {
-            showAllFinding(findings);
+            showAllFinding();
             filterByFindingStatus(findings, filter_status.value)
         } else if (filter_status.value == 'Closed') {
-            showAllFinding(findings);
+            showAllFinding();
             filterByFindingStatus(findings, filter_status.value)
         } else {
-            showAllFinding(findings);
+            showAllFinding();
         }
     }
 
@@ -170,30 +224,8 @@
         }
     }
 
-    // FILTER BY EQUIPMENT
-    // filter_equipment.onchange = () => {
-    //     doFilterByFindingEquipment(findings, );
-    // }
-
-    // function doFilterByFindingEquipment(findings, equipment, filter_equipment) {
-    //     if (equipment != filter_equipment.value) {
-    //         findings.classList.add('d-none');
-    //     }
-    // }
-
-    // function filterByFindingEquipment(findings, equipment) {
-    //     for (let i = 0; i < findings.length; i++) {
-
-    //         let finding_equipment = findings[i].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.lastElementChild.textContent;
-
-    //         if (finding_equipment != equipment) {
-    //             findings[i].classList.add('d-none')
-    //         }
-    //     }
-    // }
-
     // SHOW ALL FINDING
-    function showAllFinding(findings) {
+    function showAllFinding() {
         for (let i = 0; i < findings.length; i++) {
             findings[i].classList.remove('d-none');
         }
@@ -201,7 +233,7 @@
 
     // WINDOW ONLOAD
     window.onload = () => {
-        doFilterByFindingStatus();
+        doFilter();
     }
 </script>
 
