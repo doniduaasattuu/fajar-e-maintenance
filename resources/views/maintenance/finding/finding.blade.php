@@ -65,11 +65,11 @@
                 <div>
                     @if (null != $finding->image)
                     <a href="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" @disabled(null==$finding->image)>
-                        <img class="finding-image card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
+                        <img class="finding-image card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
                     </a>
                     @else
                     <div>
-                        <img class="card-img-top p-1 rounded" style="height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
+                        <img class="card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
                     </div>
                     @endif
                 </div>
@@ -96,7 +96,7 @@
                         @default
                         <div class="row">
                             <div class="col-6 mb-0 fw-semibold">{{ ucfirst($column == 'created_at' ? 'Date' : $column) }}</div>
-                            <div class="col-6 mb-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ (null != $finding->$column) ? $finding->$column : 'Not set' }}">{{ $column == 'created_at' ? $findingService->formatDDMMYY($finding->$column) : $finding->$column }}</div>
+                            <div class="col-6 mb-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ (null != $finding->$column) ? $finding->$column : 'Not set' }}">{{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
                         </div>
                         @endswitch
                         @endforeach
@@ -115,7 +115,7 @@
                             </a>
                         </div>
                         <div class="col">
-                            <div url="/finding-delete/{{ $finding->id }}" class="btn btn-outline-danger btn-sm w-100 button_delete">
+                            <div url="/finding-delete/{{ $finding->id }}" data-bs-toggle="modal" data-bs-target="#confirmation_modal" class="btn btn-outline-danger btn-sm w-100 button_delete">
                                 <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />

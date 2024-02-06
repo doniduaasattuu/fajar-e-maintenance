@@ -52,13 +52,16 @@ class FindingServiceImpl implements FindingService
     {
         $id = $validated['id'];
         $existing_finding = Finding::query()->find($id);
-        Storage::disk('public')->delete("/findings/" . $existing_finding->image);
+
+        if (!is_null($existing_finding->image)) {
+            Storage::disk('public')->delete("findings/$existing_finding->image");
+        }
 
         $this->update($validated);
         $this->saveImage($image, $id);
     }
 
-    public function deleteImage($finding): void
+    public function deleteImage(Finding $finding): void
     {
         Storage::disk('public')->delete("/findings/" . $finding->image);
     }

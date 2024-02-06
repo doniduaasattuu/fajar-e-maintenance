@@ -2,43 +2,50 @@
     @csrf
     <div>
 
+        @isset($finding)
+        <input type="hidden" id="id" name="id" value="{{ $finding->id }}">
+        <input type="hidden" id="reporter" name="reporter" value="{{ $finding->reporter }}">
+        @endisset
+
         @foreach ($findingService->getColumns('findings', ['id', 'description', 'image', 'reporter', 'created_at', 'updated_at']) as $column) {{-- FINDING COLUMN --}}
         <div class="mb-3">
             <label for="{{ $column }}" class="form-label fw-semibold">{{ ucfirst($column) }}</label>
 
             {{-- STATUS FINDING --}}
             @switch($column)
-            @case('status')
-            <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
-                @foreach ($findingService->findingStatusEnum as $option )
-                <option @selected(old($column)==$option) value="{{ $option }}">{{ $option }}</option>
-                @endforeach
-            </select>
-            @break
 
             {{-- AREA --}}
             @case('area')
             <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
                 <option value="">-- Choose --</option>
                 @foreach ($findingService->areas() as $option )
-                <option @selected(old($column)==$option) value="{{ $option }}">{{ $option }}</option>
+                <option @selected( isset($finding) ? ($finding->$column==$option) : old($column)==$option) value="{{ $option }}">{{ $option }}</option>
+                @endforeach
+            </select>
+            @break
+
+            {{-- STATUS --}}
+            @case('status')
+            <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
+                @foreach ($findingService->findingStatusEnum as $option )
+                <option @selected( isset($finding) ? ($finding->$column==$option) : old($column)==$option) value="{{ $option }}">{{ $option }}</option>
                 @endforeach
             </select>
             @break
 
             {{-- EQUIPMENT --}}
             @case('equipment')
-            <input value="{{ old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" oninput="return toupper(this)" maxlength="9">
+            <input value="{{ null != old($column) ? old($column) : (isset($finding) ? $finding->$column : '' ) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" oninput="return toupper(this)" maxlength="9">
             @break
 
             {{-- NOTIFICATION --}}
             @case('notification')
-            <input value="{{ old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" onkeypress="return onlynumber(event, 48, 57)" maxlength="8">
+            <input value="{{ null != old($column) ? old($column) : (isset($finding) ? $finding->$column : '' ) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" onkeypress="return onlynumber(event, 48, 57)" maxlength="8">
             @break
 
             {{-- FUNCLOC --}}
             @default
-            <input value="{{ old($column) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" oninput="return toupper(this)" maxlength="25">
+            <input value="{{ null != old($column) ? old($column) : (isset($finding) ? $finding->$column : '' ) }}" id="{{ $column }}" name="{{ $column }}" type="text" class="form-control" oninput="return toupper(this)" maxlength="25">
             @endswitch
 
             @include('utility.error-help')
@@ -79,7 +86,7 @@
     </div>
 
     {{-- BUTTON SUBMIT --}}
-    <button type="submit" class="btn btn-primary">{{ isset($motor) ? 'Update' : 'Submit' }}</button>
+    <button type="submit" class="btn btn-primary">{{ isset($finding) ? 'Update' : 'Submit' }}</button>
 </form>
 
 @include('utility.script.toupper')

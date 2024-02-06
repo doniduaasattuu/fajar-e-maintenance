@@ -50,6 +50,7 @@ Route::middleware('member')->group(function () {
     Route::get('/finding-registration', [FindingController::class, 'findingRegistration']);
     Route::post('/finding-register', [FindingController::class, 'findingRegister']);
     Route::get('/finding-edit/{id}', [FindingController::class, 'findingEdit']);
+    Route::post('/finding-update', [FindingController::class, 'findingUpdate']);
     Route::get('/finding-delete/{id}', [FindingController::class, 'findingDelete']);
 
     // CHECKING FORM

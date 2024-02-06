@@ -262,9 +262,6 @@ class RecordController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->validated();
-            // return response()->json($validated);
-            // return redirect()->back()->with('alert', ['message' => 'The trafo record successfully saved.', 'variant' => 'alert-success', 'record_id' => $validated['id']]);
-
             $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
             $image = $request->file('finding_image');
             $validated_finding = [

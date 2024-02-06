@@ -17,6 +17,8 @@ interface UserService
 
     public function registeredNiks(): array; // return all nik users
 
+    public function registeredFullnames(): array; // return all fullname
+
     public function availableRole(): array;
 
     public function departments(): array; // return all department

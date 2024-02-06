@@ -60,6 +60,12 @@ class UserServiceImpl implements UserService
         return $niks->toArray();
     }
 
+    public function registeredFullnames(): array
+    {
+        $fullnames = User::query()->pluck('fullname');
+        return $fullnames->toArray();
+    }
+
     public function availableRole(): array
     {
         return [

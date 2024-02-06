@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('findings', function (Blueprint $table) {
             $table->string('id')->nullable(false)->primary();
             $table->string('area', 20)->nullable(false);
-            $table->text('description')->nullable(false);
-            $table->string('image', 20)->nullable(true);
             $table->enum('status', ['Open', 'Closed'])->nullable(true);
             $table->string('equipment', 9)->nullable(true);
             $table->string('funcloc', 50)->nullable(true);
             $table->char('notification', 8)->nullable(true);
             $table->string('reporter', 50)->nullable(true);
+            $table->text('description')->nullable(false);
+            $table->string('image', 20)->nullable(true);
             $table->timestamps();
         });
     }
