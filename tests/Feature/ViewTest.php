@@ -7,6 +7,7 @@ use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\TrafoService;
 use App\Services\UserService;
+use Database\Seeders\FindingSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;

@@ -9,7 +9,10 @@ use App\Traits\Utility;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class TrendController extends Controller
 {
@@ -23,11 +26,11 @@ class TrendController extends Controller
         $this->trafoService = $trafoService;
     }
 
-    public function equipmentTrend(string $equipment)
+    public function equipmentTrend(string $equipment, string $start_date = null, string $end_date = null)
     {
         $equipment_code = $this->getEquipmentCode($equipment);
-        $end_date = Carbon::now()->addDays(1);
-        $start_date = Carbon::now()->addYears(-1)->addDays(-1);
+        $start_date = !is_null($start_date) ? $start_date : Carbon::now()->addYears(-1)->addDays(-1);
+        $end_date = !is_null($end_date) ? $end_date : Carbon::now()->addDays(1);
 
         if (in_array($equipment_code, $this->motorService->motorCodes()) && in_array($equipment, $this->motorService->registeredMotors())) {
 
@@ -149,5 +152,38 @@ class TrendController extends Controller
             ->get();
 
         return $findings;
+    }
+
+    public function trends()
+    {
+        return response()->view('maintenance.trends.trends', [
+            'title' => 'Equipment trends'
+        ]);
+    }
+
+    public function getTrends(Request $request)
+    {
+        $data = [
+            'equipment' => $request->input('equipment'),
+            'start_date' => !is_null($request->input('start_date')) ? $request->input('start_date') : Carbon::now()->addYears(-1)->addDays(-1),
+            'end_date' => !is_null($request->input('end_date')) ? $request->input('end_date') : Carbon::now()->addDays(1),
+        ];
+
+        $rules = [
+            'equipment' => ['required', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
+            'start_date' => ['required', 'before:now'],
+            'end_date' => ['required', 'after:start_date'],
+        ];
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->passes()) {
+
+            $validated = $validator->validated();
+
+            return $this->equipmentTrend($validated['equipment'], $validated['start_date'], $validated['end_date']);
+        } else {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
     }
 }

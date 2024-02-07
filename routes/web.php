@@ -66,6 +66,8 @@ Route::middleware('member')->group(function () {
     Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo']);
 
     // TREND
+    Route::get('/trends', [TrendController::class, 'trends']);
+    Route::post('/trends', [TrendController::class, 'getTrends']);
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
     Route::middleware('role:db_admin')->group(function () {
