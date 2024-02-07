@@ -10,6 +10,7 @@ use App\Http\Controllers\TrafoController;
 use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------

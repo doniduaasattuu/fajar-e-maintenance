@@ -4,7 +4,9 @@
 
         @isset($finding)
         <input type="hidden" id="id" name="id" value="{{ $finding->id }}">
+        @include('utility.error-help', ['column' => 'id'])
         <input type="hidden" id="reporter" name="reporter" value="{{ $finding->reporter }}">
+        @include('utility.error-help', ['column' => 'reporter'])
         @endisset
 
         @foreach ($findingService->getColumns('findings', ['id', 'description', 'image', 'reporter', 'created_at', 'updated_at']) as $column) {{-- FINDING COLUMN --}}

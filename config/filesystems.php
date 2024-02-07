@@ -39,7 +39,15 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'findings' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/findings'),
+            'url' => env('APP_URL') . '/storage/findings',
             'visibility' => 'public',
             'throw' => false,
         ],
