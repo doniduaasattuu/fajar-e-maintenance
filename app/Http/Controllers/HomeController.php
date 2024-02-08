@@ -49,7 +49,7 @@ class HomeController extends Controller
 
     public function search(Request $request): RedirectResponse | JsonResponse
     {
-        $equipment = $request->input('equipment');
+        $equipment = $request->input('search_equipment');
 
         if ($equipment != null && strlen($equipment) === 9) {
 

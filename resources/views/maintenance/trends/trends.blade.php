@@ -10,8 +10,8 @@
             <h2 class="mb-4">Trends</h2>
 
             <div class="mb-3">
-                <label for="equipment_trends" class="form-label fw-semibold">Equipment</label>
-                <input value="{{ old('equipment') }}" type="text" id="equipment_trends" name="equipment" oninput="return toupper(this)" maxlength="9" class="form-control" aria-describedby="equipment">
+                <label for="trends_equipment" class="form-label fw-semibold">Equipment</label>
+                <input value="{{ old('equipment') }}" type="text" id="trends_equipment" name="equipment" oninput="return toupper(this)" maxlength="9" class="form-control" aria-describedby="equipment">
                 @include('utility.error-help', ['column' => 'equipment'])
             </div>
 

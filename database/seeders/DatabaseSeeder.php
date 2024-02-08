@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('documents')->delete();
         DB::table('findings')->delete();
         DB::table('trafo_records')->delete();
         DB::table('trafo_details')->delete();
@@ -38,6 +39,7 @@ class DatabaseSeeder extends Seeder
             TrafoDetailsSeeder::class,
             TrafoRecordSeeder::class,
             FindingSeeder::class,
+            DocumentSeeder::class,
         ]);
     }
 }

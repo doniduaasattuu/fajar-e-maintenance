@@ -69,7 +69,7 @@ class HomeControllerTest extends TestCase
         $this->seed(UserSeeder::class);
 
         $this->post('/search', [
-            'equipment' => 'EMO000426'
+            'search_equipment' => 'EMO000426'
         ])
             ->assertRedirectToRoute('login');
     }
@@ -83,7 +83,7 @@ class HomeControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])
             ->post('/search', [
-                'equipment' => 'EMO000426'
+                'search_equipment' => 'EMO000426'
             ])
             ->assertRedirect('/checking-form/Fajar-MotorList1804');
     }
@@ -97,7 +97,7 @@ class HomeControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->post('/search', [
-                'equipment' => null,
+                'search_equipment' => null,
             ])
             ->assertSeeText('The submitted equipment is invalid.');
     }
@@ -111,7 +111,7 @@ class HomeControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])->followingRedirects()
             ->post('/search', [
-                'equipment' => 'EMO00426'
+                'search_equipment' => 'EMO00426'
             ])
             ->assertSeeText('The submitted equipment is invalid.');
     }

@@ -292,8 +292,8 @@
                 }, {
                     data: <?php echo json_encode($vibration_nde_frame_value) ?>,
                     label: "Frame",
-                    borderColor: "rgb(196,88,180)",
-                    backgroundColor: "rgb(196,88,180)",
+                    borderColor: "rgb(80,80,80)",
+                    backgroundColor: "rgb(80,80,80)",
                     fill: false,
                     tension: 0.3,
                 },
