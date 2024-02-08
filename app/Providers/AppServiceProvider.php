@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\DocumentRepository;
 use App\Repositories\FindingRepository;
 use App\Repositories\FunclocRepository;
+use App\Repositories\Impl\DocumentRepositoryImpl;
 use App\Repositories\Impl\FindingRepositoryImpl;
 use App\Repositories\Impl\FunclocRepositoryImpl;
 use App\Repositories\Impl\MotorDetailRepositoryImpl;
@@ -70,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
         TrafoRecordService::class => trafoRecordServiceImpl::class,
         TrafoRecordRepository::class => TrafoRecordRepositoryImpl::class,
         DocumentService::class => DocumentServiceImpl::class,
+        DocumentRepository::class => DocumentRepositoryImpl::class,
     ];
 
     /**

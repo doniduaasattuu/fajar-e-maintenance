@@ -164,7 +164,7 @@ class TrendController extends Controller
     public function getTrends(Request $request)
     {
         $data = [
-            'equipment' => $request->input('trends_equipment'),
+            'equipment' => $request->input('equipment'),
             'start_date' => !is_null($request->input('start_date')) ? $request->input('start_date') : Carbon::now()->addYears(-1)->addDays(-1),
             'end_date' => !is_null($request->input('end_date')) ? $request->input('end_date') : Carbon::now()->addDays(1),
         ];

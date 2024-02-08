@@ -65,7 +65,7 @@ class FindingController extends Controller
     public function findingRegistration()
     {
         return response()->view('maintenance.finding.form', [
-            'title' => 'Finding registration',
+            'title' => 'New finding',
             'findingService' => $this->findingService,
             'action' => 'finding-register'
         ]);
@@ -98,7 +98,7 @@ class FindingController extends Controller
                 $validated = $validator->safe()->except(['image']);
 
                 if (!is_null($image) && $image->isValid()) {
-                    $validated['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                    $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
                     $this->findingService->insertWithImage($image, $validated);
                 } else {
                     $this->findingService->insert($validated);
@@ -154,7 +154,7 @@ class FindingController extends Controller
             try {
 
                 if (!is_null($image) && $image->isValid()) {
-                    $validated['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                    $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
                     $this->findingService->updateWithImage($image, $validated);
                 } else {
                     $this->findingService->update($validated);

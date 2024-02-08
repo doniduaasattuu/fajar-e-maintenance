@@ -95,7 +95,7 @@ class FindingControllerTest extends TestCase
             'user' => 'Jamal Mirdad'
         ])
             ->get('/finding-registration')
-            ->assertSeeText('Finding registration')
+            ->assertSeeText('New finding')
             ->assertSeeText('Table')
             ->assertSeeText('Area')
             ->assertSeeText('-- Choose --')
@@ -119,7 +119,7 @@ class FindingControllerTest extends TestCase
             'user' => 'Doni Darmawan'
         ])
             ->get('/finding-registration')
-            ->assertSeeText('Finding registration')
+            ->assertSeeText('New finding')
             ->assertSeeText('Table')
             ->assertSeeText('Area')
             ->assertSeeText('-- Choose --')

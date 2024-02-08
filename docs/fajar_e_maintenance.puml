@@ -207,10 +207,11 @@ entity documents {
   * id VARCHAR() <<PK>>
   --
   * title VARCHAR(50)
-  * attachment VARCHAR(20)
     area VARCHAR(20)
     equipment VARCHAR(9)
     funcloc VARCHAR(50)
+    uploaded_by VARCHAR(50)
+  * attachment VARCHAR(20)
     created_at TIMESTAMP
     updated_at TIMESTAMP
 }

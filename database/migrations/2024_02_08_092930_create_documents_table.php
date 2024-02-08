@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->string('id')->nullable(false)->primary();
             $table->string('title')->nullable(false);
-            $table->string('attachment')->nullable(false);
             $table->string('area')->nullable(true);
             $table->string('equipment')->nullable(true);
             $table->string('funcloc')->nullable(true);
             $table->string('uploaded_by')->nullable(true);
+            $table->string('attachment')->nullable(false);
             $table->timestamps();
         });
     }

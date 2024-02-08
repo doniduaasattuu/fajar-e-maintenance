@@ -39,7 +39,9 @@ Route::middleware('member')->group(function () {
     Route::get('/documents', [DocumentController::class, 'documents']);
     Route::get('/documents/{attachment}', [DocumentController::class, 'renderDocument']);
     Route::get('/document-edit/{id}', [DocumentController::class, 'documentEdit']);
+    Route::post('/document-update', [DocumentController::class, 'documentUpdate']);
     Route::get('/document-registration', [DocumentController::class, 'documentRegistration']);
+    Route::post('/document-register', [DocumentController::class, 'documentRegister']);
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');

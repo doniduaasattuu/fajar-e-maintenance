@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Document;
+use App\Models\User;
+use App\Traits\Utility;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Filesystem\Filesystem;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentSeeder extends Seeder
 {
+    use Utility;
     /**
      * Run the database seeds.
      */
@@ -18,8 +21,9 @@ class DocumentSeeder extends Seeder
     {
         $files = new Filesystem();
         $files->cleanDirectory('storage/app/public/documents');
-        $paper_machines = ['PM1', 'PM2', 'PM3', 'PM5', 'PM7', 'PM8'];
+        $paper_machines = $this->areas();
         shuffle($paper_machines);
+        $users = User::query()->get();
 
         for ($i = 0; $i < sizeof($paper_machines); $i++) {
 
@@ -28,14 +32,17 @@ class DocumentSeeder extends Seeder
             $attachment = UploadedFile::fake()->create($id, 500, $extension);
             $attachment->storePubliclyAs('documents', $attachment->getClientOriginalName() . '.' . $extension, 'public');
 
+            $pm = $paper_machines[rand(0, sizeof($paper_machines) - 1)];
+            $titles = array(0 => 'Schematic diagram panel incoming MDP 3kV', 1 => 'Schematic diagram panel incoming MDP 20kV', 2 => 'Schematic diagram panel outgoing MDP 3kV', 3 => 'Schematic diagram panel outgoing MDP 20kV');
+
             $document = new Document();
             $document->id = $id;
-            $document->title = 'Schematic diagram panel incoming MDP 3kV ' . $paper_machines[$i];
-            $document->attachment = $id . '.' . $extension;
-            $document->area = array(0 => 'PM3', 1 => 'SP3', 2 => 'PM7', 3 => 'SP7', 4 => 'PM5', 5 => 'SP5', 6 => 'PM8', 7 => 'SP8', 8 => 'PM2', 9 => 'SP2', 10 => 'PM1', 11 => 'SP1')[rand(0, 11)];
+            $document->title =  $titles[rand(0, sizeof($titles) - 1)] . ' ' . $pm;
+            $document->area = $pm;
             $document->equipment = null;
             $document->funcloc = null;
-            $document->uploaded_by = null;
+            $document->uploaded_by = $users[rand(0, count($users) - 1)]->abbreviated_name;
+            $document->attachment = $id . '.' . $extension;
             $document->save();
         }
     }
