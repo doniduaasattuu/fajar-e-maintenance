@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('area')->nullable(true);
             $table->string('equipment')->nullable(true);
             $table->string('funcloc')->nullable(true);
+            $table->string('uploaded_by')->nullable(true);
             $table->timestamps();
         });
     }

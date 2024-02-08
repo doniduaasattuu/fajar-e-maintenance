@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
@@ -33,6 +34,12 @@ Route::middleware('guest')->group(function () {
 Route::middleware('member')->group(function () {
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
+
+    // DOCUMENTS
+    Route::get('/documents', [DocumentController::class, 'documents']);
+    Route::get('/documents/{attachment}', [DocumentController::class, 'renderDocument']);
+    Route::get('/document-edit/{id}', [DocumentController::class, 'documentEdit']);
+    Route::get('/document-registration', [DocumentController::class, 'documentRegistration']);
 
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
@@ -71,6 +78,10 @@ Route::middleware('member')->group(function () {
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
     Route::middleware('role:db_admin')->group(function () {
+        // DOCUMENT
+        Route::get('/document-delete/{id}', [DocumentController::class, 'documentDelete']);
+
+        // FUNCLOC
         Route::get('/funcloc-edit/{id}', [FunclocController::class, 'funclocEdit'])->name('funcloc-edit');
         Route::post('/funcloc-update', [FunclocController::class, 'funclocUpdate'])->name('funcloc-update');
         Route::get('/funcloc-registration', [FunclocController::class, 'funclocRegistration'])->name('funcloc-registration');

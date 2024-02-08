@@ -22,8 +22,10 @@ use App\Repositories\TrafoDetailRepository;
 use App\Repositories\TrafoRecordRepository;
 use App\Repositories\TrafoRepository;
 use App\Repositories\UserRepository;
+use App\Services\DocumentService;
 use App\Services\FindingService;
 use App\Services\FunclocService;
+use App\Services\Impl\DocumentServiceImpl;
 use App\Services\Impl\FindingServiceImpl;
 use App\Services\Impl\FunclocServiceImpl;
 use App\Services\Impl\MotorDetailServiceImpl;
@@ -67,6 +69,7 @@ class AppServiceProvider extends ServiceProvider
         TrafoDetailRepository::class => TrafoDetailRepositoryImpl::class,
         TrafoRecordService::class => trafoRecordServiceImpl::class,
         TrafoRecordRepository::class => TrafoRecordRepositoryImpl::class,
+        DocumentService::class => DocumentServiceImpl::class,
     ];
 
     /**

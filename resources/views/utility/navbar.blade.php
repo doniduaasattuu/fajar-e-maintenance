@@ -49,6 +49,7 @@
                         <li><a class="border-bottom dropdown-item" href="/motors">Motor</a></li>
                         <li><a class="border-bottom dropdown-item" href="/trafos">Trafo</a></li>
                         <li><a class="border-bottom dropdown-item" href="/funclocs">Funcloc</a></li>
+                        <li><a class="border-bottom dropdown-item" href="/documents">Document</a></li>
                         @inject('userService', 'App\Services\UserService')
                         @if (isset($userService) && (session('nik') != null) && $userService->isAdmin(session('nik')))
                         <li><a class="border-bottom dropdown-item" href="/users">User</a></li>
