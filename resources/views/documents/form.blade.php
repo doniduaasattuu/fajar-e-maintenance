@@ -39,6 +39,7 @@ $skipped = ['id', 'uploaded_by', 'created_at', 'updated_at'];
                 @case('area')
                 <select id="{{ $column }}" name="{{ $column }}" class="form-select" aria-label="Default select example">
                     <option value="">-- Choose --</option>
+                    <option @selected( isset($document) ? ($document->$column=='All') : old($column)=='All') value="All">All</option>
                     @foreach ($documentService->areas() as $option )
                     <option @selected( isset($document) ? ($document->$column==$option) : old($column)==$option) value="{{ $option }}">{{ $option }}</option>
                     @endforeach

@@ -17,6 +17,7 @@ class DocumentController extends Controller
 {
     use Utility;
     private DocumentService $documentService;
+    private $allowed_attachment = ['png', 'jpeg', 'jpg', 'xlsx', 'xls', 'ods', 'doc', 'docx', 'pdf'];
 
     public function __construct(DocumentService $documentService)
     {
@@ -49,9 +50,9 @@ class DocumentController extends Controller
 
             $document->delete();
 
-            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'Document successfully deleted!.']);
+            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'Document successfully deleted.']);
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found!.']);
+            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found.']);
         }
     }
 
@@ -71,11 +72,11 @@ class DocumentController extends Controller
         $rules = [
             'id' => ['required', 'size:13'],
             'title' => ['required', 'min:15', 'max:50'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],
             'uploaded_by' => ['required', 'max:50'],
-            'attachment' => ['required', 'max:25000', File::types(['png', 'jpeg', 'jpg', 'xlsx', 'xls', 'ods', 'doc', 'docx', 'pdf'])],
+            'attachment' => ['required', 'max:25000', File::types($this->allowed_attachment)],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -126,11 +127,11 @@ class DocumentController extends Controller
         $rules = [
             'id' => ['required', 'size:13', 'exists:App\Models\Document,id'],
             'title' => ['required', 'min:15', 'max:50'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],
             'uploaded_by' => ['required', 'max:50'],
-            'attachment' => ['nullable', 'max:25000', File::types(['png', 'jpeg', 'jpg', 'xlsx', 'xls', 'ods', 'doc', 'docx', 'pdf'])],
+            'attachment' => ['nullable', 'max:25000', File::types($this->allowed_attachment)],
         ];
 
         $validator = Validator::make($request->all(), $rules);
