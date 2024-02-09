@@ -45,8 +45,8 @@
                         Records
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="border-bottom border-top dropdown-item" href="/record-motor">Motor</a></li>
-                        <li><a class="border-bottom dropdown-item" href="/record-trafo">Trafo</a></li>
+                        <li><a class="border-bottom border-top dropdown-item" href="/record/motor">Motor</a></li>
+                        <li><a class="border-bottom dropdown-item" href="/record/trafo">Trafo</a></li>
                     </ul>
                 </li>
 

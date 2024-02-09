@@ -356,4 +356,68 @@ class RecordController extends Controller
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);
         }
     }
+
+    // DAILY RECORD PAGE
+    public function recordMotor()
+    {
+        $selected_columns = [
+            'motor',
+            'motor_status',
+            'number_of_greasing',
+            'temperature_de',
+            'temperature_body',
+            'temperature_nde',
+            'vibration_de_vertical_value',
+            'vibration_de_horizontal_value',
+            'vibration_de_axial_value',
+            'vibration_de_frame_value',
+            'noise_de',
+            'vibration_nde_vertical_value',
+            'vibration_nde_horizontal_value',
+            'vibration_nde_frame_value',
+            'noise_nde',
+            'nik',
+            'created_at',
+        ];
+        $records = MotorRecord::query()->select($selected_columns)->orderBy('created_at', 'desc')->get();
+
+        return response()->view('records.motor', [
+            'title' => 'Motor records',
+            'records' => $records,
+            'selected_columns' => $selected_columns,
+        ]);
+    }
+
+    public function recordTrafo()
+    {
+        $selected_columns = [
+            'trafo',
+            'trafo_status',
+            'primary_current_phase_r',
+            'primary_current_phase_s',
+            'primary_current_phase_t',
+            'secondary_current_phase_r',
+            'secondary_current_phase_s',
+            'secondary_current_phase_t',
+            'primary_voltage',
+            'secondary_voltage',
+            'oil_temperature',
+            'winding_temperature',
+            'cleanliness',
+            'noise',
+            'silica_gel',
+            'oil_leakage',
+            'oil_level',
+            'blower_condition',
+            'nik',
+            'created_at',
+        ];
+        $records = TrafoRecord::query()->select($selected_columns)->orderBy('created_at', 'desc')->get();
+
+        return response()->view('records.trafo', [
+            'title' => 'Trafo records',
+            'records' => $records,
+            'selected_columns' => $selected_columns,
+        ]);
+    }
 }

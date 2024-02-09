@@ -79,6 +79,10 @@ Route::middleware('member')->group(function () {
     Route::post('/trends', [TrendController::class, 'getTrends']);
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
+    // RECORD
+    Route::get('/record/motor', [RecordController::class, 'recordMotor']);
+    Route::get('/record/trafo', [RecordController::class, 'recordTrafo']);
+
     Route::middleware('role:db_admin')->group(function () {
         // DOCUMENT
         Route::get('/document-delete/{id}', [DocumentController::class, 'documentDelete']);
