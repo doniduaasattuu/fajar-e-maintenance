@@ -2,7 +2,7 @@
 
 <div class="py-4">
 
-    <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm table-responsive-md">
+    <table style="font-size: 13px" class="rounded table table-light table-sm table-hover mb-0 border border-1 shadow-sm table-responsive-md">
         <tr>
             <thead>
                 @foreach ($selected_columns as $column)

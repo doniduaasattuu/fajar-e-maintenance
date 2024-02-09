@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
+use \Mccarlosen\LaravelMpdf;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as FacadesLaravelMpdf;
 
 class RecordController extends Controller
 {
@@ -419,5 +421,40 @@ class RecordController extends Controller
             'records' => $records,
             'selected_columns' => $selected_columns,
         ]);
+    }
+
+    public function recordViewTrafoPdf()
+    {
+        $selected_columns = [
+            'trafo',
+            'trafo_status',
+            'primary_current_phase_r',
+            'primary_current_phase_s',
+            'primary_current_phase_t',
+            'secondary_current_phase_r',
+            'secondary_current_phase_s',
+            'secondary_current_phase_t',
+            'primary_voltage',
+            'secondary_voltage',
+            'oil_temperature',
+            'winding_temperature',
+            'cleanliness',
+            'noise',
+            'silica_gel',
+            'oil_leakage',
+            'oil_level',
+            'blower_condition',
+            'nik',
+            'created_at',
+        ];
+        $records = TrafoRecord::query()->select($selected_columns)->orderBy('created_at', 'desc')->get();
+
+        $pdf = FacadesLaravelMpdf::loadView('records.trafo', [
+            'title' => 'Trafo records',
+            'records' => $records,
+            'selected_columns' => $selected_columns,
+        ]);
+
+        return $pdf->stream('document.pdf');
     }
 }

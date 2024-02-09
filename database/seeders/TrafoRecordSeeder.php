@@ -15,7 +15,7 @@ class TrafoRecordSeeder extends Seeder
      */
     public function run(): void
     {
-        $year = 36;
+        $year = 99;
         $users = User::all();
 
         for ($i = 0; $i < $year; $i++) {
@@ -42,6 +42,7 @@ class TrafoRecordSeeder extends Seeder
             $record1->earthing_connection = array(0 => 'No loose', 1 => 'Loose')[rand(0, 1)];
             $record1->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
             $record1->oil_level = rand(70, 88);
+            $record1->blower_condition = array(0 => 'Good', 1 => 'Not good')[rand(0, 1)];
             $record1->nik = $users[rand(0, sizeof($users) - 1)]->nik;
             $record1->created_at = Carbon::now()->addMonths(- ($year - $i));
             $record1->save();

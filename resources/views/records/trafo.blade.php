@@ -1,8 +1,11 @@
-@include('utility.prefix', ['container' => 'container-fluid'])
+<!DOCTYPE html>
+<html lang="en">
+@include('utility.head')
 
-<div class="py-4">
+@include('utility.navbar')
 
-    <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm table-responsive-md">
+<body>
+    <table class="rounded table table-light table-sm table-hover mb-0 border border-1 shadow-sm table-responsive-md">
         <tr>
             <thead>
                 @foreach ($selected_columns as $column)
@@ -11,31 +14,68 @@
 
                 {{-- TRAFO STATUS --}}
                 @case('trafo_status')
-                <th>Status</th>
+                <th style="line-height: 30px;" class="text-center px-2">Status</th>
                 @break
 
                 {{-- PRIMARY CURRENT --}}
                 @case('primary_current_phase_r')
                 @case('primary_current_phase_s')
                 @case('primary_current_phase_t')
-                <th>{{ 'Prim ' . explode('_', $column)[1] . ' ' . strtoupper(explode('_', $column)[3]) }}</th>
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'Prim ' . strtoupper(explode('_', $column)[3]) }}</th>
                 @break
 
                 {{-- SECONDARY CURRENT --}}
                 @case('secondary_current_phase_r')
                 @case('secondary_current_phase_s')
                 @case('secondary_current_phase_t')
-                <th>{{ 'Sec ' . explode('_', $column)[1] . ' ' . strtoupper(explode('_', $column)[3]) }}</th>
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'Sec ' . strtoupper(explode('_', $column)[3]) }}</th>
+                @break
+
+                {{-- PRIMARY VOLTAGE --}}
+                @case('primary_voltage')
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'Prim V' }}</th>
+                @break
+
+                {{-- SECONDARY VOLTAGE --}}
+                @case('secondary_voltage')
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'Sec V' }}</th>
                 @break
 
                 {{-- TEMPERATURE --}}
                 @case('oil_temperature')
                 @case('winding_temperature')
-                <th>{{ ucfirst(explode('_', $column)[0]) }}</th>
+                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[0]) }}</th>
+                @break
+
+                {{-- CLEANLINESS --}}
+                @case('cleanliness')
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'Clean' }}</th>
+                @break
+
+                {{-- SILICA GEL --}}
+                @case('silica_gel')
+                <th style="line-height: 30px;" class="text-center px-2">{{ 'S Gel' }}</th>
+                @break
+
+                {{-- OIL LEAKAGE --}}
+                {{-- OIL LEVEL --}}
+                @case('oil_leakage')
+                @case('oil_level')
+                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[1]) }}</th>
+                @break
+
+                {{-- BLOWER CONDITION --}}
+                @case('blower_condition')
+                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[0]) }}</th>
+                @break
+
+                {{-- CREATED_AT --}}
+                @case('created_at')
+                <th style="line-height: 30px;" class="text-center px-2">Date</th>
                 @break
 
                 @default
-                <th>{{ ucfirst(str_replace('_', ' ', $column)) }}</th>
+                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(str_replace('_', ' ', $column)) }}</th>
                 @endswitch
 
                 @endforeach
@@ -57,33 +97,33 @@
                 @case('secondary_current_phase_r')
                 @case('secondary_current_phase_s')
                 @case('secondary_current_phase_t')
-                <td>{{ $record->$column . ' A' }}</td>
+                <td class="text-center px-2">{{ $record->$column . ' A' }}</td>
                 @break
 
                 {{-- VOLTAGE --}}
                 @case('primary_voltage')
                 @case('secondary_voltage')
-                <td>{{ $record->$column . ' V' }}</td>
+                <td class="text-center px-2">{{ $record->$column . ' V' }}</td>
                 @break
 
                 {{-- TEMPERATURE --}}
                 @case('oil_temperature')
                 @case('winding_temperature')
-                <td>{{ $record->$column . ' °C' }}</td>
+                <td class="text-center px-2">{{ $record->$column . ' °C' }}</td>
                 @break
 
                 {{-- OIL LEVEL --}}
                 @case('oil_level')
-                <td>{{ $record->$column . ' %' }}</td>
+                <td class="text-center px-2">{{ $record->$column . ' %' }}</td>
                 @break
 
                 {{-- CREATED AT --}}
                 @case('created_at')
-                <td>{{ Carbon\Carbon::create($record->$column)->format('d M Y') }}</td>
+                <td class="text-center px-2">{{ Carbon\Carbon::create($record->$column)->format('d M Y') }}</td>
                 @break
 
                 @default
-                <td>{{ ucfirst(str_replace('_', ' ', $record->$column)) }}</td>
+                <td class="text-center px-2">{{ ucfirst(str_replace('_', ' ', $record->$column)) }}</td>
                 @endswitch
 
 
@@ -93,7 +133,6 @@
 
         @endforeach
     </table>
+</body>
 
-</div>
-
-@include('utility.suffix')
+</html>

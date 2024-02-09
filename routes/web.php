@@ -82,6 +82,7 @@ Route::middleware('member')->group(function () {
     // RECORD
     Route::get('/record/motor', [RecordController::class, 'recordMotor']);
     Route::get('/record/trafo', [RecordController::class, 'recordTrafo']);
+    Route::get('/record/trafo/pdf', [RecordController::class, 'recordViewTrafoPdf']);
 
     Route::middleware('role:db_admin')->group(function () {
         // DOCUMENT
