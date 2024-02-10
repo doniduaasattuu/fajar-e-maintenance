@@ -50,7 +50,7 @@ class DocumentController extends Controller
 
             $document->delete();
 
-            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'Document successfully deleted.']);
+            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'Document successfully deleted.']);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found.']);
         }

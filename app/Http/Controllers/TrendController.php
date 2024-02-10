@@ -48,6 +48,7 @@ class TrendController extends Controller
             $trends = $this->queryTrend($collection);
 
             return response()->view('maintenance.trends.motor', [
+                'table' => 'motor',
                 'motorService' => $this->motorService,
                 'equipment' => $equipment,
                 'title' => 'Equipment trend',
@@ -103,6 +104,7 @@ class TrendController extends Controller
             $trends = $this->queryTrend($collection);
 
             return response()->view('maintenance.trends.trafo', [
+                'table' => 'trafo',
                 'trafoService' => $this->trafoService,
                 'equipment' => $equipment,
                 'title' => 'Equipment trend',

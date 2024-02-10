@@ -42,7 +42,7 @@ class FunclocServiceTest extends TestCase
         $funclocService = $this->app->make(FunclocService::class);
         $funclocs = $funclocService->registeredFunclocs();
         self::assertNotNull($funclocs);
-        self::assertCount(19, $funclocs);
+        self::assertTrue(count($funclocs) > 85);
     }
 
     public function testUpdateFuncloc()

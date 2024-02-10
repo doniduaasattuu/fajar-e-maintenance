@@ -1,138 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-@include('utility.head')
+@include('maintenance.report.header')
 
-@include('utility.navbar')
+<tr>
+    <thead>
+        @foreach ($selected_columns as $column)
 
-<body>
-    <table style="font-size: 10px;" class="rounded table table-light table-sm table-hover mb-0 border border-1 shadow-sm table-responsive-md">
-        <tr>
-            <thead>
-                @foreach ($selected_columns as $column)
+        @switch($column)
 
-                @switch($column)
+        {{-- FUNCLOC --}}
+        @case('funcloc')
+        <th>Area</th>
+        @break
 
-                {{-- TRAFO STATUS --}}
-                @case('trafo_status')
-                <th style="line-height: 30px;" class="text-center px-2">Status</th>
-                @break
+        {{-- TRAFO STATUS --}}
+        @case('trafo_status')
+        <th>Status</th>
+        @break
 
-                {{-- PRIMARY CURRENT --}}
-                @case('primary_current_phase_r')
-                @case('primary_current_phase_s')
-                @case('primary_current_phase_t')
-                <th style="line-height: 30px;" class="text-center px-2">{{ 'Prim ' . strtoupper(explode('_', $column)[3]) }}</th>
-                @break
+        {{-- PRIMARY CURRENT --}}
+        @case('primary_current_phase_r')
+        @case('primary_current_phase_s')
+        @case('primary_current_phase_t')
+        <th>{{ 'Pri ' . strtoupper(explode('_', $column)[3]) }}</th>
+        @break
 
-                {{-- SECONDARY CURRENT --}}
-                @case('secondary_current_phase_r')
-                @case('secondary_current_phase_s')
-                @case('secondary_current_phase_t')
-                <th style="line-height: 30px;" class="text-center px-2">{{ 'Sec ' . strtoupper(explode('_', $column)[3]) }}</th>
-                @break
+        {{-- SECONDARY CURRENT --}}
+        @case('secondary_current_phase_r')
+        @case('secondary_current_phase_s')
+        @case('secondary_current_phase_t')
+        <th>{{ 'Sec ' . strtoupper(explode('_', $column)[3]) }}</th>
+        @break
 
-                {{-- PRIMARY VOLTAGE --}}
-                @case('primary_voltage')
-                <th style="line-height: 30px;" class="text-center px-2">{{ 'Prim V' }}</th>
-                @break
+        {{-- PRIMARY VOLTAGE --}}
+        @case('primary_voltage')
+        <th>{{ 'Prim V' }}</th>
+        @break
 
-                {{-- SECONDARY VOLTAGE --}}
-                @case('secondary_voltage')
-                <th style="line-height: 30px;" class="text-center px-2">{{ 'Sec V' }}</th>
-                @break
+        {{-- SECONDARY VOLTAGE --}}
+        @case('secondary_voltage')
+        <th>{{ 'Sec V' }}</th>
+        @break
 
-                {{-- TEMPERATURE --}}
-                @case('oil_temperature')
-                @case('winding_temperature')
-                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[0]) }} temp</th>
-                @break
+        {{-- TEMPERATURE --}}
+        @case('oil_temperature')
+        @case('winding_temperature')
+        <th>{{ ucfirst(explode('_', substr($column, 0, 4))[0]) . ' temp' }}</th>
+        @break
 
-                {{-- CLEANLINESS --}}
-                @case('cleanliness')
-                <th style="line-height: 30px;" class="text-center px-2">{{ 'Cleanness' }}</th>
-                @break
+        {{-- OIL LEAKAGE --}}
+        {{-- OIL LEVEL --}}
+        @case('oil_leakage')
+        {{-- @case('oil_level') --}}
+        <th>{{ ucfirst(explode('_', $column)[1]) }}</th>
+        @break
 
-                {{-- OIL LEAKAGE --}}
-                {{-- OIL LEVEL --}}
-                @case('oil_leakage')
-                {{-- @case('oil_level') --}}
-                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[1]) }}</th>
-                @break
+        {{-- BLOWER CONDITION --}}
+        @case('blower_condition')
+        <th>{{ ucfirst(explode('_', $column)[0]) }}</th>
+        @break
 
-                {{-- BLOWER CONDITION --}}
-                @case('blower_condition')
-                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(explode('_', $column)[0]) }}</th>
-                @break
+        {{-- CLEANLINESS --}}
+        @case('cleanliness')
+        <th>Clean</th>
+        @break
 
-                {{-- CREATED_AT --}}
-                @case('created_at')
-                <th style="line-height: 30px;" class="text-center px-2">Date</th>
-                @break
+        {{-- NIK --}}
+        @case('nik')
+        <th>Checker</th>
+        @break
 
-                @default
-                <th style="line-height: 30px;" class="text-center px-2">{{ ucfirst(str_replace('_', ' ', $column)) }}</th>
-                @endswitch
+        {{-- CREATED_AT --}}
+        @case('created_at')
+        <th>Date</th>
+        @break
 
-                @endforeach
-            </thead>
-        </tr>
-        @foreach ($records as $record)
-
-        <tr>
-            <tbody>
-                @foreach ($selected_columns as $column)
-
-                @switch($column)
-
-                {{-- TRAFO --}}
-                @case('trafo')
-                <td class="text-center px-2" style="font-family: 'Roboto Mono';">{{ $record->$column }}</td>
-                @break
-
-                {{-- PRIMARY CURRENT --}}
-                @case('primary_current_phase_r')
-                @case('primary_current_phase_s')
-                @case('primary_current_phase_t')
-                {{-- SECONDARY CURRENT --}}
-                @case('secondary_current_phase_r')
-                @case('secondary_current_phase_s')
-                @case('secondary_current_phase_t')
-                <td class="text-center px-2">{{ $record->$column . 'A' }}</td>
-                @break
-
-                {{-- VOLTAGE --}}
-                @case('primary_voltage')
-                @case('secondary_voltage')
-                <td class="text-center px-2">{{ $record->$column . 'V' }}</td>
-                @break
-
-                {{-- TEMPERATURE --}}
-                @case('oil_temperature')
-                @case('winding_temperature')
-                <td class="text-center px-2">{{ $record->$column . '°C' }}</td>
-                @break
-
-                {{-- OIL LEVEL --}}
-                @case('oil_level')
-                <td class="text-center px-2">{{ $record->$column . '%' }}</td>
-                @break
-
-                {{-- CREATED AT --}}
-                @case('created_at')
-                <td class="text-center px-2">{{ Carbon\Carbon::create($record->$column)->format('d M Y') }}</td>
-                @break
-
-                @default
-                <td class="text-center px-2">{{ ucfirst(str_replace('_', ' ', $record->$column)) }}</td>
-                @endswitch
-
-
-                @endforeach
-            </tbody>
-        </tr>
+        @default
+        <th>{{ ucfirst(str_replace('_', ' ', $column)) }}</th>
+        @endswitch
 
         @endforeach
-    </table>
-</body>
+    </thead>
+</tr>
+@foreach ($records as $record)
 
-</html>
+<tr>
+    <tbody>
+        @foreach ($selected_columns as $column)
+
+        @switch($column)
+
+        {{-- FUNCLOC --}}
+        @case('funcloc')
+        <td>{{ explode('-', $record->$column)[2] }}</td>
+        @break
+
+        {{-- TRAFO --}}
+        @case('trafo')
+        <td>{{ $record->$column }}</td>
+        @break
+
+        {{-- PRIMARY CURRENT --}}
+        @case('primary_current_phase_r')
+        @case('primary_current_phase_s')
+        @case('primary_current_phase_t')
+        {{-- SECONDARY CURRENT --}}
+        @case('secondary_current_phase_r')
+        @case('secondary_current_phase_s')
+        @case('secondary_current_phase_t')
+        <td>{{ null != $record->$column ? $record->$column . 'A' : $record->$column }}</td>
+        @break
+
+        {{-- VOLTAGE --}}
+        @case('primary_voltage')
+        @case('secondary_voltage')
+        <td>{{ null != $record->$column ? $record->$column . 'V' : $record->$column }}</td>
+        @break
+
+        {{-- TEMPERATURE --}}
+        @case('oil_temperature')
+        @case('winding_temperature')
+        <td>{{ null != $record->$column ? $record->$column . '°C' : $record->$column }}</td>
+        @break
+
+        {{-- OIL LEVEL --}}
+        @case('oil_level')
+        <td>{{ null != $record->$column ? $record->$column . '%' : $record->$column }}</td>
+        @break
+
+        {{-- NIK --}}
+        @case('nik')
+        @inject('user', 'App\Services\UserService' )
+        <td>{{ $user->user($record->$column)->printed_name }}</td>
+        @break
+
+        {{-- CREATED AT --}}
+        @case('created_at')
+        <td>{{ Carbon\Carbon::create($record->$column)->format('d-m-y') }}</td>
+        @break
+
+        @default
+        <td>{{ ucfirst(str_replace('_', ' ', $record->$column)) }}</td>
+        @endswitch
+
+
+        @endforeach
+    </tbody>
+</tr>
+@endforeach
+
+@include('maintenance.report.footer')

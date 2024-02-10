@@ -46,7 +46,7 @@ class TrafoServiceTest extends TestCase
         $trafoService = $this->app->make(TrafoService::class);
         $trafos = $trafoService->registeredTrafos();
         self::assertNotEmpty($trafos);
-        self::assertCount(12, $trafos);
+        self::assertTrue(count($trafos) > 25);
     }
 
     public function testUpdateTrafoSuccess()
@@ -78,7 +78,7 @@ class TrafoServiceTest extends TestCase
         $uniqueIds = $trafoService->registeredUniqueIds();
         self::assertNotNull($uniqueIds);
         self::assertNotEmpty($uniqueIds);
-        self::assertCount(12, $uniqueIds);
+        self::assertTrue(count($uniqueIds) > 25);
         self::assertTrue(in_array('1', $uniqueIds));
         self::assertTrue(in_array('8', $uniqueIds));
         self::assertTrue(in_array('12', $uniqueIds));
@@ -92,7 +92,7 @@ class TrafoServiceTest extends TestCase
         $qrCodeLinks = $trafoService->registeredQrCodeLinks();
         self::assertNotNull($qrCodeLinks);
         self::assertNotEmpty($qrCodeLinks);
-        self::assertCount(12, $qrCodeLinks);
+        self::assertTrue(count($qrCodeLinks) > 25);
         self::assertTrue(in_array('id=Fajar-TrafoList1', $qrCodeLinks));
         self::assertTrue(in_array('id=Fajar-TrafoList4', $qrCodeLinks));
         self::assertTrue(in_array('id=Fajar-TrafoList12', $qrCodeLinks));

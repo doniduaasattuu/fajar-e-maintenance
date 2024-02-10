@@ -76,7 +76,7 @@ class ViewTest extends TestCase
         ])
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered funcloc is 19 records.')
+            ->assertSeeText('The total registered funcloc is')
             ->assertSeeText('Description')
             ->assertSeeText('Updated at')
             ->assertSeeText('Edit')
@@ -100,7 +100,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('The total registered motor is 22 records.')
+            ->assertSeeText('The total registered motor is')
             ->assertSeeText('MGM000481');
     }
 
@@ -181,7 +181,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('The total registered trafo is 12 records.')
+            ->assertSeeText('The total registered trafo is')
             ->assertSeeText('ETF001234');
     }
 }

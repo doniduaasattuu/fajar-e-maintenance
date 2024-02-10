@@ -48,4 +48,13 @@ class User extends Authenticatable
             get: fn () => (sizeof($names) > 2) ? $names[0] . ' ' . $names[1] . ' ' . $names[2][0]  : $this->fullname
         );
     }
+
+    public function printedName(): Attribute
+    {
+        $names = explode(' ', $this->abbreviated_name);
+
+        return new Attribute(
+            get: fn () => (strlen($names[0]) < 3) ? $names[0] . ' ' . $names[1] : $names[0]
+        );
+    }
 }

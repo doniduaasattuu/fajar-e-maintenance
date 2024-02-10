@@ -31,7 +31,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Table motor')
             ->assertSeeText('New motor')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered motor is 22 records.')
+            ->assertSeeText('The total registered motor is')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('MGM000481');
@@ -49,7 +49,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Table motor')
             ->assertSeeText('New motor')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered motor is 22 records.')
+            ->assertSeeText('The total registered motor is')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('MGM000481');

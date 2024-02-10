@@ -14,15 +14,11 @@ use App\Services\MotorService;
 use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
 use App\Traits\Utility;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
-use \Mccarlosen\LaravelMpdf;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as FacadesLaravelMpdf;
 
 class RecordController extends Controller
 {
@@ -33,46 +29,6 @@ class RecordController extends Controller
     private FindingService $findingService;
     private TrafoService $trafoService;
     private TrafoRecordService $trafoRecordService;
-    private $motor_selected_columns = [
-        'motor',
-        'motor_status',
-        'number_of_greasing',
-        'temperature_de',
-        'temperature_body',
-        'temperature_nde',
-        'vibration_de_vertical_value',
-        'vibration_de_horizontal_value',
-        'vibration_de_axial_value',
-        'vibration_de_frame_value',
-        'noise_de',
-        'vibration_nde_vertical_value',
-        'vibration_nde_horizontal_value',
-        'vibration_nde_frame_value',
-        'noise_nde',
-        'nik',
-        'created_at',
-    ];
-
-    private $trafo_selected_columns = [
-        'trafo',
-        'trafo_status',
-        'primary_current_phase_r',
-        'primary_current_phase_s',
-        'primary_current_phase_t',
-        'secondary_current_phase_r',
-        'secondary_current_phase_s',
-        'secondary_current_phase_t',
-        'primary_voltage',
-        'secondary_voltage',
-        'oil_temperature',
-        'winding_temperature',
-        'cleanliness',
-        'noise',
-        'silica_gel',
-        'oil_leakage',
-        'oil_level',
-        'created_at',
-    ];
 
     public function __construct(
         MotorService $motorService,
@@ -399,73 +355,5 @@ class RecordController extends Controller
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);
         }
-    }
-
-    // DAILY RECORD PAGE
-    public function report()
-    {
-        return response()->view('maintenance.report.report', [
-            'title' => 'Daily activity report'
-        ]);
-    }
-
-    public function generateReport(Request $request)
-    {
-
-        $data = [
-            'table' =>  $request->input('table'),
-            'date' => $request->input('date') ?? Carbon::now(),
-        ];
-
-        $rules = [
-            'table' => ['required', Rule::in(['motors', 'trafos'])],
-            'date' => ['required'],
-        ];
-
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->passes()) {
-            $validated = $validator->validated();
-
-            switch ($validated['table']) {
-                case 'motors':
-
-                    $records = MotorRecord::query()
-                        ->select($this->motor_selected_columns)
-                        ->orderBy('created_at', 'desc')
-                        ->where('created_at', Carbon::create($validated['date'])->toDateString())
-                        ->get();
-
-                    return $this->renderPdf($this->motor_selected_columns, $records, 'maintenance.report.motor', 'Motor daily report');
-                    break;
-
-                case 'trafos':
-
-                    $records = TrafoRecord::query()
-                        ->select($this->trafo_selected_columns)
-                        ->orderBy('created_at', 'desc')
-                        ->orWhere('created_at', '=', $validated['date'])
-                        ->get();
-
-                    return $this->renderPdf($this->trafo_selected_columns, $records, 'maintenance.report.trafo', 'Trafo daily report');
-                    break;
-
-                default:
-                    return redirect()->back()->withErrors($validator)->withInput();
-            }
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-    }
-
-    public function renderPdf(array $selected_columns, Collection $records, string $view, string $title)
-    {
-        $pdf = FacadesLaravelMpdf::loadView($view, [
-            'title' => $title,
-            'records' => $records,
-            'selected_columns' => $selected_columns,
-        ]);
-
-        return $pdf->stream('document.pdf');
     }
 }

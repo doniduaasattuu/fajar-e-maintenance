@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FindingSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +15,7 @@ class FindingServiceTest extends TestCase
 
     public function testGetEquipments()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FindingSeeder::class);
 
         $equipments = DB::table('findings')->distinct()->get(['equipment']);
         $equipments = $equipments->map(function ($value, $key) {

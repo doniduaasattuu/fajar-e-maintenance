@@ -55,14 +55,14 @@ class FindingSeeder extends Seeder
 
         $finding3 = new Finding();
         $finding3->id = uniqid();
-        $finding3->area = 'IN1';
+        $finding3->area = 'PM7';
         $finding3->status = 'Open';
-        $finding3->equipment = 'ETF000085';
-        $finding3->funcloc = 'FP-01-IN1';
+        $finding3->equipment = 'EMO005614';
+        $finding3->funcloc = 'FP-01-PM7-VAS-VP13';
         $finding3->notification = null;
-        $finding3->description = 'Oil leakage on conservator';
+        $finding3->description = 'Inner bearing defect motor refiner PM7';
         $finding3->image = null;
-        $finding3->reporter = 'Jiyantoro';
+        $finding3->reporter = 'Doni Darmawan';
         $finding3->created_at = '2024-01-11 14:11:53';
         $finding3->updated_at = null;
         $finding3->save();
@@ -76,7 +76,7 @@ class FindingSeeder extends Seeder
         $finding4->notification = null;
         $finding4->description = 'Noise trafo PLN';
         $finding4->image = null;
-        $finding4->reporter = 'Jiyantoro';
+        $finding4->reporter = 'Doni Darmawan';
         $finding4->created_at = '2024-01-01 14:11:53';
         $finding4->updated_at = null;
         $finding4->save();

@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
             TrafoRecordSeeder::class,
             FindingSeeder::class,
             DocumentSeeder::class,
+            DailyRecordSeeder::class,
         ]);
     }
 }

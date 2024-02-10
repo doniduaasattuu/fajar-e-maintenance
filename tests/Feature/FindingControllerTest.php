@@ -29,7 +29,7 @@ class FindingControllerTest extends TestCase
 
     public function testGetFindingsEmployee()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FindingSeeder::class]);
         $this->withSession([
             'nik' => '55000153',
             'user' => 'Jamal Mirdad'
@@ -49,7 +49,7 @@ class FindingControllerTest extends TestCase
             ->assertSeeText('Notification')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
-            ->assertSeeText('Oil leakage on conservator')
+            ->assertSeeText('Inner bearing defect motor refiner PM7')
             ->assertSeeText('Area licin oli lubrikasi tumpah');
     }
 
@@ -75,7 +75,7 @@ class FindingControllerTest extends TestCase
             ->assertSeeText('Notification')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
-            ->assertSeeText('Oil leakage on conservator')
+            ->assertSeeText('Inner bearing defect motor refiner PM7')
             ->assertSeeText('Area licin oli lubrikasi tumpah');
     }
 

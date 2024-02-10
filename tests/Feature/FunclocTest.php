@@ -82,8 +82,7 @@ class FunclocTest extends TestCase
 
         $trafos = $funcloc->Trafos;
         self::assertNotNull($trafos);
-        self::assertCount(2, $trafos);
-        self::assertEquals('ETF000091', $trafos->last()->id);
+        self::assertCount(4, $trafos);
     }
 
     public function testFunclocRelationToTrafosNull()

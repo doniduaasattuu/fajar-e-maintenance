@@ -19,21 +19,9 @@ class DailyRecordSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('motor_details')->delete();
-        DB::table('motors')->delete();
-        DB::table('trafo_details')->delete();
-        DB::table('trafos')->delete();
-
-        $this->call([
-            MotorSeeder::class,
-            TrafoSeeder::class,
-        ]);
-
         $users = User::query()->get();
         $trafos = Trafo::query()->get();
         $motors = Motor::query()->get();
-        DB::table('motor_records')->delete();
-        DB::table('trafo_records')->delete();
 
         foreach ($motors as $motor) {
             if ($motor->status == 'Installed') {
@@ -67,7 +55,7 @@ class DailyRecordSeeder extends Seeder
                 $record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
                 $record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
-                $record->created_at = Carbon::now()->toDateString();
+                $record->created_at = Carbon::now();
                 $record->save();
             }
         }
@@ -99,7 +87,7 @@ class DailyRecordSeeder extends Seeder
                 $record->oil_level = rand(70, 88);
                 $record->blower_condition = array(0 => 'Good', 1 => 'Not good')[rand(0, 1)];
                 $record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
-                $record->created_at = Carbon::now()->toDateString();
+                $record->created_at = Carbon::now();
                 $record->save();
             }
         }

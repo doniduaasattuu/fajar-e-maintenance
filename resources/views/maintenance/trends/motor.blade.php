@@ -2,6 +2,12 @@
 
 <div class="py-4" style="min-width: 350px;">
 
+    <!-- <a href="/report/{{ $table . '/' . $equipment}}">
+        <button class="mb-3" type="button" class="btn btn-primary">
+            Download
+        </button>
+    </a> -->
+
     {{-- TEMPERATURE --}}
     <div class="mb-3">
         <h6 class="text-center text-secondary">Temperature of {{ $equipment }}</h6>

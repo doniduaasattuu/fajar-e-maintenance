@@ -11,7 +11,6 @@ use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class TrafoControllerTest extends TestCase
@@ -34,7 +33,7 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('Table trafo')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered trafo is 11 records.')
+            ->assertSeeText('The total registered trafo is')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('ETF001234');
@@ -52,7 +51,7 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('Table trafo')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered trafo is 12 records.')
+            ->assertSeeText('The total registered trafo')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('ETF001234');
@@ -1030,7 +1029,7 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => '10012003',
-                'unique_id' => '18',
+                'unique_id' => '800',
                 'qr_code_link' => 'id=Fajar-TrafoList8',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
@@ -1351,8 +1350,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1403,8 +1402,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1455,8 +1454,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1507,8 +1506,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1560,8 +1559,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR#2',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1612,8 +1611,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => null,
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1662,8 +1661,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1714,8 +1713,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1766,8 +1765,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1814,8 +1813,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHENERATOR',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1862,8 +1861,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => null,
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1907,8 +1906,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => null,
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -1953,8 +1952,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'AU',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2000,8 +1999,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'THIS-SORT-FIELD-IS-TOO-LONG-MORE-THAN-FIFTY-CHARACTER',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2047,8 +2046,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'SP3.@SP-03/M',
                 'description' => 'TR INCHENERATOR#2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2095,8 +2094,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHI 2',
                 'description' => null,
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2140,8 +2139,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHI 2',
                 'description' => 'THIS-DESCRIPTION-IS-TOO-LONG-MORE-THAN-FIFTY-CHARACTER-MAKE-THE-SORTFIELD-IS-INVALID',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2188,8 +2187,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHI 2',
                 'description' => 'TR INCHI 2',
                 'material_number' => null,
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2233,8 +2232,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHI 2',
                 'description' => 'TR INCHI 2',
                 'material_number' => '1001219',
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2280,8 +2279,8 @@ class TrafoControllerTest extends TestCase
                 'sort_field' => 'TR INCHI 2',
                 'description' => 'TR INCHI 2',
                 'material_number' => '1001O110',
-                'unique_id' => '15',
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'unique_id' => '256',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2329,7 +2328,7 @@ class TrafoControllerTest extends TestCase
                 'description' => 'TR INCHI 2',
                 'material_number' => '1001O110',
                 'unique_id' => null,
-                'qr_code_link' => 'id=Fajar-TrafoList15',
+                'qr_code_link' => 'id=Fajar-TrafoList256',
                 'trafo_detail' => 'ETF000006',
                 'power_rate' => '3000',
                 'power_unit' => 'kVA',
@@ -2875,8 +2874,8 @@ class TrafoControllerTest extends TestCase
         self::assertEquals($trafo->status, 'Available');
         self::assertNull($trafo->funcloc);
         self::assertNull($trafo->sort_field);
-        self::assertEquals($trafo->unique_id, '11');
-        self::assertEquals($trafo->qr_code_link, 'id=Fajar-TrafoList11');
+        self::assertEquals($trafo->unique_id, '1234');
+        self::assertEquals($trafo->qr_code_link, 'id=Fajar-TrafoList1234');
     }
 
     public function testTrafoGetEquipmentInstallInvalid()

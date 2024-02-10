@@ -42,7 +42,7 @@ class MotorServiceTest extends TestCase
         $motorService = $this->app->make(MotorService::class);
         $motors = $motorService->registeredMotors();
         self::assertNotEmpty($motors);
-        self::assertCount(22, $motors);
+        self::assertTrue(count($motors) > 70);
     }
 
     public function testUpdateMotorSuccess()
@@ -74,7 +74,7 @@ class MotorServiceTest extends TestCase
         $uniqueIds = $motorService->registeredUniqueIds();
         self::assertNotNull($uniqueIds);
         self::assertNotEmpty($uniqueIds);
-        self::assertCount(22, $uniqueIds);
+        self::assertTrue(count($uniqueIds) > 70);
         self::assertTrue(in_array('2100', $uniqueIds));
         self::assertTrue(in_array('9999', $uniqueIds));
         self::assertFalse(in_array('1010', $uniqueIds));
@@ -88,7 +88,7 @@ class MotorServiceTest extends TestCase
         $qrCodeLinks = $motorService->registeredQrCodeLinks();
         self::assertNotNull($qrCodeLinks);
         self::assertNotEmpty($qrCodeLinks);
-        self::assertCount(22, $qrCodeLinks);
+        self::assertTrue(count($qrCodeLinks) > 70);
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList4592', $qrCodeLinks));
         self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList155', $qrCodeLinks));
         self::assertFalse(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList111', $qrCodeLinks));

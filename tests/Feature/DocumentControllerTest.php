@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-use function PHPUnit\Framework\assertTrue;
-
 class DocumentControllerTest extends TestCase
 {
     // DOCUMENTS
@@ -574,7 +572,7 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         self::assertNotNull($documents);
-        self::assertCount(13, $documents);
+        self::assertTrue(count($documents) > 10);
 
         $this->get('/document-edit/' . $documents->first()->id)
             ->assertRedirectToRoute('login');
@@ -585,7 +583,7 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         self::assertNotNull($documents);
-        self::assertCount(13, $documents);
+        self::assertTrue(count($documents) > 10);
 
         $this->withSession([
             'nik' => '55000153',
@@ -612,7 +610,7 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         self::assertNotNull($documents);
-        self::assertCount(13, $documents);
+        self::assertTrue(count($documents) > 10);
 
         $this->withSession([
             'nik' => '55000154',

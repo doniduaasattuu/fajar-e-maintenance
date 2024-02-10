@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Funcloc;
-use Database\Seeders\DatabaseSeeder;
+use Database\Seeders\FunclocSeeder;
+use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -15,7 +17,7 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->get('/funclocs', [])
             ->assertRedirectToRoute('login');
@@ -23,7 +25,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocNotAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -39,7 +41,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -56,7 +58,7 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocRegistrationGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->get('/funcloc-registration')
             ->assertRedirectToRoute('login');
@@ -64,7 +66,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocRegistrationNotAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -79,7 +81,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocRegistrationAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -98,7 +100,7 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testRegisterFunclocGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
@@ -110,7 +112,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocNotAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->withSession([
             'nik' => '55000153',
@@ -127,7 +129,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocAuthorizedSuccess()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -148,7 +150,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -165,7 +167,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalidUnderscore()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -182,7 +184,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalidPrefix()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -199,7 +201,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocDescriptionInvalid()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -216,7 +218,7 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocDescriptionNull()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -253,7 +255,7 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocUpdateGuest()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertRedirectToRoute('login');
@@ -261,7 +263,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetEditFunclocEmployee()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->followingRedirects()
             ->withSession([
@@ -275,7 +277,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetEditFunclocUnregisteredAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed(FunclocSeeder::class);
 
         $this->followingRedirects()
             ->withSession([
@@ -289,7 +291,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocUpdateAuthorized()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',
@@ -304,7 +306,7 @@ class FunclocControllerTest extends TestCase
 
     public function testGetFunclocUpdate()
     {
-        $this->seed(DatabaseSeeder::class);
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
 
         $this->withSession([
             'nik' => '55000154',

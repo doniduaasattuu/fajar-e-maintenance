@@ -6,6 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -106,5 +107,25 @@ class UserTest extends TestCase
         self::assertNotEquals($user->fullname, $user->abbreviated_name);
         self::assertEquals('Yuan Lucky Prasetyo Winarno', $user->fullname);
         self::assertEquals('Yuan Lucky P', $user->abbreviated_name);
+    }
+
+    public function testprintedNameDouble()
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::query()->find('55000154');
+        self::assertNotNull($user->printed_name);
+        self::assertEquals('Doni', $user->printed_name);
+        Log::info($user->printed_name);
+    }
+
+    public function testprintedNameSingle()
+    {
+        $this->seed(UserSeeder::class);
+
+        $user = User::query()->find('55000092');
+        self::assertNotNull($user->printed_name);
+        self::assertEquals('R. Much', $user->printed_name);
+        Log::info($user->printed_name);
     }
 }

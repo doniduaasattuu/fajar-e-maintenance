@@ -5,6 +5,7 @@ use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrafoController;
@@ -79,10 +80,16 @@ Route::middleware('member')->group(function () {
     Route::post('/trends', [TrendController::class, 'getTrends']);
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
-    // RECORD
-    Route::get('/report', [RecordController::class, 'report']);
-    Route::post('/report', [RecordController::class, 'generateReport']);
-    Route::get('/record/trafo/pdf', [RecordController::class, 'recordViewTrafoPdf']);
+    // DAILY REPORT
+    Route::get('/report', [PdfController::class, 'report']);
+    Route::post('/report', [PdfController::class, 'generateReport']);
+    Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
+    Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
+    // Route::get('/report/motor/pdf', [PdfController::class, 'renderPdfMotor']);
+
+    // EQUIPMENT REPORT
+    Route::get('/report/motor/{equipment}', [PdfController::class, 'reportMotorEquipment']);
+    Route::get('/report/trafo/{equipment}', [PdfController::class, 'reportTrafoEquipment']);
 
     Route::middleware('role:db_admin')->group(function () {
         // DOCUMENT

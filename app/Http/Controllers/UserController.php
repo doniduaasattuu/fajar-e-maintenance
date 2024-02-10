@@ -176,7 +176,7 @@ class UserController extends Controller
             }
 
             $user->delete();
-            return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'User successfully deleted!.']);
+            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'User successfully deleted!.']);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'User not found!.']);
         }
