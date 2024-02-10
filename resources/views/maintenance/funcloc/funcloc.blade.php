@@ -27,7 +27,7 @@
 
     <!-- FILTER FUNCLOC -->
     <div class="mb-3">
-        <label for="filter" class="form-label fw-bold">Filter</label>
+        <label for="filter" class="form-label fw-semibold">Filter</label>
         <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by funcloc">
         <div class="form-text">The total registered funcloc is {{ count($funclocService->getAll()) }} records.</div>
     </div>

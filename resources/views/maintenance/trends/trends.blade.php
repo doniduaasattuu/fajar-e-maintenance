@@ -7,7 +7,7 @@
         <form id="/trends" method="post">
             @csrf
 
-            <h2 class="mb-4">Trends</h2>
+            <h2 class="mb-3">Trends</h2>
 
             <div class="mb-3">
                 <label for="trends_equipment" class="form-label fw-semibold">Equipment</label>

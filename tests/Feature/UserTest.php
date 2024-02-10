@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
 use Tests\TestCase;

@@ -28,13 +28,13 @@
 
         <!-- BY ID -->
         <div class="col pe-1">
-            <label for="filter" class="form-label fw-bold">Filter</label>
+            <label for="filter" class="form-label fw-semibold">Filter</label>
             <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by motor">
         </div>
 
         <!-- BY STATUS -->
         <div class="col ps-1">
-            <label for="filter_status" class="form-label fw-bold">Motor status</label>
+            <label for="filter_status" class="form-label fw-semibold">Motor status</label>
             <select id="filter_status" name="filter_status" class="form-select" aria-label="Default select example">
                 <option value="All" selected>All</option>
                 <option value="Installed">Installed</option>

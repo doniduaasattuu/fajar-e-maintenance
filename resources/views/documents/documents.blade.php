@@ -26,12 +26,12 @@ $skipped = ['id', 'created_at', 'updated_at'];
     {{-- FILTER DOCUMENT --}}
     <div class="row mb-3">
         <div class="col pe-1">
-            <label for="filter_title" class="form-label fw-bold">Filter</label>
+            <label for="filter_title" class="form-label fw-semibold">Filter</label>
             <input type="text" class="form-control" id="filter_title" name="filter_title" placeholder="Filter by title">
         </div>
 
         <div class="col ps-1">
-            <label for="filter_area" class="form-label fw-bold">Area</label>
+            <label for="filter_area" class="form-label fw-semibold">Area</label>
             <select id="filter_area" name="filter_area" class="form-select" aria-label="Default select example">
                 <option value="All" selected>All</option>
                 @foreach ($documentService->areas() as $option)

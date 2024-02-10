@@ -1,8 +1,11 @@
-@include('utility.prefix', ['container' => 'container-fluid'])
+<!DOCTYPE html>
+<html lang="en">
+@include('utility.head')
 
-<div class="py-4">
+@include('utility.navbar')
 
-    <table style="font-size: 13px" class="rounded table table-light table-sm table-hover mb-0 border border-1 shadow-sm table-responsive-md">
+<body>
+    <table style="font-size: 10px;" class="rounded table table-light table-sm table-hover mb-0 border border-1 shadow-sm table-responsive-md">
         <tr>
             <thead>
                 @foreach ($selected_columns as $column)
@@ -101,7 +104,6 @@
 
         @endforeach
     </table>
+</body>
 
-</div>
-
-@include('utility.suffix')
+</html>

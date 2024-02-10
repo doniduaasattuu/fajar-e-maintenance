@@ -80,8 +80,8 @@ Route::middleware('member')->group(function () {
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
 
     // RECORD
-    Route::get('/record/motor', [RecordController::class, 'recordMotor']);
-    Route::get('/record/trafo', [RecordController::class, 'recordTrafo']);
+    Route::get('/report', [RecordController::class, 'report']);
+    Route::post('/report', [RecordController::class, 'generateReport']);
     Route::get('/record/trafo/pdf', [RecordController::class, 'recordViewTrafoPdf']);
 
     Route::middleware('role:db_admin')->group(function () {

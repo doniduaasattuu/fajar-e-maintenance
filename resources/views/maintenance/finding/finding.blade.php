@@ -32,7 +32,7 @@
 
         {{-- FILTER FINDING BY EQUIPMENT --}}
         <div class="col pe-1">
-            <label for="filter_equipment" class="form-label fw-bold">Equipment</label>
+            <label for="filter_equipment" class="form-label fw-semibold">Equipment</label>
             <select id="filter_equipment" name="filter_equipment" class="form-select" aria-label="Default select example">
                 <option value="All">All</option>
                 <option value="">Not set</option>
@@ -44,7 +44,7 @@
 
         {{-- FILTER FINDING BY STATUS --}}
         <div class="col ps-1">
-            <label for="filter_status" class="form-label fw-bold">Finding status</label>
+            <label for="filter_status" class="form-label fw-semibold">Finding status</label>
             <select id="filter_status" name="filter_status" class="form-select" aria-label="Default select example">
                 <option value="All">All</option>
                 @foreach ($findingService->findingStatusEnum as $option)
