@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Funcloc;
 use App\Models\MotorRecord;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Seeders\DailyRecordSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
@@ -13,29 +14,39 @@ use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class PdfControllerTest extends TestCase
 {
-    public function testPdf()
+    public function testGetDailyActivityReportPageGuest()
     {
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DailyRecordSeeder::class]);
 
-        $records = MotorRecord::query()->get();
-        self::assertNotNull($records);
-        $records = $records->map(function ($values, $keys) {
-            $values = collect($values);
+        $this->get('/report')
+            ->assertRedirectToRoute('login');
+    }
 
-            return $values->map(function ($value, $key) {
-                if ($key == 'nik') {
-                    $name = User::query()->find($value)->printed_name;
-                    return $name;
-                } else {
-                    return $value;
-                }
-            });
-        });
-        Log::info(json_encode($records, JSON_PRETTY_PRINT));
+    public function testGetDailyActivityReportPageEmployee()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DailyRecordSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])
+            ->get('/report')
+            ->assertSeeText('Daily activity report')
+            ->assertSeeText('Equipment')
+            ->assertSee('Motor')
+            ->assertSee('Trafo')
+            ->assertSee('Date')
+            ->assertSee('Generate');
+    }
+
+    public function testPostDailyReportPdfGuest()
+    {
+        $this
+            ->post('/report')
+            ->assertRedirectToRoute('login');
     }
 }

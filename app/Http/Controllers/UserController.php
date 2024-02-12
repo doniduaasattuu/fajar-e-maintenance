@@ -69,6 +69,23 @@ class UserController extends Controller
         ]);
     }
 
+    public function loginPasses()
+    {
+        $app_demo = env('APP_DEMO');
+
+        if ($app_demo == true) {
+
+            session(["nik" => '55000154']);
+            session(["user" => 'Guest']);
+
+            return redirect()->route('home');
+        } else {
+            return response()->view('user.login', [
+                'title' => 'Login'
+            ]);
+        }
+    }
+
     public function doLogin(Request $request)
     {
         $rules = [
