@@ -160,10 +160,13 @@ class PdfController extends Controller
         ]);
     }
 
-    public function reportMotorEquipment(string $equipment)
+    public function reportMotorEquipment(string $equipment, string $start_date, string $end_date)
     {
         $view = 'maintenance.report.motor';
-        $records = MotorRecord::query()->where('motor', $equipment)->get();
+        $records = MotorRecord::query()
+            ->where('motor', $equipment)
+            ->whereBetween('created_at', [$start_date, $end_date])
+            ->get();
         $title = 'Record of ' . $equipment;
 
         $pdf = LaravelMpdf::loadView($view, [

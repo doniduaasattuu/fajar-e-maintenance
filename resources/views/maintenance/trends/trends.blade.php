@@ -33,7 +33,15 @@
                 @include('utility.error-help', ['column' => 'end_date'])
             </div>
 
+            <div class="form-check mb-3">
+                <input name="generate_pdf" class="form-check-input" type="checkbox" value=true id="flexCheckChecked">
+                <label class="form-check-label w-100" for="flexCheckChecked">
+                    Show as PDF File
+                </label>
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
+
         </form>
     </div>
 

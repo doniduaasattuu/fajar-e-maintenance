@@ -165,16 +165,20 @@ class TrendController extends Controller
 
     public function getTrends(Request $request)
     {
+        $request->mergeIfMissing(['generate_pdf' => 'false']);
+
         $data = [
             'equipment' => $request->input('equipment'),
             'start_date' => !is_null($request->input('start_date')) ? $request->input('start_date') : Carbon::now()->addYears(-1)->addDays(-1),
             'end_date' => !is_null($request->input('end_date')) ? $request->input('end_date') : Carbon::now()->addDays(1),
+            'generate_pdf' => $request->input('generate_pdf'),
         ];
 
         $rules = [
             'equipment' => ['required', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
             'start_date' => ['required', 'before:now'],
             'end_date' => ['required', 'after:start_date'],
+            'generate_pdf' => ['required'],
         ];
 
         $validator = Validator::make($data, $rules);
@@ -183,7 +187,17 @@ class TrendController extends Controller
 
             $validated = $validator->validated();
 
-            return $this->equipmentTrend($validated['equipment'], $validated['start_date'], $validated['end_date']);
+            if ($validated['generate_pdf'] == 'true') {
+
+                // return response()->json($request->all());
+                return redirect()->action([PdfController::class, 'reportMotorEquipment'], [
+                    'equipment' => $validated['equipment'],
+                    'start_date' => $validated['start_date'],
+                    'end_date' => $validated['end_date'],
+                ]);
+            } else {
+                return $this->equipmentTrend($validated['equipment'], $validated['start_date'], $validated['end_date']);
+            }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
