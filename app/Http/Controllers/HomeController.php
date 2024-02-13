@@ -7,7 +7,6 @@ use App\Models\Trafo;
 use App\Services\MotorService;
 use App\Services\UserService;
 use App\Traits\Utility;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +46,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function search(Request $request): RedirectResponse | JsonResponse
+    public function search(Request $request): RedirectResponse
     {
         $equipment = $request->input('search_equipment');
 

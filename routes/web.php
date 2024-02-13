@@ -133,5 +133,8 @@ Route::middleware('member')->group(function () {
         Route::get('/role-assign/db_admin/{nik}', [RoleController::class, 'roleAssignDbAdmin']);
         Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
+
+        Route::get('/user-registration', [App\Http\Controllers\UserController::class, 'userRegistration']);
+        Route::post('/user-registration', [App\Http\Controllers\UserController::class, 'register']);
     });
 });

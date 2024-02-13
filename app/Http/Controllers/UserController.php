@@ -17,12 +17,10 @@ use Illuminate\Validation\Rules\Password;
 class UserController extends Controller
 {
     private UserService $userService;
-    private RoleService $roleService;
 
     public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
-        $this->roleService = $roleService;
     }
 
     public function registration()
@@ -30,6 +28,7 @@ class UserController extends Controller
         return response()->view('user.registration', [
             'title' => 'Registration',
             'userService' => $this->userService,
+            'action' => '/registration',
         ]);
     }
 
@@ -41,7 +40,7 @@ class UserController extends Controller
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
             'department' => ['required', Rule::in($this->userService->departments())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
-            'registration_code' => ['required', new ValidRegistrationCode()],
+            'registration_code' => ['required', new ValidRegistrationCode($this->userService)],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -56,7 +55,11 @@ class UserController extends Controller
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
+            if (!is_null(session('nik'))) {
+                return redirect()->back()->with('alert', ['message' => 'User account successfully registered.', 'variant' => 'alert-success']);
+            } else {
+                return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
+            }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -216,5 +219,14 @@ class UserController extends Controller
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
         }
+    }
+
+    public function userRegistration()
+    {
+        return response()->view('user.user-registration', [
+            'title' => 'User registration',
+            'userService' => $this->userService,
+            'action' => '/user-registration',
+        ]);
     }
 }

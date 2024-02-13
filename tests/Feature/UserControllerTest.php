@@ -28,6 +28,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('EI7')
             ->assertSeeText('Phone number')
             ->assertSeeText('Registration code')
+            ->assertDontSee($this->app->make(UserService::class)->registrationCode)
             ->assertSeeText('Sign Up')
             ->assertSeeText('Already have an account ?, Sign in here');
     }
@@ -54,9 +55,12 @@ class UserControllerTest extends TestCase
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
-        $this->post('/registration', $data)
-            ->assertStatus(302)
-            ->assertRedirect('/login');
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertStatus(200)
+            ->assertSeeText('Your account successfully registered.')
+            ->assertDontSeeText('User account successfully registered.');
 
         $userService = $this->app->make(UserService::class);
         $user = $userService->user($data['nik']);
@@ -658,6 +662,20 @@ class UserControllerTest extends TestCase
         ])
             ->get('/users')
             ->assertSeeText('User management')
+            ->assertSeeText('New User')
+            ->assertSeeText('Filter')
+            ->assertSee('Name')
+            ->assertSeeText('Dept')
+            ->assertSee('All')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('The total registered user is')
+            ->assertSeeText('people')
             ->assertSeeText('NIK')
             ->assertSeeText('Name')
             ->assertSeeText('Dept')
@@ -807,5 +825,98 @@ class UserControllerTest extends TestCase
         ])->followingRedirects()
             ->get('/user-reset/55000154')
             ->assertSeeText('You cannot reset the creator!.');
+    }
+
+    // ADMIN REGISTER NEW USER
+    public function testGetPageAdminRegisterNewUserGuest()
+    {
+        $this->get('/user-registration')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testGetPageAdminRegisterNewUserEmployee()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])
+            ->followingRedirects()
+            ->get('/user-registration')
+            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testGetPageAdminRegisterNewUserAuthorized()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])
+            ->followingRedirects()
+            ->get('/user-registration')
+            ->assertSeeText('User registration')
+            ->assertSeeText('Table')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Password')
+            ->assertSeeText('Full name')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Registration code')
+            ->assertSee($this->app->make(UserService::class)->registrationCode)
+            ->assertDontSeeText('Sign Up')
+            ->assertDontSeeText('Already have an account ?, Sign in here');
+    }
+
+    // POST NEW USER
+    public function testPostRegisterNewUserEmployee()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $data = [
+            'nik' => '55000555',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'dOnI dArMawAN',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this->withSession([
+            'nik' => '55000153',
+            'user' => 'Jamal Mirdad'
+        ])
+            ->followingRedirects()
+            ->post('/user-registration', $data)
+            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('You are not allowed to perform this operation!.');
+    }
+
+    public function testPostRegisterNewUserAuthorizedSuccess()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $data = [
+            'nik' => '55000555',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'dOnI dArMawAN',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/user-registration');
+
+        $this
+            ->followingRedirects()
+            ->post('/user-registration', $data)
+            ->assertDontSeeText('Your account successfully registered.')
+            ->assertSeeText('User account successfully registered.');
     }
 }

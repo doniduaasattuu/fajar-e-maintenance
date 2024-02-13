@@ -35,7 +35,7 @@ use App\Services\Impl\MotorRecordServiceImpl;
 use App\Services\Impl\MotorServiceImpl;
 use App\Services\Impl\RoleServiceImpl;
 use App\Services\Impl\TrafoDetailServiceImpl;
-use App\Services\Impl\trafoRecordServiceImpl;
+use App\Services\Impl\TrafoRecordServiceImpl;
 use App\Services\Impl\TrafoServiceImpl;
 use App\Services\Impl\UserServiceImpl;
 use App\Services\MotorDetailService;
@@ -69,7 +69,7 @@ class AppServiceProvider extends ServiceProvider
         TrafoRepository::class => TrafoRepositoryImpl::class,
         TrafoDetailService::class => TrafoDetailServiceImpl::class,
         TrafoDetailRepository::class => TrafoDetailRepositoryImpl::class,
-        TrafoRecordService::class => trafoRecordServiceImpl::class,
+        TrafoRecordService::class => TrafoRecordServiceImpl::class,
         TrafoRecordRepository::class => TrafoRecordRepositoryImpl::class,
         DocumentService::class => DocumentServiceImpl::class,
         DocumentRepository::class => DocumentRepositoryImpl::class,

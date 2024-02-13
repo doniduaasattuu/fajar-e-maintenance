@@ -23,7 +23,8 @@ class ViewTest extends TestCase
     {
         $this->view('user.registration', [
             'title' => 'Registration',
-            'userService' => $this->app->make(UserService::class)
+            'userService' => $this->app->make(UserService::class),
+            'action' => '/registration'
         ])
             ->assertSeeText('Registration')
             ->assertSeeText('NIK')

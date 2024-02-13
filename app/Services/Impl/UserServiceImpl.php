@@ -15,11 +15,13 @@ class UserServiceImpl implements UserService
     use Utility;
     public string $tableName;
     private UserRepository $userRepository;
+    public string $registrationCode;
 
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
         $this->tableName = app(User::class)->getTable();
+        $this->registrationCode = env('REGISTRATION_CODE');
     }
 
     public function login(array $validated): bool
@@ -52,6 +54,12 @@ class UserServiceImpl implements UserService
             'EI6',
             'EI7',
         ];
+    }
+
+    public function getAll(): Collection
+    {
+        $users = User::query()->get();
+        return $users;
     }
 
     public function registeredNiks(): array

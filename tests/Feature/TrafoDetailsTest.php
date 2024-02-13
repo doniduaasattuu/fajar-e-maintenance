@@ -28,7 +28,7 @@ class TrafoDetailsTest extends TestCase
 
     public function testTrafoDetailsRelationToTrafoNull()
     {
-        $this->seed([FunclocSeeder::class, trafoSeeder::class, trafoDetailsSeeder::class]);
+        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
         $trafoDetail = TrafoDetails::query()->with(['Trafo'])->where('trafo_detail', 'ETF000000')->first();
         self::assertNull($trafoDetail);
