@@ -9,6 +9,8 @@
 
             <h3 class="mb-3">{{ $title }}</h3>
 
+            @include('utility.error')
+
             <div class="mb-3">
                 <label for="table" class="form-label fw-semibold">Equipment</label>
                 <select id="table" name="table" class="form-select" aria-label="Default select example">

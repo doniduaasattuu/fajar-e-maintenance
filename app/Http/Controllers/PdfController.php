@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\MotorRecord;
 use App\Models\TrafoRecord;
-use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
+use Mpdf\Mpdf;
 
 class PdfController extends Controller
 {
@@ -77,6 +79,24 @@ class PdfController extends Controller
             ->get();
     }
 
+    public function html(string $view, string $title, Collection $records, array $selected_columns): Response
+    {
+        $html = response()->view($view, [
+            'title' => $title,
+            'records' => $records,
+            'selected_columns' => $selected_columns,
+        ]);
+
+        return $html;
+    }
+
+    public function renderPdf(Response $html, string $title)
+    {
+        $pdf = new Mpdf(config('pdf'));
+        $pdf->WriteHTML($html);
+        $pdf->Output($title . '.pdf', 'I');
+    }
+
     public function generateReport(Request $request)
     {
 
@@ -98,83 +118,61 @@ class PdfController extends Controller
             $date =  Carbon::create($validated['date'])->toDateString();
             $date_after = Carbon::create($validated['date'])->addDay();
 
-            switch ($validated['table']) {
-                case 'motors':
+            try {
+                switch ($validated['table']) {
+                    case 'motors':
 
-                    $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
-                    return $this->renderPdf($this->motor_selected_columns, $motor_records, 'maintenance.report.motor', 'Motor daily report', $date);
-                    break;
+                        $view = 'maintenance.report.motor';
+                        $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
+                        $title = 'Fajar E-Maintenance' . ' - ' . 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
+                        $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
 
-                case 'trafos':
+                        return $this->renderPdf($html, $title);
+                        break;
 
-                    $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
-                    return $this->renderPdf($this->trafo_selected_columns, $trafo_records, 'maintenance.report.trafo', 'Trafo daily report', $date);
-                    break;
+                    case 'trafos':
 
-                default:
-                    return redirect()->back()->withErrors($validator)->withInput();
+                        $view = 'maintenance.report.trafo';
+                        $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
+                        $title = 'Fajar E-Maintenance' . ' - ' . 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
+                        $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
+
+                        return $this->renderPdf($html, $title);
+                        break;
+
+                    default:
+                        return redirect()->back()->withErrors($validator)->withInput();
+                }
+            } catch (Exception $error) {
+                return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
 
-    public function renderPdf(array $selected_columns, Collection $records, string $view, string $title, string $date)
+    public function reportEquipmentPdf(string $type, string $equipment, string $start_date, string $end_date)
     {
-        $file_title =  'Fajar E-Maintenance' . ' - ' . $title . ' - ' . Carbon::create($date)->format('d M Y');
+        $title = 'Fajar E-Maintenance' . ' - ' . 'Record of ' . $equipment . ' - [' . Carbon::create($start_date)->format('d M Y') . ' - ' . Carbon::create($end_date)->format('d M Y') . ']';
 
-        $pdf = LaravelMpdf::loadView($view, [
-            'title' => $file_title,
-            'records' => $records,
-            'selected_columns' => $selected_columns,
-        ]);
-
-        return $pdf->stream($file_title . '.pdf');
-    }
-
-    public function reportTrafoHtml()
-    {
-        $records = TrafoRecord::query()
-            ->select($this->trafo_selected_columns)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('maintenance.report.trafo', [
-            'title' => 'Daily report trafo',
-            'records' => $records,
-            'selected_columns' => $this->trafo_selected_columns,
-        ]);
-    }
-
-    public function reportMotorHtml()
-    {
-        $records = motorRecord::query()
-            ->select($this->motor_selected_columns)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->view('maintenance.report.motor', [
-            'title' => 'Daily report motor',
-            'records' => $records,
-            'selected_columns' => $this->motor_selected_columns,
-        ]);
-    }
-
-    public function reportMotorEquipment(string $equipment, string $start_date, string $end_date)
-    {
-        $view = 'maintenance.report.motor';
-        $records = MotorRecord::query()
-            ->where('motor', $equipment)
-            ->whereBetween('created_at', [$start_date, $end_date])
-            ->get();
-        $title = 'Record of ' . $equipment;
-
-        $pdf = LaravelMpdf::loadView($view, [
-            'title' => $title,
-            'records' => $records,
-            'selected_columns' => $this->motor_selected_columns,
-        ]);
-
-        return $pdf->stream($title . '.pdf');
+        if ($type == 'motors') {
+            // MOTORS
+            $view = 'maintenance.report.motor';
+            $motor_records = MotorRecord::query()
+                ->where('motor', $equipment)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->get();
+            $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
+            return $this->renderPdf($html, $title);
+        } else {
+            // TRAFOS
+            $view = 'maintenance.report.trafo';
+            $trafo_records = TrafoRecord::query()
+                ->where('trafo', $equipment)
+                ->whereBetween('created_at', [$start_date, $end_date])
+                ->get();
+            $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
+            return $this->renderPdf($html, $title);
+        }
     }
 }

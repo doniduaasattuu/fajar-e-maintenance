@@ -9,7 +9,6 @@ use App\Traits\Utility;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -186,17 +185,34 @@ class TrendController extends Controller
         if ($validator->passes()) {
 
             $validated = $validator->validated();
+            $start_date = Carbon::create($validated['start_date'])->format('Y-m-d');
+            $end_date = Carbon::create($validated['end_date'])->format('Y-m-d');
 
             if ($validated['generate_pdf'] == 'true') {
 
-                // return response()->json($request->all());
-                return redirect()->action([PdfController::class, 'reportMotorEquipment'], [
-                    'equipment' => $validated['equipment'],
-                    'start_date' => $validated['start_date'],
-                    'end_date' => $validated['end_date'],
-                ]);
+                $equipment = $validated['equipment'];
+                $equipment_code = $this->getEquipmentCode($equipment);
+
+                // CHECK TYPE OF EQUIPMENT
+                if (in_array($equipment_code, $this->motorService->motorCodes()) && in_array($equipment, $this->motorService->registeredMotors())) {
+
+                    return redirect()->action([PdfController::class, 'reportEquipmentPdf'], [
+                        'type' => 'motors',
+                        'equipment' => $equipment,
+                        'start_date' => $start_date,
+                        'end_date' => $end_date,
+                    ]);
+                } else {
+
+                    return redirect()->action([PdfController::class, 'reportEquipmentPdf'], [
+                        'type' => 'trafos',
+                        'equipment' => $equipment,
+                        'start_date' => $start_date,
+                        'end_date' => $end_date,
+                    ]);
+                }
             } else {
-                return $this->equipmentTrend($validated['equipment'], $validated['start_date'], $validated['end_date']);
+                return $this->equipmentTrend($validated['equipment'], $start_date, $end_date);
             }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();

@@ -85,12 +85,9 @@ Route::middleware('member')->group(function () {
     Route::post('/report', [PdfController::class, 'generateReport']);
     Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
     Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
-    // Route::get('/report/motor/pdf', [PdfController::class, 'renderPdfMotor']);
 
     // EQUIPMENT REPORT
-    Route::get('/report/motor/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportMotorEquipment']);
-    // Route::post('/report/motor', [PdfController::class, 'reportMotorEquipment']);
-    Route::get('/report/trafo/{equipment}', [PdfController::class, 'reportTrafoEquipment']);
+    Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
     Route::middleware('role:db_admin')->group(function () {
         // DOCUMENT
