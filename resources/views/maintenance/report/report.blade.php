@@ -4,7 +4,7 @@
 
     <div class="my-4 py-5 position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
 
-        <form id="/report" method="post">
+        <form action="/report" method="post">
             @csrf
 
             <h3 class="mb-3">{{ $title }}</h3>
@@ -14,8 +14,8 @@
             <div class="mb-3">
                 <label for="table" class="form-label fw-semibold">Equipment</label>
                 <select id="table" name="table" class="form-select" aria-label="Default select example">
-                    <option @selected(old('table')) value="motors">Motor</option>
-                    <option @selected(old('table')) value="trafos">Trafo</option>
+                    <option @selected(old('table')=='motors' ) value="motors">Motor</option>
+                    <option @selected(old('table')=='trafos' ) value="trafos">Trafo</option>
                 </select>
             </div>
 

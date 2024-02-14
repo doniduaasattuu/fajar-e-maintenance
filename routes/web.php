@@ -83,8 +83,8 @@ Route::middleware('member')->group(function () {
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);
     Route::post('/report', [PdfController::class, 'generateReport']);
-    Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
-    Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
+    // Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
+    // Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
 
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);

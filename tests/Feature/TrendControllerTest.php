@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Funcloc;
 use Carbon\Carbon;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FindingSeeder;
@@ -9,6 +10,7 @@ use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorRecordSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -188,5 +190,68 @@ class TrendControllerTest extends TestCase
             ->assertSeeText('Greasing record of MGM000481')
             ->assertSeeText('Findings of MGM000481')
             ->assertSeeText('The top one is the newest.');
+    }
+
+    // POST GET TREND AS PDF
+    public function testPostEquipmentTrendAsPdfEmptyRecords()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/trends');
+
+        $this
+            ->followingRedirects()
+            ->post('/trends', [
+                'equipment' => 'EMO000023',
+                'start_date' => Carbon::now()->addYears(-1)->format('Y-m-d'),
+                'end_date' => Carbon::now()->format('Y-m-d'),
+                'generate_pdf' => 'true'
+            ])
+            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('No records found.');
+    }
+
+    public function testPostEquipmentTrendAsPdfInvalidEquipment()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/trends');
+
+        $this
+            ->followingRedirects()
+            ->post('/trends', [
+                'equipment' => 'EMO000023',
+                'start_date' => Carbon::now()->addYears(-1)->format('Y-m-d'),
+                'end_date' => Carbon::now()->format('Y-m-d'),
+                'generate_pdf' => 'true'
+            ])
+            ->assertSeeText('The selected equipment is invalid.');
+    }
+
+    public function testPostEquipmentTrendAsPdfSuccess()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->withSession([
+            'nik' => '55000154',
+            'user' => 'Doni Darmawan'
+        ])->get('/trends');
+
+        $equipment = 'MGM000481';
+
+        $this
+            ->post('/trends', [
+                'equipment' => 'MGM000481',
+                'start_date' => Carbon::now()->addYears(-1)->format('Y-m-d'),
+                'end_date' => Carbon::now()->format('Y-m-d'),
+                'generate_pdf' => 'true'
+            ])
+            ->assertRedirectContains('/report/motors/' . $equipment);
     }
 }

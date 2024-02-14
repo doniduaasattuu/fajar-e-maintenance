@@ -44,6 +44,6 @@
 
     <div>
 
-        <caption>{{ $title }}</caption>
+        <caption>Fajar E-Maintenance - {{ $title }}</caption>
 
         <table class="table table-sm mb-0">

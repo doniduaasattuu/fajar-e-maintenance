@@ -12,8 +12,11 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf;
 use Mpdf\Mpdf;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class PdfController extends Controller
 {
@@ -90,11 +93,36 @@ class PdfController extends Controller
         return $html;
     }
 
-    public function renderPdf(Response $html, string $title)
+    public function renderPdf(Response $html, string $title): RedirectResponse
     {
         $pdf = new Mpdf(config('pdf'));
         $pdf->WriteHTML($html);
-        $pdf->Output($title . '.pdf', 'I');
+        $file = $pdf->Output($title . '.pdf', 'S');
+
+        $pdf_files = new Filesystem();
+        $pdf_files->cleanDirectory('storage/pdf');
+
+        $path = "pdf/$title.pdf";
+        Storage::disk('public')->put($path, $file);
+
+        return redirect("storage/$path");
+    }
+
+    public function checkRecordsIsEmpty(Collection $records, Response $html, string $title, array $input): RedirectResponse
+    {
+        if ($records->isEmpty()) {
+            return redirect()->back()
+                ->withInput([
+                    'equipment' => $input['equipment'] ?? null,
+                    'start_date' => $input['start_date'] ?? null,
+                    'end_date' => $input['end_date'] ?? null,
+                    'table' => $input['table'] ?? null,
+                    'date' => $input['date'] ?? null,
+                ])
+                ->with('message', ['header' => '[404] Not found.', 'message' => 'No records found.']);
+        } else {
+            return $this->renderPdf($html, $title);
+        }
     }
 
     public function generateReport(Request $request)
@@ -117,6 +145,10 @@ class PdfController extends Controller
             $validated = $validator->validated();
             $date =  Carbon::create($validated['date'])->toDateString();
             $date_after = Carbon::create($validated['date'])->addDay();
+            $input = [
+                'table' => $validated['table'],
+                'date' => $date,
+            ];
 
             try {
                 switch ($validated['table']) {
@@ -124,20 +156,20 @@ class PdfController extends Controller
 
                         $view = 'maintenance.report.motor';
                         $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
-                        $title = 'Fajar E-Maintenance' . ' - ' . 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
+                        $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
 
-                        return $this->renderPdf($html, $title);
+                        return $this->checkRecordsIsEmpty($motor_records, $html, $title, $input);
                         break;
 
                     case 'trafos':
 
                         $view = 'maintenance.report.trafo';
                         $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
-                        $title = 'Fajar E-Maintenance' . ' - ' . 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
+                        $title = 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
 
-                        return $this->renderPdf($html, $title);
+                        return $this->checkRecordsIsEmpty($trafo_records, $html, $title, $input);
                         break;
 
                     default:
@@ -153,7 +185,12 @@ class PdfController extends Controller
 
     public function reportEquipmentPdf(string $type, string $equipment, string $start_date, string $end_date)
     {
-        $title = 'Fajar E-Maintenance' . ' - ' . 'Record of ' . $equipment . ' - [' . Carbon::create($start_date)->format('d M Y') . ' - ' . Carbon::create($end_date)->format('d M Y') . ']';
+        $title = 'Record of ' . $equipment . ' - [' . Carbon::create($start_date)->format('d M Y') . ' - ' . Carbon::create($end_date)->format('d M Y') . ']';
+        $input = [
+            'equipment' => $equipment,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ];
 
         if ($type == 'motors') {
             // MOTORS
@@ -163,7 +200,8 @@ class PdfController extends Controller
                 ->whereBetween('created_at', [$start_date, $end_date])
                 ->get();
             $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
-            return $this->renderPdf($html, $title);
+
+            return $this->checkRecordsIsEmpty($motor_records, $html, $title, $input);
         } else {
             // TRAFOS
             $view = 'maintenance.report.trafo';
@@ -172,7 +210,8 @@ class PdfController extends Controller
                 ->whereBetween('created_at', [$start_date, $end_date])
                 ->get();
             $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
-            return $this->renderPdf($html, $title);
+
+            return $this->checkRecordsIsEmpty($trafo_records, $html, $title, $input);
         }
     }
 }
