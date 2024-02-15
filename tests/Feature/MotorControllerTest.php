@@ -9,6 +9,8 @@ use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class MotorControllerTest extends TestCase
@@ -32,6 +34,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('New motor')
             ->assertSeeText('Filter')
             ->assertSeeText('The total registered motor is')
+            ->assertSeeText('The total number displayed is')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('MGM000481');
@@ -50,6 +53,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('New motor')
             ->assertSeeText('Filter')
             ->assertSeeText('The total registered motor is')
+            ->assertSeeText('The total number displayed is')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('MGM000481');
@@ -68,6 +72,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('New motor')
             ->assertSeeText('Filter')
             ->assertSeeText('The total registered motor is 0 records.')
+            ->assertSeeText('The total number displayed is 0 motor.')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertDontSeeText('MGM000481');

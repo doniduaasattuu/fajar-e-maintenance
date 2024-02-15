@@ -2,16 +2,7 @@
 <div class="py-4">
     <h3 class="mb-3">{{ $title }}</h3>
 
-    <!-- REGISTRY NEW FUNCLOC -->
-    <!-- <div class="mb-3">
-        <a class="text-dark nav-link d-inline-block" aria-current="page" href="/funcloc-registration">
-            <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="grey" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0" />
-            </svg>
-            New funcloc</a>
-    </div> -->
-
-    <!-- REGISTRY NEW FUNCLOC -->
+    {{-- REGISTRY NEW FUNCLOC --}}
     <div class="mb-3">
         <div class="btn-group">
             <button type="button" class="btn btn-primary">
@@ -25,14 +16,28 @@
         </div>
     </div>
 
-    <!-- FILTER FUNCLOC -->
+    {{-- FILTER FUNCLOC --}}
     <div class="mb-3">
         <label for="filter" class="form-label fw-semibold">Filter</label>
         <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by funcloc">
         <div class="form-text">The total registered funcloc is {{ count($funclocService->getAll()) }} records.</div>
     </div>
 
-    <!-- TABlE FUNCLOC -->
+    {{-- PAGINATION --}}
+    <div class="mb-3">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                @for ($i = 1; $i <= $paginate->lastPage(); $i++)
+                    <button onclick="location.href = '/funclocs/{{ $i }}'" type="button" @class(['btn', 'btn-primary' , ($i==$paginate->currentPage()) ? 'active' : ''])>
+                        {{ $i }}
+                    </button>
+                    @endfor
+            </div>
+        </div>
+        <div class="form-text">The total number displayed is {{ count($paginate->items()) }} funcloc.</div>
+    </div>
+
+    {{-- TABlE FUNCLOC --}}
     <div class="mb-3">
         <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm">
             <thead>
@@ -50,14 +55,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($funclocService->getAll() as $funcloc)
+                @foreach ($paginate->items() as $funcloc)
                 <tr class="table_row">
                     @foreach ($funclocService->getTableColumns() as $column)
                     @if ($column == 'created_at')
                     @continue
                     @elseif ($column == 'id')
                     <!-- ADD TOOLTIP FOR FUNCLOC ID -->
-                    <td class="funcloc_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $funcloc->description }}">{{ $funcloc->$column }}</td>
+                    <td class="funcloc_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ null != $funcloc->description ? $funcloc->description : 'Not set' }}">{{ $funcloc->$column }}</td>
                     @else
                     <td class="text-break {{ $column }}" scope="row">{{ $funcloc->$column }}</td>
                     @endif

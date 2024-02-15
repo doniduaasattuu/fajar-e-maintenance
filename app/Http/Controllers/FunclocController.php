@@ -7,6 +7,7 @@ use App\Models\Funcloc;
 use App\Services\FunclocService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -20,11 +21,14 @@ class FunclocController extends Controller
         $this->funclocService = $funclocService;
     }
 
-    public function funclocs()
+    public function funclocs(?string $page = '1')
     {
+        $paginate = DB::table('funclocs')->paginate(perPage: 1000, page: $page);
+
         return response()->view('maintenance.funcloc.funcloc', [
             'title' => 'Table funcloc',
             'funclocService' => $this->funclocService,
+            'paginate' => $paginate,
         ]);
     }
 

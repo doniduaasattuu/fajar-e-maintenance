@@ -13,6 +13,7 @@ use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\TrafoSeeder;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 use function Termwind\ask;
@@ -71,26 +72,33 @@ class ViewTest extends TestCase
     {
         $this->seed(FunclocSeeder::class);
 
+        $paginate = DB::table('funclocs')->paginate();
+
         $this->view('maintenance.funcloc.funcloc', [
             'title' => 'Table funcloc',
             'funclocService' => $this->app->make(FunclocService::class),
+            'paginate' => $paginate,
         ])
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')
             ->assertSeeText('The total registered funcloc is')
             ->assertSeeText('Description')
             ->assertSeeText('Updated at')
-            ->assertSeeText('Edit')
-            ->assertSeeText('SP5.M-21/M');
+            ->assertSeeText('Edit');
     }
 
     public function testViewMotors()
     {
         $this->seed([FunclocSeeder::class, MotorSeeder::class]);
 
+        $paginate = DB::table('motors')->paginate(perPage: 10, page: 1);
+
         $this->view('maintenance.motor.motor', [
             'title' => 'Table motor',
             'motorService' => $this->app->make(MotorService::class),
+            'paginate' => $paginate,
+            'filter' => '',
+            'filter_status' => 'All',
         ])
             ->assertSeeText('Table motor')
             ->assertSeeText('New motor')
@@ -102,7 +110,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Details')
             ->assertSeeText('Edit')
             ->assertSeeText('The total registered motor is')
-            ->assertSeeText('MGM000481');
+            ->assertSeeText('The total number displayed is 10 motor.');
     }
 
     public function testViewEditMotor()

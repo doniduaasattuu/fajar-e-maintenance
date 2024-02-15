@@ -9,6 +9,7 @@ use App\Services\MotorService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -30,11 +31,18 @@ class MotorController extends Controller
         $this->motorDetailService = $motorDetailService;
     }
 
-    public function motors()
+    public function motors(?string $page = '1', ?string $filter_status = 'All', ?string $filter = '')
     {
+        $paginate = DB::table('motors')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(perPage: 1000, page: $page);
+
         return response()->view('maintenance.motor.motor', [
             'title' => 'Table motor',
             'motorService' => $this->motorService,
+            'paginate' => $paginate,
+            'filter' => $filter,
+            'filter_status' => $filter_status,
         ]);
     }
 

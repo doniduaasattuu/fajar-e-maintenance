@@ -29,20 +29,34 @@
         <!-- BY ID -->
         <div class="col pe-1">
             <label for="filter" class="form-label fw-semibold">Filter</label>
-            <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by motor">
+            <input value="{{ $filter }}" type="text" class="form-control" id="filter" name="filter" placeholder="Filter by motor">
         </div>
 
         <!-- BY STATUS -->
         <div class="col ps-1">
             <label for="filter_status" class="form-label fw-semibold">Motor status</label>
             <select id="filter_status" name="filter_status" class="form-select" aria-label="Default select example">
-                <option value="All" selected>All</option>
-                <option value="Installed">Installed</option>
-                <option value="Repaired">Repaired</option>
-                <option value="Available">Available</option>
+                <option @selected($filter_status=='All' ) value="All">All</option>
+                <option @selected($filter_status=='Installed' ) value="Installed">Installed</option>
+                <option @selected($filter_status=='Repaired' ) value="Repaired">Repaired</option>
+                <option @selected($filter_status=='Available' ) value="Available">Available</option>
             </select>
         </div>
         <div class="form-text">The total registered motor is {{ count($motorService->getAll()) }} records.</div>
+    </div>
+
+    {{-- PAGINATION --}}
+    <div class="mb-3">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group me-2" role="group" aria-label="First group">
+                @for ($i = 1; $i <= $paginate->lastPage(); $i++)
+                    <button onclick="return pageClick(<?php echo $i ?>)" type="button" @class(['btn', 'btn-sm' , 'btn-outline-secondary' , ($i==$paginate->currentPage()) ? 'active' : ''])>
+                        {{ $i }}
+                    </button>
+                    @endfor
+            </div>
+        </div>
+        <div class="form-text">The total number displayed is {{ count($paginate->items()) }} motor.</div>
     </div>
 
     <!-- TABlE MOTOR -->
@@ -72,8 +86,15 @@
             </thead>
             <tbody>
                 <!-- MOTOR -->
-                @foreach ($motorService->getAll() as $motor)
+                @foreach ($paginate->items() as $motor)
+
+                <!-- CHECK IF FILTER MATCH WITH ID -->
+                @if (preg_match("/$filter/i", $motor->id))
+                <tr class="table_row d-none">
+                    @else
                 <tr class="table_row">
+                    @endif
+
                     @foreach ($motorService->getTableColumns() as $column)
                     @if (
                     $column == 'description' ||
@@ -109,6 +130,7 @@
                         </a>
                     </td>
                 </tr>
+
                 @endforeach
             </tbody>
         </table>
@@ -225,6 +247,12 @@
         doFilterById();
         doFilterByMotorStatus()
         doHideColumnOnPhone()
+    }
+</script>
+
+<script>
+    function pageClick(page) {
+        window.location = '/motors' + '/' + page + '/' + filter_status.value + '/' + filter.value;
     }
 </script>
 
