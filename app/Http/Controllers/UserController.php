@@ -8,8 +8,10 @@ use App\Services\UserService;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
 use App\Services\RoleService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
@@ -17,7 +19,6 @@ use Illuminate\Validation\Rules\Password;
 class UserController extends Controller
 {
     private UserService $userService;
-
     public function __construct(UserService $userService, RoleService $roleService)
     {
         $this->userService = $userService;
@@ -52,15 +53,19 @@ class UserController extends Controller
             try {
                 $this->userService->register($validated);
             } catch (Exception $error) {
+                Log::error('user registration', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
             if (!is_null(session('nik'))) {
+                Log::info('user ' . $validated['nik'] . ' registered by admin', ['user' => $validated['fullname'], 'admin' => session('user')]);
                 return redirect()->back()->with('alert', ['message' => 'User account successfully registered.', 'variant' => 'alert-success']);
             } else {
+                Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
                 return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
             }
         } else {
+            Log::info('user try registration', ['nik' => $request->input('nik'), 'ip' => $request->ip()]);
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
@@ -70,23 +75,6 @@ class UserController extends Controller
         return response()->view('user.login', [
             'title' => 'Login'
         ]);
-    }
-
-    public function loginPasses()
-    {
-        $app_demo = env('APP_DEMO');
-
-        if ($app_demo == true) {
-
-            session(["nik" => '55000154']);
-            session(["user" => 'Guest']);
-
-            return redirect()->route('home');
-        } else {
-            return response()->view('user.login', [
-                'title' => 'Login'
-            ]);
-        }
     }
 
     public function doLogin(Request $request)
@@ -107,10 +95,12 @@ class UserController extends Controller
                 $user = User::query()->find($validated['nik']);
                 session(["nik" => $user->nik]);
                 session(["user" => $user->fullname]);
+                Log::info('user login', ['nik' => $user->nik, 'user' => $user->fullname]);
 
                 return redirect()->route('home');
             } else {
 
+                Log::info('user login failed', ['nik' => $validated['nik'], 'password' => $validated['password']]);
                 $validator->errors()->add('nik', 'The nik or password is wrong.');
                 return redirect()->back()->withErrors($validator)->withInput();
             }
@@ -121,6 +111,7 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+        Log::info('user logout', ['nik' => session('nik'), 'user' => session('user')]);
         $request->session()->flush();
         return redirect()->route('login');
     }
@@ -155,9 +146,11 @@ class UserController extends Controller
             try {
                 $this->userService->updateProfile($validated);
             } catch (Exception $error) {
+                Log::error('user update', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
+            Log::info('user updated', ['nik' => session('nik'), 'user' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -180,22 +173,30 @@ class UserController extends Controller
         $user = User::query()->find($nik);
 
         if ($nik == session('nik')) {
+            Log::alert('user tries to delete himself', ['admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete your self, this action causes an error.']);
         }
 
         if ($nik == '55000154') {
+            Log::alert('user tries to delete the creator', ['admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete the creator!.']);
         }
 
         if (!is_null($user)) {
 
-            $roles = Role::query()->where('nik', '=', $nik)->get();
-
-            foreach ($roles as $role) {
-                $role->delete();
+            try {
+                // DELETE ROLES
+                $roles = Role::query()->where('nik', '=', $nik)->get();
+                foreach ($roles as $role) {
+                    $role->delete();
+                }
+                $user->delete();
+            } catch (Exception $error) {
+                Log::error('user deleted', ['user' => $user->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
+                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            $user->delete();
+            Log::info('user deleted success', ['deleted' => $user->fullname, 'admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'User successfully deleted!.']);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'User not found!.']);
@@ -207,14 +208,17 @@ class UserController extends Controller
         $user = User::query()->find($nik);
 
         if ($nik == '55000154') {
+            Log::alert('user tries to reset creator password', ['admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot reset the creator!.']);
         }
 
         if (!is_null($user)) {
 
-            $user->password = '@Fajarpaper123';
+            $user->password = env('DEFAULT_PASSWORD', '@Fajarpaper123');
+            $user->updated_at = Carbon::now()->toDateTimeString();
             $user->update();
 
+            Log::info('user password reset success', ['user' => $user->fullname, 'admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
