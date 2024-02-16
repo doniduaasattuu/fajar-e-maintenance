@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Motor;
 use App\Models\MotorRecord;
 use App\Models\Trafo;
+use App\Models\User;
 use App\Services\MotorService;
 use App\Services\UserService;
 use App\Traits\Utility;
@@ -50,6 +51,7 @@ class HomeController extends Controller
     public function search(Request $request): RedirectResponse
     {
         $search = $request->input('search_equipment');
+        $current_user = User::query()->find(session('nik'));
 
         if ($search != null && strlen($search) === 9 && !str_starts_with(strtolower($search), 'motor')) {
 
@@ -89,8 +91,10 @@ class HomeController extends Controller
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $motor = Motor::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($motor)) {
+            if (!is_null($motor) && $current_user->isDbAdmin()) {
                 return redirect()->action([MotorController::class, 'motorEdit'], ['id' => $motor->id]);
+            } else if (!is_null($motor)) {
+                return redirect()->action([MotorController::class, 'motorDetails'], ['id' => $motor->id]);
             } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
             }
@@ -99,8 +103,10 @@ class HomeController extends Controller
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $trafo = Trafo::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($trafo)) {
+            if (!is_null($trafo) && $current_user->isDbAdmin()) {
                 return redirect()->action([TrafoController::class, 'trafoEdit'], ['id' => $trafo->id]);
+            } else if (!is_null($trafo)) {
+                return redirect()->action([TrafoController::class, 'trafoDetails'], ['id' => $trafo->id]);
             } else {
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
             }

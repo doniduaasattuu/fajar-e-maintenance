@@ -28,7 +28,7 @@ $skipped = [
         <h5 class="text-break lh-sm mb-0">{{ ($motor->sort_field != null) ? $motor->sort_field : '' }}</h5>
         <p class="text-break mb-0 text-secondary">{{ ($motor->description != null) ? $motor->description : '' }}</p>
         <p class="text-break lh-sm mb-0 text-secondary">{{ ($motor->funcloc != null) ? $motor->funcloc : '' }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $motor->id }}</p>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $motor->id . ' (' .$motor->unique_id .')' }}</p>
     </div>
     @endisset
 

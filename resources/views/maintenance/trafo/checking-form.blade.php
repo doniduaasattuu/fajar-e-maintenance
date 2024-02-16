@@ -29,7 +29,7 @@ $skipped = [
         <h5 class="text-break lh-sm mb-0">{{ ($trafo->sort_field != null) ? $trafo->sort_field : '' }}</h5>
         <p class="text-break mb-0 text-secondary">{{ ($trafo->description != null) ? $trafo->description : '' }}</p>
         <p class="text-break lh-sm mb-0 text-secondary">{{ ($trafo->funcloc != null) ? $trafo->funcloc : '' }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $trafo->id }}</p>
+        <p class="text-break lh-sm mb-0 text-secondary">{{ $trafo->id . ' (' .$trafo->unique_id .')' }}</p>
     </div>
     @endisset
 
