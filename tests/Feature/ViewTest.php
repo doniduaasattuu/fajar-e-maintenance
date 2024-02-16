@@ -78,6 +78,7 @@ class ViewTest extends TestCase
             'title' => 'Table funcloc',
             'funclocService' => $this->app->make(FunclocService::class),
             'paginate' => $paginate,
+            'filter' => null,
         ])
             ->assertSeeText('Table funcloc')
             ->assertSeeText('Filter')

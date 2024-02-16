@@ -50,7 +50,7 @@ Route::middleware('member')->group(function () {
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
     // TABLES
-    Route::get('/funclocs/{page?}', [FunclocController::class, 'funclocs'])->name('funclocs');
+    Route::get('/funclocs/{page?}/{filter?}', [FunclocController::class, 'funclocs'])->name('funclocs');
     Route::get('/motors/{page?}/{filter_status?}/{filter?}', [MotorController::class, 'motors'])->name('motors');
     Route::get('/trafos/{page?}', [TrafoController::class, 'trafos'])->name('trafos');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');

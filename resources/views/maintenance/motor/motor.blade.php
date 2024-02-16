@@ -22,14 +22,13 @@
         </div>
     </div>
 
-
     {{-- FILTER MOTOR --}}
     <div class="row mb-3">
 
         <!-- BY ID -->
         <div class="col pe-1">
             <label for="filter" class="form-label fw-semibold">Filter</label>
-            <input value="{{ $filter }}" type="text" class="form-control" id="filter" name="filter" placeholder="Filter by motor">
+            <input value="{{ $filter }}" type="text" class="form-control" id="filter" name="filter" placeholder="Filter by motor or unique id">
         </div>
 
         <!-- BY STATUS -->
@@ -59,22 +58,15 @@
         <div class="form-text">The total number displayed is {{ count($paginate->items()) }} motor.</div>
     </div>
 
-    <!-- TABlE MOTOR -->
+    {{-- TABlE MOTOR --}}
     <div class="mb-3">
         <table class="rounded table table-light table-hover mb-0 border border-1 shadow-sm table-responsive-md">
             <thead>
                 <tr>
-                    @foreach ($motorService->getTableColumns() as $column)
-                    @if (
-                    $column == 'description' ||
-                    $column == 'material_number' ||
-                    $column == 'qr_code_link' ||
-                    $column == 'created_at'
-                    )
-                    @continue
-                    @else
+                    @foreach ($motorService->getColumns('motors', ['description','material_number','qr_code_link','created_at',]) as $column)
+
                     <th style="line-height: 30px;" class="{{ $column }}" scope="col">{{ $column == 'id' ? 'Motor' : ucfirst(str_replace("_", " ", $column)) }}</th>
-                    @endif
+
                     @endforeach
 
                     <!-- DETAILS -->
@@ -95,20 +87,21 @@
                 <tr class="table_row">
                     @endif
 
-                    @foreach ($motorService->getTableColumns() as $column)
-                    @if (
-                    $column == 'description' ||
-                    $column == 'material_number' ||
-                    $column == 'qr_code_link' ||
-                    $column == 'created_at'
-                    )
-                    @continue
-                    @elseif ($column == 'id')
-                    <!-- ADD TOOLTIP FOR EQUIPMENT ID -->
+                    @foreach ($motorService->getColumns('motors', ['description', 'material_number', 'qr_code_link', 'created_at',]) as $column)
+
+                    @switch($column)
+                    @case('id')
                     <td class="motor_id text-break {{ $column }}" scope="row" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ $motor->funcloc != null ? $motor->funcloc : $motor->status }}">{{ $motor->$column }}</td>
-                    @else
+                    @break
+
+                    @case('unique_id')
+                    <td class="text-break motor_unique {{ $column }}" scope="row">{{ $motor->$column }}</td>
+                    @break
+
+                    @default
                     <td class="text-break {{ $column == 'status' ? 'motor_status' : $column }}" scope="row">{{ $motor->$column }}</td>
-                    @endif
+                    @endswitch
+
                     @endforeach
 
                     <!-- DETAILS -->
@@ -173,10 +166,16 @@
     let motors_id = document.getElementsByClassName('motor_id');
     let filter_status = document.getElementById('filter_status');
     let statuses = document.getElementsByClassName('motor_status');
+    let unique_ids = document.getElementsByClassName('motor_unique');
 
     motorsText = [];
     for (id of motors_id) {
         motorsText.push(id.textContent);
+    }
+
+    uniqueIdsText = [];
+    for (id of unique_ids) {
+        uniqueIdsText.push(id.textContent);
     }
 
     function resetFilter(table_rows) {
@@ -193,7 +192,7 @@
             resetFilter(table_rows);
 
             for (let i = 0; i < motorsText.length; i++) {
-                if (!motorsText[i].match(filter.value.trim().toUpperCase())) {
+                if (!motorsText[i].match(filter.value.trim().toUpperCase()) && !uniqueIdsText[i].match(filter.value.trim().toUpperCase())) {
                     table_rows[i].classList.add("d-none");
                 }
             }
@@ -249,11 +248,9 @@
         doHideColumnOnPhone()
     }
 </script>
-
 <script>
     function pageClick(page) {
         window.location = '/motors' + '/' + page + '/' + filter_status.value + '/' + filter.value;
     }
 </script>
-
 @include('utility.suffix')

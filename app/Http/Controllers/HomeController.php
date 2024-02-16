@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Motor;
+use App\Models\MotorRecord;
 use App\Models\Trafo;
 use App\Services\MotorService;
 use App\Services\UserService;
@@ -48,15 +49,15 @@ class HomeController extends Controller
 
     public function search(Request $request): RedirectResponse
     {
-        $equipment = $request->input('search_equipment');
+        $search = $request->input('search_equipment');
 
-        if ($equipment != null && strlen($equipment) === 9) {
+        if ($search != null && strlen($search) === 9 && !str_starts_with(strtolower($search), 'motor')) {
 
-            $equipment_code = $this->getEquipmentCode($equipment);
+            $equipment_code = $this->getEquipmentCode($search);
 
             if (in_array($equipment_code, $this->motorService->motorCodes())) {
 
-                $motor = Motor::query()->find($equipment);
+                $motor = Motor::query()->find($search);
 
                 if (!is_null($motor)) {
                     $equipment_id = $this->getEquipmentId($motor->qr_code_link);
@@ -65,11 +66,11 @@ class HomeController extends Controller
                         'equipment_id' => $equipment_id
                     ]);
                 } else {
-                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
+                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
                 }
             } else if (in_array($equipment_code, ['ETF'])) {
 
-                $trafo = Trafo::query()->find($equipment);
+                $trafo = Trafo::query()->find($search);
 
                 if (!is_null($trafo)) {
                     $equipment_id = $this->getEquipmentId($trafo->qr_code_link);
@@ -78,14 +79,33 @@ class HomeController extends Controller
                         'equipment_id' => $equipment_id
                     ]);
                 } else {
-                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
+                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
                 }
             } else {
-                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $equipment was not found."]);
+                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
+            }
+        } else if ($search != null && str_starts_with(strtolower($search), 'motor')) {
+
+            $unique_id = preg_replace('/[^0-9]/i', '', $search);
+            $motor = Motor::query()->where('unique_id', '=', $unique_id)->first();
+
+            if (!is_null($motor)) {
+                return redirect()->action([MotorController::class, 'motorEdit'], ['id' => $motor->id]);
+            } else {
+                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
+            }
+        } else if ($search != null && str_starts_with(strtolower($search), 'trafo')) {
+
+            $unique_id = preg_replace('/[^0-9]/i', '', $search);
+            $trafo = Trafo::query()->where('unique_id', '=', $unique_id)->first();
+
+            if (!is_null($trafo)) {
+                return redirect()->action([TrafoController::class, 'trafoEdit'], ['id' => $trafo->id]);
+            } else {
+                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
             }
         } else {
-
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted equipment is invalid."]);
+            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted value is invalid."]);
         }
     }
 }

@@ -19,7 +19,7 @@
     {{-- FILTER FUNCLOC --}}
     <div class="mb-3">
         <label for="filter" class="form-label fw-semibold">Filter</label>
-        <input type="text" class="form-control" id="filter" name="filter" placeholder="Filter by funcloc">
+        <input value="{{ null != $filter ? $filter : ''}}" type="text" class="form-control" id="filter" name="filter" placeholder="Filter by funcloc">
         <div class="form-text">The total registered funcloc is {{ count($funclocService->getAll()) }} records.</div>
     </div>
 
@@ -28,7 +28,7 @@
         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
             <div class="btn-group me-2" role="group" aria-label="First group">
                 @for ($i = 1; $i <= $paginate->lastPage(); $i++)
-                    <button onclick="location.href = '/funclocs/{{ $i }}'" type="button" @class(['btn', 'btn-primary' , ($i==$paginate->currentPage()) ? 'active' : ''])>
+                    <button onclick="return pageClick(<?php echo $i ?>)" type="button" @class(['btn', 'btn-sm' , 'btn-outline-secondary' , ($i==$paginate->currentPage()) ? 'active' : ''])>
                         {{ $i }}
                     </button>
                     @endfor
@@ -139,6 +139,11 @@
     window.onload = () => {
         doFilter();
         doHideColumnOnPhone()
+    }
+</script>
+<script>
+    function pageClick(page) {
+        window.location = '/funclocs' + '/' + page + '/' + filter.value;
     }
 </script>
 @include('utility.script.tooltip')

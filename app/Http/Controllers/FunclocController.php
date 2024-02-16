@@ -21,14 +21,17 @@ class FunclocController extends Controller
         $this->funclocService = $funclocService;
     }
 
-    public function funclocs(?string $page = '1')
+    public function funclocs(?string $page = '1', ?string $filter = null)
     {
-        $paginate = DB::table('funclocs')->paginate(perPage: 1000, page: $page);
+        $paginate = DB::table('funclocs')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(perPage: 1000, page: $page);
 
         return response()->view('maintenance.funcloc.funcloc', [
             'title' => 'Table funcloc',
             'funclocService' => $this->funclocService,
             'paginate' => $paginate,
+            'filter' => $filter,
         ]);
     }
 

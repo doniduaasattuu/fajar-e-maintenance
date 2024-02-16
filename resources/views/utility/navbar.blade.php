@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form action="/search" method="post" class="my-4 mb-xl-0 my-xl-0 d-flex" role="search">
                 @csrf
-                <input id="search_equipment" name="search_equipment" oninput="return toupper(this)" class="search_input form-control me-2" type="texy" maxlength="9" placeholder="Search by Equipment" aria-label="Search">
+                <input id="search_equipment" name="search_equipment" oninput="return toupper(this)" class="search_input form-control me-2" type="texy" maxlength="9" placeholder="Equipment name or id" aria-label="Search">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
