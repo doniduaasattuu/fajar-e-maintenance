@@ -8,6 +8,7 @@ use App\Services\DocumentService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -32,11 +33,6 @@ class DocumentController extends Controller
         ]);
     }
 
-    public function renderDocument(string $attachment)
-    {
-        return response()->file('/storage/documents/' . $attachment);
-    }
-
     public function documentDelete(string $id)
     {
         $document = Document::query()->find($id);
@@ -50,6 +46,7 @@ class DocumentController extends Controller
 
             $document->delete();
 
+            Log::info('document with title "' . $document->title . '" was deleted', ['admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'Document successfully deleted.']);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found.']);
@@ -95,9 +92,12 @@ class DocumentController extends Controller
                     $this->documentService->insert($validated);
                 }
             } catch (Exception $error) {
+                Log::error('document inserted error', ['user' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
 
+
+            Log::info('document inserted with title "' . $validated['title'] . '" success', ['user' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'The document successfully saved.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -149,8 +149,11 @@ class DocumentController extends Controller
                 } else {
                     $this->documentService->update($validated);
                 }
+
+                Log::info('document with title "' . $validated['title'] . '" was updated', ['user' => session('user')]);
                 return redirect()->back()->with('alert', ['message' => 'The document successfully updated.', 'variant' => 'alert-success'])->withInput();
             } catch (Exception $error) {
+                Log::error('document updated error', ['user' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
         } else {

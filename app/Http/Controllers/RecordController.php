@@ -16,9 +16,11 @@ use App\Services\TrafoService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
+use PgSql\Lob;
 
 class RecordController extends Controller
 {
@@ -147,14 +149,17 @@ class RecordController extends Controller
 
                     // SAVE RECORD
                     $this->motorRecordService->save($validated_record);
+                    Log::info('record motor ' . $validated['motor'] . ' was inserted', ['checker' => session('user')]);
 
                     // SAVE FINDING
                     if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
                         if (!is_null($image) && $image->isValid()) {
 
+                            Log::info('finding of ' . $validated['motor'] . ' with description and image also inserted', ['checker' => session('user')]);
                             $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                             $this->findingService->insertWithImage($image, $validated_finding);
                         } else {
+                            Log::info('finding of ' . $validated['motor'] . ' with description and without image also inserted', ['checker' => session('user')]);
                             $this->findingService->insert($validated_finding);
                         }
                     }
@@ -162,6 +167,7 @@ class RecordController extends Controller
 
                     // UPDATE RECORD
                     $this->motorRecordService->update($record, $validated_record);
+                    Log::info('record motor ' . $record['motor'] . ' was updated', ['checker' => session('user')]);
 
                     // UPDATE FINDING
                     $finding = Finding::query()->find($validated['id']);
@@ -171,17 +177,21 @@ class RecordController extends Controller
                         if (is_null($finding)) {
                             if (!is_null($image) && $image->isValid()) {
 
+                                Log::info('finding with description and image inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
                                 $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                                 $this->findingService->insertWithImage($image, $validated_finding);
                             } else {
+                                Log::info('finding with description inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
                                 $this->findingService->insert($validated_finding);
                             }
                         } else {
                             if (!is_null($image) && $image->isValid()) {
 
+                                Log::info('finding motor record ' . $validated['motor'] . ' with image updated', ['checker' => session('user')]);
                                 $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                                 $this->findingService->updateWithImage($image, $validated_finding);
                             } else {
+                                Log::info('finding motor record ' . $validated['motor'] . ' with description updated', ['checker' => session('user')]);
                                 $this->findingService->update($validated_finding);
                             }
                         }
@@ -190,6 +200,7 @@ class RecordController extends Controller
                         if (!is_null($finding)) {
                             $this->findingService->deleteImage($finding);
                             $finding->delete();
+                            Log::info('finding was deleted on motor record ' . $validated['trafo']);
                         }
                     }
 
@@ -281,14 +292,17 @@ class RecordController extends Controller
 
                     // SAVE RECORD
                     $this->trafoRecordService->save($validated_record);
+                    Log::info('record trafo ' . $validated['trafo'] . ' was inserted', ['checker' => session('user')]);
 
                     // SAVE FINDING
                     if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
                         if (!is_null($image) && $image->isValid()) {
 
+                            Log::info('finding of ' . $validated['trafo'] . ' with description and image also inserted', ['checker' => session('user')]);
                             $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                             $this->findingService->insertWithImage($image, $validated_finding);
                         } else {
+                            Log::info('finding of ' . $validated['trafo'] . ' with description and without image also inserted', ['checker' => session('user')]);
                             $this->findingService->insert($validated_finding);
                         }
                     }
@@ -296,6 +310,7 @@ class RecordController extends Controller
 
                     // UPDATE RECORD
                     $this->trafoRecordService->update($record, $validated_record);
+                    Log::info('record trafo ' . $record['trafo'] . ' was updated', ['checker' => session('user')]);
 
                     // UPDATE FINDING
                     $finding = Finding::query()->find($validated['id']);
@@ -305,17 +320,21 @@ class RecordController extends Controller
                         if (is_null($finding)) {
                             if (!is_null($image) && $image->isValid()) {
 
+                                Log::info('finding with description and image inserted on ' . $validated['trafo'] . ' update record', ['checker' => session('user')]);
                                 $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                                 $this->findingService->insertWithImage($image, $validated_finding);
                             } else {
+                                Log::info('finding with description inserted on ' . $validated['trafo'] . ' update record', ['checker' => session('user')]);
                                 $this->findingService->insert($validated_finding);
                             }
                         } else {
                             if (!is_null($image) && $image->isValid()) {
 
+                                Log::info('finding trafo record ' . $validated['trafo'] . ' with image updated', ['checker' => session('user')]);
                                 $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                                 $this->findingService->updateWithImage($image, $validated_finding);
                             } else {
+                                Log::info('finding trafo record ' . $validated['trafo'] . ' with description updated', ['checker' => session('user')]);
                                 $this->findingService->update($validated_finding);
                             }
                         }
@@ -324,6 +343,7 @@ class RecordController extends Controller
                         if (!is_null($finding)) {
                             $this->findingService->deleteImage($finding);
                             $finding->delete();
+                            Log::info('finding was deleted on trafo record ' . $validated['trafo']);
                         }
                     }
 
