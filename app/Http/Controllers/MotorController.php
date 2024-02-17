@@ -10,6 +10,7 @@ use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -134,9 +135,11 @@ class MotorController extends Controller
                 $this->motorService->updateMotor($validated_motor);
                 $this->motorDetailService->updateMotorDetail($validated_motor_details);
             } catch (Exception $error) {
+                Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
+            Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'The motor successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -210,9 +213,11 @@ class MotorController extends Controller
                 $this->motorService->register($validated_motor);
                 $this->motorDetailService->register($validated_motor_details);
             } catch (Exception $error) {
+                Log::error('motor registration error', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
+            Log::info('motor register success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'The motor successfully registered.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -262,10 +267,11 @@ class MotorController extends Controller
             try {
                 $this->motorService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
-
+                Log::error('motor install dismantle error', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->with('message', ['header' => '[500] Internal Server Error', 'message' => $error->getMessage()]);
             }
 
+            Log::info('motor install dismantle success', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "The motor was successfully swapped."]);
         } else {
             return redirect()->back()->with('message', ['header' => '[403] Forbidden', 'message' => $validator->errors()->first()]);

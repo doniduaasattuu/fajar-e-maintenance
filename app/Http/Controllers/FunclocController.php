@@ -8,6 +8,7 @@ use App\Services\FunclocService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -67,9 +68,11 @@ class FunclocController extends Controller
             try {
                 $this->funclocService->updateFuncloc($validated);
             } catch (Exception $error) {
+                Log::error('funcloc tries to updated', ['funcloc' => $validated['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
+            Log::info('funcloc updated success', ['funcloc' => $validated['id'], 'admin' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'The funcloc successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -101,21 +104,14 @@ class FunclocController extends Controller
             try {
                 $this->funclocService->register($validated);
             } catch (Exception $error) {
+                Log::error('funcloc registration error', ['funcloc' => $validated['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
+            Log::info('funcloc register success', ['funcloc' => $validated['id'], 'admin' => session('user')]);
             return redirect()->back()->with('alert', ['message' => 'The funcloc successfully registered.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
-        }
-    }
-
-    public function funclocStatus(Request $request)
-    {
-        $funcloc = Funcloc::query()->find($request->input('id'));
-
-        if (is_null($funcloc)) {
-            return Session::flash('funcloc-status', 'Funcloc not registered');
         }
     }
 }

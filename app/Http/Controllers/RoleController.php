@@ -32,7 +32,7 @@ class RoleController extends Controller
             Log::error('user tries to unassign db_admin', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
             return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
         }
-        Log::info("user unassigned $nik from db_admin", ['nik' => $nik, 'admin' => session('user')]);
+        Log::info("user removed $nik from db_admin", ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
         return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from database administrator."]);
     }
 
@@ -66,8 +66,7 @@ class RoleController extends Controller
             Log::error("user tries to unnasign $nik from admin", ['admin' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
         }
-
-        Log::info('user removed from admin', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
+        Log::info("user removed $nik from admin", ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
         return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from administrator."]);
     }
 
