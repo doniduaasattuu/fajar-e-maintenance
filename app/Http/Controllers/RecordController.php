@@ -200,7 +200,7 @@ class RecordController extends Controller
                         if (!is_null($finding)) {
                             $this->findingService->deleteImage($finding);
                             $finding->delete();
-                            Log::info('finding was deleted on motor record ' . $validated['trafo']);
+                            Log::info('finding was deleted on motor record ' . $validated['motor']);
                         }
                     }
 

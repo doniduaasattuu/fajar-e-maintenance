@@ -14,6 +14,7 @@ use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -100,10 +101,13 @@ class FindingController extends Controller
                 if (!is_null($image) && $image->isValid()) {
                     $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
                     $this->findingService->insertWithImage($image, $validated);
+                    Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' with image was inserted', ['user' => session('user')]);
                 } else {
+                    Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' without image was inserted', ['user' => session('user')]);
                     $this->findingService->insert($validated);
                 }
             } catch (Exception $error) {
+                Log::error('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'], ['user' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
 
@@ -156,11 +160,14 @@ class FindingController extends Controller
                 if (!is_null($image) && $image->isValid()) {
                     $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
                     $this->findingService->updateWithImage($image, $validated);
+                    Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' was updated with image', ['user' => session('user')]);
                 } else {
+                    Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' was updated without image', ['user' => session('user')]);
                     $this->findingService->update($validated);
                 }
                 return redirect()->back()->with('alert', ['message' => 'The finding successfully updated.', 'variant' => 'alert-success'])->withInput();
             } catch (Exception $error) {
+                Log::error('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' error', ['user' => session('user'), 'message' => $error->getMessage()]);
                 return redirect()->back()->withErrors($error->getMessage())->withInput();
             }
         } else {
@@ -179,7 +186,7 @@ class FindingController extends Controller
             }
 
             $finding->delete();
-
+            Log::info('finding of ' . (!is_null($finding['equipment']) ? $finding['equipment'] : $finding['id']) . ' ' . $finding['area'] . ' was deleted', ['user' => session('user')]);
             return redirect()->back()->with('message', ['header' => '[204] Success!', 'message' => 'Finding successfully deleted!.']);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Finding not found!.']);
