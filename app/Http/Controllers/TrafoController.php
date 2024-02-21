@@ -15,7 +15,6 @@ use Illuminate\Validation\Rule;
 
 class TrafoController extends Controller
 {
-    use Utility;
     private TrafoService $trafoService;
     private FunclocService $funclocService;
     private TrafoDetailService $trafoDetailService;

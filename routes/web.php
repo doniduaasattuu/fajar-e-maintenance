@@ -36,6 +36,10 @@ Route::middleware('member')->group(function () {
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
 
+    // FORMS
+    Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
+    Route::post("/populating-forms", [HomeController::class, 'populating']);
+
     // DOCUMENTS
     Route::get('/documents', [DocumentController::class, 'documents']);
     Route::get('/documents/{attachment}', [DocumentController::class, 'renderDocument']);

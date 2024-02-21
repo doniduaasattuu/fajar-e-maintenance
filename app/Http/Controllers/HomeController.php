@@ -7,6 +7,7 @@ use App\Models\MotorRecord;
 use App\Models\Trafo;
 use App\Models\User;
 use App\Services\MotorService;
+use App\Services\TrafoService;
 use App\Services\UserService;
 use App\Traits\Utility;
 use Illuminate\Http\RedirectResponse;
@@ -18,11 +19,13 @@ class HomeController extends Controller
     use Utility;
     private UserService $userService;
     private MotorService $motorService;
+    private TrafoService $trafoService;
 
-    public function __construct(UserService $userService, MotorService $motorService)
+    public function __construct(UserService $userService, MotorService $motorService, TrafoService $trafoService)
     {
         $this->userService = $userService;
         $this->motorService = $motorService;
+        $this->trafoService = $trafoService;
     }
 
     public function home()
@@ -113,5 +116,39 @@ class HomeController extends Controller
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted value is invalid."]);
         }
+    }
+
+    public function populatingForms()
+    {
+
+        return response()->view('maintenance.populating-forms', [
+            'title' => 'Populating forms',
+        ]);
+    }
+
+    public function populating(Request $request)
+    {
+        $equipments = $request->input("equipments");
+        $equipments = explode(",", $equipments);
+
+        $result = [];
+        foreach ($equipments as $equipment) {
+            if (in_array($this->getEquipmentCode($equipment), $this->motorService->motorCodes())) {
+                $motor = Motor::query()->find($equipment);
+                if ($motor) {
+                    array_push($result, "/checking-form/Fajar-MotorList" . $motor->unique_id);
+                }
+            } else {
+                $trafo = Trafo::query()->find($equipment);
+                if ($trafo) {
+                    array_push($result, "/checking-form/Fajar-TrafoList" . $trafo->unique_id);
+                }
+            };
+        }
+
+        return response()->view('maintenance.populating-forms', [
+            'title' => 'Populating forms',
+            'links' => $result,
+        ]);
     }
 }

@@ -24,8 +24,6 @@ use PgSql\Lob;
 
 class RecordController extends Controller
 {
-    use Utility;
-
     private MotorService $motorService;
     private MotorRecordService $motorRecordService;
     private FindingService $findingService;

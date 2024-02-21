@@ -16,8 +16,6 @@ use Illuminate\Validation\Rule;
 
 class MotorController extends Controller
 {
-    use Utility;
-
     private MotorService $motorService;
     private FunclocService $funclocService;
     private MotorDetailService $motorDetailService;

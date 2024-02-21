@@ -23,7 +23,6 @@ use Illuminate\Validation\Rules\File;
 class FindingController extends Controller
 {
 
-    use Utility;
     private FindingService $findingService;
     private FunclocService $funclocService;
     private MotorService $motorService;

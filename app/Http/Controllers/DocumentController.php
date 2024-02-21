@@ -16,7 +16,6 @@ use Illuminate\Validation\Rules\File;
 
 class DocumentController extends Controller
 {
-    use Utility;
     private DocumentService $documentService;
     private $allowed_attachment = ['png', 'jpeg', 'jpg', 'xlsx', 'xls', 'ods', 'doc', 'docx', 'pdf'];
 
