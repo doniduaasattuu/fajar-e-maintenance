@@ -11,6 +11,7 @@ use App\Services\RoleService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -77,42 +78,61 @@ class UserController extends Controller
         ]);
     }
 
+    // public function doLogin(Request $request)
+    // {
+    //     $rules = [
+    //         'nik' => ['required', 'numeric'],
+    //         'password' => ['required'],
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->passes()) {
+
+    //         $validated = $validator->validated();
+
+    //         if ($this->userService->login($validated)) {
+
+    //             $user = User::query()->find($validated['nik']);
+    //             session(["nik" => $user->nik]);
+    //             session(["user" => $user->fullname]);
+    //             Log::info('user login', ['nik' => $user->nik, 'user' => $user->fullname]);
+
+    //             return redirect()->route('home');
+    //         } else {
+
+    //             Log::info('user login failed', ['nik' => $validated['nik'], 'password' => $validated['password']]);
+    //             $validator->errors()->add('nik', 'The nik or password is wrong.');
+    //             return redirect()->back()->withErrors($validator)->withInput();
+    //         }
+    //     } else {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    // }
+
     public function doLogin(Request $request)
     {
-        $rules = [
-            'nik' => ['required', 'numeric'],
+        $credentials = $request->validate([
+            'nik' => ['required'],
             'password' => ['required'],
-        ];
+        ]);
 
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->passes()) {
-
-            $validated = $validator->validated();
-
-            if ($this->userService->login($validated)) {
-
-                $user = User::query()->find($validated['nik']);
-                session(["nik" => $user->nik]);
-                session(["user" => $user->fullname]);
-                Log::info('user login', ['nik' => $user->nik, 'user' => $user->fullname]);
-
-                return redirect()->route('home');
-            } else {
-
-                Log::info('user login failed', ['nik' => $validated['nik'], 'password' => $validated['password']]);
-                $validator->errors()->add('nik', 'The nik or password is wrong.');
-                return redirect()->back()->withErrors($validator)->withInput();
-            }
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended();
         }
+
+        return back()->withErrors([
+            'nik' => 'The nik or password is wrong.',
+        ])->onlyInput('nik');
     }
 
     public function logout(Request $request)
     {
-        Log::info('user logout', ['nik' => session('nik'), 'user' => session('user')]);
-        $request->session()->flush();
+        Log::info('user logout', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('login');
     }
 

@@ -6,6 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -127,5 +128,25 @@ class UserTest extends TestCase
         self::assertNotNull($user->printed_name);
         self::assertEquals('R. Much', $user->printed_name);
         Log::info($user->printed_name);
+    }
+
+    public function testAuthUser()
+    {
+        User::create([
+            'nik' => "55000154",
+            'password' => bcrypt("rahasia"),
+            'fullname' => "Doni Darmawan",
+            'department' => "EI2",
+            'phone_number' => "08983456945",
+        ]);
+
+        $user = Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ], true);
+
+        self::assertTrue($user);
+        self::assertTrue(Auth::check());
+        self::assertEquals(Auth::user()->department, 'EI2');
     }
 }

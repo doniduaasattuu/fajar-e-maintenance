@@ -15,6 +15,14 @@ class User extends Authenticatable
     public $incrementing = false;
     public $timestamps = true;
 
+    protected $fillable = [
+        'nik',
+        'password',
+        'fullname',
+        'department',
+        'phone_number',
+    ];
+
     public function roles(): HasMany
     {
         return $this->hasMany(Role::class, 'nik', 'nik');

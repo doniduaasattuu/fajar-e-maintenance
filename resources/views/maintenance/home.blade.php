@@ -1,8 +1,10 @@
-@include('utility.prefix')
+@extends('app')
+
+@section('content')
 
 <div class="my-4">
     <div class="text-center mx-auto" style="max-width: 600px;">
-        <p class="mb-1">Hello {{ session('user') }}, welcome to</p>
+        <p class="mb-1">Hello {{ Auth::user()->fullname }}, welcome to</p>
         <h2 style="font-weight: 700;">Fajar E-Maintenance</h2>
         <p class="mb-3">We make daily inspection checks easier</p>
     </div>
@@ -96,5 +98,8 @@
     </div>
 </div>
 
-@include('utility.script.focustosearch')
-@include('utility.suffix')
+<script>
+    say()
+</script>
+
+@endsection

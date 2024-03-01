@@ -1,7 +1,7 @@
 <!-- NAVBAR -->
 <nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm" style="min-width: 330px;">
     <div class="container-lg">
-        <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">Fajar E-Maintenance</a>
+        <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">{{ env('APP_NAME', 'Fajar E-Maintenance') }}</a>
         <button class="navbar-dark navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -12,19 +12,6 @@
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-
-                {{-- SCANNER --}}
-                <!-- <li class="nav-item me-2 me-md-3">
-                    <a class="text-white nav-link" aria-current="page" href="/scanner">
-                        <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
-                            <path d="M2 2h2v2H2V2Z" />
-                            <path d="M6 0v6H0V0h6ZM5 1H1v4h4V1ZM4 12H2v2h2v-2Z" />
-                            <path d="M6 10v6H0v-6h6Zm-5 1v4h4v-4H1Zm11-9h2v2h-2V2Z" />
-                            <path d="M10 0v6h6V0h-6Zm5 1v4h-4V1h4ZM8 1V0h1v2H8v2H7V1h1Zm0 5V4h1v2H8ZM6 8V7h1V6h1v2h1V7h5v1h-4v1H7V8H6Zm0 0v1H2V8H1v1H0V7h3v1h3Zm10 1h-1V7h1v2Zm-1 0h-1v2h2v-1h-1V9Zm-4 0h2v1h-1v1h-1V9Zm2 3v-1h-1v1h-1v1H9v1h3v-2h1Zm0 0h3v1h-2v1h-1v-2Zm-4-1v1h1v-2H7v1h2Z" />
-                            <path d="M7 12h1v3h4v1H7v-4Zm9 2v2h-3v-1h2v-1h1Z" />
-                        </svg>
-                        Scanner</a>
-                </li> -->
 
                 {{-- TOOLS --}}
                 <li class="nav-item dropdown me-2 me-md-3">
@@ -130,7 +117,7 @@
                             </a>
                         </li>
                         @inject('userService', 'App\Services\UserService')
-                        @if (isset($userService) && (session('nik') != null) && $userService->isAdmin(session('nik')))
+                        @if (isset($userService) && (Auth::user()->nik != null) && $userService->isAdmin(Auth::user()->nik))
                         <li>
                             <a class="border-secondary border-bottom dropdown-item" href="/users">
                                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
@@ -150,7 +137,7 @@
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
                             <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z" />
                         </svg>
-                        {{ explode(' ', session('user'))[0] }}
+                        {{ explode(' ', Auth::user()->fullname)[0] }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li>
