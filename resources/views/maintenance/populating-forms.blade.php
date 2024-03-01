@@ -11,7 +11,7 @@
 
             <div class="mb-3">
                 <label for="equipments" class="form-label">Equipments</label>
-                <input type="text" id="equipments" name="equipments" class="form-control" aria-describedby="equipment">
+                <input type="text" id="equipments" name="equipments" class="form-control" placeholder="Separate them with commas" aria-describedby="equipment">
                 @isset($links)
                 @if (count($links) < 1) <div class="form-text text-danger">No equipment found.
             </div>
