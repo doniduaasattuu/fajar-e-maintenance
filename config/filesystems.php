@@ -60,6 +60,14 @@ return [
             'throw' => false,
         ],
 
+        'js' => [
+            'driver' => 'local',
+            'root' => resource_path('js'),
+            'url' => env('APP_URL') . '/js',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

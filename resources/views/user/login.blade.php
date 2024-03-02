@@ -1,14 +1,5 @@
 @extends('app')
 
-@section('scripts')
-<script type="text/javascript" src="/storage/js/say-hello.js">
-    let nik = document.getElementById("nik");
-    nik.onfocus = () => {
-        sayHello('Doni')
-    }
-</script>
-@endsection
-
 @section('content')
 <div class="container d-flex vh-100">
     <div class="my-auto align-items-center py-4 mx-auto justify-content-center" style="min-width: 300px;">
@@ -24,7 +15,7 @@
             {{-- NIK --}}
             <div class="mb-3">
                 <label for="nik" class="form-label">NIK</label>
-                <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return onlynumber(event, 48, 57)" maxlength="8" class="form-control" aria-describedby="nik">
+                <input value="{{ old('nik') }}" id="nik" name="nik" type="text" onkeypress="return JS.onlynumber(event, 48, 57)" maxlength="8" class="form-control" aria-describedby="nik">
             </div>
 
             {{-- PASSWORD --}}
@@ -38,6 +29,5 @@
             <div id="emailHelp" class="form-text">Don&#039;t have an account ?, Register <a class="text-decoration-none" href="/registration">here</a></div>
         </form>
     </div>
-
 </div>
 @endsection

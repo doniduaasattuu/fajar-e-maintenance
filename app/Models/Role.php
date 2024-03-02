@@ -12,12 +12,12 @@ class Role extends Model
 {
     protected $table = "roles";
     protected $primaryKey = "id";
-    protected $keyType = "string";
+    protected $keyType = "integer";
     public $incrementing = true;
     public $timestamps = true;
 
-    public function User(): HasOne
-    {
-        return $this->hasOne(User::class, 'nik', 'nik');
-    }
+    // public function User(): HasOne
+    // {
+    //     return $this->hasOne(User::class, 'nik', 'nik');
+    // }
 }

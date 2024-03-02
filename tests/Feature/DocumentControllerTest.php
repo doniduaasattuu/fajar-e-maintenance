@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Document;
+use App\Models\User;
 use App\Services\DocumentService;
 use App\Services\Impl\DocumentServiceImpl;
 use Database\Seeders\DatabaseSeeder;
@@ -16,6 +17,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -32,11 +34,11 @@ class DocumentControllerTest extends TestCase
 
     public function testGetDocumentsEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        $this->seed([UserSeeder::class, RoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
             ->get('/documents')
             ->assertSeeText('Documents')
             ->assertSeeText('New document')
@@ -60,10 +62,10 @@ class DocumentControllerTest extends TestCase
     public function testGetDocumentsAuthorized()
     {
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/documents')
             ->assertSeeText('Documents')
             ->assertSeeText('New document')
@@ -95,10 +97,10 @@ class DocumentControllerTest extends TestCase
     public function testGetNewDocumentEmployee()
     {
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-registration')
             ->assertSeeText('New document')
             ->assertSeeText('Table')
@@ -122,10 +124,10 @@ class DocumentControllerTest extends TestCase
     public function testGetNewDocumentAuthorized()
     {
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-registration')
             ->assertSeeText('New document')
             ->assertSeeText('Table')
@@ -173,10 +175,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.png');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -202,10 +204,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -227,10 +229,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -253,10 +255,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -279,10 +281,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -306,10 +308,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -332,10 +334,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -358,10 +360,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -386,10 +388,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -413,10 +415,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -440,10 +442,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -466,10 +468,10 @@ class DocumentControllerTest extends TestCase
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -492,10 +494,10 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $id = uniqid();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -519,10 +521,10 @@ class DocumentControllerTest extends TestCase
 
         $attachment = UploadedFile::fake()->create('attachment', 500, 'cdr');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -546,10 +548,10 @@ class DocumentControllerTest extends TestCase
 
         $attachment = UploadedFile::fake()->create('attachment', 26000, 'pdf');
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/document-registration');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
 
         $this
             ->followingRedirects()
@@ -585,10 +587,10 @@ class DocumentControllerTest extends TestCase
         self::assertNotNull($documents);
         self::assertTrue(count($documents) > 10);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id)
             ->assertSeeText('Edit document')
             ->assertSeeText('Table')
@@ -612,10 +614,10 @@ class DocumentControllerTest extends TestCase
         self::assertNotNull($documents);
         self::assertTrue(count($documents) > 10);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id)
             ->assertSeeText('Edit document')
             ->assertSeeText('Table')
@@ -638,10 +640,10 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -671,10 +673,10 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -699,10 +701,10 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -727,10 +729,10 @@ class DocumentControllerTest extends TestCase
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $documents->first()->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -757,10 +759,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -786,10 +788,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -815,10 +817,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -845,10 +847,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -874,10 +876,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -903,10 +905,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -933,10 +935,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -963,10 +965,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -992,10 +994,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -1021,10 +1023,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.png');
@@ -1051,10 +1053,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $this
@@ -1078,10 +1080,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->image('attachment.gif');
@@ -1107,10 +1109,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->get('/document-edit/' . $document->id);
 
         $attachment = UploadedFile::fake()->create('attachment', 26000, 'pdf');
@@ -1147,10 +1149,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
             ->followingRedirects()
             ->get('/document-delete/' . $document->id)
             ->assertSeeText('You are not allowed to perform this operation!.');
@@ -1162,10 +1164,10 @@ class DocumentControllerTest extends TestCase
         $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
         $document = $documents->first();
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this
             ->followingRedirects()
             ->get('/document-delete/' . $document->id)
             ->assertSeeText('Document successfully deleted.');
@@ -1178,10 +1180,10 @@ class DocumentControllerTest extends TestCase
     {
         $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/documents');
+        $this
             ->followingRedirects()
             ->get('/document-delete/' . uniqid())
             ->assertSeeText('Document not found.');

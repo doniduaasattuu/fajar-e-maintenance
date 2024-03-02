@@ -16,11 +16,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    @vite('resources/js/app.js')
     <title>@yield('title', env('APP_NAME', 'Fajar E-Maintenance'))</title>
 </head>
 
 <body>
-
     @if (
     request()->path() != 'login' &&
     request()->path() != 'registration'
@@ -28,9 +28,10 @@
     @include('utility.navbar')
     @endif
 
+    @include('utility.message')
+
     @yield('content')
 
-    @yield('scripts')
 </body>
 
 </html>
