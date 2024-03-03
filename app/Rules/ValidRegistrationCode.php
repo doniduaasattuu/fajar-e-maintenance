@@ -8,12 +8,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class ValidRegistrationCode implements ValidationRule
 {
-    private UserService $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
     /**
      * Run the validation rule.
      *
@@ -21,7 +15,7 @@ class ValidRegistrationCode implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $registration_code = $this->userService->registrationCode;
+        $registration_code = env('REGISTRATION_CODE');
         $attribute = str_replace('_', ' ', $attribute);
 
         if ($value !== $registration_code) {

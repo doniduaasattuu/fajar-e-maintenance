@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
@@ -25,57 +26,88 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
-    public function registration()
+    public function login()
     {
-        return response()->view('user.registration', [
-            'title' => 'Registration',
-            'userService' => $this->userService,
-            'action' => '/registration',
+        return view('auth.login', [
+            'title' => 'Login',
         ]);
     }
+
+    public function registration()
+    {
+        return view('auth.registration', [
+            'title' => 'Registration'
+        ]);
+    }
+
+    // public function registration()
+    // {
+    //     return response()->view('user.registration', [
+    //         'title' => 'Registration',
+    //         'userService' => $this->userService,
+    //         'action' => '/registration',
+    //     ]);
+    // }
+
+    // public function register(Request $request)
+    // {
+    //     $rules = [
+    //         'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
+    //         'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+    //         'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
+    //         'department' => ['required', Rule::in($this->userService->departments())],
+    //         'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+    //         'registration_code' => ['required', new ValidRegistrationCode($this->userService)],
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->passes()) {
+
+    //         $validated = $validator->safe()->except(['registration_code']);
+
+    //         try {
+    //             $this->userService->register($validated);
+    //         } catch (Exception $error) {
+    //             Log::error('user registration', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
+    //             return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+    //         }
+
+    //         if (!is_null(session('nik'))) {
+    //             Log::info('user ' . $validated['nik'] . ' registered by admin', ['user' => $validated['fullname'], 'admin' => session('user')]);
+    //             return redirect()->back()->with('alert', ['message' => 'User account successfully registered.', 'variant' => 'alert-success']);
+    //         } else {
+    //             Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
+    //             return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
+    //         }
+    //     } else {
+    //         Log::info('user try registration', ['nik' => $request->input('nik'), 'ip' => $request->ip()]);
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    // }
 
     public function register(Request $request)
     {
-        $rules = [
+        $validated = $request->validate([
             'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
             'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
-            'department' => ['required', Rule::in($this->userService->departments())],
+            'department' => ['required', Rule::in(User::$departments)],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
-            'registration_code' => ['required', new ValidRegistrationCode($this->userService)],
-        ];
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->passes()) {
-
-            $validated = $validator->safe()->except(['registration_code']);
-
-            try {
-                $this->userService->register($validated);
-            } catch (Exception $error) {
-                Log::error('user registration', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
-            }
-
-            if (!is_null(session('nik'))) {
-                Log::info('user ' . $validated['nik'] . ' registered by admin', ['user' => $validated['fullname'], 'admin' => session('user')]);
-                return redirect()->back()->with('alert', ['message' => 'User account successfully registered.', 'variant' => 'alert-success']);
-            } else {
-                Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
-                return redirect('login')->with('alert', ['message' => 'Your account successfully registered.', 'variant' => 'alert-success']);
-            }
-        } else {
-            Log::info('user try registration', ['nik' => $request->input('nik'), 'ip' => $request->ip()]);
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-    }
-
-    public function login()
-    {
-        return response()->view('user.login', [
-            'title' => 'Login'
+            'registration_code' => ['required', new ValidRegistrationCode()],
         ]);
+
+        User::insert([
+            'nik' => $request->nik,
+            'password' => bcrypt($request->password),
+            'fullname' => $request->fullname,
+            'department' => $request->department,
+            'phone_number' => $request->phone_number,
+            'created_at' => Carbon::now()->toDateTimeString(),
+        ]);
+
+        Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
+        return redirect('login')->with('alert', new Alert('Your account successfully registered.', 'alert-success'));
     }
 
     // public function doLogin(Request $request)
@@ -113,7 +145,7 @@ class UserController extends Controller
     public function doLogin(Request $request)
     {
         $credentials = $request->validate([
-            'nik' => ['required'],
+            'nik' => ['required', 'numeric'],
             'password' => ['required'],
         ]);
 
@@ -138,43 +170,69 @@ class UserController extends Controller
 
     public function profile()
     {
-        return response()->view('user.profile', [
+        return view('auth.profile', [
             'title' => 'My profile',
             'userService' => $this->userService,
         ]);
     }
 
+    // public function updateProfile(Request $request)
+    // {
+    //     $rules = [
+    //         'nik' => ['required', 'digits:8', 'numeric', 'same:Auth::user()->nik', Rule::in($this->userService->registeredNiks())],
+    //         'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
+    //         'department' => ['required', Rule::in(User::$departments)],
+    //         'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+    //         'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+    //         'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->passes()) {
+
+    //         $confirmed_password = $validator->validated()['new_password_confirmation'];
+    //         $validated = $validator->safe()->except(['new_password', 'new_password_confirmation']);
+    //         $validated['password'] = $confirmed_password;
+
+    //         try {
+    //             $this->userService->updateProfile($validated);
+    //         } catch (Exception $error) {
+    //             Log::error('user update', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
+    //             return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+    //         }
+
+    //         Log::info('user updated', ['nik' => session('nik'), 'user' => session('user')]);
+    //         return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
+    //     } else {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    // }
+
     public function updateProfile(Request $request)
     {
-        $rules = [
-            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), Rule::in($this->userService->registeredNiks())],
+        $request->merge(['current_nik' => Auth::user()->nik]);
+
+        $validated = $request->validate([
+            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', Rule::in($this->userService->registeredNiks())],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
-            'department' => ['required', Rule::in($this->userService->departments())],
+            'department' => ['required', Rule::in(User::$departments)],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-        ];
+        ]);
 
-        $validator = Validator::make($request->all(), $rules);
+        $user = User::find($validated['nik']);
+        $user->nik = $validated['nik'];
+        $user->password = bcrypt($validated['new_password']);
+        $user->fullname = $validated['fullname'];
+        $user->department = $validated['department'];
+        $user->phone_number = $validated['phone_number'];
+        // $user->updated_at = Carbon::now()->toDateTimeString();
+        $user->update();
 
-        if ($validator->passes()) {
-
-            $confirmed_password = $validator->validated()['new_password_confirmation'];
-            $validated = $validator->safe()->except(['new_password', 'new_password_confirmation']);
-            $validated['password'] = $confirmed_password;
-
-            try {
-                $this->userService->updateProfile($validated);
-            } catch (Exception $error) {
-                Log::error('user update', ['user' => $validated['fullname'], 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
-            }
-
-            Log::info('user updated', ['nik' => session('nik'), 'user' => session('user')]);
-            return redirect()->back()->with('alert', ['message' => 'Your profile successfully updated.', 'variant' => 'alert-success']);
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+        Log::info('user updated', ['nik' => session('nik'), 'user' => session('user')]);
+        return redirect()->back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
     }
 
     public function users()

@@ -48,6 +48,7 @@ Route::middleware('member')->group(function () {
     Route::get('/document-registration', [DocumentController::class, 'documentRegistration']);
     Route::post('/document-register', [DocumentController::class, 'documentRegister']);
 
+    // USER
     Route::get('/', [HomeController::class, 'home'])->name('home');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
@@ -125,7 +126,7 @@ Route::middleware('member')->group(function () {
         Route::post('/trafo-install-dismantle', [TrafoController::class, 'doTrafoInstallDismantle']);
     });
 
-    Route::middleware('role:admin')->group(function () {
+    Route::middleware('role')->group(function () {
         Route::get('/users', [UserController::class, 'users']);
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
         Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);

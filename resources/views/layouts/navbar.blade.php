@@ -1,5 +1,5 @@
 <!-- NAVBAR -->
-<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm" style="min-width: 330px;">
+<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-lg border-bottom border-1" style="min-width: 330px;">
     <div class="container-lg">
         <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">{{ env('APP_NAME', 'Fajar E-Maintenance') }}</a>
         <button class="navbar-dark navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,7 +8,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <form action="/search" method="post" class="my-4 mb-xl-0 my-xl-0 d-flex" role="search">
                 @csrf
-                <input id="search_equipment" name="search_equipment" oninput="return toupper(this)" class="search_input form-control me-2" type="texy" maxlength="9" placeholder="Equipment name or id" aria-label="Search">
+                <x-input-text id="search_equipment" name="search_equipment" class="me-2" oninput="return JS.toupper(this)" maxlength="9" placeholder="Equipment name or id"></x-input-text>
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -22,6 +22,8 @@
                         Tools
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
+
+                        {{-- SCANNER --}}
                         <li>
                             <a class="border-secondary border-bottom border-top dropdown-item" aria-current="page" href="/scanner">
                                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code" viewBox="0 0 16 16">
@@ -34,6 +36,8 @@
                                 Scanner
                             </a>
                         </li>
+
+                        {{-- FORMS --}}
                         <li>
                             <a class="border-secondary border-bottom dropdown-item" aria-current="page" href="/populating-forms">
                                 <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16">
@@ -42,6 +46,7 @@
                                 Forms
                             </a>
                         </li>
+
                     </ul>
                 </li>
 
@@ -150,10 +155,6 @@
                         </li>
                         <li>
                             <a class="border-secondary border-bottom text-light dropdown-item" href="/logout">
-                                <!-- <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                                </svg> -->
                                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dc3545" class="bi bi-arrow-right-square-fill" viewBox="0 0 16 16">
                                     <path d="M0 14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2a2 2 0 0 0-2 2zm4.5-6.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5a.5.5 0 0 1 0-1" />
                                 </svg>
@@ -162,9 +163,8 @@
                         </li>
                     </ul>
                 </li>
+
             </ul>
         </div>
     </div>
 </nav>
-
-@include('utility.script.toupper')

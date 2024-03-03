@@ -16,21 +16,14 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('roles')->truncate();
+        DB::table('roles')->delete();
 
         $roles = [
             [
-                'id' => 1,
-                'role' => 'user',
-                'created_at' => Carbon::now(),
-            ],
-            [
-                'id' => 2,
                 'role' => 'admin',
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => 3,
                 'role' => 'superadmin',
                 'created_at' => Carbon::now(),
             ],

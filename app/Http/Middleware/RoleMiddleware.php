@@ -15,25 +15,14 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        $nik = Auth::user()->nik;
+        $user = Auth::user();
 
-        foreach ($roles as $role) {
-
-            $hasRoles = Role::query()->where(['nik' => $nik, 'role' => $role])->first();
-
-            if (
-                !is_null($hasRoles) &&
-                $hasRoles->nik == $nik &&
-                $hasRoles->role == $role
-            ) {
-                continue;
-            } else {
-                return redirect()->back()->with('message', ['header' => '[403] You are not authorized!', 'message' => "You are not allowed to perform this operation!."]);
-            }
+        if ($user->isSuperAdmin()) {
+            return $next($request);
+        } else {
+            return redirect()->back()->with('message', ['header' => '[403] You are not authorized!', 'message' => "You are not allowed to perform this operation!."]);
         }
-
-        return $next($request);
     }
 }

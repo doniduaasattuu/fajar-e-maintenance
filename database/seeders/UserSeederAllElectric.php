@@ -15,7 +15,7 @@ class UserSeederAllElectric extends Seeder
      */
     public function run(): void
     {
-        DB::table('roles')->delete();
+        DB::table('user_role')->delete();
         DB::table('users')->delete();
 
         $user00 = new User();
@@ -32,7 +32,7 @@ class UserSeederAllElectric extends Seeder
         $user01->nik = '31100003';
         $user01->password = '@Fajarpaper123';
         $user01->fullname = 'Arief Sunari';
-        $user01->department = 'EI1';
+        $user01->department = 'EI2';
         $user01->phone_number = '12345678910';
         $user01->created_at = Carbon::now();
         $user01->updated_at = null;
@@ -72,7 +72,7 @@ class UserSeederAllElectric extends Seeder
         $user05->nik = '31100019';
         $user05->password = '@Fajarpaper123';
         $user05->fullname = 'Jiyantoro';
-        $user05->department = 'EI1';
+        $user05->department = 'EI7';
         $user05->phone_number = '12345678910';
         $user05->created_at = Carbon::now();
         $user05->updated_at = null;
@@ -92,7 +92,7 @@ class UserSeederAllElectric extends Seeder
         $user07->nik = '31100029';
         $user07->password = '@Fajarpaper123';
         $user07->fullname = 'Muslim';
-        $user07->department = 'EI1';
+        $user07->department = 'EI5';
         $user07->phone_number = '12345678910';
         $user07->created_at = Carbon::now();
         $user07->updated_at = null;

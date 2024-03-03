@@ -9,5 +9,4 @@ class UserRole extends Model
 {
     protected $table = 'user_role';
     public $increments = false;
-    public $timestamps = true;
 }

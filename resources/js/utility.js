@@ -2,7 +2,7 @@ export function toupper(evt) {
     evt.value = evt.value.toUpperCase();
 }
 
-export function onlynumber(evt, min, max) {
+export function onlynumber(evt, min = 48, max = 57) {
     let ASCIICode = evt.which ? evt.which : evt.keyCode;
     if (ASCIICode > 31 && (ASCIICode < min || ASCIICode > max)) return false;
     return true;
