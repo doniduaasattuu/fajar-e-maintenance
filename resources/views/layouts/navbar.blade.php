@@ -121,8 +121,7 @@
                                 Document
                             </a>
                         </li>
-                        @inject('userService', 'App\Services\UserService')
-                        @if (isset($userService) && (Auth::user()->nik != null) && $userService->isAdmin(Auth::user()->nik))
+                        @if (Auth::user()->isAdmin())
                         <li>
                             <a class="border-secondary border-bottom dropdown-item" href="/users">
                                 <svg class="me-1 mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">

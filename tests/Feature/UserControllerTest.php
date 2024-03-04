@@ -706,8 +706,6 @@ class UserControllerTest extends TestCase
 
     public function testGetUserManagementEmployee()
     {
-        $this->markTestSkipped('must be revisited.');
-
         $this->seed(UserRoleSeeder::class);
 
         Auth::attempt([
@@ -717,31 +715,26 @@ class UserControllerTest extends TestCase
 
         self::assertFalse(Auth::user()->isSuperAdmin());
 
-        $this->get('/');
-
         $this
             ->followingRedirects()
             ->get('/users')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testGetUserManagementAuthorized()
+    public function testGetUserManagementAdmin()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        $this
             ->get('/users')
             ->assertSeeText('User management')
-            ->assertSeeText('New User')
-            ->assertSeeText('Filter')
-            ->assertSee('Name')
+            ->assertSeeText('Search')
             ->assertSeeText('Dept')
-            ->assertSee('All')
             ->assertSee('EI1')
             ->assertSee('EI2')
             ->assertSee('EI3')
@@ -752,20 +745,17 @@ class UserControllerTest extends TestCase
             ->assertSeeText('The total registered user is')
             ->assertSeeText('people')
             ->assertSeeText('NIK')
-            ->assertSeeText('Name')
-            ->assertSeeText('Dept')
-            ->assertSeeText('DB')
-            ->assertSeeText('Admin')
-            ->assertSeeText('Reset')
-            ->assertSeeText('55000154')
-            ->assertSeeText('EI2');
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
     }
 
     // DELETE USER
     public function testDeleteUserGuest()
     {
-        $this->markTestSkipped('must be revisited.');
-
         $this->seed(UserSeeder::class);
 
         $this
@@ -775,251 +765,242 @@ class UserControllerTest extends TestCase
 
     public function testDeleteUserEmployee()
     {
-        $this->markTestSkipped('must be revisited.');
-
         $this->seed(UserSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
             ->get('/user-delete/31903007')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testDeleteUserAuthorized()
+    public function testDeleteUserSuperAdmin()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->get('/users')
-            ->assertSeeText('Yuan Lucky P');
+            'password' => 'rahasia'
+        ]);
 
-        $this->followingRedirects()
-            ->get('/user-delete/31903007')
-            ->assertSeeText('User successfully deleted!.');
-
-        $this->get('/users')
-            ->assertDontSeeText('Yuan Lucky P');
+        $this
+            ->followingRedirects()
+            ->get('/user-delete/31100171')
+            ->assertSeeText('User successfully deleted.');
     }
 
     public function testDeleteUserSelf()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
+            'password' => 'rahasia'
+        ]);
 
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
+        $user = Auth::user();
 
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
-            ->get('/user-delete/31903007')
+        $this
+            ->actingAs($user)
+            ->followingRedirects()
+            ->get('/user-delete/55000154')
             ->assertSeeText('You cannot delete your self, this action causes an error.');
     }
 
-    public function testDeleteUserAuthorizedTheCreator()
+    public function testUserSuperAdminDeleteTheCreator()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
+        $user = User::query()->find('55000153');
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
 
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
 
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
+        $this
+            ->followingRedirects()
             ->get('/user-delete/55000154')
-            ->assertSeeText('You cannot delete the creator!.');
+            ->assertSeeText('You cannot delete the creator.');
     }
 
     // RESET PASSWORD
     public function testResetPasswordGuest()
     {
-        $this->markTestSkipped('must be revisited.');
-
         $this->seed(UserSeeder::class);
 
-        $this->get('/user-reset/55000153')
+        $this->get('/user-reset/55000154')
             ->assertRedirectToRoute('login');
     }
 
     public function testResetPasswordEmployee()
     {
-        $this->markTestSkipped('must be revisited.');
 
-        $this->seed(UserSeeder::class);
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
-            ->get('/user-reset/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
 
-    public function testResetPasswordAuthorizedSuccess()
-    {
-        $this->markTestSkipped('must be revisited.');
+        $user = Auth::user();
 
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $user = User::query()->find('55000153');
-        self::assertNotNull($user);
-        $user->password = '@JamalMirdad123';
-        $user->update();
-
-        self::assertEquals($user->password, '@JamalMirdad123');
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/user-reset/55000153')
-            ->assertSeeText('User password reset successfully.');
-
-        $user = User::query()->find('55000153');
-        self::assertNotEquals($user->password, '@JamalMirdad123');
-    }
-
-    public function testResetPasswordAuthorizedTheCreator()
-    {
-        $this->markTestSkipped('must be revisited.');
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
-
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
-
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
+        $this
+            ->actingAs($user)
+            ->followingRedirects()
             ->get('/user-reset/55000154')
-            ->assertSeeText('You cannot reset the creator!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    // ADMIN REGISTER NEW USER
-    public function testGetPageAdminRegisterNewUserGuest()
+    public function testResetPasswordSuperAdminSuccess()
     {
-        $this->markTestSkipped('must be revisited.');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->get('/user-registration')
-            ->assertRedirectToRoute('login');
-    }
+        $user = User::query()->find('55000153');
 
-    public function testGetPageAdminRegisterNewUserEmployee()
-    {
-        $this->markTestSkipped('must be revisited.');
+        self::assertTrue(Hash::check('rahasia', $user->password));
 
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
-            ->followingRedirects()
-            ->get('/user-registration')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testGetPageAdminRegisterNewUserAuthorized()
-    {
-        $this->markTestSkipped('must be revisited.');
-
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->followingRedirects()
-            ->get('/user-registration')
-            ->assertSeeText('User registration')
-            ->assertSeeText('Table')
-            ->assertSeeText('NIK')
-            ->assertSeeText('Password')
-            ->assertSeeText('Full name')
-            ->assertSeeText('Department')
-            ->assertSeeText('Phone number')
-            ->assertSeeText('Registration code')
-            ->assertSee($this->app->make(UserService::class)->registrationCode)
-            ->assertDontSeeText('Sign Up')
-            ->assertDontSeeText('Already have an account ?, Sign in here');
-    }
-
-    // POST NEW USER
-    public function testPostRegisterNewUserEmployee()
-    {
-        $this->markTestSkipped('must be revisited.');
-
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $data = [
-            'nik' => '55000555',
-            'password' => 'Rahasia@1234',
-            'fullname' => 'dOnI dArMawAN',
-            'department' => 'EI2',
-            'phone_number' => '08983456945',
-            'registration_code' => env('REGISTRATION_CODE'),
-        ];
-
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
-            ->followingRedirects()
-            ->post('/user-registration', $data)
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testPostRegisterNewUserAuthorizedSuccess()
-    {
-        $this->markTestSkipped('must be revisited.');
-
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $data = [
-            'nik' => '55000555',
-            'password' => 'Rahasia@1234',
-            'fullname' => 'dOnI dArMawAN',
-            'department' => 'EI2',
-            'phone_number' => '08983456945',
-            'registration_code' => env('REGISTRATION_CODE'),
-        ];
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/user-registration');
+            'password' => 'rahasia'
+        ]);
 
         $this
             ->followingRedirects()
-            ->post('/user-registration', $data)
-            ->assertDontSeeText('Your account successfully registered.')
-            ->assertSeeText('User account successfully registered.');
+            ->get('/user-reset/55000153')
+            ->assertSeeText('User password reset successfully.');
+
+        $user = $user->fresh();
+        self::assertTrue(Hash::check('@Fajarpaper123', $user->password));
     }
+
+    // public function testResetPasswordAuthorizedTheCreator()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->withSession([
+    //         'nik' => '55000154',
+    //         'user' => 'Doni Darmawan'
+    //     ])->get('/');
+
+    //     $this->followingRedirects()
+    //         ->get('/role-assign/admin/31903007')
+    //         ->assertSeeText('User assigned as database administrator.');
+
+    //     $this->withSession([
+    //         'nik' => '31903007',
+    //         'user' => 'Yuan Lucky P'
+    //     ])->followingRedirects()
+    //         ->get('/user-reset/55000154')
+    //         ->assertSeeText('You cannot reset the creator!.');
+    // }
+
+    // // ADMIN REGISTER NEW USER
+    // public function testGetPageAdminRegisterNewUserGuest()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->get('/user-registration')
+    //         ->assertRedirectToRoute('login');
+    // }
+
+    // public function testGetPageAdminRegisterNewUserEmployee()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+    //     $this->withSession([
+    //         'nik' => '55000153',
+    //         'user' => 'Jamal Mirdad'
+    //     ])
+    //         ->followingRedirects()
+    //         ->get('/user-registration')
+    //         ->assertSeeText('[403] You are not authorized!')
+    //         ->assertSeeText('You are not allowed to perform this operation!.');
+    // }
+
+    // public function testGetPageAdminRegisterNewUserAuthorized()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+    //     $this->withSession([
+    //         'nik' => '55000154',
+    //         'user' => 'Doni Darmawan'
+    //     ])
+    //         ->followingRedirects()
+    //         ->get('/user-registration')
+    //         ->assertSeeText('User registration')
+    //         ->assertSeeText('Table')
+    //         ->assertSeeText('NIK')
+    //         ->assertSeeText('Password')
+    //         ->assertSeeText('Full name')
+    //         ->assertSeeText('Department')
+    //         ->assertSeeText('Phone number')
+    //         ->assertSeeText('Registration code')
+    //         ->assertSee($this->app->make(UserService::class)->registrationCode)
+    //         ->assertDontSeeText('Sign Up')
+    //         ->assertDontSeeText('Already have an account ?, Sign in here');
+    // }
+
+    // // POST NEW USER
+    // public function testPostRegisterNewUserEmployee()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+    //     $data = [
+    //         'nik' => '55000555',
+    //         'password' => 'Rahasia@1234',
+    //         'fullname' => 'dOnI dArMawAN',
+    //         'department' => 'EI2',
+    //         'phone_number' => '08983456945',
+    //         'registration_code' => env('REGISTRATION_CODE'),
+    //     ];
+
+    //     $this->withSession([
+    //         'nik' => '55000153',
+    //         'user' => 'Jamal Mirdad'
+    //     ])
+    //         ->followingRedirects()
+    //         ->post('/user-registration', $data)
+    //         ->assertSeeText('[403] You are not authorized!')
+    //         ->assertSeeText('You are not allowed to perform this operation!.');
+    // }
+
+    // public function testPostRegisterNewUserAuthorizedSuccess()
+    // {
+    //     $this->markTestSkipped('must be revisited.');
+
+    //     $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+    //     $data = [
+    //         'nik' => '55000555',
+    //         'password' => 'Rahasia@1234',
+    //         'fullname' => 'dOnI dArMawAN',
+    //         'department' => 'EI2',
+    //         'phone_number' => '08983456945',
+    //         'registration_code' => env('REGISTRATION_CODE'),
+    //     ];
+
+    //     $this->withSession([
+    //         'nik' => '55000154',
+    //         'user' => 'Doni Darmawan'
+    //     ])->get('/user-registration');
+
+    //     $this
+    //         ->followingRedirects()
+    //         ->post('/user-registration', $data)
+    //         ->assertDontSeeText('Your account successfully registered.')
+    //         ->assertSeeText('User account successfully registered.');
+    // }
 }

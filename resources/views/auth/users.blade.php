@@ -11,32 +11,18 @@
         <x-modal-confirm></x-modal-confirm>
         @endif
 
-        {{-- ADD USER --}}
-        <div class="mb-3">
-            <x-button-primary>
-                <x-anchor :href="'/user-registration'">
-                    <svg class="my-1 me-1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0" />
-                    </svg>
-                    New User
-                </x-anchor>
-            </x-button-primary>
-        </div>
-
         {{-- FILTERING --}}
         <div class="row mb-3">
             {{-- FILTER SEARCH --}}
             <div class="col pe-1">
-                <x-input-label for="filter_search" :value="__('Search')" />
-                <x-input-text id="filter_search" type="text" name="filter_search" autofocus placeholder="Any"></x-input-text>
+                <x-input-label for="search" :value="__('Search')" />
+                <x-input-text id="search" type="text" name="search" placeholder="NIK or fullname"></x-input-text>
             </div>
             {{-- BY DEPT --}}
-            @verbatim
             <div class="col ps-1">
-                <x-input-label for="filter_department" :value="__('Dept')" />
-                <x-input-select id="filter_department" name="filter_department" :options="App\Models\User::$departments" :value="old('filter_department')" :choose="'-- All --'"></x-input-select>
+                <x-input-label for="dept" :value="__('Dept')" />
+                <x-input-select id="dept" name="dept" :options="App\Models\User::$departments" :choose="''"></x-input-select>
             </div>
-            @endverbatim
             <div class="form-text">The total registered user is {{ count(App\Models\User::all()) }} people.</div>
         </div>
 
@@ -107,16 +93,18 @@
     <x-paginate :paginate="$paginate"></x-paginate>
     @endif
 
-    <script>
-        let filter_search = document.getElementById("filter_search");
-        filter_search.value = new URLSearchParams(document.location.search).get('search');
-        filter_search.onkeyup = () => {
-            if (filter_search.value.length >= 1) {
-                window.location = '?search=' + filter_search.value;
-            } else {
-                window.location = '/users';
-            }
+    <script type="module">
+        let search = document.getElementById("search");
+        let dept = document.getElementById("dept");
+
+        JS.fillInputFilterFromUrlSearchParams(search, dept)
+
+        function doFilter() {
+            JS.filter(search, dept);
         }
+
+        search.oninput = JS.debounce(doFilter, 300);
+        dept.oninput = JS.debounce(doFilter, 300);
     </script>
 
 </x-app-layout>

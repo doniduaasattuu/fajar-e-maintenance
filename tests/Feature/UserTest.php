@@ -191,4 +191,52 @@ class UserTest extends TestCase
         self::assertNotNull($user);
         self::assertFalse($user->isAdmin());
     }
+
+    public function testUserAssignAsAdmin()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $user = User::query()->find('55000154');
+        self::assertFalse($user->isAdmin());
+
+        $user = $user->fresh();
+        $user->roles()->attach('admin');
+        self::assertTrue($user->isAdmin());
+    }
+
+    public function testUserAssignAsSuperAdmin()
+    {
+        $this->seed([UserSeeder::class, RoleSeeder::class]);
+
+        $user = User::query()->find('55000154');
+        self::assertFalse($user->isSuperAdmin());
+
+        $user = $user->fresh();
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
+    }
+
+    public function testUserRemoveFromAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::query()->find('55000153');
+        self::assertTrue($user->isAdmin());
+
+        $user->roles()->detach('admin');
+        $user = $user->fresh();
+        self::assertFalse($user->isAdmin());
+    }
+
+    public function testUserRemoveFromSuperAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::query()->find('55000154');
+        self::assertTrue($user->isSuperAdmin());
+
+        $user->roles()->detach('superadmin');
+        $user = $user->fresh();
+        self::assertFalse($user->isSuperAdmin());
+    }
 }

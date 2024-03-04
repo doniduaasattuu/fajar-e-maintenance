@@ -1,7 +1,5 @@
 <x-guest-layout>
 
-    @section('title', $title)
-
     <x-h1>{{ $title }}</x-h1>
 
     <form action="{{ route('registration') }}" method="POST">

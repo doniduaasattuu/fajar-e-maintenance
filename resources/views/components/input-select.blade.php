@@ -1,4 +1,4 @@
-@props(['options' => [], 'value', 'choose'])
+@props(['options' => [], 'value' => '', 'choose'])
 
 <select {!! $attributes->merge(['class' => 'form-select']) !!} >
     @isset ($choose)

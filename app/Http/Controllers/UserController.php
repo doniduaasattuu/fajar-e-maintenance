@@ -11,7 +11,6 @@ use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
 use App\Services\RoleService;
 use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -119,8 +118,8 @@ class UserController extends Controller
         $user->phone_number = $validated['phone_number'];
         $user->update();
 
-        Log::info('user updated', ['nik' => session('nik'), 'user' => session('user')]);
-        return redirect()->back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
+        Log::info('user updated', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
+        return back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
     }
 
     public function userReset(string $nik)
@@ -128,16 +127,16 @@ class UserController extends Controller
         $user = User::query()->find($nik);
 
         if ($nik == '55000154') {
-            Log::alert('user tries to reset creator password', ['admin' => session('user')]);
+            Log::alert('user tries to reset creator password', ['admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[403] Forbidden', 'You cannot reset the creator!.'));
         }
 
         if (!is_null($user) && Auth::user()->isSuperAdmin()) {
-            $user->password = env('DEFAULT_PASSWORD', '@Fajarpaper123');
+            $user->password = bcrypt(env('DEFAULT_PASSWORD', '@Fajarpaper123'));
             $user->updated_at = Carbon::now()->toDateTimeString();
             $user->update();
 
-            Log::info('user password reset success', ['user' => $user->fullname, 'admin' => session('user')]);
+            Log::info('user password reset success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[200] Success', 'User password reset successfully.'));
         } else {
             return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
@@ -146,14 +145,34 @@ class UserController extends Controller
 
     public function users(Request $request)
     {
-        $paginate = User::query()
-            ->when($request->input('search'), function ($query, $search) {
+        $search = $request->query('search');
+        $dept = $request->query('dept');
+
+        function ownQuery($search)
+        {
+            if (!is_null($search) && is_numeric($search)) {
+                return User::query()
+                    ->when($search, function ($query, $search) {
+                        $query
+                            ->where('nik', 'like', "%{$search}%");
+                    });
+            } else if (!is_null($search) && !is_numeric($search)) {
+                return User::query()
+                    ->when($search, function ($query, $search) {
+                        $query
+                            ->where('fullname', 'like', "%{$search}%");
+                    });
+            } else {
+                return User::query();
+            }
+        }
+
+        $paginate = ownQuery($search)
+            ->when($dept, function ($query, $dept) {
                 $query
-                    ->where('fullname', 'like', "%{$search}%")
-                    ->orWhere('nik', 'like', "%{$search}%")
-                    ->orWhere('department', 'like', "%{$search}%");
+                    ->where('department', '=', $dept);
             })
-            ->paginate(5)
+            ->paginate()
             ->withQueryString();
 
         return view('auth.users', [
@@ -161,42 +180,60 @@ class UserController extends Controller
             'userService' => $this->userService,
             'paginate' => $paginate,
         ]);
-    }
 
-    // ============================
+        // if (is_numeric($search)) {
+        //     $paginate = User::query()
+        //         ->when($dept, function ($query, $dept) {
+        //             $query
+        //                 ->where('department', '=', $dept);
+        //         })
+        //         ->when($search, function ($query, $search) {
+        //             $query
+        //                 ->where('nik', 'like', "%{$search}%");
+        //         })
+        //         ->paginate(5)
+        //         ->withQueryString();
+        // } else {
+        //     $paginate = User::query()
+        //         ->when($dept, function ($query, $dept) {
+        //             $query
+        //                 ->where('department', '=', $dept);
+        //         })
+        //         ->when($search, function ($query, $search) {
+        //             $query
+        //                 ->where('fullname', 'like', "%{$search}%");
+        //         })
+        //         ->paginate(5)
+        //         ->withQueryString();
+        // }
+    }
 
     public function userDelete(string $nik)
     {
         $user = User::query()->find($nik);
 
-        if ($nik == session('nik')) {
-            Log::alert('user tries to delete himself', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete your self, this action causes an error.']);
+        if ($nik == Auth::user()->nik) {
+            Log::alert('user tries to delete himself', ['superadmin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete your self, this action causes an error.'));
         }
 
         if ($nik == '55000154') {
-            Log::alert('user tries to delete the creator', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot delete the creator!.']);
+            Log::alert('user tries to delete the creator', ['superadmin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete the creator.'));
         }
 
         if (!is_null($user)) {
 
-            try {
-                // DELETE ROLES
-                $roles = Role::query()->where('nik', '=', $nik)->get();
-                foreach ($roles as $role) {
-                    $role->delete();
-                }
-                $user->delete();
-            } catch (Exception $error) {
-                Log::error('user deleted', ['user' => $user->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+            $roles = Role::pluck('role');
+            foreach ($roles as $role) {
+                $user->roles()->detach($role);
             }
+            $user->delete();
 
-            Log::info('user deleted success', ['deleted' => $user->fullname, 'admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'User successfully deleted!.']);
+            Log::info('user deleted success', ['deleted' => $user->fullname, 'superadmin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'User successfully deleted.'));
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'User not found!.']);
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
         }
     }
 
@@ -205,8 +242,8 @@ class UserController extends Controller
     //     $user = User::query()->find($nik);
 
     //     if ($nik == '55000154') {
-    //         Log::alert('user tries to reset creator password', ['admin' => session('user')]);
-    //         return redirect()->back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot reset the creator!.']);
+    //         Log::alert('user tries to reset creator password', ['admin' => Auth::user()->fullname]);
+    //         return back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot reset the creator!.']);
     //     }
 
     //     if (!is_null($user)) {
@@ -215,12 +252,15 @@ class UserController extends Controller
     //         $user->updated_at = Carbon::now()->toDateTimeString();
     //         $user->update();
 
-    //         Log::info('user password reset success', ['user' => $user->fullname, 'admin' => session('user')]);
-    //         return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
+    //         Log::info('user password reset success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
+    //         return back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
     //     } else {
-    //         return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
+    //         return back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
     //     }
     // }
+
+
+    // ============================
 
     public function userRegistration()
     {
