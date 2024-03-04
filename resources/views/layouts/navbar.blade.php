@@ -1,5 +1,5 @@
 <!-- NAVBAR -->
-<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-lg border-bottom border-1" style="min-width: 330px;">
+<nav class="sticky-top navbar absolute navbar-expand-xl bg-dark text-white zindex-fixed shadow-sm border-bottom border-1" style="min-width: 330px;">
     <div class="container-lg">
         <a class="text-white fw-medium me-xl-4 me-lg-3 navbar-brand" href="/">{{ env('APP_NAME', 'Fajar E-Maintenance') }}</a>
         <button class="navbar-dark navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

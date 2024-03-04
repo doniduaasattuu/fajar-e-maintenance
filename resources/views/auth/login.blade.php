@@ -27,9 +27,9 @@
 
         {{-- BUTTON --}}
         <div class="mb-3">
-            <x-primary-button>
+            <x-button-primary>
                 {{ __('Sign In') }}
-            </x-primary-button>
+            </x-button-primary>
             <x-input-help>
                 Don't have an account ?, <x-anchor :href="'/registration'">{{ __('Register here') }}</x-anchor>
             </x-input-help>

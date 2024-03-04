@@ -55,9 +55,9 @@
 
         {{-- BUTTON --}}
         <div class="mb-3">
-            <x-primary-button>
+            <x-button-primary>
                 {{ __('Sign Up') }}
-            </x-primary-button>
+            </x-button-primary>
             <x-input-help>
                 Already have an account ?, <x-anchor :href="'/login'">{{ 'Sign in here' }}</x-anchor>
             </x-input-help>

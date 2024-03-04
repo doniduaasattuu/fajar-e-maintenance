@@ -94,7 +94,7 @@ Route::middleware('member')->group(function () {
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
-    Route::middleware('role:db_admin')->group(function () {
+    Route::middleware('role')->group(function () {
         // DOCUMENT
         Route::get('/document-delete/{id}', [DocumentController::class, 'documentDelete']);
 
@@ -126,13 +126,16 @@ Route::middleware('member')->group(function () {
         Route::post('/trafo-install-dismantle', [TrafoController::class, 'doTrafoInstallDismantle']);
     });
 
-    Route::middleware('role')->group(function () {
-        Route::get('/users', [UserController::class, 'users']);
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/users', [UserController::class, 'users'])->name('users');
+    });
+
+    Route::middleware('role:superadmin')->group(function () {
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
         Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);
 
-        Route::get('/role-delete/db_admin/{nik}', [RoleController::class, 'roleDeleteDbAdmin']);
-        Route::get('/role-assign/db_admin/{nik}', [RoleController::class, 'roleAssignDbAdmin']);
+        // Route::get('/role-delete/db_admin/{nik}', [RoleController::class, 'roleDeleteDbAdmin']);
+        // Route::get('/role-assign/db_admin/{nik}', [RoleController::class, 'roleAssignDbAdmin']);
         Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
 

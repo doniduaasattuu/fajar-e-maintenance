@@ -121,4 +121,14 @@ export function largeSoftFoundation(input, select) {
         unacceptable(select);
     }
 }
-// CHANGE VIBRATION START
+
+// SHOW MODAL CONFIRM
+export function modalConfirm(url) {
+    let modal_url = document.getElementById("modal_url");
+    modal_url.setAttribute("href", url);
+
+    modal_button_cancel = document.getElementById("modal_button_cancel");
+    modal_button_cancel.onclick = () => {
+        modal_url.removeAttribute("href");
+    };
+}

@@ -25,9 +25,11 @@
     @include('layouts.navbar')
     @endif
 
-    @include('utility.message')
+    @if (session('modal'))
+    <x-modal :modal='session("modal")'></x-modal>
+    @endif
 
-    <main class="container-lg" style="min-width: 330px;">
+    <main class="container-lg py-4" style="min-width: 330px;">
         {{ $slot }}
     </main>
 

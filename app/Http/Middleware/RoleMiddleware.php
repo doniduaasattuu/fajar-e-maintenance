@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Data\Modal;
+use App\Data\Popup;
 use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
@@ -15,14 +17,22 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $role): Response
     {
-        $user = Auth::user();
+        if ($role == 'admin') {
+            if (Auth::user()->isAdmin()) {
+                return $next($request);
+            } else {
+                return back()->with('modal', new Modal('[403] Forbidden', 'You are not allowed to perform this operation!'));
+            }
+        }
 
-        if ($user->isSuperAdmin()) {
-            return $next($request);
-        } else {
-            return redirect()->back()->with('message', ['header' => '[403] You are not authorized!', 'message' => "You are not allowed to perform this operation!."]);
+        if ($role == 'superadmin') {
+            if (Auth::user()->isSuperAdmin()) {
+                return $next($request);
+            } else {
+                return back()->with('modal', new Modal('[403] Forbidden', 'You are not allowed to perform this operation!'));
+            }
         }
     }
 }

@@ -36,6 +36,12 @@ class User extends Authenticatable
 
     public static array $registered;
 
+    public static function columns(string $table, ?array $skipped): array
+    {
+        $columns =  DB::getSchemaBuilder()->getColumnListing($table);
+        return array_values(array_diff($columns, $skipped));
+    }
+
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_role', 'nik', 'role');
