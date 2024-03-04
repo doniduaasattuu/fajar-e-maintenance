@@ -17,13 +17,11 @@ use Illuminate\Support\Facades\Validator;
 class HomeController extends Controller
 {
     use Utility;
-    private UserService $userService;
     private MotorService $motorService;
     private TrafoService $trafoService;
 
-    public function __construct(UserService $userService, MotorService $motorService, TrafoService $trafoService)
+    public function __construct(MotorService $motorService, TrafoService $trafoService)
     {
-        $this->userService = $userService;
         $this->motorService = $motorService;
         $this->trafoService = $trafoService;
     }
@@ -32,7 +30,6 @@ class HomeController extends Controller
     {
         return response()->view('maintenance.home', [
             'title' => 'Fajar E-Maintenance',
-            'userService' => $this->userService,
         ]);
     }
 

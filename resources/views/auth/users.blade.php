@@ -4,6 +4,8 @@
     $skipped = ['password', 'remember_token', 'created_at', 'updated_at'];
     @endphp
 
+    @inject('utility', 'App\Services\Utility')
+
     <div class="mb-4">
         <x-h3>{{ $title }}</x-h3>
 
@@ -34,7 +36,7 @@
         <table class="rounded table table-hover mb-0 border border-1 shadow-sm table-responsive-md" style="min-width: 800px;">
             <thead>
                 <tr>
-                    @foreach ($userService->getColumns('users', $skipped) as $column)
+                    @foreach ($utility::getColumns('users', $skipped) as $column)
                     <th style="line-height: 30px">{{ $column == 'nik' ? strtoupper($column) : ucfirst(str_replace('_' , ' ', $column)) }}</th>
                     @endforeach
 
@@ -47,9 +49,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($paginate->items() as $user)
+                @foreach ($paginator->items() as $user)
                 <tr class="table-row">
-                    @foreach ($userService->getColumns('users', $skipped) as $column)
+                    @foreach ($utility::getColumns('users', $skipped) as $column)
                     <td>{{ $user->$column }}</td>
                     @endforeach
 
@@ -89,8 +91,8 @@
     </div>
 
     {{-- PAGINATION --}}
-    @if ($paginate->hasPages())
-    <x-paginate :paginate="$paginate"></x-paginate>
+    @if ($paginator->hasPages())
+    <x-paginator :paginator="$paginator"></x-paginator>
     @endif
 
     <script type="module">

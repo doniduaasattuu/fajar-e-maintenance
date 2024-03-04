@@ -1,11 +1,13 @@
 <x-app-layout>
 
+    @inject('utility', 'App\Services\Utility')
+
     <div class="mb-4">
         <x-h3>{{ __($title) }}</x-h3>
         <table class="rounded table mb-0 border border-1 shadow-sm">
             <tbody>
 
-                @foreach ($userService->getColumns('users', ['password', 'remember_token']) as $column)
+                @foreach ($utility::getColumns('users', ['password', 'remember_token']) as $column)
                 <tr class="table">
 
                     {{-- COLUMN --}}

@@ -2,18 +2,13 @@
 
 namespace App\Rules;
 
+use App\Models\User;
 use App\Services\UserService;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 
 class UserExists implements ValidationRule
 {
-    private UserService $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
     /**
      * Run the validation rule.
      *
@@ -22,7 +17,7 @@ class UserExists implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (!is_null($value) && !empty($value)) {
-            if ($this->userService->userExists($value)) {
+            if (User::find($value)) {
                 $fail("The user $value is already registered.");
             }
         }

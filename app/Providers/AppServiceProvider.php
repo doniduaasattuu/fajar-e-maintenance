@@ -51,8 +51,6 @@ use Illuminate\Support\ServiceProvider;
 class AppServiceProvider extends ServiceProvider
 {
     public array $singletons = [
-        UserService::class => UserServiceImpl::class,
-        UserRepository::class => UserRepositoryImpl::class,
         FunclocService::class => FunclocServiceImpl::class,
         FunclocRepository::class => FunclocRepositoryImpl::class,
         MotorService::class => MotorServiceImpl::class,

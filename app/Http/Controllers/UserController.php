@@ -6,10 +6,10 @@ use App\Data\Alert;
 use App\Data\Modal;
 use App\Models\Role;
 use App\Models\User;
-use App\Services\UserService;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
 use App\Services\RoleService;
+use App\Services\Utility;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +19,6 @@ use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
-    private UserService $userService;
-    public function __construct(UserService $userService, RoleService $roleService)
-    {
-        $this->userService = $userService;
-    }
 
     public function login()
     {
@@ -42,7 +37,7 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'nik' => ['required', 'digits:8', 'numeric', new UserExists($this->userService)],
+            'nik' => ['required', 'digits:8', 'numeric', new UserExists()],
             'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
             'department' => ['required', Rule::in(User::$departments)],
@@ -80,20 +75,10 @@ class UserController extends Controller
         ])->onlyInput('nik');
     }
 
-    public function logout(Request $request)
-    {
-        Log::info('user logout', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('login');
-    }
-
     public function profile()
     {
         return view('auth.profile', [
-            'title' => 'My profile',
-            'userService' => $this->userService,
+            'title' => 'My profile'
         ]);
     }
 
@@ -102,7 +87,7 @@ class UserController extends Controller
         $request->merge(['current_nik' => Auth::user()->nik]);
 
         $validated = $request->validate([
-            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', Rule::in($this->userService->registeredNiks())],
+            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik'],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in(User::$departments)],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
@@ -167,45 +152,18 @@ class UserController extends Controller
             }
         }
 
-        $paginate = ownQuery($search)
+        $paginator = ownQuery($search)
             ->when($dept, function ($query, $dept) {
                 $query
                     ->where('department', '=', $dept);
             })
-            ->paginate()
+            ->paginate(2)
             ->withQueryString();
 
         return view('auth.users', [
             'title' => 'User management',
-            'userService' => $this->userService,
-            'paginate' => $paginate,
+            'paginator' => $paginator,
         ]);
-
-        // if (is_numeric($search)) {
-        //     $paginate = User::query()
-        //         ->when($dept, function ($query, $dept) {
-        //             $query
-        //                 ->where('department', '=', $dept);
-        //         })
-        //         ->when($search, function ($query, $search) {
-        //             $query
-        //                 ->where('nik', 'like', "%{$search}%");
-        //         })
-        //         ->paginate(5)
-        //         ->withQueryString();
-        // } else {
-        //     $paginate = User::query()
-        //         ->when($dept, function ($query, $dept) {
-        //             $query
-        //                 ->where('department', '=', $dept);
-        //         })
-        //         ->when($search, function ($query, $search) {
-        //             $query
-        //                 ->where('fullname', 'like', "%{$search}%");
-        //         })
-        //         ->paginate(5)
-        //         ->withQueryString();
-        // }
     }
 
     public function userDelete(string $nik)
@@ -237,37 +195,12 @@ class UserController extends Controller
         }
     }
 
-    // public function userReset(string $nik)
-    // {
-    //     $user = User::query()->find($nik);
-
-    //     if ($nik == '55000154') {
-    //         Log::alert('user tries to reset creator password', ['admin' => Auth::user()->fullname]);
-    //         return back()->with('message', ['header' => '[403] You are not allowed!', 'message' => 'You cannot reset the creator!.']);
-    //     }
-
-    //     if (!is_null($user)) {
-
-    //         $user->password = env('DEFAULT_PASSWORD', '@Fajarpaper123');
-    //         $user->updated_at = Carbon::now()->toDateTimeString();
-    //         $user->update();
-
-    //         Log::info('user password reset success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
-    //         return back()->with('message', ['header' => '[200] Success!', 'message' => "User password reset successfully."]);
-    //     } else {
-    //         return back()->with('message', ['header' => '[404] Not found!', 'message' => "User not found!."]);
-    //     }
-    // }
-
-
-    // ============================
-
-    public function userRegistration()
+    public function logout(Request $request)
     {
-        return response()->view('user.user-registration', [
-            'title' => 'User registration',
-            'userService' => $this->userService,
-            'action' => '/user-registration',
-        ]);
+        Log::info('user logout', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('login');
     }
 }

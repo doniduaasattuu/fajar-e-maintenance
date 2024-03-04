@@ -12,7 +12,7 @@ trait Utility
 {
     public array $equipmentStatus = ['Installed', 'Available', 'Repaired'];
 
-    public function getColumns(string $table, array $skipped = [])
+    public static function getColumns(string $table, array $skipped = [])
     {
         $columns =  DB::getSchemaBuilder()->getColumnListing($table);
         return array_values(array_diff($columns, $skipped));
@@ -35,12 +35,6 @@ trait Utility
         $equipment_id = explode('=', $qr_code_link)[1];
         return $equipment_id;
     }
-
-    // private function getEquipmentType(string $equipment_id): string
-    // {
-    //     $equipment_type = preg_replace('/[0-9]/i', '', $equipment_id);
-    //     return $equipment_type;
-    // }
 
     private function getEquipmentCode(string $equipment): string
     {
