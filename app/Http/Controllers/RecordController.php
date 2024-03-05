@@ -15,8 +15,12 @@ use App\Services\MotorRecordService;
 use App\Services\MotorService;
 use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -60,6 +64,7 @@ class RecordController extends Controller
                     'motorService' => $this->motorService,
                     'motor' => $motor,
                     'motorDetail' => $motor->MotorDetail,
+                    'action' => route('motor-record'),
                 ]);
             } else {
                 return back()->with('modal', new Modal('[404] Not found', "The motor with id $unique_id was not found."));
@@ -87,10 +92,9 @@ class RecordController extends Controller
 
     public function saveRecordMotor(Request $request)
     {
-        $request->mergeIfMissing(['id' => uniqid()]);
-        $data = $request->all();
+        $request->merge(['id' => uniqid()]);
 
-        $rules = [
+        $validated = $request->validate([
             'id' => ['required', 'size:13'],
             'funcloc' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'motor' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
@@ -118,17 +122,18 @@ class RecordController extends Controller
             'vibration_nde_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
             'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
             'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
-            'nik' => ['required', 'digits:8', 'numeric', Rule::in(session('nik')), 'exists:App\Models\User,nik'],
+            'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
             'finding_description' => ['nullable', 'min:15'],
-            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
-        ];
+            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', Rule::requiredIf(fn () => !is_null($request->input('finding_description'))), 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
+        ]);
 
-        $validator = Validator::make($data, $rules);
+        DB::beginTransaction();
 
-        if ($validator->passes()) {
+        try {
+            $validated_record = Arr::except($validated, ['finding_description', 'finding_image']);
+            $record = MotorRecord::create($validated_record);
+            $record->save();
 
-            $validated = $validator->validated();
-            $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
             $image = $request->file('finding_image');
             $validated_finding = [
                 'id' => $validated['id'],
@@ -136,88 +141,158 @@ class RecordController extends Controller
                 'description' => $validated['finding_description'],
                 'equipment' => $validated['motor'],
                 'funcloc' => $validated['funcloc'],
-                'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
+                'reporter' => Auth::user()->abbreviated_name,
             ];
 
-            try {
-
-                $record = MotorRecord::query()->find($validated_record['id']);
-
-                if (is_null($record)) {
-
-                    // SAVE RECORD
-                    $this->motorRecordService->save($validated_record);
-                    Log::info('record motor ' . $validated['motor'] . ' was inserted', ['checker' => session('user')]);
-
-                    // SAVE FINDING
-                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
-                        if (!is_null($image) && $image->isValid()) {
-
-                            Log::info('finding of ' . $validated['motor'] . ' with description and image also inserted', ['checker' => session('user')]);
-                            $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
-                            $this->findingService->insertWithImage($image, $validated_finding);
-                        } else {
-                            Log::info('finding of ' . $validated['motor'] . ' with description and without image also inserted', ['checker' => session('user')]);
-                            $this->findingService->insert($validated_finding);
-                        }
-                    }
-                } else {
-
-                    // UPDATE RECORD
-                    $this->motorRecordService->update($record, $validated_record);
-                    Log::info('record motor ' . $record['motor'] . ' was updated', ['checker' => session('user')]);
-
-                    // UPDATE FINDING
-                    $finding = Finding::query()->find($validated['id']);
-
-                    if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
-
-                        if (is_null($finding)) {
-                            if (!is_null($image) && $image->isValid()) {
-
-                                Log::info('finding with description and image inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
-                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
-                                $this->findingService->insertWithImage($image, $validated_finding);
-                            } else {
-                                Log::info('finding with description inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
-                                $this->findingService->insert($validated_finding);
-                            }
-                        } else {
-                            if (!is_null($image) && $image->isValid()) {
-
-                                Log::info('finding motor record ' . $validated['motor'] . ' with image updated', ['checker' => session('user')]);
-                                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
-                                $this->findingService->updateWithImage($image, $validated_finding);
-                            } else {
-                                Log::info('finding motor record ' . $validated['motor'] . ' with description updated', ['checker' => session('user')]);
-                                $this->findingService->update($validated_finding);
-                            }
-                        }
-                    } else {
-
-                        if (!is_null($finding)) {
-                            $this->findingService->deleteImage($finding);
-                            $finding->delete();
-                            Log::info('finding was deleted on motor record ' . $validated['motor']);
-                        }
-                    }
-
-                    return back()->with('alert', new Alert('The motor record successfully updated.', 'alert-success'))->withInput();
-                }
-            } catch (Exception $error) {
-                return back()->withErrors($error->getMessage())->withInput();
+            if (!is_null($image) && $image->isValid()) {
+                $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+                $this->findingService->insertWithImage($image, $validated_finding);
             }
 
-            return back()->with('alert', new Alert('The motor record successfully saved.', 'alert-success', 'motor/' .  $validated_record['id']))->withInput();
-        } else {
-            return back()->withErrors($validator)->withInput();
+            DB::commit();
+        } catch (Exception $error) {
+            DB::rollback();
+            return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'))->withInput();
         }
+
+        return back()->with('alert', new Alert('The motor record successfully saved.', 'alert-success', 'record-edit/motor/' .  $validated_record['id']))->withInput();
     }
+
+    // public function OldsaveRecordMotor(Request $request)
+    // {
+    //     $request->mergeIfMissing(['id' => uniqid()]);
+    //     $data = $request->all();
+
+    //     $rules = [
+    //         'id' => ['required', 'size:13'],
+    //         'funcloc' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+    //         'motor' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
+    //         'sort_field' => ['required'],
+    //         'motor_status' => ['required', Rule::in($this->motorService->motorStatusEnum())],
+    //         'cleanliness' => ['required', Rule::in($this->motorService->cleanlinessEnum())],
+    //         'nipple_grease' => ['required', Rule::in($this->motorService->nippleGreaseEnum())],
+    //         'number_of_greasing' => ['nullable', 'integer', 'max:255', 'prohibited_if:nipple_grease,Not Available'],
+    //         'temperature_de' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+    //         'temperature_body' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+    //         'temperature_nde' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+    //         'vibration_de_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_de_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'vibration_de_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_de_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'vibration_de_axial_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_de_axial_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'vibration_de_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_de_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'noise_de' => ['required', Rule::in($this->motorService->noiseEnum())],
+    //         'vibration_nde_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_nde_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'vibration_nde_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_nde_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'vibration_nde_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+    //         'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+    //         'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
+    //         'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
+    //         'finding_description' => ['nullable', 'min:15'],
+    //         'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
+    //     ];
+
+    //     $validator = Validator::make($data, $rules);
+
+    //     if ($validator->passes()) {
+
+    //         $validated = $validator->validated();
+    //         $validated_record = $validator->safe()->except(['finding_description', 'finding_image']);
+    //         $image = $request->file('finding_image');
+    //         $validated_finding = [
+    //             'id' => $validated['id'],
+    //             'area' => explode('-', $validated['funcloc'])[2],
+    //             'description' => $validated['finding_description'],
+    //             'equipment' => $validated['motor'],
+    //             'funcloc' => $validated['funcloc'],
+    //             'reporter' => User::query()->find($validated['nik'])->abbreviated_name,
+    //         ];
+
+    //         try {
+
+    //             $record = MotorRecord::query()->find($validated_record['id']);
+
+    //             if (is_null($record)) {
+
+    //                 // SAVE RECORD
+    //                 $this->motorRecordService->save($validated_record);
+    //                 Log::info('record motor ' . $validated['motor'] . ' was inserted', ['checker' => session('user')]);
+
+    //                 // SAVE FINDING
+    //                 if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+    //                     if (!is_null($image) && $image->isValid()) {
+
+    //                         Log::info('finding of ' . $validated['motor'] . ' with description and image also inserted', ['checker' => session('user')]);
+    //                         $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+    //                         $this->findingService->insertWithImage($image, $validated_finding);
+    //                     } else {
+    //                         Log::info('finding of ' . $validated['motor'] . ' with description and without image also inserted', ['checker' => session('user')]);
+    //                         $this->findingService->insert($validated_finding);
+    //                     }
+    //                 }
+    //             } else {
+
+    //                 // UPDATE RECORD
+    //                 $this->motorRecordService->update($record, $validated_record);
+    //                 Log::info('record motor ' . $record['motor'] . ' was updated', ['checker' => session('user')]);
+
+    //                 // UPDATE FINDING
+    //                 $finding = Finding::query()->find($validated['id']);
+
+    //                 if (!empty($validated['finding_description']) && !is_null($validated['finding_description'])) {
+
+    //                     if (is_null($finding)) {
+    //                         if (!is_null($image) && $image->isValid()) {
+
+    //                             Log::info('finding with description and image inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
+    //                             $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+    //                             $this->findingService->insertWithImage($image, $validated_finding);
+    //                         } else {
+    //                             Log::info('finding with description inserted on ' . $validated['motor'] . ' update record', ['checker' => session('user')]);
+    //                             $this->findingService->insert($validated_finding);
+    //                         }
+    //                     } else {
+    //                         if (!is_null($image) && $image->isValid()) {
+
+    //                             Log::info('finding motor record ' . $validated['motor'] . ' with image updated', ['checker' => session('user')]);
+    //                             $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+    //                             $this->findingService->updateWithImage($image, $validated_finding);
+    //                         } else {
+    //                             Log::info('finding motor record ' . $validated['motor'] . ' with description updated', ['checker' => session('user')]);
+    //                             $this->findingService->update($validated_finding);
+    //                         }
+    //                     }
+    //                 } else {
+
+    //                     if (!is_null($finding)) {
+    //                         $this->findingService->deleteImage($finding);
+    //                         $finding->delete();
+    //                         Log::info('finding was deleted on motor record ' . $validated['motor']);
+    //                     }
+    //                 }
+
+    //                 return back()->with('alert', new Alert('The motor record successfully updated.', 'alert-success'))->withInput();
+    //             }
+    //         } catch (Exception $error) {
+    //             return back()->withErrors($error->getMessage())->withInput();
+    //         }
+
+    //         return back()->with('alert', new Alert('The motor record successfully saved.', 'alert-success', 'motor/' .  $validated_record['id']))->withInput();
+    //     } else {
+    //         return back()->withErrors($validator)->withInput();
+    //     }
+    // }
 
     public function editRecordMotor(string $uniqid)
     {
         $record = MotorRecord::query()->find($uniqid);
         $finding = Finding::query()->find($uniqid);
+
+        $motor = Motor::query()->with(['MotorDetail'])->find($record->motor);
 
         if (!is_null($record)) {
 
@@ -225,11 +300,90 @@ class RecordController extends Controller
                 'title' => 'Motor record edit',
                 'motorService' => $this->motorService,
                 'record' => $record,
+                'motor' => $motor,
+                'motorDetail' => $motor->MotorDetail,
                 'finding' => $finding,
+                'action' => '/' . request()->path(),
             ]);
         } else {
             return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The record $uniqid is not found."]);
         }
+    }
+
+    public function updateRecordMotor(Request $request, string $record_id)
+    {
+        $record = MotorRecord::find($record_id);
+        $record->update($request->all());
+
+        $validated = $request->validate([
+            'id' => ['required', 'size:13'],
+            'funcloc' => ['required', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+            'motor' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
+            'sort_field' => ['required'],
+            'motor_status' => ['required', Rule::in($this->motorService->motorStatusEnum())],
+            'cleanliness' => ['required', Rule::in($this->motorService->cleanlinessEnum())],
+            'nipple_grease' => ['required', Rule::in($this->motorService->nippleGreaseEnum())],
+            'number_of_greasing' => ['nullable', 'integer', 'max:255', 'prohibited_if:nipple_grease,Not Available'],
+            'temperature_de' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+            'temperature_body' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+            'temperature_nde' => ['nullable', 'decimal:0,2', 'min:15', 'max:255'],
+            'vibration_de_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_axial_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_axial_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_de_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_de_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'noise_de' => ['required', Rule::in($this->motorService->noiseEnum())],
+            'vibration_nde_vertical_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_vertical_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_nde_horizontal_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_horizontal_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'vibration_nde_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
+            'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
+            'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
+            'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
+            'finding_description' => ['nullable', 'min:15'],
+            'finding_image' => ['nullable', 'prohibited_if:finding_description,null', Rule::requiredIf(fn () => !is_null($request->input('finding_description'))), 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $validated_record = Arr::except($validated, ['finding_description', 'finding_image']);
+            $record->update($validated_record);
+
+            // $finding = Finding::find($record_id);
+            // $image = $request->file('finding_image');
+            // if (!is_null($image) && $image->isValid()) {
+
+            //     $validated_finding = [
+            //         'id' => $validated['id'],
+            //         'area' => explode('-', $validated['funcloc'])[2],
+            //         'description' => $validated['finding_description'],
+            //         'equipment' => $validated['motor'],
+            //         'funcloc' => $validated['funcloc'],
+            //         'reporter' => Auth::user()->abbreviated_name,
+            //     ];
+
+            //     $finding->update($validated_finding);
+
+            //     $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
+            //     $this->findingService->updateWithImage($image, $validated_finding);
+            // } else if ($finding->description != $validated['finding_description']) {
+            //     $finding->update([
+            //         'finding_description' => $validated['finding_description'],
+            //     ]);
+            // }
+
+            DB::commit();
+        } catch (Exception $error) {
+            DB::rollback();
+            return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'))->withInput();
+        }
+
+        return back()->with('alert', new Alert('The motor record successfully updated.', 'alert-success'))->withInput();
     }
 
     // TRAFO

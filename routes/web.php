@@ -76,7 +76,8 @@ Route::middleware('member')->group(function () {
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
     // MOTOR
     Route::post('/record-motor', [RecordController::class, 'saveRecordMotor'])->name('motor-record');
-    Route::get('/record-edit/motor/{uniqid}', [RecordController::class, 'editRecordMotor']);
+    Route::get('/record-edit/motor/{uniqid}', [RecordController::class, 'editRecordMotor'])->name('record-edit-motor');
+    Route::post('/record-edit/motor/{uniqid}', [RecordController::class, 'updateRecordMotor'])->name('update-record-motor');
     // TRAFO
     Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo']);
     Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo']);

@@ -15,117 +15,123 @@ export function onlynumbercoma(evt) {
     return true;
 }
 
-export function sayHello(name) {
-    return `Hello ${name}`;
+export function preventmaxtemperature(id, max = 255) {
+    let input = document.getElementById(id);
+    if (Number(input.value) > max) {
+        input.value = "";
+    }
+}
+
+export function preventmaxvibration(id, max = 45) {
+    let input = document.getElementById(id);
+    if (Number(input.value) > max) {
+        input.value = "";
+    }
 }
 
 // CHANGE VIBRATION START
 export function changeVibrationDescriptionColor(id) {
     let input = document.getElementById(id);
-    let select = document.getElementById(id.replace("value", "desc"));
-    let power_rate = Number(45);
-
-    if (Number(input.value) > 45) {
-        input.value = "";
-    }
+    let power_rate = input.getAttribute("power_rate");
+    let desc = document.getElementById(id.replace("value", "desc"));
 
     if (power_rate <= 15) {
-        smallMachines(input, select);
+        smallMachines(input, desc);
     } else if (power_rate > 15 && power_rate <= 300) {
-        mediumMachines(input, select);
+        mediumMachines(input, desc);
     } else if (power_rate > 300 && power_rate <= 600) {
-        largeRigidFoundation(input, select);
+        largeRigidFoundation(input, desc);
     } else {
-        largeSoftFoundation(input, select);
+        largeSoftFoundation(input, desc);
     }
 }
 
-export function resetColor(select) {
-    select.classList.remove("bg-success");
-    select.classList.remove("bg-info");
-    select.classList.remove("bg-warning");
-    select.classList.remove("bg-danger");
-    select.classList.remove("text-dark");
-    select.classList.remove("text-white");
+function resetColor(desc) {
+    desc.classList.remove("bg-success");
+    desc.classList.remove("bg-info");
+    desc.classList.remove("bg-warning");
+    desc.classList.remove("bg-danger");
+    desc.classList.remove("text-dark");
+    desc.classList.remove("text-white");
 }
 
 // --------------------------------------------------
 
-export function good(select) {
-    resetColor(select);
-    select.classList.add("text-white");
-    select.classList.add("bg-success");
-    select.value = "Good";
+function good(desc) {
+    resetColor(desc);
+    desc.classList.add("text-white");
+    desc.classList.add("bg-success");
+    desc.value = "Good";
 }
 
-export function satisfactory(select) {
-    resetColor(select);
-    select.classList.add("text-dark");
-    select.classList.add("bg-info");
-    select.value = "Satisfactory";
+function satisfactory(desc) {
+    resetColor(desc);
+    desc.classList.add("text-dark");
+    desc.classList.add("bg-info");
+    desc.value = "Satisfactory";
 }
 
-export function unsatisfactory(select) {
-    resetColor(select);
-    select.classList.add("text-dark");
-    select.classList.add("bg-warning");
-    select.value = "Unsatisfactory";
+function unsatisfactory(desc) {
+    resetColor(desc);
+    desc.classList.add("text-dark");
+    desc.classList.add("bg-warning");
+    desc.value = "Unsatisfactory";
 }
 
-export function unacceptable(select) {
-    resetColor(select);
-    select.classList.add("text-white");
-    select.classList.add("bg-danger");
-    select.value = "Unacceptable";
+function unacceptable(desc) {
+    resetColor(desc);
+    desc.classList.add("text-white");
+    desc.classList.add("bg-danger");
+    desc.value = "Unacceptable";
 }
 
 // --------------------------------------------------
 
-export function smallMachines(input, select) {
+function smallMachines(input, desc) {
     if (Number(input.value) <= 0.71) {
-        good(select);
+        good(desc);
     } else if (Number(input.value) > 0.71 && Number(input.value) <= 1.8) {
-        satisfactory(select);
+        satisfactory(desc);
     } else if (Number(input.value) > 1.8 && Number(input.value) <= 4.5) {
-        unsatisfactory(select);
+        unsatisfactory(desc);
     } else {
-        unacceptable(select);
+        unacceptable(desc);
     }
 }
 
-export function mediumMachines(input, select) {
+function mediumMachines(input, desc) {
     if (Number(input.value) <= 1.12) {
-        good(select);
+        good(desc);
     } else if (Number(input.value) > 1.12 && Number(input.value) <= 2.8) {
-        satisfactory(select);
+        satisfactory(desc);
     } else if (Number(input.value) > 2.8 && Number(input.value) <= 7.1) {
-        unsatisfactory(select);
+        unsatisfactory(desc);
     } else {
-        unacceptable(select);
+        unacceptable(desc);
     }
 }
 
-export function largeRigidFoundation(input, select) {
+function largeRigidFoundation(input, desc) {
     if (Number(input.value) <= 1.8) {
-        good(select);
+        good(desc);
     } else if (Number(input.value) > 1.8 && Number(input.value) <= 4.5) {
-        satisfactory(select);
+        satisfactory(desc);
     } else if (Number(input.value) > 4.5 && Number(input.value) <= 11.2) {
-        unsatisfactory(select);
+        unsatisfactory(desc);
     } else {
-        unacceptable(select);
+        unacceptable(desc);
     }
 }
 
-export function largeSoftFoundation(input, select) {
+function largeSoftFoundation(input, desc) {
     if (Number(input.value) <= 2.8) {
-        good(select);
+        good(desc);
     } else if (Number(input.value) > 2.8 && Number(input.value) <= 7.1) {
-        satisfactory(select);
+        satisfactory(desc);
     } else if (Number(input.value) > 7.1 && Number(input.value) <= 18.0) {
-        unsatisfactory(select);
+        unsatisfactory(desc);
     } else {
-        unacceptable(select);
+        unacceptable(desc);
     }
 }
 
@@ -138,13 +144,6 @@ export function modalConfirm(url) {
     modal_button_cancel.onclick = () => {
         modal_url.removeAttribute("href");
     };
-}
-
-export function getValueFromUrlSearchParams(id) {
-    let params = new URLSearchParams(document.location.search);
-    let value_from_params = params.get(id);
-
-    return value_from_params;
 }
 
 // FILTERING DATA TABLE
@@ -192,3 +191,7 @@ export const debounce = (mainFunction, delay) => {
         }, delay);
     };
 };
+
+// export function hello() {
+//     console.log("hello");
+// }

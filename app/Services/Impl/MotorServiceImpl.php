@@ -15,6 +15,7 @@ class MotorServiceImpl implements MotorService
     use Utility;
 
     private MotorRepository $motorRepository;
+    public static array $motorStatus = ['Installed', 'Repaired', 'Available'];
 
     public function __construct(MotorRepository $motorRepository)
     {

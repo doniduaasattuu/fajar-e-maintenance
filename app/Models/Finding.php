@@ -16,4 +16,16 @@ class Finding extends Model
     protected $attributes = [
         'status' => 'Open'
     ];
+
+    protected $fillable = [
+        'id',
+        'area',
+        'status',
+        'equipment',
+        'funcloc',
+        'notification',
+        'reporter',
+        'description',
+        'image',
+    ];
 }

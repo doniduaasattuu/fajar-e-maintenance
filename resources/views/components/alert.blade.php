@@ -5,7 +5,7 @@
 
     @if ($alert->link)
     </br>
-    <a href="/record-edit/{{ $alert->link }}" class="alert-link">Click here</a> to edit.
+    <a href="/{{ $alert->link }}" class="alert-link">Click here</a> to edit.
     @endif
 
     @if ($button_close)
