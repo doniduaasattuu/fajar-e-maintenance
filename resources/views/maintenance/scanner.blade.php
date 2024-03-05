@@ -12,11 +12,14 @@
         }
     </style>
 
+    @section('title', $title)
+
     <div class="container py-4 flex justify-content-center items-center">
         <div class="mycontainer py-3">
             <div id="reader"></div>
         </div>
     </div>
+
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script type="text/javascript">
         function onScanSuccess(decodedText, decodedResult) {

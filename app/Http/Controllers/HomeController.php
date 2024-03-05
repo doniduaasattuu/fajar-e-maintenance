@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Motor;
-use App\Models\MotorRecord;
 use App\Models\Trafo;
 use App\Models\User;
 use App\Services\MotorService;
 use App\Services\TrafoService;
-use App\Services\UserService;
 use App\Traits\Utility;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -28,23 +25,13 @@ class HomeController extends Controller
 
     public function home()
     {
-        return response()->view('maintenance.home', [
-            'title' => 'Fajar E-Maintenance',
-        ]);
+        return view('maintenance.home');
     }
 
     public function scanner()
     {
-        return response()->view('maintenance.scanner', [
+        return view('maintenance.scanner', [
             'title' => 'Scanner'
-        ]);
-    }
-
-    public function checkingForm()
-    {
-        return response()->view('maintenance.motor.checking-form', [
-            'title' => 'Checking form',
-            'motorService' => $this->motorService,
         ]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
+use App\Data\Modal;
 use App\Models\Finding;
 use App\Models\Motor;
 use App\Models\MotorRecord;
@@ -13,14 +15,12 @@ use App\Services\MotorRecordService;
 use App\Services\MotorService;
 use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
-use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
-use PgSql\Lob;
 
 class RecordController extends Controller
 {
@@ -46,27 +46,27 @@ class RecordController extends Controller
 
     public function checkingForm(string $equipment_id)
     {
-        $equipment_type = preg_replace('/[0-9]/i', '', $equipment_id);
+        $equipment_type = $this->getEquipmentType($equipment_id);
 
         if ($equipment_type == 'Fajar-MotorList') {
 
-            $unique_id = preg_replace('/[a-zA-Z\-]/i', '', $equipment_id);
+            $unique_id = $this->getEquipmentUniqueId($equipment_id);
             $motor = Motor::query()->with(['MotorDetail'])->where('unique_id', '=', $unique_id)->first();
 
             if (!is_null($motor)) {
 
-                return response()->view('maintenance.motor.checking-form', [
+                return view('maintenance.motor.checking-form', [
                     'title' => 'Checking form',
                     'motorService' => $this->motorService,
                     'motor' => $motor,
                     'motorDetail' => $motor->MotorDetail,
                 ]);
             } else {
-                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The motor with id ' . $unique_id . ' was not found.']);
+                return back()->with('modal', new Modal('[404] Not found', "The motor with id $unique_id was not found."));
             }
         } else if ($equipment_type == 'Fajar-TrafoList') {
 
-            $unique_id = preg_replace('/[a-zA-Z\-]/i', '', $equipment_id);
+            $unique_id = $this->getEquipmentUniqueId($equipment_id);
             $trafo = Trafo::query()->with(['TrafoDetail'])->where('unique_id', '=', $unique_id)->first();
 
             if (!is_null($trafo)) {
@@ -81,7 +81,7 @@ class RecordController extends Controller
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The trafo with id ' . $unique_id . ' was not found.']);
             }
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => 'The scanned qr code not found.']);
+            return back()->with('modal', new Modal('[404] Not found', "The equipment was not found."));
         }
     }
 
@@ -202,15 +202,15 @@ class RecordController extends Controller
                         }
                     }
 
-                    return redirect()->back()->with('alert', ['message' => 'The motor record successfully updated.', 'variant' => 'alert-success'])->withInput();
+                    return back()->with('alert', new Alert('The motor record successfully updated.', 'alert-success'))->withInput();
                 }
             } catch (Exception $error) {
-                return redirect()->back()->withErrors($error->getMessage())->withInput();
+                return back()->withErrors($error->getMessage())->withInput();
             }
 
-            return redirect()->back()->with('alert', ['message' => 'The motor record successfully saved.', 'variant' => 'alert-success', 'record_id' => 'motor/' .  $validated_record['id']]);
+            return back()->with('alert', new Alert('The motor record successfully saved.', 'alert-success', 'motor/' .  $validated_record['id']))->withInput();
         } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
         }
     }
 

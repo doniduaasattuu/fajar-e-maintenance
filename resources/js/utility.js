@@ -8,6 +8,13 @@ export function onlynumber(evt, min = 48, max = 57) {
     return true;
 }
 
+export function onlynumbercoma(evt) {
+    let ASCIICode = evt.which ? evt.which : evt.keyCode;
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57) && ASCIICode != 46)
+        return false;
+    return true;
+}
+
 export function sayHello(name) {
     return `Hello ${name}`;
 }

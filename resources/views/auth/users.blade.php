@@ -6,7 +6,7 @@
 
     @inject('utility', 'App\Services\Utility')
 
-    <div class="mb-4">
+    <section class="mb-4">
         <x-h3>{{ $title }}</x-h3>
 
         @if (Auth::user()->isSuperAdmin())
@@ -28,10 +28,10 @@
             <div class="form-text">The total registered user is {{ count(App\Models\User::all()) }} people.</div>
         </div>
 
-    </div>
+    </section>
 
     {{-- USER DATA --}}
-    <div class="mb-4 overflow-x-auto">
+    <section class="mb-4 overflow-x-auto">
         {{-- TABLE --}}
         <table class="rounded table table-hover mb-0 border border-1 shadow-sm table-responsive-md" style="min-width: 800px;">
             <thead>
@@ -88,7 +88,7 @@
             </tbody>
         </table>
 
-    </div>
+    </section>
 
     {{-- PAGINATION --}}
     @if ($paginator->hasPages())

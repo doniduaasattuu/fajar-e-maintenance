@@ -1,6 +1,6 @@
-@props(['options' => [], 'value' => '', 'choose'])
+@props(['disabled' => false, 'options' => [], 'value' => '', 'choose'])
 
-<select {!! $attributes->merge(['class' => 'form-select']) !!} >
+<select {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'form-select']) !!} >
     @isset ($choose)
     <option>{{ $choose }}</option>
     @endisset

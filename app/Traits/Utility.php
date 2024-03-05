@@ -18,6 +18,17 @@ trait Utility
         return array_values(array_diff($columns, $skipped));
     }
 
+    public static function getEquipmentType(string $equipment_id)
+    {
+        return preg_replace('/[0-9]/i', '', $equipment_id);
+    }
+
+    public static function getEquipmentUniqueId(string $equipment_id)
+    {
+        return preg_replace('/[a-zA-Z\-]/i', '', $equipment_id);
+    }
+
+    // ===================
     public function filterValidatedData(array $validated, array $skipped = [])
     {
         return array_values(array_diff($validated, $skipped));

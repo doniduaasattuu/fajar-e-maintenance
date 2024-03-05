@@ -2,7 +2,7 @@
 
     @inject('utility', 'App\Services\Utility')
 
-    <div class="mb-4">
+    <section class="mb-4">
         <x-h3>{{ __($title) }}</x-h3>
         <table class="rounded table mb-0 border border-1 shadow-sm">
             <tbody>
@@ -30,7 +30,7 @@
 
             </tbody>
         </table>
-    </div>
+    </section>
 
     <div class="mb-4">
         <x-h3>{{ __('Update profile') }}</x-h3>
