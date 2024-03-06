@@ -79,24 +79,20 @@ class HomeController extends Controller
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $motor = Motor::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($motor) && $current_user->isAdmin()) {
-                return redirect()->action([MotorController::class, 'motorEdit'], ['id' => $motor->id]);
-            } else if (!is_null($motor)) {
-                return redirect()->action([MotorController::class, 'motorDetails'], ['id' => $motor->id]);
-            } else {
-                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
+            if (!is_null($motor)) {
+                $equipment_id = explode('=', $motor->qr_code_link)[1];
+
+                return redirect()->action([RecordController::class, 'checkingForm'], ['equipment_id' => $equipment_id]);
             }
         } else if ($search != null && str_starts_with(strtolower($search), 'trafo')) {
 
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $trafo = Trafo::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($trafo) && $current_user->isAdmin()) {
-                return redirect()->action([TrafoController::class, 'trafoEdit'], ['id' => $trafo->id]);
-            } else if (!is_null($trafo)) {
-                return redirect()->action([TrafoController::class, 'trafoDetails'], ['id' => $trafo->id]);
-            } else {
-                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
+            if (!is_null($trafo)) {
+                $equipment_id = explode('=', $trafo->qr_code_link)[1];
+
+                return redirect()->action([RecordController::class, 'checkingForm'], ['equipment_id' => $equipment_id]);
             }
         } else {
             return back()->with('modal', new Modal('[404] Not found', "The submitted value is invalid."));
