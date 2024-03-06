@@ -6,7 +6,7 @@
         <h5 class="text-break lh-sm mb-0">{{ $equipment->status }}</h5>
         @endif
         @if ($record)
-        <h5 class="text-break lh-sm mb-0">[EDIT {{ $equipment->sort_field ?? '' }} RECORD]</h5>
+        <h5 class="text-break lh-sm mb-0">[ EDIT {{ $equipment->sort_field ?? '' }} RECORD ]</h5>
         @else
         <h5 class="text-break lh-sm mb-0">{{ $equipment->sort_field ?? '' }}</h5>
         @endif

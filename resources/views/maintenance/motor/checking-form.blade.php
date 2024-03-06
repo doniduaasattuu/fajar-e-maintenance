@@ -34,12 +34,11 @@
             @csrf
 
             @isset($record)
-            <input type="hidden" id="id" name="id" value="{{ $record->id}}">
+            <input type="hidden" id="id" name="id" value="{{ $record->id }}">
             @endisset
-
-            <input type="hidden" id="funcloc" name="funcloc" value="{{ $motor->funcloc ?? $record->funcloc}}">
-            <input type="hidden" id="motor" name="motor" value="{{ $motor->id ?? $record->motor}}">
-            <input type="hidden" id="sort_field" name="sort_field" value="{{ $motor->sort_field ?? $record->sort_field}}">
+            <input type="hidden" id="funcloc" name="funcloc" value="{{ $motor->funcloc ?? $record->funcloc ?? '' }}">
+            <input type="hidden" id="motor" name="motor" value="{{ $motor->id ?? $record->motor ?? '' }}">
+            <input type="hidden" id="sort_field" name="sort_field" value="{{ $motor->sort_field ?? $record->sort_field ?? '' }}">
             <input type="hidden" id="nik" name="nik" value="{{ Auth::user()->nik }}">
 
             {{-- MOTOR STATUS --}}
@@ -201,17 +200,19 @@
                 @endif
             </div>
 
+            {{-- BUTTON SUBMIT --}}
             @if ($motor->status === 'Installed')
             <div class="mb-3">
                 <x-button-primary>
                     @isset($record)
-                    {{ __('Update') }}
+                    {{ __('Save changes') }}
                     @else
                     {{ __('Submit') }}
                     @endisset
                 </x-button-primary>
             </div>
             @endif
+
         </form>
     </section>
 

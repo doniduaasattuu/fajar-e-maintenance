@@ -79,13 +79,14 @@ Route::middleware('member')->group(function () {
     Route::get('/record-edit/motor/{uniqid}', [RecordController::class, 'editRecordMotor'])->name('record-edit-motor');
     Route::post('/record-edit/motor/{uniqid}', [RecordController::class, 'updateRecordMotor'])->name('update-record-motor');
     // TRAFO
-    Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo']);
-    Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo']);
+    Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo'])->name('trafo-record');
+    Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo'])->name('record-edit-trafo');
+    Route::post('/record-edit/trafo/{uniqid}', [RecordController::class, 'updateRecordTrafo'])->name('update-record-trafo');
 
     // TREND
     Route::get('/trends', [TrendController::class, 'trends']);
     Route::post('/trends', [TrendController::class, 'getTrends']);
-    Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
+    Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipment-trend');
 
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);

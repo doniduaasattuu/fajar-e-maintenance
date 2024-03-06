@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Modal;
 use App\Models\Motor;
 use App\Models\Trafo;
-use App\Models\User;
 use App\Services\MotorService;
 use App\Services\TrafoService;
 use App\Traits\Utility;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -38,7 +39,7 @@ class HomeController extends Controller
     public function search(Request $request): RedirectResponse
     {
         $search = $request->input('search_equipment');
-        $current_user = User::query()->find(session('nik'));
+        $current_user = Auth::user();
 
         if ($search != null && strlen($search) === 9 && !str_starts_with(strtolower($search), 'motor')) {
 
@@ -55,7 +56,7 @@ class HomeController extends Controller
                         'equipment_id' => $equipment_id
                     ]);
                 } else {
-                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
+                    return back()->with('modal', new Modal('[404] Not found', "The equipment $search was not found."));
                 }
             } else if (in_array($equipment_code, ['ETF'])) {
 
@@ -68,17 +69,17 @@ class HomeController extends Controller
                         'equipment_id' => $equipment_id
                     ]);
                 } else {
-                    return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
+                    return back()->with('modal', new Modal('[404] Not found', "The equipment $search was not found."));
                 }
             } else {
-                return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The equipment $search was not found."]);
+                return back()->with('modal', new Modal('[404] Not found', "The equipment $search was not found."));
             }
         } else if ($search != null && str_starts_with(strtolower($search), 'motor')) {
 
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $motor = Motor::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($motor) && $current_user->isDbAdmin()) {
+            if (!is_null($motor) && $current_user->isAdmin()) {
                 return redirect()->action([MotorController::class, 'motorEdit'], ['id' => $motor->id]);
             } else if (!is_null($motor)) {
                 return redirect()->action([MotorController::class, 'motorDetails'], ['id' => $motor->id]);
@@ -90,7 +91,7 @@ class HomeController extends Controller
             $unique_id = preg_replace('/[^0-9]/i', '', $search);
             $trafo = Trafo::query()->where('unique_id', '=', $unique_id)->first();
 
-            if (!is_null($trafo) && $current_user->isDbAdmin()) {
+            if (!is_null($trafo) && $current_user->isAdmin()) {
                 return redirect()->action([TrafoController::class, 'trafoEdit'], ['id' => $trafo->id]);
             } else if (!is_null($trafo)) {
                 return redirect()->action([TrafoController::class, 'trafoDetails'], ['id' => $trafo->id]);
@@ -98,7 +99,7 @@ class HomeController extends Controller
                 return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted unique id $unique_id was not found."]);
             }
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The submitted value is invalid."]);
+            return back()->with('modal', new Modal('[404] Not found', "The submitted value is invalid."));
         }
     }
 
