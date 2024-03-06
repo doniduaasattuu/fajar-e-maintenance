@@ -29,6 +29,9 @@
     </x-alert>
     @endisset
 
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["funcloc", "trafo", "sort_field", "nik"]' />
+
     {{-- FORM --}}
     <section>
         <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
@@ -92,7 +95,7 @@
             <div class="mb-3">
                 <x-input-label for="secondary_voltage" :value="__('Secondary voltage')" />
                 <x-input-number-coma placeholder="V" id="secondary_voltage" name="secondary_voltage" :value="old('secondary_voltage', $record->secondary_voltage ?? '')" :disabled='$trafo_installed' />
-                <x-input-error :message="$errors->first('secondary')" />
+                <x-input-error :message="$errors->first('secondary_voltage')" />
             </div>
 
             {{-- TRAFO IMAGE --}}

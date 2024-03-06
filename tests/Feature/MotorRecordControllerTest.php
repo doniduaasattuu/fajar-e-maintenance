@@ -3,18 +3,15 @@
 namespace Tests\Feature;
 
 use App\Models\Finding;
-use App\Models\Funcloc;
-use App\Models\MotorDetails;
 use App\Models\MotorRecord;
 use Carbon\Carbon;
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
-use Database\Seeders\UserSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class MotorRecordControllerTest extends TestCase
@@ -27,45 +24,49 @@ class MotorRecordControllerTest extends TestCase
 
     public function testGetCheckingFormNotFound()
     {
-        $this->withSession([
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+            'password' => 'rahasia'
         ]);
 
         $this->get('/scanner');
 
         $this->followingRedirects()
             ->get('/checking-form/Fajar-MotorList987')
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('The motor with id 987 was not found.');
     }
 
     public function testGetCheckingFormMotorInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
-        $this->withSession([
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+            'password' => 'rahasia'
         ]);
 
         $this->get('/scanner');
 
         $this->followingRedirects()
             ->get('/checking-form/Fajar-MotorI23')
-            ->assertSeeText('[404] Not found.')
-            ->assertSeeText('The scanned qr code not found.');
+            ->assertSeeText('[404] Not found')
+            ->assertSeeText('The equipment was not found.');
     }
 
-    public function testGetCheckingValidSuccess()
+    public function testGetCheckingFormMotorValidSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+            'password' => 'rahasia'
         ]);
 
-        $this->get('/checking-form/Fajar-MotorList2100')
+        $this
+            ->get('/checking-form/Fajar-MotorList2100')
             ->assertSeeText('FP-01-PM3-REL-PPRL-PRAR')
             ->assertSeeText('MGM000481')
             ->assertSeeText('Motor status')
@@ -81,40 +82,38 @@ class MotorRecordControllerTest extends TestCase
             ->assertSeeText('Left side')
             ->assertSeeText('Front side')
             ->assertSee('IEC 60085')
-            ->assertSeeText('Temperature de')
-            ->assertSeeText('Temperature body')
-            ->assertSeeText('Temperature nde')
+            ->assertSeeText('Temperature DE')
+            ->assertSeeText('Temperature Body')
+            ->assertSeeText('Temperature NDE')
             ->assertSeeText('Vibration standard')
-            ->assertSee('Good')
-            ->assertSee('Satisfactory')
-            ->assertSee('Unsatisfactory')
-            ->assertSee('Unacceptable')
             ->assertSeeText('Vibration inspection guide')
-            ->assertSeeText('Vibration de vertical')
-            ->assertSeeText('Vibration de horizontal')
-            ->assertSeeText('Vibration de axial')
-            ->assertSeeText('Vibration de frame')
-            ->assertSeeText('Noise de')
+            ->assertSeeText('Vibration DEV')
+            ->assertSeeText('Vibration DEH')
+            ->assertSeeText('Vibration DEA')
+            ->assertSeeText('Vibration DE Frame')
+            ->assertSeeText('Noise DE')
             ->assertSee('Normal')
             ->assertSee('Abnormal')
-            ->assertSeeText('Vibration nde vertical')
-            ->assertSeeText('Vibration nde vertical')
-            ->assertSeeText('Vibration nde horizontal')
-            ->assertSeeText('Finding')
+            ->assertSeeText('Vibration NDEV')
+            ->assertSeeText('Vibration NDEH')
+            ->assertSeeText('Vibration NDE Frame')
+            ->assertSeeText('Finding description')
             ->assertSee('Description of findings if any')
-            ->assertSeeText('Finding attachment')
+            ->assertSeeText('Finding image')
             ->assertSee('Submit');
     }
 
     // POST
     public function testPostRecordMotorSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -158,15 +157,18 @@ class MotorRecordControllerTest extends TestCase
     // FUNCLOC
     public function testPostRecordMotorFunclocNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
-        $this->followingRedirects()
+        $this
+            ->followingRedirects()
             ->post('/record-motor', [
                 'id' => uniqid(),
                 'funcloc' => null,
@@ -207,12 +209,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorFunclocInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -256,12 +260,14 @@ class MotorRecordControllerTest extends TestCase
     // ID MOTOR
     public function testPostRecordMotorIdMotorNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -304,12 +310,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorIdMotorInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -353,12 +361,14 @@ class MotorRecordControllerTest extends TestCase
     // SORT FIELD
     public function testPostRecordMotorSortFieldNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -402,12 +412,14 @@ class MotorRecordControllerTest extends TestCase
     // MOTOR STATUS
     public function testPostRecordMotorMotorStatusNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -450,12 +462,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -498,12 +512,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusRunningSucess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -546,12 +562,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorMotorStatusNotRunningSucess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -595,12 +613,14 @@ class MotorRecordControllerTest extends TestCase
     // CLEANLINESS
     public function testPostRecordMotorCleanlinessNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -643,12 +663,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -691,12 +713,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessCleanSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -739,12 +763,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorCleanlinessDirtySuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -788,12 +814,14 @@ class MotorRecordControllerTest extends TestCase
     // NIPPLE GREASE
     public function testPostRecordMotorNippleGreaseNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -837,12 +865,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -886,12 +916,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseAvailableSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -934,12 +966,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNippleGreaseNotAvailableSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -983,12 +1017,14 @@ class MotorRecordControllerTest extends TestCase
     // NUMBER OF GREASING
     public function testPostRecordMotorNumberOfGreasingNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1031,12 +1067,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingFilled()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1079,12 +1117,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1127,12 +1167,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidType()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1175,12 +1217,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingInvalidTypeComa()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1223,12 +1267,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNumberOfGreasingSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1273,12 +1319,14 @@ class MotorRecordControllerTest extends TestCase
     // TEMPERATURE DE
     public function testPostRecordMotorTemperatureDeNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1321,12 +1369,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1370,12 +1420,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1419,12 +1471,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureDeInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1469,12 +1523,14 @@ class MotorRecordControllerTest extends TestCase
     // TEMPERATURE BODY
     public function testPostRecordMotorTemperatureBodyNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1517,12 +1573,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1566,12 +1624,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1615,12 +1675,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureBodyInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1665,12 +1727,14 @@ class MotorRecordControllerTest extends TestCase
     // TEMPERATURE NDE
     public function testPostRecordMotorTemperatureNdeNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1713,12 +1777,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1762,12 +1828,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1811,12 +1879,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorTemperatureNdeInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1861,12 +1931,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DEV VALUE
     public function testPostRecordMotorVibrationDeVerticalNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1909,12 +1981,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -1958,12 +2032,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2007,12 +2083,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2057,12 +2135,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DE VERTICAL DESC
     public function testPostRecordMotorVibrationDeVerticalDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2106,12 +2186,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeVerticalDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2156,12 +2238,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DEH VALUE
     public function testPostRecordMotorVibrationDeHorizontalNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2204,12 +2288,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2253,12 +2339,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2302,12 +2390,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2352,12 +2442,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DE HORIZONTAL DESC
     public function testPostRecordMotorVibrationDeHorizontalDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2401,12 +2493,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeHorizontalDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2451,12 +2545,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DEA VALUE
     public function testPostRecordMotorVibrationDeAxialNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2499,12 +2595,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2548,12 +2646,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2595,12 +2695,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2645,12 +2747,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DE AXIAL DESC
     public function testPostRecordMotorVibrationDeAxialDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2694,12 +2798,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeAxialDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2744,12 +2850,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DEF VALUE
     public function testPostRecordMotorVibrationDeFrameNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2792,12 +2900,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2841,12 +2951,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2890,12 +3002,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2940,12 +3054,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DE FRAME DESC
     public function testPostRecordMotorVibrationDeFrameDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -2989,12 +3105,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationDeFrameDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3039,12 +3157,14 @@ class MotorRecordControllerTest extends TestCase
     // NOISE DE
     public function testPostRecordMotorNoiseDeNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3088,12 +3208,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNoiseDeInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3138,12 +3260,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION NDEV VALUE
     public function testPostRecordMotorVibrationNdeVerticalNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3187,12 +3311,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3236,12 +3362,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3285,12 +3413,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3335,12 +3465,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION NDE VERTICAL DESC
     public function testPostRecordMotorVibrationNdeVerticalDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3384,12 +3516,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeVerticalDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3434,12 +3568,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION NDEH VALUE
     public function testPostRecordMotorVibrationNdeHorizontalNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3482,12 +3618,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3531,12 +3669,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3580,12 +3720,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3630,12 +3772,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION DE HORIZONTAL DESC
     public function testPostRecordMotorVibrationNdeHorizontalDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3679,12 +3823,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeHorizontalDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3729,12 +3875,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION NDEF VALUE
     public function testPostRecordMotorVibrationNdeFrameNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3777,12 +3925,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3826,12 +3976,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3875,12 +4027,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3925,12 +4079,14 @@ class MotorRecordControllerTest extends TestCase
     // VIBRATION NDE FRAME DESC
     public function testPostRecordMotorVibrationNdeFrameDescNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -3974,12 +4130,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorVibrationNdeFrameDescInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4024,12 +4182,14 @@ class MotorRecordControllerTest extends TestCase
     // NOISE NDE
     public function testPostRecordMotorNoiseNdeNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4073,12 +4233,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostRecordMotorNoiseNdeInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4125,12 +4287,14 @@ class MotorRecordControllerTest extends TestCase
     // =====================================================
     public function testPostMotorRecordWithTextAndImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $image = UploadedFile::fake()->image('photo.jpg');
@@ -4184,12 +4348,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithTextOnlySuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4242,12 +4408,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithoutTextAndImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4300,12 +4468,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithTextAndWithoutImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $this->followingRedirects()
@@ -4358,12 +4528,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithoutTextAndWithImageFailed()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $image = UploadedFile::fake()->image('photo.jpg');
@@ -4416,12 +4588,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithTextAndImageFailedMaxSize()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $image = UploadedFile::fake()->create('photo', 5500, 'jpg');
@@ -4471,12 +4645,14 @@ class MotorRecordControllerTest extends TestCase
 
     public function testPostMotorRecordWithTextAndImageInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-MotorList2100');
 
         $image = UploadedFile::fake()->create('photo', 2500, 'gif');
@@ -4529,7 +4705,7 @@ class MotorRecordControllerTest extends TestCase
     }
 
     // ===============================================
-    // ================== EDIT FUNCLOC =============== 
+    // ================== EDIT RECORD ================ 
     // ===============================================
 
     public function testGetEditRecordMotor()
@@ -4543,7 +4719,8 @@ class MotorRecordControllerTest extends TestCase
         $id = $records->first()->id;
 
         $this->get("/record-edit/motor/$id")
-            ->assertSeeText('Motor record edit')
+            ->assertSeeText('[ EDIT')
+            ->assertSeeText('RECORD ]')
             ->assertSeeText('Maximum upload file size: 5 MB.')
             ->assertDontSeeText('Existing');
     }
@@ -4563,7 +4740,8 @@ class MotorRecordControllerTest extends TestCase
         $id = $findings->first()->id;
 
         $this->get("/record-edit/motor/$id")
-            ->assertSeeText('Motor record edit')
+            ->assertSeeText('[ EDIT')
+            ->assertSeeText('RECORD ]')
             ->assertSeeText('Existing');
     }
 }

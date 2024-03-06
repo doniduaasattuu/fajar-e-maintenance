@@ -411,7 +411,7 @@
                     },
                     y: {
                         type: 'category',
-                        labels: ['Dark blue', 'Light blue', 'Pink', 'Brown'],
+                        labels: ['Good', 'Satisfactory', 'Unsatisfactory', 'Unacceptable'],
                         offset: true,
                         position: 'left',
                         stack: 'demo',

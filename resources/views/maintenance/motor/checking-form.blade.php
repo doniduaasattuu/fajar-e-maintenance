@@ -28,6 +28,9 @@
     </x-alert>
     @endisset
 
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["funcloc", "motor", "sort_field", "nik"]' />
+
     {{-- FORM --}}
     <section>
         <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
@@ -107,7 +110,8 @@
                 <x-input-label for="vibration_de_vertical_value" :value="__('Vibration DEV')" />
                 <x-input-number-coma id="vibration_de_vertical_value" name="vibration_de_vertical_value" :value="old('vibration_de_vertical_value', $record->vibration_de_vertical_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_de_vertical_desc' name='vibration_de_vertical_desc' :value="old('vibration_de_vertical_desc', $record->vibration_de_vertical_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_de_vertical')" />
+                <x-input-error :message="$errors->first('vibration_de_vertical_value')" />
+                <x-input-error :message="$errors->first('vibration_de_vertical_desc')" />
             </div>
 
             {{-- VIBRATION DE HORIZONTAL --}}
@@ -115,7 +119,8 @@
                 <x-input-label for="vibration_de_horizontal_value" :value="__('Vibration DEH')" />
                 <x-input-number-coma id="vibration_de_horizontal_value" name="vibration_de_horizontal_value" :value="old('vibration_de_horizontal_value', $record->vibration_de_horizontal_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_de_horizontal_desc' name='vibration_de_horizontal_desc' :value="old('vibration_de_horizontal_desc', $record->vibration_de_horizontal_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_de_horizontal')" />
+                <x-input-error :message="$errors->first('vibration_de_horizontal_value')" />
+                <x-input-error :message="$errors->first('vibration_de_horizontal_desc')" />
             </div>
 
             {{-- VIBRATION DE AXIAL --}}
@@ -123,15 +128,17 @@
                 <x-input-label for="vibration_de_axial_value" :value="__('Vibration DEA')" />
                 <x-input-number-coma id="vibration_de_axial_value" name="vibration_de_axial_value" :value="old('vibration_de_axial_value', $record->vibration_de_axial_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_de_axial_desc' name='vibration_de_axial_desc' :value="old('vibration_de_axial_desc', $record->vibration_de_axial_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_de_axial')" />
+                <x-input-error :message="$errors->first('vibration_de_axial_value')" />
+                <x-input-error :message="$errors->first('vibration_de_axial_desc')" />
             </div>
 
             {{-- VIBRATION DE FRAME --}}
             <div class="mb-3">
-                <x-input-label for="vibration_de_frame_value" :value="__('Vibration Frame')" />
+                <x-input-label for="vibration_de_frame_value" :value="__('Vibration DE Frame')" />
                 <x-input-number-coma id="vibration_de_frame_value" name="vibration_de_frame_value" :value="old('vibration_de_frame_value', $record->vibration_de_frame_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_de_frame_desc' name='vibration_de_frame_desc' :value="old('vibration_de_frame_desc', $record->vibration_de_frame_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_de_frame')" />
+                <x-input-error :message="$errors->first('vibration_de_frame_value')" />
+                <x-input-error :message="$errors->first('vibration_de_frame_desc')" />
             </div>
 
             {{-- NOISE DE --}}
@@ -148,7 +155,8 @@
                 <x-input-label for="vibration_nde_vertical_value" :value="__('Vibration NDEV')" />
                 <x-input-number-coma id="vibration_nde_vertical_value" name="vibration_nde_vertical_value" :value="old('vibration_nde_vertical_value', $record->vibration_nde_vertical_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_nde_vertical_desc' name='vibration_nde_vertical_desc' :value="old('vibration_nde_vertical_desc', $record->vibration_nde_vertical_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_nde_vertical')" />
+                <x-input-error :message="$errors->first('vibration_nde_vertical_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_vertical_desc')" />
             </div>
 
             {{-- VIBRATION NDE HORIZONTAL --}}
@@ -156,15 +164,17 @@
                 <x-input-label for="vibration_nde_horizontal_value" :value="__('Vibration NDEH')" />
                 <x-input-number-coma id="vibration_nde_horizontal_value" name="vibration_nde_horizontal_value" :value="old('vibration_nde_horizontal_value', $record->vibration_nde_horizontal_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_nde_horizontal_desc' name='vibration_nde_horizontal_desc' :value="old('vibration_nde_horizontal_desc', $record->vibration_nde_horizontal_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_nde_horizontal')" />
+                <x-input-error :message="$errors->first('vibration_nde_horizontal_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_horizontal_desc')" />
             </div>
 
             {{-- VIBRATION NDE FRAME --}}
             <div class="mb-3">
-                <x-input-label for="vibration_nde_frame_value" :value="__('Vibration Frame')" />
+                <x-input-label for="vibration_nde_frame_value" :value="__('Vibration NDE Frame')" />
                 <x-input-number-coma id="vibration_nde_frame_value" name="vibration_nde_frame_value" :value="old('vibration_nde_frame_value', $record->vibration_nde_frame_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
                 <x-input-vibration-level id='vibration_nde_frame_desc' name='vibration_nde_frame_desc' :value="old('vibration_nde_frame_desc', $record->vibration_nde_frame_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
-                <x-input-error :message="$errors->first('vibration_nde_frame')" />
+                <x-input-error :message="$errors->first('vibration_nde_frame_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_frame_desc')" />
             </div>
 
             {{-- NOISE NDE --}}
