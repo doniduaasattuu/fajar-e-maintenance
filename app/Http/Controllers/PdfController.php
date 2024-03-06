@@ -175,13 +175,13 @@ class PdfController extends Controller
                         break;
 
                     default:
-                        return redirect()->back()->withErrors($validator)->withInput();
+                        return back()->withErrors($validator)->withInput();
                 }
             } catch (Exception $error) {
-                return redirect()->back()->withErrors($error->getMessage())->withInput();
+                return back()->withErrors($error->getMessage())->withInput();
             }
         } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
         }
     }
 

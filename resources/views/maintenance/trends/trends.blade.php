@@ -2,10 +2,10 @@
 
     <div class="my-4 py-5 position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
 
+        <x-h2>{{ __($title) }}</x-h2>
+
         <form action="/trends" method="POST">
             @csrf
-
-            <x-h2>{{ __($title) }}</x-h2>
 
             {{-- EQUIPMENT --}}
             <div class="mb-3">
