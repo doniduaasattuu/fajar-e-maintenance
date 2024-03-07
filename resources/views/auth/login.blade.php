@@ -2,13 +2,13 @@
 
     <x-h1>{{ $title }}</x-h1>
 
+    @if(session("alert"))
+    <x-alert :alert='session("alert")'>
+    </x-alert>
+    @endisset
+
     <form action="{{ route('login') }}" method="POST">
         @csrf
-
-        @if(session("alert"))
-        <x-alert :alert='session("alert")'>
-        </x-alert>
-        @endisset
 
         {{-- NIK --}}
         <div class="mb-3">

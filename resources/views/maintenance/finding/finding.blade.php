@@ -1,241 +1,131 @@
-@include('utility.prefix')
+<x-app-layout>
 
-<style>
-    .finding-image:hover {
-        opacity: 0.85;
-    }
-</style>
+    @inject('utility', 'App\Services\Utility')
 
-<div class="py-4">
+    <x-modal-confirm></x-modal-confirm>
 
-    @include('utility.confirmation')
+    <section class="mb-4">
+        <x-h3>{{ $title }}</x-h3>
 
-    <h3 class="mb-3">{{ $title }}</h3>
+        {{-- BUTTON NEW --}}
+        <x-finding.button-new :href='"/finding-registration"'>
+            {{ __('New finding') }}
+        </x-finding.button-new>
 
-    {{-- REGISTRY NEW FINDING --}}
-    <div class="mb-3">
-        <div class="btn-group">
-            <button type="button" class="btn btn-primary">
-                <a class="text-white nav-link d-inline-block" aria-current="page" href="/finding-registration">
-                    <svg class="my-1 me-1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                        <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0" />
-                    </svg>
-                    New finding
-                </a>
-            </button>
+        {{-- FILTERING --}}
+        <div class="row mb-3">
+            {{-- FILTER SEARCH --}}
+            <div class="col pe-1">
+                <x-input-label for="search" :value="__('Search')" />
+                <x-input-text id="search" type="text" name="search" placeholder="Equipment"></x-input-text>
+            </div>
+            {{-- BY STATUS --}}
+            <div class="col ps-1">
+                <x-input-label for="status" :value="__('Status')" />
+                <x-input-select id="status" name="status" :options="['Open', 'Closed']" :choose="''"></x-input-select>
+            </div>
+            <div class="form-text">The total finding is {{ $paginator->total() }} records.</div>
         </div>
-    </div>
+    </section>
 
+    {{-- FINDING DATA --}}
+    <section class="mb-4">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4 g-2">
+            @foreach ($paginator->items() as $finding)
+            <div class="col finding">
+                <div class="card shadow shadow-md">
 
-    {{-- FILTER FINDING --}}
-    <div class="row mb-3">
-
-        {{-- FILTER FINDING BY EQUIPMENT --}}
-        <div class="col pe-1">
-            <label for="filter_equipment" class="form-label fw-semibold">Equipment</label>
-            <select id="filter_equipment" name="filter_equipment" class="form-select" aria-label="Default select example">
-                <option value="All">All</option>
-                <option value="">Not set</option>
-                @foreach ($equipments as $option)
-                <option value="{{ $option }}">{{ $option }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        {{-- FILTER FINDING BY STATUS --}}
-        <div class="col ps-1">
-            <label for="filter_status" class="form-label fw-semibold">Finding status</label>
-            <select id="filter_status" name="filter_status" class="form-select" aria-label="Default select example">
-                <option value="All">All</option>
-                @foreach ($findingService->findingStatusEnum as $option)
-                <option value="{{ $option }}">{{ $option }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-text">The total finding is {{ count($findingService->getAll()) }} records.</div>
-    </div>
-
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 row-cols-xxl-4 g-2">
-
-        @foreach ($findings as $finding)
-        <div class="col finding">
-            <div class="card shadow shadow-md">
-
-                {{-- FINDING IMAGE --}}
-                <div>
-                    @if (null != $finding->image)
-                    <a href="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" @disabled(null==$finding->image)>
-                        <img class="finding-image card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
-                    </a>
-                    @else
+                    {{-- FINDING IMAGE --}}
                     <div>
-                        <img class="card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="{{ null != $finding->image ? '/storage/findings/' . $finding->image : '/storage/assets/images/finding-default.png' }}" alt="{{ $finding->description }}">
-                    </div>
-                    @endif
-                </div>
-
-                {{-- FINDING DESCRIPTION --}}
-                <div class="card-body">
-                    <div class="mb-2">
-                        <h5 class="card-title">{{ $finding->area ?? 'Null' }}</h5>
-                        <p class="card-text text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ (null != $finding->description) ? $finding->description : 'Not set' }}">{{ $finding->description ?? '' }}</p>
-                    </div>
-                    <div>
-
-                        {{-- FINDING COLUMN --}}
-                        @foreach ($findingService->getColumns('findings', ['id', 'area', 'description', 'image', 'updated_at']) as $column)
-                        @switch($column)
-
-                        @case('funcloc')
-                        <div class="row">
-                            <div class="col-6 mb-0 fw-semibold">{{ ucfirst($column) }}</div>
-                            <div class="col-6 mb-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ (null != $finding->$column) ? $finding->$column : 'Not set' }}">{{ str_replace('FP-01-', '', $finding->$column) }}</div>
-                        </div>
-                        @break
-
-                        @default
-                        <div class="row">
-                            <div class="col-6 mb-0 fw-semibold">{{ ucfirst($column == 'created_at' ? 'Date' : $column) }}</div>
-                            <div class="col-6 mb-0 text-truncate" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="{{ (null != $finding->$column) ? $finding->$column : 'Not set' }}">{{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
-                        </div>
-                        @endswitch
-                        @endforeach
-
-                    </div>
-
-                    {{-- ACTION BUTTON --}}
-                    <div class="row mt-3">
-                        <div class="col">
-                            <a href="/finding-edit/{{ $finding->id }}" class="btn btn-outline-primary btn-sm w-100">
-                                <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                </svg>
-                                Update
+                        @isset($finding->image)
+                        <span style="cursor: pointer;">
+                            <a href="{{ '/storage/findings/' . $finding->image }}">
+                                <img class="card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="{{ '/storage/findings/' . $finding->image }}" alt="{{ $finding->description }}">
                             </a>
+                        </span>
+                        @else
+                        <div>
+                            <img class="card-img-top p-2" style="border-radius: 12px; height: 300px; object-fit: cover;" src="/storage/assets/images/finding-default.png" alt="{{ $finding->description }}">
                         </div>
-                        <div class="col">
-                            <div url="/finding-delete/{{ $finding->id }}" data-bs-toggle="modal" data-bs-target="#confirmation_modal" class="btn btn-outline-danger btn-sm w-100 button_delete">
-                                <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                                </svg>
-                                Delete
+                        @endisset
+                    </div>
+
+                    {{-- FINDING DESCRIPTION --}}
+                    <div class="card-body">
+                        <div class="mb-2">
+                            <h5 class="card-title fw-semibold" style="color: #9b9fa3">{{ $finding->area ?? 'Null' }}</h5>
+                            <p class="card-text" style="height: 50px; overflow: hidden;">{{ $finding->description ?? '' }}</p>
+                        </div>
+                        <div>
+
+                            {{-- FINDING COLUMN --}}
+                            @foreach ($utility::getColumns('findings', ['id', 'area', 'description', 'image', 'updated_at']) as $column)
+                            @switch($column)
+
+                            @case('funcloc')
+                            <div class="row">
+                                <div class="col-6 mb-0 fw-semibold" style="color: #9b9fa3">{{ ucfirst($column) }}</div>
+                                <div class="col-6 mb-0 text-truncate" style="color: #9b9fa3">{{ str_replace('FP-01-', '', $finding->$column) }}</div>
+                            </div>
+                            @break
+
+                            @default
+                            <div class="row">
+                                <div class="col-6 mb-0 fw-semibold" style="color: #9b9fa3">{{ ucfirst($column == 'created_at' ? 'Date' : $column) }}</div>
+                                <div class="col-6 mb-0 text-truncate" style="color: #9b9fa3">{{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
+                            </div>
+                            @endswitch
+                            @endforeach
+
+                        </div>
+
+                        {{-- ACTION BUTTON --}}
+                        <div class="row mt-3">
+                            <div class="col pe-1">
+                                <a href="/finding-edit/{{ $finding->id }}" class="btn btn-outline-primary btn-sm w-100">
+                                    <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                    Edit
+                                </a>
+                            </div>
+                            <div class="col ps-1">
+                                <span class="btn btn-outline-danger btn-sm w-100" data-bs-toggle="modal" data-bs-target="#modal_confirm" onclick="return JS.modalConfirm('/finding-delete/{{ $finding->id }}')" style="cursor: pointer">
+                                    <svg class="mb-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                    </svg>
+                                    Delete
+                                </span>
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
+            @endforeach
         </div>
-        @endforeach
+    </section>
 
-    </div>
+    {{-- PAGINATION --}}
+    @if ($paginator->hasPages())
+    <x-paginator :paginator="$paginator"></x-paginator>
+    @endif
 
-</div>
+    <script type="module">
+        let search = document.getElementById("search");
+        let status = document.getElementById("status");
 
-<script>
-    const findings = document.getElementsByClassName('finding');
-    const filter_status = document.getElementById('filter_status');
-    const filter_equipment = document.getElementById('filter_equipment');
-    const button_deletes = document.getElementsByClassName('button_delete');
+        JS.fillInputFilterFromUrlSearchParams(search, status)
 
-    // DO CONFIRMATION BEFORE DELETE
-    function doConfirmation(buttons) {
-        for (let i = 0; i < buttons.length; i++) {
-            buttons[i].style.cursor = 'pointer';
-            buttons[i].onclick = () => {
-                let confirm_url = buttons[i].getAttribute('url');
-                let modal_url = document.getElementById('confirmation_url');
-                modal_url.setAttribute('href', confirm_url);
-            }
+        function doFilter() {
+            JS.filter(search, status);
         }
-    }
 
-    doConfirmation(button_deletes);
+        search.oninput = JS.debounce(doFilter, 300);
+        status.oninput = JS.debounce(doFilter, 0);
+    </script>
 
-    // DO FILTER
-    function doFilter() {
-        doFilterByFindingStatus();
-        doFilterByFindingEquipment();
-    }
 
-    // FILTER BY FINDING EQUIPMENT
-    filter_equipment.onchange = () => {
-        if (filter_status.value != 'All') {
-            doFilterByFindingEquipment();
-            filterByFindingStatus(findings, filter_status.value);
-        } else {
-            doFilterByFindingEquipment();
-        }
-    }
-
-    function doFilterByFindingEquipment() {
-
-        if (filter_equipment.value != 'All') {
-            showAllFinding();
-            filterByFindingEquipment(findings, filter_equipment.value);
-        } else {
-            showAllFinding();
-        }
-    }
-
-    function filterByFindingEquipment(findings, equipment) {
-        for (let i = 0; i < findings.length; i++) {
-
-            let finding_equipment = findings[i].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.lastElementChild.textContent;
-
-            if (finding_equipment != equipment) {
-                findings[i].classList.add('d-none')
-            }
-        }
-    }
-
-    // FILTER BY FINDING STATUS
-    filter_status.onchange = () => {
-        if (filter_equipment.value != 'All') {
-            doFilterByFindingStatus();
-            filterByFindingEquipment(findings, filter_equipment.value)
-        } else {
-            doFilterByFindingStatus();
-        }
-    }
-
-    function doFilterByFindingStatus() {
-        if (filter_status.value == 'Open') {
-            showAllFinding();
-            filterByFindingStatus(findings, filter_status.value)
-        } else if (filter_status.value == 'Closed') {
-            showAllFinding();
-            filterByFindingStatus(findings, filter_status.value)
-        } else {
-            showAllFinding();
-        }
-    }
-
-    function filterByFindingStatus(findings, status) {
-        for (let i = 0; i < findings.length; i++) {
-
-            let finding_status = findings[i].firstElementChild.firstElementChild.nextElementSibling.firstElementChild.nextElementSibling.firstElementChild.lastElementChild.textContent
-
-            if (finding_status != status) {
-                findings[i].classList.add('d-none')
-            }
-        }
-    }
-
-    // SHOW ALL FINDING
-    function showAllFinding() {
-        for (let i = 0; i < findings.length; i++) {
-            findings[i].classList.remove('d-none');
-        }
-    }
-
-    // WINDOW ONLOAD
-    window.onload = () => {
-        doFilter();
-    }
-</script>
-
-@include('utility.script.tooltip')
-@include('utility.suffix')
+</x-app-layout>

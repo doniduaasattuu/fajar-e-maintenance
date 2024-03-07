@@ -46,6 +46,8 @@ use App\Services\TrafoDetailService;
 use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
 use App\Services\UserService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -86,6 +88,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        DB::listen(function ($query) {
+            Log::info($query->sql);
+        });
     }
 }

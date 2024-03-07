@@ -90,7 +90,7 @@ trait Utility
         return $ddmmyy;
     }
 
-    public function areas(): array
+    public static function areas(): array
     {
         $funcloc = Funcloc::query()->pluck('id');
         $areas = $funcloc->map(function ($value, $key) {

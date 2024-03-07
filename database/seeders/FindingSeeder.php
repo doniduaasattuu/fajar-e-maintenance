@@ -31,7 +31,7 @@ class FindingSeeder extends Seeder
         $finding1->status = 'Open';
         $finding1->equipment = 'MGM000481';
         $finding1->funcloc = 'FP-01-PM3-REL-PPRL-PRAR';
-        $finding1->notification = null;
+        $finding1->notification = '80012235';
         $finding1->description = 'Motor panas tertutup buburan';
         $finding1->image = "$id.jpg";
         $finding1->reporter = 'Doni Darmawan';

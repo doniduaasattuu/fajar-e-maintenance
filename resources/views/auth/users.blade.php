@@ -6,12 +6,12 @@
 
     @inject('utility', 'App\Services\Utility')
 
+    @if (Auth::user()->isSuperAdmin())
+    <x-modal-confirm></x-modal-confirm>
+    @endif
+
     <section class="mb-4">
         <x-h3>{{ $title }}</x-h3>
-
-        @if (Auth::user()->isSuperAdmin())
-        <x-modal-confirm></x-modal-confirm>
-        @endif
 
         {{-- FILTERING --}}
         <div class="row mb-3">
@@ -25,9 +25,8 @@
                 <x-input-label for="dept" :value="__('Dept')" />
                 <x-input-select id="dept" name="dept" :options="App\Models\User::$departments" :choose="''"></x-input-select>
             </div>
-            <div class="form-text">The total registered user is {{ count(App\Models\User::all()) }} people.</div>
+            <div class="form-text">The total registered user is {{ $paginator->total() }} people.</div>
         </div>
-
     </section>
 
     {{-- USER DATA --}}
@@ -106,7 +105,7 @@
         }
 
         search.oninput = JS.debounce(doFilter, 300);
-        dept.oninput = JS.debounce(doFilter, 300);
+        dept.oninput = JS.debounce(doFilter, 0);
     </script>
 
 </x-app-layout>

@@ -177,7 +177,7 @@
             <div class="mb-3">
                 <x-input-label for="finding_image" :value="__('Finding image')" />
                 <div class="input-group">
-                    <x-input-file id="finding_image" name="finding_image" :disabled='$trafo_installed' accept="image/*"></x-input-file>
+                    <x-input-file id="finding_image" name="finding_image" :disabled='$trafo_installed' accept="image/*" />
                     @if( isset($finding) && $finding->image !== null)
                     <button class="btn btn-outline-secondary" type="button" id="image"><a target="_blank" class="text-reset text-decoration-none" href="/storage/findings/{{ $finding->image }}">Existing</a></button>
                     @endif

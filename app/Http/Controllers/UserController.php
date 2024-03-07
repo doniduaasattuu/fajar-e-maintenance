@@ -8,8 +8,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
-use App\Services\RoleService;
-use App\Services\Utility;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -136,12 +134,14 @@ class UserController extends Controller
         function ownQuery($search)
         {
             if (!is_null($search) && is_numeric($search)) {
+                // IF SEARCH BY NIK
                 return User::query()
                     ->when($search, function ($query, $search) {
                         $query
                             ->where('nik', 'like', "%{$search}%");
                     });
             } else if (!is_null($search) && !is_numeric($search)) {
+                // IF SEARCH BY NAME
                 return User::query()
                     ->when($search, function ($query, $search) {
                         $query
@@ -157,7 +157,7 @@ class UserController extends Controller
                 $query
                     ->where('department', '=', $dept);
             })
-            ->paginate(2)
+            ->paginate(5)
             ->withQueryString();
 
         return view('auth.users', [
