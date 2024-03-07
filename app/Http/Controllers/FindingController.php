@@ -12,6 +12,7 @@ use App\Services\MotorService;
 use App\Services\TrafoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -57,45 +58,26 @@ class FindingController extends Controller
 
     public function findings(Request $request)
     {
+        $dept = $request->query('dept');
+        $status = $request->query('status');
         $search = $request->query('search');
-        $status = $request->query('status'); // open or closed
 
-        function ownQuery($search, array $columns)
-        {
-            $findings = DB::table('findings');
-
-            if (!is_null($findings)) {
-                foreach ($columns as $column) {
-                    $findings->orWhere($column, 'like', "%{$search}%");
-                }
-            }
-
-            return $findings;
-
-            // if (!is_null($status)) {
-            //     return Finding::query()
-            //         ->where('status', '=', $status);
-            // } else {
-            //     return Finding::query();
-            // }
-        }
-
-        $paginator = ownQuery($search, ['equipment', 'funcloc', 'notification', 'reporter'])
+        $paginator = Finding::query()
+            ->when($dept, function ($query, $dept) {
+                $query
+                    ->where('department', '=', $dept);
+            })
             ->when($status, function ($query, $status) {
                 $query
                     ->where('status', '=', $status);
             })
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('description', 'LIKE', "%{$search}%");
+            })
             ->orderBy('created_at', 'DESC')
             ->paginate(4)
             ->withQueryString();
-
-        // ->when($search, function ($query, $search) {
-        //     $query
-        //         ->where('equipment', 'like', "%{$search}%")
-        //         ->orWhere('funcloc', 'like', "%{$search}%")
-        //         ->orWhere('notification', 'like', "%{$search}%")
-        //         ->orWhere('reporter', 'like', "%{$search}%");
-        // })
 
         return view('maintenance.finding.finding', [
             'title' => 'Findings',
@@ -162,6 +144,7 @@ class FindingController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
             'area' => ['required', Rule::in($this->areas())],
+            'department' => ['required', Rule::in($this::$departments)],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
             'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
@@ -247,6 +230,7 @@ class FindingController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'exists:App\Models\Finding,id'],
             'area' => ['required', Rule::in($this->areas())],
+            'department' => ['required', Rule::in($this::$departments)],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
             'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],

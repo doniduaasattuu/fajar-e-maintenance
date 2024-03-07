@@ -137,6 +137,7 @@ class RecordController extends Controller
             $validated_finding = [
                 'id' => $validated['id'],
                 'area' => explode('-', $validated['funcloc'])[2],
+                'department' => Auth::user()->department,
                 'description' => $validated['finding_description'],
                 'equipment' => $validated['motor'],
                 'funcloc' => $validated['funcloc'],
@@ -236,6 +237,7 @@ class RecordController extends Controller
                 $validated_finding = [
                     'id' => $validated['id'],
                     'area' => explode('-', $validated['funcloc'])[2],
+                    'department' => Auth::user()->department,
                     'description' => $validated['finding_description'],
                     'equipment' => $validated['motor'],
                     'funcloc' => $validated['funcloc'],
@@ -437,6 +439,7 @@ class RecordController extends Controller
             $validated_finding = [
                 'id' => $validated['id'],
                 'area' => explode('-', $validated['funcloc'])[2],
+                'department' => Auth::user()->department,
                 'description' => $validated['finding_description'],
                 'equipment' => $validated['trafo'],
                 'funcloc' => $validated['funcloc'],
@@ -549,6 +552,7 @@ class RecordController extends Controller
                 $validated_finding = [
                     'id' => $validated['id'],
                     'area' => explode('-', $validated['funcloc'])[2],
+                    'department' => Auth::user()->department,
                     'description' => $validated['finding_description'],
                     'equipment' => $validated['trafo'],
                     'funcloc' => $validated['funcloc'],

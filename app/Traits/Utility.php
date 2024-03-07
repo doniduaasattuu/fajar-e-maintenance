@@ -12,6 +12,16 @@ trait Utility
 {
     public array $equipmentStatus = ['Installed', 'Available', 'Repaired'];
 
+    public static array $departments = [
+        'EI1',
+        'EI2',
+        'EI3',
+        'EI4',
+        'EI5',
+        'EI6',
+        'EI7',
+    ];
+
     public static function getColumns(string $table, array $skipped = [])
     {
         $columns =  DB::getSchemaBuilder()->getColumnListing($table);

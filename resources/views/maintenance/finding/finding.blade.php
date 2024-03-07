@@ -14,17 +14,28 @@
 
         {{-- FILTERING --}}
         <div class="row mb-3">
-            {{-- FILTER SEARCH --}}
+
+            {{-- BY DEPT --}}
             <div class="col pe-1">
-                <x-input-label for="search" :value="__('Search')" />
-                <x-input-text id="search" type="text" name="search" placeholder="Equipment"></x-input-text>
+                <x-input-label for="dept" :value="__('Dept')" />
+                <x-input-select id="dept" name="dept" :options='$utility::$departments' :choose="''"></x-input-select>
+                </select>
             </div>
+
             {{-- BY STATUS --}}
-            <div class="col ps-1">
+            <div class="col ps-1 pe-md-1">
                 <x-input-label for="status" :value="__('Status')" />
                 <x-input-select id="status" name="status" :options="['Open', 'Closed']" :choose="''"></x-input-select>
             </div>
+
+            {{-- FILTER SEARCH --}}
+            <div class="col-md ps-md-1 ps-md-1">
+                <x-input-label for="search" class="d-none d-md-block" :value="__('Search')" />
+                <x-input-text id="search" type="text" name="search" class="mt-3 mt-md-0" placeholder="Description"></x-input-text>
+            </div>
+
             <div class="form-text">The total finding is {{ $paginator->total() }} records.</div>
+
         </div>
     </section>
 
@@ -33,7 +44,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4 g-2">
             @foreach ($paginator->items() as $finding)
             <div class="col finding">
-                <div class="card shadow shadow-md">
+                <div class="card shadow-md">
 
                     {{-- FINDING IMAGE --}}
                     <div>
@@ -53,13 +64,13 @@
                     {{-- FINDING DESCRIPTION --}}
                     <div class="card-body">
                         <div class="mb-2">
-                            <h5 class="card-title fw-semibold" style="color: #9b9fa3">{{ $finding->area ?? 'Null' }}</h5>
+                            <h5 class="card-title fw-semibold" style="color: #9b9fa3">{{ $finding->department ?? '' }}</h5>
                             <p class="card-text" style="height: 50px; overflow: hidden;">{{ $finding->description ?? '' }}</p>
                         </div>
                         <div>
 
                             {{-- FINDING COLUMN --}}
-                            @foreach ($utility::getColumns('findings', ['id', 'area', 'description', 'image', 'updated_at']) as $column)
+                            @foreach ($utility::getColumns('findings', ['id', 'department', 'description', 'image', 'updated_at']) as $column)
                             @switch($column)
 
                             @case('funcloc')
@@ -114,17 +125,19 @@
     @endif
 
     <script type="module">
-        let search = document.getElementById("search");
+        let dept = document.getElementById("dept");
         let status = document.getElementById("status");
+        let search = document.getElementById("search");
 
-        JS.fillInputFilterFromUrlSearchParams(search, status)
+        JS.fillInputFilterFromUrlSearchParams(dept, status, search)
 
         function doFilter() {
-            JS.filter(search, status);
+            JS.filter(dept, status, search);
         }
 
-        search.oninput = JS.debounce(doFilter, 300);
+        dept.oninput = JS.debounce(doFilter, 0);
         status.oninput = JS.debounce(doFilter, 0);
+        search.oninput = JS.debounce(doFilter, 300);
     </script>
 
 

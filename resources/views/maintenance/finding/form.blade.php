@@ -16,6 +16,9 @@
     </x-alert>
     @endisset
 
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["id", "reporter"]' />
+
     {{-- FORM --}}
     <section>
         <form action="/{{ $action }}" id="forms" method="POST" enctype="multipart/form-data">
@@ -31,6 +34,13 @@
                 <x-input-label for="area" :value="__('Area *')" />
                 <x-input-select id="area" name="area" :options="$utility::areas()" :value='old("area", $finding->area ?? "")' :choose="''" />
                 <x-input-error :message="$errors->first('area')" />
+            </div>
+
+            {{-- DEPARTMENT --}}
+            <div class="mb-3">
+                <x-input-label for="department" :value="__('Department *')" />
+                <x-input-select id="department" name="department" :options="$utility::$departments" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' :choose="''" />
+                <x-input-error :message="$errors->first('department')" />
             </div>
 
             {{-- STATUS --}}
