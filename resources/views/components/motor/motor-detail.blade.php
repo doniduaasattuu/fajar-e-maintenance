@@ -7,7 +7,7 @@
     @switch($column)
 
     @case('motor_detail')
-    <x-input-number-text type="hidden" id="{{ $column }}" name="{{ $column }}" :value='old($column, $motorDetail->$column ?? $motor->id)' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-number-text type="hidden" id="{{ $column }}" name="{{ $column }}" :value='old($column, $motorDetail->$column ?? $motor->id ?? "" )' :disabled='!Auth::user()->isAdmin()' />
     @break
 
     @case('power_unit')
@@ -15,7 +15,7 @@
     @case('nipple_grease')
     @case('cooling_fan')
     @case('mounting')
-    <x-input-select id="status" name="status" :options="$utility::getEnumValue('motor', $column)" :value='old($column, $motorDetail->$column ?? "")' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-select id="{{ $column }}" name="{{ $column }}" :options="$utility::getEnumValue('motor', $column)" :value='old($column, $motorDetail->$column ?? "")' :disabled='!Auth::user()->isAdmin()' />
     @break
 
     @case('power_rate')

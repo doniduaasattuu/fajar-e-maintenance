@@ -153,13 +153,12 @@ class RecordController extends Controller
                     $this->findingService->insert($validated_finding);
                 }
             }
-
-            DB::commit();
         } catch (Exception $error) {
             DB::rollback();
             return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'))->withInput();
         }
 
+        DB::commit();
         return back()->with('alert', new Alert('The motor record successfully saved.', 'alert-success', 'record-edit/motor/' .  $validated_record['id']));
     }
 

@@ -1,84 +1,94 @@
-@include('utility.prefix')
+<x-app-layout>
 
-<div class="py-4">
+    @inject('utility', 'App\Services\Utility')
 
-    <div class="mb-3">
-        <h3 class="mb-1">{{ $title }}</h3>
-        <nav aria-label=" breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/trafos">Table</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ (isset($trafo) && $trafo != null) ? $trafo->id : $title }}</li>
-            </ol>
-        </nav>
-    </div>
+    {{-- BREADCUMB --}}
+    <section>
+        @isset($trafo)
+        <x-breadcumb-table :title='$title' :table="'Trafos'" :table_item='$trafo' />
+        @else
+        <x-breadcumb-table :title='$title' :table="'Trafos'" />
+        @endisset
+    </section>
 
-    @include('utility.alert')
+    @if(session("alert"))
+    <x-alert :alert='session("alert")'>
+    </x-alert>
+    @endisset
 
-    @switch($title)
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["trafo_detail"]' />
 
-    @case('Trafo registration')
-    @include('maintenance.trafo.registration')
-    @break
+    <section>
+        <form action="/{{ $action ?? '' }}" id="forms" method="POST">
+            @csrf
 
-    @case('Edit trafo')
-    @include('maintenance.trafo.edit')
-    @break
+            {{-- trafo DATA --}}
+            @isset($trafo)
+            <x-form-equipment :equipment='$trafo' :utility='$utility' :table='"trafos"' />
+            @else
+            <x-form-equipment :utility='$utility' :table='"trafos"' :qr_code_link='"id=Fajar-TrafoList"' />
+            @endisset
 
-    @default
-    @include('maintenance.trafo.details')
-    @endswitch
+            {{-- trafo DETAIL --}}
+            <x-alert :alert='new App\Data\Alert("All fields below can be blank.", "alert-info")' :button_close='true' />
 
-</div>
+            @isset($trafoDetail)
+            <x-trafo.trafo-detail :trafoDetail='$trafoDetail' :utility='$utility' :trafo='$trafo' />
+            @else
+            <x-trafo.trafo-detail :utility='$utility' />
+            @endisset
 
-<script>
-    let id = document.getElementById('id');
-    let unique_id = document.getElementById('unique_id');
-    let qr_code_link = document.getElementById('qr_code_link');
-    let status = document.getElementById('status');
-    let funcloc = document.getElementById('funcloc')
-    let sort_field = document.getElementById('sort_field')
-    let current_funcloc = <?php echo (isset($trafo)) ? (json_encode($trafo->funcloc)) : "''" ?>;
-    let current_sort_field = <?php echo (isset($trafo)) ? (json_encode($trafo->sort_field)) : "''" ?>;
+            @if (Auth::user()->isAdmin())
+            {{-- BUTTON SUBMIT --}}
+            <div class="mb-3">
+                <x-button-primary>
+                    @isset($trafo)
+                    {{ __('Save changes') }}
+                    @else
+                    {{ __('Submit') }}
+                    @endisset
+                </x-button-primary>
+            </div>
+            @endif
 
-    function disabledFunclocAndSortField() {
-        if (status.value == 'Repaired' || status.value == 'Available') {
-            // IF STATUS VALUE IS NOT INSTALLED
-            if (funcloc.value.length > 0 && sort_field.value.length > 0) {
-                current_funcloc = funcloc.value;
-                current_sort_field = sort_field.value;
+        </form>
+    </section>
+
+    <script>
+        let current_funcloc = '';
+        let current_sort_field = '';
+
+        const status = document.getElementById('status');
+        const funcloc = document.getElementById('funcloc');
+        const sort_field = document.getElementById('sort_field');
+
+        function disabledFunclocAndSortField(status, funcloc, sort_field) {
+            if (status.value == 'Repaired' || status.value == 'Available') {
+                // IF STATUS VALUE IS NOT INSTALLED
+                if (funcloc.value.length > 0 || sort_field.value.length > 0) {
+                    current_funcloc = funcloc.value;
+                    current_sort_field = sort_field.value;
+                }
+
+                funcloc.setAttribute('disabled', true);
+                sort_field.setAttribute('disabled', true);
+
+                funcloc.value = '';
+                sort_field.value = '';
+            } else if (status.value == 'Installed') {
+                // IF STATUS VALUE IS INSTALLED
+                funcloc.value = current_funcloc;
+                sort_field.value = current_sort_field;
+
+                funcloc.removeAttribute('disabled');
+                sort_field.removeAttribute('disabled');
             }
-
-            funcloc.setAttribute('disabled', true);
-            sort_field.setAttribute('disabled', true);
-
-            funcloc.value = '';
-            sort_field.value = '';
-        } else if (status.value == 'Installed') {
-            // IF STATUS VALUE IS INSTALLED
-            funcloc.value = current_funcloc;
-            sort_field.value = current_sort_field;
-
-            funcloc.removeAttribute('disabled');
-            sort_field.removeAttribute('disabled');
         }
-    }
 
-    status.onchange = () => {
-        disabledFunclocAndSortField();
-    }
-
-    unique_id.oninput = () => {
-        qr_code_link.value = "";
-        let link = "id=Fajar-TrafoList";
-        qr_code_link.value = link + unique_id.value;
-    }
-
-    window.onload = () => {
-        if (window.location.pathname.split('/')[1] !== 'trafo-details') {
-            disabledFunclocAndSortField();
+        status.onchange = () => {
+            disabledFunclocAndSortField(status, funcloc, sort_field);
         }
-    }
-</script>
-@include('utility.script.toupper')
-@include('utility.script.onlynumber')
-@include('utility.suffix')
+    </script>
+
+</x-app-layout>

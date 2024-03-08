@@ -8,9 +8,9 @@
         <x-h3>{{ $title }}</x-h3>
 
         {{-- BUTTON NEW --}}
-        <x-finding.button-new :href='"/finding-registration"'>
+        <x-button-new :href='"/finding-registration"'>
             {{ __('New finding') }}
-        </x-finding.button-new>
+        </x-button-new>
 
         {{-- FILTERING --}}
         <div class="row mb-3">
@@ -39,7 +39,7 @@
 
     {{-- FINDING DATA --}}
     <section class="mb-4">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4 g-2">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-2">
             @foreach ($paginator->items() as $finding)
             <div class="col finding">
                 <div class="card shadow-md">
@@ -73,15 +73,15 @@
 
                             @case('funcloc')
                             <div class="row">
-                                <div class="col-6 mb-0 fw-semibold" style="color: #9b9fa3">{{ ucfirst($column) }}</div>
-                                <div class="col-6 mb-0 text-truncate" style="color: #9b9fa3">{{ str_replace('FP-01-', '', $finding->$column) }}</div>
+                                <div class="col-5 mb-0 fw-semibold pe-1" style="color: #9b9fa3">{{ ucfirst($column) }}</div>
+                                <div class="col-7 mb-0 text-truncate ps-1" style="color: #9b9fa3">: {{ str_replace('FP-01-', '', $finding->$column) }}</div>
                             </div>
                             @break
 
                             @default
                             <div class="row">
-                                <div class="col-6 mb-0 fw-semibold" style="color: #9b9fa3">{{ ucfirst($column == 'created_at' ? 'Date' : $column) }}</div>
-                                <div class="col-6 mb-0 text-truncate" style="color: #9b9fa3">{{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
+                                <div class="col-5 mb-0 fw-semibold pe-1" style="color: #9b9fa3">{{ ucfirst($column == 'created_at' ? 'Date' : (($column == 'notification') ? 'Notif' : $column)) }}</div>
+                                <div class="col-7 mb-0 text-truncate ps-1" style="color: #9b9fa3">: {{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
                             </div>
                             @endswitch
                             @endforeach

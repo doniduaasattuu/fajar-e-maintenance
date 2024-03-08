@@ -22,17 +22,36 @@ class FunclocController extends Controller
         $this->funclocService = $funclocService;
     }
 
-    public function funclocs(?string $page = '1', ?string $filter = null)
-    {
-        $paginate = DB::table('funclocs')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(perPage: 1000, page: $page);
+    // public function funclocs(?string $page = '1', ?string $filter = null)
+    // {
+    //     $paginate = DB::table('funclocs')
+    //         ->orderBy('updated_at', 'desc')
+    //         ->paginate(perPage: 1000, page: $page);
 
-        return response()->view('maintenance.funcloc.funcloc', [
-            'title' => 'Table funcloc',
-            'funclocService' => $this->funclocService,
-            'paginate' => $paginate,
-            'filter' => $filter,
+    //     return response()->view('maintenance.funcloc.funcloc', [
+    //         'title' => 'Table funcloc',
+    //         'funclocService' => $this->funclocService,
+    //         'paginate' => $paginate,
+    //         'filter' => $filter,
+    //     ]);
+    // }
+
+    public function funclocs(Request $request)
+    {
+        $search = $request->query('search');
+
+        $paginator = Funcloc::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('id', 'LIKE', "%{$search}%");
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50)
+            ->withQueryString();
+
+        return view('maintenance.funcloc.funcloc', [
+            'title' => 'Funclocs',
+            'paginator' => $paginator,
         ]);
     }
 

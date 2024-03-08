@@ -3,7 +3,7 @@
 {{-- ID --}}
 <div class="mb-3">
     <x-input-label for="id" :value="__('Id *')" />
-    <x-input-text id="id" name="id" :value='old("id", $equipment->id ?? "")' :readonly='isset($equipment) ? true : false' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-text id="id" name="id" :value='old("id", $equipment->id ?? "")' :readonly='isset($equipment) ? true : false' :disabled='!Auth::user()->isAdmin()' oninput="return JS.toupper(this)" />
     <x-input-error :message="$errors->first('id')" />
 </div>
 
@@ -17,22 +17,29 @@
 {{-- FUNCLOC --}}
 <div class="mb-3">
     <x-input-label for="funcloc" :value="__('Funcloc')" />
-    <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $equipment->funcloc ?? "")' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $equipment->funcloc ?? "")' :disabled='!Auth::user()->isAdmin()' oninput="return JS.toupper(this)" />
     <x-input-error :message="$errors->first('funcloc')" />
 </div>
 
 {{-- SORT FIELD --}}
 <div class="mb-3">
     <x-input-label for="sort_field" :value="__('Sort field')" />
-    <x-input-text id="sort_field" name="sort_field" :value='old("sort_field", $equipment->sort_field ?? "")' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-text id="sort_field" name="sort_field" :value='old("sort_field", $equipment->sort_field ?? "")' :disabled='!Auth::user()->isAdmin()' oninput="return JS.toupper(this)" />
     <x-input-error :message="$errors->first('sort_field')" />
 </div>
 
 {{-- DESCRIPTION --}}
 <div class="mb-3">
     <x-input-label for="description" :value="__('Description')" />
-    <x-input-text id="description" name="description" :value='old("description", $equipment->description ?? "")' :disabled='!Auth::user()->isAdmin()' />
+    <x-input-text id="description" name="description" :value='old("description", $equipment->description ?? "")' :disabled='!Auth::user()->isAdmin()' oninput="return JS.toupper(this)" />
     <x-input-error :message="$errors->first('description')" />
+</div>
+
+{{-- MATERIAL NUMBER --}}
+<div class="mb-3">
+    <x-input-label for="material_number" :value="__('Material number')" />
+    <x-input-number-text id="material_number" name="material_number" :value='old("material_number", $equipment->material_number ?? "" )' :disabled='!Auth::user()->isAdmin()' maxlength="8" />
+    <x-input-error :message="$errors->first('material_number')" />
 </div>
 
 {{-- UNIQUE ID --}}

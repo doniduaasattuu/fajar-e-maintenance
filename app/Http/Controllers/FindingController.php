@@ -144,7 +144,7 @@ class FindingController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
             'area' => ['required', Rule::in($this->areas())],
-            'department' => ['required', Rule::in($this::$departments)],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
             'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
@@ -230,7 +230,7 @@ class FindingController extends Controller
         $validated = $request->validate([
             'id' => ['required', 'exists:App\Models\Finding,id'],
             'area' => ['required', Rule::in($this->areas())],
-            'department' => ['required', Rule::in($this::$departments)],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
             'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],

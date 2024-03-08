@@ -22,7 +22,7 @@ class MotorSeeder extends Seeder
         $motor01->description = 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3';
         $motor01->material_number = '10010591';
         $motor01->unique_id = '4592';
-        $motor01->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList4592';
+        $motor01->qr_code_link = 'id=Fajar-MotorList4592';
         $motor01->created_at = Carbon::now();
         $motor01->updated_at = null;
         $motor01->save();
@@ -35,7 +35,7 @@ class MotorSeeder extends Seeder
         $motor02->description = 'AC MOTOR;380V,50Hz,2.2kW,6P,112M';
         $motor02->material_number = '10010507';
         $motor02->unique_id = '5453';
-        $motor02->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList5453';
+        $motor02->qr_code_link = 'id=Fajar-MotorList5453';
         $motor02->created_at = Carbon::now();
         $motor02->updated_at = null;
         $motor02->save();
@@ -48,7 +48,7 @@ class MotorSeeder extends Seeder
         $motor03->description = 'AC MOTOR;380V,50Hz,75kW,4P,280S,B3';
         $motor03->material_number = null;
         $motor03->unique_id = '1187';
-        $motor03->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1187';
+        $motor03->qr_code_link = 'id=Fajar-MotorList1187';
         $motor03->created_at = Carbon::now();
         $motor03->updated_at = null;
         $motor03->save();
@@ -61,7 +61,7 @@ class MotorSeeder extends Seeder
         $motor04->description = 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3';
         $motor04->material_number = '10010692';
         $motor04->unique_id = '580';
-        $motor04->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList580';
+        $motor04->qr_code_link = 'id=Fajar-MotorList580';
         $motor04->created_at = Carbon::now();
         $motor04->updated_at = null;
         $motor04->save();
@@ -74,7 +74,7 @@ class MotorSeeder extends Seeder
         $motor05->description = 'AC MOTOR;290V,50Hz,0.75kW,4P,80M,B3';
         $motor05->material_number = null;
         $motor05->unique_id = '4702';
-        $motor05->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList4702';
+        $motor05->qr_code_link = 'id=Fajar-MotorList4702';
         $motor05->created_at = Carbon::now();
         $motor05->updated_at = null;
         $motor05->save();
@@ -87,7 +87,7 @@ class MotorSeeder extends Seeder
         $motor06->description = 'AC MOTOR;380V,50Hz,11kW,4P,160M,B3';
         $motor06->material_number = '10010918';
         $motor06->unique_id = '1818';
-        $motor06->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1818';
+        $motor06->qr_code_link = 'id=Fajar-MotorList1818';
         $motor06->created_at = Carbon::now();
         $motor06->updated_at = null;
         $motor06->save();
@@ -100,7 +100,7 @@ class MotorSeeder extends Seeder
         $motor07->description = 'AC MOTOR;380V,50Hz,11kW,4P,160M,B3';
         $motor07->material_number = '10011051';
         $motor07->unique_id = '273';
-        $motor07->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList273';
+        $motor07->qr_code_link = 'id=Fajar-MotorList273';
         $motor07->created_at = Carbon::now();
         $motor07->updated_at = null;
         $motor07->save();
@@ -113,7 +113,7 @@ class MotorSeeder extends Seeder
         $motor08->description = 'AC MOTOR;380V,50Hz,22kW,4P,180L,B3';
         $motor08->material_number = '10020913';
         $motor08->unique_id = '155';
-        $motor08->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList155';
+        $motor08->qr_code_link = 'id=Fajar-MotorList155';
         $motor08->created_at = Carbon::now();
         $motor08->updated_at = null;
         $motor08->save();
@@ -126,7 +126,7 @@ class MotorSeeder extends Seeder
         $motor09->description = 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3';
         $motor09->material_number = '10010923';
         $motor09->unique_id = '56';
-        $motor09->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56';
+        $motor09->qr_code_link = 'id=Fajar-MotorList56';
         $motor09->created_at = Carbon::now();
         $motor09->updated_at = null;
         $motor09->save();
@@ -139,7 +139,7 @@ class MotorSeeder extends Seeder
         $motor10->description = 'AC MOTOR;380V,50Hz,15kW,4P,160L,B3';
         $motor10->material_number = '10010924';
         $motor10->unique_id = '287';
-        $motor10->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList287';
+        $motor10->qr_code_link = 'id=Fajar-MotorList287';
         $motor10->created_at = Carbon::now();
         $motor10->updated_at = null;
         $motor10->save();
@@ -152,7 +152,7 @@ class MotorSeeder extends Seeder
         $motor11->description = 'AC MOTOR;380V,50Hz,90kW,6P,315S,B3';
         $motor11->material_number = '10025942';
         $motor11->unique_id = '293';
-        $motor11->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList293';
+        $motor11->qr_code_link = 'id=Fajar-MotorList293';
         $motor11->created_at = Carbon::now();
         $motor11->updated_at = null;
         $motor11->save();
@@ -165,7 +165,7 @@ class MotorSeeder extends Seeder
         $motor12->description = 'AC MOTOR;3000V,50Hz,250kW,8P,400B,B3';
         $motor12->material_number = '10010982';
         $motor12->unique_id = '358';
-        $motor12->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList358';
+        $motor12->qr_code_link = 'id=Fajar-MotorList358';
         $motor12->created_at = Carbon::now();
         $motor12->updated_at = null;
         $motor12->save();
@@ -178,7 +178,7 @@ class MotorSeeder extends Seeder
         $motor13->description = 'AC MOTOR;380V,50Hz,15kW,4P,160L,B5';
         $motor13->material_number = '10011100';
         $motor13->unique_id = '382';
-        $motor13->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList382';
+        $motor13->qr_code_link = 'id=Fajar-MotorList382';
         $motor13->created_at = Carbon::now();
         $motor13->updated_at = null;
         $motor13->save();
@@ -191,7 +191,7 @@ class MotorSeeder extends Seeder
         $motor14->description = 'AC MOTOR;380V,50Hz,75kW,4P,250M,B3';
         $motor14->material_number = '10010668';
         $motor14->unique_id = '1804';
-        $motor14->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1804';
+        $motor14->qr_code_link = 'id=Fajar-MotorList1804';
         $motor14->created_at = Carbon::now();
         $motor14->updated_at = null;
         $motor14->save();
@@ -204,7 +204,7 @@ class MotorSeeder extends Seeder
         $motor15->description = 'BOTTOM SLITTER 5/M';
         $motor15->material_number = null;
         $motor15->unique_id = '9007';
-        $motor15->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9007';
+        $motor15->qr_code_link = 'id=Fajar-MotorList9007';
         $motor15->created_at = Carbon::now();
         $motor15->updated_at = null;
         $motor15->save();
@@ -217,7 +217,7 @@ class MotorSeeder extends Seeder
         $motor16->description = 'AC MOTOR;380V,50Hz,220kW,4P';
         $motor16->material_number = null;
         $motor16->unique_id = '473';
-        $motor16->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList473';
+        $motor16->qr_code_link = 'id=Fajar-MotorList473';
         $motor16->created_at = Carbon::now();
         $motor16->updated_at = null;
         $motor16->save();
@@ -230,7 +230,7 @@ class MotorSeeder extends Seeder
         $motor17->description = 'MOTOR;380V,50Hz,1.1kW';
         $motor17->material_number = null;
         $motor17->unique_id = '656';
-        $motor17->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList656';
+        $motor17->qr_code_link = 'id=Fajar-MotorList656';
         $motor17->created_at = Carbon::now();
         $motor17->updated_at = null;
         $motor17->save();
@@ -243,7 +243,7 @@ class MotorSeeder extends Seeder
         $motor18->description = 'FRONT DRUM/M';
         $motor18->material_number = null;
         $motor18->unique_id = '657';
-        $motor18->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList657';
+        $motor18->qr_code_link = 'id=Fajar-MotorList657';
         $motor18->created_at = Carbon::now();
         $motor18->updated_at = null;
         $motor18->save();
@@ -256,7 +256,7 @@ class MotorSeeder extends Seeder
         $motor19->description = 'MOTOR;380V,50Hz,1.1kW';
         $motor19->material_number = null;
         $motor19->unique_id = '658';
-        $motor19->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList658';
+        $motor19->qr_code_link = 'id=Fajar-MotorList658';
         $motor19->created_at = Carbon::now();
         $motor19->updated_at = null;
         $motor19->save();
@@ -269,7 +269,7 @@ class MotorSeeder extends Seeder
         $motor20->description = 'AC MOTOR;420V,50Hz,7.5KW,8P,160L,B3';
         $motor20->material_number = '10010638';
         $motor20->unique_id = '10571';
-        $motor20->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList10571';
+        $motor20->qr_code_link = 'id=Fajar-MotorList10571';
         $motor20->created_at = Carbon::now();
         $motor20->updated_at = null;
         $motor20->save();
@@ -282,7 +282,7 @@ class MotorSeeder extends Seeder
         $motor21->description = 'MOTOR HOIST CRANE 3.2T KONE';
         $motor21->material_number = null;
         $motor21->unique_id = '474';
-        $motor21->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList474';
+        $motor21->qr_code_link = 'id=Fajar-MotorList474';
         $motor21->created_at = Carbon::now();
         $motor21->updated_at = null;
         $motor21->save();
@@ -295,7 +295,7 @@ class MotorSeeder extends Seeder
         $motor22->description = 'DC MOTOR;440V,50Hz,45kW';
         $motor22->material_number = '10010784';
         $motor22->unique_id = '9026';
-        $motor22->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9026';
+        $motor22->qr_code_link = 'id=Fajar-MotorList9026';
         $motor22->created_at = Carbon::now();
         $motor22->updated_at = null;
         $motor22->save();
@@ -308,7 +308,7 @@ class MotorSeeder extends Seeder
         $motor23->description = 'MOTOR;380V,50Hz,11kW,2P';
         $motor23->material_number = null;
         $motor23->unique_id = '782';
-        $motor23->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList782';
+        $motor23->qr_code_link = 'id=Fajar-MotorList782';
         $motor23->created_at = Carbon::now();
         $motor23->updated_at = null;
         $motor23->save();
@@ -321,7 +321,7 @@ class MotorSeeder extends Seeder
         $motor24->description = 'MOTOR HOIST CRANE 4T DEMAG';
         $motor24->material_number = null;
         $motor24->unique_id = '475';
-        $motor24->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList475';
+        $motor24->qr_code_link = 'id=Fajar-MotorList475';
         $motor24->created_at = Carbon::now();
         $motor24->updated_at = null;
         $motor24->save();
@@ -334,7 +334,7 @@ class MotorSeeder extends Seeder
         $motor25->description = 'LAY BOY/BLW 1/M;0,37KW;1,25A';
         $motor25->material_number = null;
         $motor25->unique_id = '783';
-        $motor25->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList783';
+        $motor25->qr_code_link = 'id=Fajar-MotorList783';
         $motor25->created_at = Carbon::now();
         $motor25->updated_at = null;
         $motor25->save();
@@ -347,7 +347,7 @@ class MotorSeeder extends Seeder
         $motor26->description = 'AC MOTOR;380V,50Hz,0.37kW,6P';
         $motor26->material_number = null;
         $motor26->unique_id = '476';
-        $motor26->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList476';
+        $motor26->qr_code_link = 'id=Fajar-MotorList476';
         $motor26->created_at = Carbon::now();
         $motor26->updated_at = null;
         $motor26->save();
@@ -360,7 +360,7 @@ class MotorSeeder extends Seeder
         $motor27->description = 'DC MOTOR;51KW,129A,DK3417V,TOYODENKI';
         $motor27->material_number = '10010790';
         $motor27->unique_id = '680';
-        $motor27->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList680';
+        $motor27->qr_code_link = 'id=Fajar-MotorList680';
         $motor27->created_at = Carbon::now();
         $motor27->updated_at = null;
         $motor27->save();
@@ -373,7 +373,7 @@ class MotorSeeder extends Seeder
         $motor28->description = 'T(OS)/P1/M;1,5KW;3,7A';
         $motor28->material_number = null;
         $motor28->unique_id = '9172';
-        $motor28->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9172';
+        $motor28->qr_code_link = 'id=Fajar-MotorList9172';
         $motor28->created_at = Carbon::now();
         $motor28->updated_at = null;
         $motor28->save();
@@ -386,7 +386,7 @@ class MotorSeeder extends Seeder
         $motor29->description = 'AC MOTOR;380V,50Hz,30kW,4P,200L';
         $motor29->material_number = null;
         $motor29->unique_id = '479';
-        $motor29->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList479';
+        $motor29->qr_code_link = 'id=Fajar-MotorList479';
         $motor29->created_at = Carbon::now();
         $motor29->updated_at = null;
         $motor29->save();
@@ -399,7 +399,7 @@ class MotorSeeder extends Seeder
         $motor30->description = 'AC MOTOR;380V,50Hz,75kW,4P,280';
         $motor30->material_number = '10010623';
         $motor30->unique_id = '1100';
-        $motor30->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1100';
+        $motor30->qr_code_link = 'id=Fajar-MotorList1100';
         $motor30->created_at = Carbon::now();
         $motor30->updated_at = null;
         $motor30->save();
@@ -412,7 +412,7 @@ class MotorSeeder extends Seeder
         $motor31->description = 'MOTOR HOIST CRANE 5T DEMAG';
         $motor31->material_number = null;
         $motor31->unique_id = '480';
-        $motor31->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList480';
+        $motor31->qr_code_link = 'id=Fajar-MotorList480';
         $motor31->created_at = Carbon::now();
         $motor31->updated_at = null;
         $motor31->save();
@@ -425,7 +425,7 @@ class MotorSeeder extends Seeder
         $motor32->description = 'AC MOTOR;380V,50Hz,0.37kW,2P';
         $motor32->material_number = null;
         $motor32->unique_id = '481';
-        $motor32->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList481';
+        $motor32->qr_code_link = 'id=Fajar-MotorList481';
         $motor32->created_at = Carbon::now();
         $motor32->updated_at = null;
         $motor32->save();
@@ -438,7 +438,7 @@ class MotorSeeder extends Seeder
         $motor33->description = 'DC MOTOR;460V,50Hz,110kW,4P,315S';
         $motor33->material_number = '10010992';
         $motor33->unique_id = '1287';
-        $motor33->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1287';
+        $motor33->qr_code_link = 'id=Fajar-MotorList1287';
         $motor33->created_at = Carbon::now();
         $motor33->updated_at = null;
         $motor33->save();
@@ -451,7 +451,7 @@ class MotorSeeder extends Seeder
         $motor34->description = 'AC MOTOR;1.5kW';
         $motor34->material_number = null;
         $motor34->unique_id = '483';
-        $motor34->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList483';
+        $motor34->qr_code_link = 'id=Fajar-MotorList483';
         $motor34->created_at = Carbon::now();
         $motor34->updated_at = null;
         $motor34->save();
@@ -464,7 +464,7 @@ class MotorSeeder extends Seeder
         $motor35->description = 'AC MOTOR;420V,59Hz,90kW,4P,250MD,B3';
         $motor35->material_number = null;
         $motor35->unique_id = '4737';
-        $motor35->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList4737';
+        $motor35->qr_code_link = 'id=Fajar-MotorList4737';
         $motor35->created_at = Carbon::now();
         $motor35->updated_at = null;
         $motor35->save();
@@ -477,7 +477,7 @@ class MotorSeeder extends Seeder
         $motor36->description = 'AC MOTOR;380V,50Hz,0.75kW,2P';
         $motor36->material_number = null;
         $motor36->unique_id = '484';
-        $motor36->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList484';
+        $motor36->qr_code_link = 'id=Fajar-MotorList484';
         $motor36->created_at = Carbon::now();
         $motor36->updated_at = null;
         $motor36->save();
@@ -490,7 +490,7 @@ class MotorSeeder extends Seeder
         $motor37->description = 'AC MOTOR;380V,50Hz,15kW,4P,160L,B3';
         $motor37->material_number = '10010602';
         $motor37->unique_id = '69';
-        $motor37->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList69';
+        $motor37->qr_code_link = 'id=Fajar-MotorList69';
         $motor37->created_at = Carbon::now();
         $motor37->updated_at = null;
         $motor37->save();
@@ -503,7 +503,7 @@ class MotorSeeder extends Seeder
         $motor38->description = 'AC MOTOR;380V,50Hz,1kW,4P,182';
         $motor38->material_number = null;
         $motor38->unique_id = '485';
-        $motor38->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList485';
+        $motor38->qr_code_link = 'id=Fajar-MotorList485';
         $motor38->created_at = Carbon::now();
         $motor38->updated_at = null;
         $motor38->save();
@@ -516,7 +516,7 @@ class MotorSeeder extends Seeder
         $motor39->description = 'DC MOTOR;460V,60Hz,220kW,L4034Z';
         $motor39->material_number = '10010993';
         $motor39->unique_id = '1293';
-        $motor39->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1293';
+        $motor39->qr_code_link = 'id=Fajar-MotorList1293';
         $motor39->created_at = Carbon::now();
         $motor39->updated_at = null;
         $motor39->save();
@@ -529,7 +529,7 @@ class MotorSeeder extends Seeder
         $motor40->description = 'AC MOTOR;380V,50Hz,4kW';
         $motor40->material_number = null;
         $motor40->unique_id = '780';
-        $motor40->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList780';
+        $motor40->qr_code_link = 'id=Fajar-MotorList780';
         $motor40->created_at = Carbon::now();
         $motor40->updated_at = null;
         $motor40->save();
@@ -542,7 +542,7 @@ class MotorSeeder extends Seeder
         $motor41->description = 'AC MOTOR;400V,50Hz,56kW,2P';
         $motor41->material_number = null;
         $motor41->unique_id = '488';
-        $motor41->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList488';
+        $motor41->qr_code_link = 'id=Fajar-MotorList488';
         $motor41->created_at = Carbon::now();
         $motor41->updated_at = null;
         $motor41->save();
@@ -555,7 +555,7 @@ class MotorSeeder extends Seeder
         $motor42->description = 'AC MOTOR;380V,50Hz,18.5kW,6P,200ML';
         $motor42->material_number = null;
         $motor42->unique_id = '489';
-        $motor42->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList489';
+        $motor42->qr_code_link = 'id=Fajar-MotorList489';
         $motor42->created_at = Carbon::now();
         $motor42->updated_at = null;
         $motor42->save();
@@ -568,7 +568,7 @@ class MotorSeeder extends Seeder
         $motor43->description = 'VIBRATOR/M';
         $motor43->material_number = null;
         $motor43->unique_id = '804';
-        $motor43->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList804';
+        $motor43->qr_code_link = 'id=Fajar-MotorList804';
         $motor43->created_at = Carbon::now();
         $motor43->updated_at = null;
         $motor43->save();
@@ -581,7 +581,7 @@ class MotorSeeder extends Seeder
         $motor44->description = 'MEJA SAMPUL/PAPER ROLL 1/M';
         $motor44->material_number = null;
         $motor44->unique_id = '9078';
-        $motor44->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9078';
+        $motor44->qr_code_link = 'id=Fajar-MotorList9078';
         $motor44->created_at = Carbon::now();
         $motor44->updated_at = null;
         $motor44->save();
@@ -594,7 +594,7 @@ class MotorSeeder extends Seeder
         $motor45->description = 'AC MOTOR;380V;50Hz,1.1kW,4P';
         $motor45->material_number = null;
         $motor45->unique_id = '490';
-        $motor45->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList490';
+        $motor45->qr_code_link = 'id=Fajar-MotorList490';
         $motor45->created_at = Carbon::now();
         $motor45->updated_at = null;
         $motor45->save();
@@ -607,7 +607,7 @@ class MotorSeeder extends Seeder
         $motor46->description = 'BLW TRIM/M';
         $motor46->material_number = null;
         $motor46->unique_id = '778';
-        $motor46->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList778';
+        $motor46->qr_code_link = 'id=Fajar-MotorList778';
         $motor46->created_at = Carbon::now();
         $motor46->updated_at = null;
         $motor46->save();
@@ -620,7 +620,7 @@ class MotorSeeder extends Seeder
         $motor47->description = 'AC MOTOR;380V,50Hz,1.1kW';
         $motor47->material_number = null;
         $motor47->unique_id = '779';
-        $motor47->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList779';
+        $motor47->qr_code_link = 'id=Fajar-MotorList779';
         $motor47->created_at = Carbon::now();
         $motor47->updated_at = null;
         $motor47->save();
@@ -633,7 +633,7 @@ class MotorSeeder extends Seeder
         $motor48->description = 'AC MOTOR;380V,50Hz,3.7kW';
         $motor48->material_number = null;
         $motor48->unique_id = '784';
-        $motor48->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList784';
+        $motor48->qr_code_link = 'id=Fajar-MotorList784';
         $motor48->created_at = Carbon::now();
         $motor48->updated_at = null;
         $motor48->save();
@@ -646,7 +646,7 @@ class MotorSeeder extends Seeder
         $motor49->description = 'AC MOTOR;380V,50Hz,37kW,2P,200L,B3';
         $motor49->material_number = '10010650';
         $motor49->unique_id = '1211';
-        $motor49->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1211';
+        $motor49->qr_code_link = 'id=Fajar-MotorList1211';
         $motor49->created_at = Carbon::now();
         $motor49->updated_at = null;
         $motor49->save();
@@ -659,7 +659,7 @@ class MotorSeeder extends Seeder
         $motor50->description = 'AC MOTOR;440V,50Hz,22kW,4P,B847AT';
         $motor50->material_number = null;
         $motor50->unique_id = '1290';
-        $motor50->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1290';
+        $motor50->qr_code_link = 'id=Fajar-MotorList1290';
         $motor50->created_at = Carbon::now();
         $motor50->updated_at = null;
         $motor50->save();
@@ -672,7 +672,7 @@ class MotorSeeder extends Seeder
         $motor51->description = 'DC MOTOR;380V,50Hz,1.1kW,2P,160M';
         $motor51->material_number = null;
         $motor51->unique_id = '1213';
-        $motor51->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1213';
+        $motor51->qr_code_link = 'id=Fajar-MotorList1213';
         $motor51->created_at = Carbon::now();
         $motor51->updated_at = null;
         $motor51->save();
@@ -685,7 +685,7 @@ class MotorSeeder extends Seeder
         $motor52->description = 'DC MOTOR;380V,50Hz,1.1kW,2P,160M';
         $motor52->material_number = null;
         $motor52->unique_id = '1212';
-        $motor52->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1212';
+        $motor52->qr_code_link = 'id=Fajar-MotorList1212';
         $motor52->created_at = Carbon::now();
         $motor52->updated_at = null;
         $motor52->save();
@@ -698,7 +698,7 @@ class MotorSeeder extends Seeder
         $motor53->description = 'AC MOTOR;420V,59Hz,90kW,4P,250MD,B3';
         $motor53->material_number = null;
         $motor53->unique_id = '4738';
-        $motor53->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList4738';
+        $motor53->qr_code_link = 'id=Fajar-MotorList4738';
         $motor53->created_at = Carbon::now();
         $motor53->updated_at = null;
         $motor53->save();
@@ -711,7 +711,7 @@ class MotorSeeder extends Seeder
         $motor54->description = 'AC MOTOR;380V,50Hz,55kW,4P,280SC,B';
         $motor54->material_number = null;
         $motor54->unique_id = '1268';
-        $motor54->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1268';
+        $motor54->qr_code_link = 'id=Fajar-MotorList1268';
         $motor54->created_at = Carbon::now();
         $motor54->updated_at = null;
         $motor54->save();
@@ -724,7 +724,7 @@ class MotorSeeder extends Seeder
         $motor55->description = 'AC MOTOR;380V,50Hz,75kW,4P,280S,B3';
         $motor55->material_number = null;
         $motor55->unique_id = '1267';
-        $motor55->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1267';
+        $motor55->qr_code_link = 'id=Fajar-MotorList1267';
         $motor55->created_at = Carbon::now();
         $motor55->updated_at = null;
         $motor55->save();
@@ -737,7 +737,7 @@ class MotorSeeder extends Seeder
         $motor56->description = 'AC MOTOR;380V,50Hz,30kW,6P,225MC,B';
         $motor56->material_number = null;
         $motor56->unique_id = '1266';
-        $motor56->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1266';
+        $motor56->qr_code_link = 'id=Fajar-MotorList1266';
         $motor56->created_at = Carbon::now();
         $motor56->updated_at = null;
         $motor56->save();
@@ -750,7 +750,7 @@ class MotorSeeder extends Seeder
         $motor57->description = 'AC MOTOR;380V,50Hz,90kW,4P,280M,B3';
         $motor57->material_number = '10010624';
         $motor57->unique_id = '9704';
-        $motor57->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9704';
+        $motor57->qr_code_link = 'id=Fajar-MotorList9704';
         $motor57->created_at = Carbon::now();
         $motor57->updated_at = null;
         $motor57->save();
@@ -763,7 +763,7 @@ class MotorSeeder extends Seeder
         $motor58->description = 'AC MOTOR;380V,50Hz,315kW,4P,355M,B3';
         $motor58->material_number = null;
         $motor58->unique_id = '1264';
-        $motor58->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1264';
+        $motor58->qr_code_link = 'id=Fajar-MotorList1264';
         $motor58->created_at = Carbon::now();
         $motor58->updated_at = null;
         $motor58->save();
@@ -776,7 +776,7 @@ class MotorSeeder extends Seeder
         $motor59->description = 'AC MOTOR;380V,50Hz,18.5kW,4P,180M,B3';
         $motor59->material_number = '10010607';
         $motor59->unique_id = '1153';
-        $motor59->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1153';
+        $motor59->qr_code_link = 'id=Fajar-MotorList1153';
         $motor59->created_at = Carbon::now();
         $motor59->updated_at = null;
         $motor59->save();
@@ -789,7 +789,7 @@ class MotorSeeder extends Seeder
         $motor60->description = 'AC MOTOR;380V,50Hz,90kW,4P,280S,B3';
         $motor60->material_number = '10020524';
         $motor60->unique_id = '11562';
-        $motor60->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList11562';
+        $motor60->qr_code_link = 'id=Fajar-MotorList11562';
         $motor60->created_at = Carbon::now();
         $motor60->updated_at = null;
         $motor60->save();
@@ -802,7 +802,7 @@ class MotorSeeder extends Seeder
         $motor61->description = 'AC MOTOR;380V,50Hz,90kW,4P,280S,B3';
         $motor61->material_number = '10010624';
         $motor61->unique_id = '1049';
-        $motor61->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1049';
+        $motor61->qr_code_link = 'id=Fajar-MotorList1049';
         $motor61->created_at = Carbon::now();
         $motor61->updated_at = null;
         $motor61->save();
@@ -815,7 +815,7 @@ class MotorSeeder extends Seeder
         $motor62->description = 'AC MOTOR;380V,50Hz,55kW,4P,250M,B3';
         $motor62->material_number = '10010926';
         $motor62->unique_id = '1261';
-        $motor62->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1261';
+        $motor62->qr_code_link = 'id=Fajar-MotorList1261';
         $motor62->created_at = Carbon::now();
         $motor62->updated_at = null;
         $motor62->save();
@@ -828,7 +828,7 @@ class MotorSeeder extends Seeder
         $motor63->description = 'AC MOTOR;380V,50Hz,37kW,4P,200L,B3';
         $motor63->material_number = '10010957';
         $motor63->unique_id = '2997';
-        $motor63->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2997';
+        $motor63->qr_code_link = 'id=Fajar-MotorList2997';
         $motor63->created_at = Carbon::now();
         $motor63->updated_at = null;
         $motor63->save();
@@ -841,7 +841,7 @@ class MotorSeeder extends Seeder
         $motor64->description = 'AC MOTOR;380V,50Hz,75kW,4P,280S,B3';
         $motor64->material_number = '10010623';
         $motor64->unique_id = '1259';
-        $motor64->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1259';
+        $motor64->qr_code_link = 'id=Fajar-MotorList1259';
         $motor64->created_at = Carbon::now();
         $motor64->updated_at = null;
         $motor64->save();
@@ -854,7 +854,7 @@ class MotorSeeder extends Seeder
         $motor65->description = 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3';
         $motor65->material_number = null;
         $motor65->unique_id = '2008';
-        $motor65->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008';
+        $motor65->qr_code_link = 'id=Fajar-MotorList2008';
         $motor65->created_at = Carbon::now();
         $motor65->updated_at = null;
         $motor65->save();
@@ -867,7 +867,7 @@ class MotorSeeder extends Seeder
         $motor66->description = 'TECO,AEJE215HP,316A,315CC,8P,380V';
         $motor66->material_number = null;
         $motor66->unique_id = '2568';
-        $motor66->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2568';
+        $motor66->qr_code_link = 'id=Fajar-MotorList2568';
         $motor66->created_at = Carbon::now();
         $motor66->updated_at = null;
         $motor66->save();
@@ -880,7 +880,7 @@ class MotorSeeder extends Seeder
         $motor67->description = 'MOTOR/AC/37kW/52A';
         $motor67->material_number = null;
         $motor67->unique_id = '1234';
-        $motor67->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList1234';
+        $motor67->qr_code_link = 'id=Fajar-MotorList1234';
         $motor67->created_at = Carbon::now();
         $motor67->updated_at = null;
         $motor67->save();
@@ -893,7 +893,7 @@ class MotorSeeder extends Seeder
         $motor68->description = 'AC MOTOR;380V,50Hz,4kW,4P,112M,B3';
         $motor68->material_number = null;
         $motor68->unique_id = '2850';
-        $motor68->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2850';
+        $motor68->qr_code_link = 'id=Fajar-MotorList2850';
         $motor68->created_at = Carbon::now();
         $motor68->updated_at = null;
         $motor68->save();
@@ -906,7 +906,7 @@ class MotorSeeder extends Seeder
         $motor69->description = 'IN1-BIF-STDM-P050/MBCP1/M-12A';
         $motor69->material_number = null;
         $motor69->unique_id = '5406';
-        $motor69->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList5406';
+        $motor69->qr_code_link = 'id=Fajar-MotorList5406';
         $motor69->created_at = Carbon::now();
         $motor69->updated_at = null;
         $motor69->save();
@@ -919,7 +919,7 @@ class MotorSeeder extends Seeder
         $motor70->description = 'MOTOR,MASTER PB 1,5-2,2/3,5-5,1A,4P';
         $motor70->material_number = null;
         $motor70->unique_id = '188';
-        $motor70->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList188';
+        $motor70->qr_code_link = 'id=Fajar-MotorList188';
         $motor70->created_at = Carbon::now();
         $motor70->updated_at = null;
         $motor70->save();
@@ -932,7 +932,7 @@ class MotorSeeder extends Seeder
         $motor71->description = 'AC MOTOR;3000V,50Hz,335kW,10P,8307S,B3';
         $motor71->material_number = '10012013';
         $motor71->unique_id = '233';
-        $motor71->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList233';
+        $motor71->qr_code_link = 'id=Fajar-MotorList233';
         $motor71->created_at = Carbon::now();
         $motor71->updated_at = null;
         $motor71->save();
@@ -945,7 +945,7 @@ class MotorSeeder extends Seeder
         $motor72->description = 'MOTOR,AC,ICF-CHKM11 770A,750KW,6P,690V';
         $motor72->material_number = null;
         $motor72->unique_id = '3719';
-        $motor72->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList3719';
+        $motor72->qr_code_link = 'id=Fajar-MotorList3719';
         $motor72->created_at = Carbon::now();
         $motor72->updated_at = null;
         $motor72->save();
@@ -958,7 +958,7 @@ class MotorSeeder extends Seeder
         $motor73->description = 'AC MOTOR;690V,50Hz,1100kW,4P,400L,B3';
         $motor73->material_number = null;
         $motor73->unique_id = '4821';
-        $motor73->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList4821';
+        $motor73->qr_code_link = 'id=Fajar-MotorList4821';
         $motor73->created_at = Carbon::now();
         $motor73->updated_at = null;
         $motor73->save();
@@ -971,7 +971,7 @@ class MotorSeeder extends Seeder
         $motor74->description = 'MOTOR/AC/11kW/21.6A';
         $motor74->material_number = '10012013';
         $motor74->unique_id = '9999';
-        $motor74->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9999';
+        $motor74->qr_code_link = 'id=Fajar-MotorList9999';
         $motor74->created_at = Carbon::now();
         $motor74->updated_at = null;
         $motor74->save();
@@ -984,7 +984,7 @@ class MotorSeeder extends Seeder
         $motor75->description = 'GR.MOTOR;5.5kW,i=165,CHHM86195DBB165,CYC';
         $motor75->material_number = null;
         $motor75->unique_id = '2100';
-        $motor75->qr_code_link = 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2100';
+        $motor75->qr_code_link = 'id=Fajar-MotorList2100';
         $motor75->created_at = Carbon::now();
         $motor75->updated_at = null;
         $motor75->save();

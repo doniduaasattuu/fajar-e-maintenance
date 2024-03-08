@@ -11,14 +11,14 @@
 
         @if (Auth::user()->isAdmin())
         {{-- BUTTON NEW --}}
-        <x-finding.button-new :href='"/motor-registration"'>
+        <x-button-new :href='"/motor-registration"'>
             {{ __('New motor') }}
             <x-slot:dropdown>
                 <x-dropdown-button :href='"/motor-install-dismantle"'>
                     {{ __('Install / Dismantle') }}
                 </x-dropdown-button>
             </x-slot:dropdown>
-        </x-finding.button-new>
+        </x-button-new>
 
         @endif
 

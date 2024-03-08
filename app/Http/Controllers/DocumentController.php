@@ -24,11 +24,30 @@ class DocumentController extends Controller
         $this->documentService = $documentService;
     }
 
-    public function documents()
+    // public function documents()
+    // {
+    //     return response()->view('documents.documents', [
+    //         'title' => 'Documents',
+    //         'documentService' => $this->documentService,
+    //     ]);
+    // }
+
+    public function documents(Request $request)
     {
-        return response()->view('documents.documents', [
+        $search = $request->query('search');
+
+        $paginator = Document::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('title', 'LIKE', "%{$search}%");
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50)
+            ->withQueryString();
+
+        return view('documents.documents', [
             'title' => 'Documents',
-            'documentService' => $this->documentService,
+            'paginator' => $paginator,
         ]);
     }
 

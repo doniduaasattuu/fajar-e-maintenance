@@ -39,7 +39,7 @@
             {{-- DEPARTMENT --}}
             <div class="mb-3">
                 <x-input-label for="department" :value="__('Department *')" />
-                <x-input-select id="department" name="department" :options="$utility::$departments" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' :choose="''" />
+                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' :choose="''" />
                 <x-input-error :message="$errors->first('department')" />
             </div>
 

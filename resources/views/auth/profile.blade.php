@@ -59,7 +59,7 @@
             {{-- DEPARTMENT --}}
             <div class="mb-3">
                 <x-input-label for="department" :value="__('Department')" />
-                <x-input-select id="department" name="department" :options="App\Models\User::$departments" :value="old('department', Auth::user()->department)" />
+                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value="old('department', Auth::user()->department)" />
                 <x-input-error :message="$errors->first('department')" />
             </div>
 

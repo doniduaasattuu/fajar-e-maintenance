@@ -29,20 +29,61 @@ class TrafoController extends Controller
         $this->trafoDetailService = $trafoDetailService;
     }
 
-    public function trafos()
+    // public function trafos()
+    // {
+    //     return response()->view('maintenance.trafo.trafo', [
+    //         'title' => 'Table trafo',
+    //         'trafoService' => $this->trafoService,
+    //     ]);
+    // }
+
+    public function trafos(Request $request)
     {
-        return response()->view('maintenance.trafo.trafo', [
-            'title' => 'Table trafo',
-            'trafoService' => $this->trafoService,
+        $search = $request->query('search');
+        $status = $request->query('status');
+
+        $paginator = Trafo::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('id', 'LIKE', "%{$search}%");
+            })
+            ->when($status, function ($query, $status) {
+                $query
+                    ->where('status', '=', $status);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50)
+            ->withQueryString();
+
+        return view('maintenance.trafo.trafo', [
+            'title' => 'Trafos',
+            'paginator' => $paginator,
         ]);
     }
 
+
+    // public function trafoEdit(string $id)
+    // {
+    //     $trafo = Trafo::query()->with(['trafoDetail'])->find($id);
+
+    //     if (is_null($trafo)) {
+    //         return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
+    //     }
+
+    //     return response()->view('maintenance.trafo.form', [
+    //         'title' => 'Edit trafo',
+    //         'trafoService' => $this->trafoService,
+    //         'action' => 'trafo-update',
+    //         'trafo' => $trafo,
+    //     ]);
+    // }
+
     public function trafoEdit(string $id)
     {
-        $trafo = Trafo::query()->with(['trafoDetail'])->find($id);
+        $trafo = Trafo::query()->with(['TrafoDetail'])->find($id);
 
         if (is_null($trafo)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The trafo $id is unregistered."));
         }
 
         return response()->view('maintenance.trafo.form', [
@@ -50,8 +91,10 @@ class TrafoController extends Controller
             'trafoService' => $this->trafoService,
             'action' => 'trafo-update',
             'trafo' => $trafo,
+            'trafoDetail' => $trafo->TrafoDetail,
         ]);
     }
+
 
     public function trafoDetails(string $id)
     {

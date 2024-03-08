@@ -15,6 +15,19 @@ class Motor extends Model
     public $incrementing = false;
     public $timestamps = true;
 
+    protected $fillable = [
+        'id',
+        'status',
+        'funcloc',
+        'sort_field',
+        'description',
+        'material_number',
+        'unique_id',
+        'qr_code_link',
+        'created_at',
+        'updated_at',
+    ];
+
     public function Funcloc(): BelongsTo
     {
         return $this->belongsTo(Funcloc::class, 'funcloc', 'id');
