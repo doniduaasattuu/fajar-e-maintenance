@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
 use App\Models\Motor;
 use App\Services\FunclocService;
 use App\Services\MotorDetailService;
@@ -9,6 +10,7 @@ use App\Services\MotorService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -30,27 +32,52 @@ class MotorController extends Controller
         $this->motorDetailService = $motorDetailService;
     }
 
-    public function motors(?string $page = '1', ?string $filter_status = 'All', ?string $filter = '')
-    {
-        $paginate = DB::table('motors')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(perPage: 1000, page: $page);
+    // public function motors(?string $page = '1', ?string $filter_status = 'All', ?string $filter = '')
+    // {
+    //     $paginate = DB::table('motors')
+    //         ->orderBy('updated_at', 'desc')
+    //         ->paginate(perPage: 1000, page: $page);
 
-        return response()->view('maintenance.motor.motor', [
-            'title' => 'Table motor',
-            'motorService' => $this->motorService,
-            'paginate' => $paginate,
-            'filter' => $filter,
-            'filter_status' => $filter_status,
+    //     return response()->view('maintenance.motor.motor', [
+    //         'title' => 'Table motor',
+    //         'motorService' => $this->motorService,
+    //         'paginate' => $paginate,
+    //         'filter' => $filter,
+    //         'filter_status' => $filter_status,
+    //     ]);
+    // }
+
+    public function motors(Request $request)
+    {
+        $search = $request->query('search');
+        $status = $request->query('status');
+
+        $paginator = Motor::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('id', 'LIKE', "%{$search}%");
+            })
+            ->when($status, function ($query, $status) {
+                $query
+                    ->where('status', '=', $status);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50)
+            ->withQueryString();
+
+        return view('maintenance.motor.motor', [
+            'title' => 'Motors',
+            'paginator' => $paginator,
         ]);
     }
+
 
     public function motorEdit(string $id)
     {
         $motor = Motor::query()->with(['MotorDetail'])->find($id);
 
         if (is_null($motor)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The motor $id is unregistered."));
         }
 
         return response()->view('maintenance.motor.form', [
@@ -58,6 +85,7 @@ class MotorController extends Controller
             'motorService' => $this->motorService,
             'action' => 'motor-update',
             'motor' => $motor,
+            'motorDetail' => $motor->MotorDetail,
         ]);
     }
 
@@ -76,11 +104,80 @@ class MotorController extends Controller
         ]);
     }
 
+    // public function motorUpdate(Request $request)
+    // {
+    //     $rules = [
+    //         'id' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
+    //         'status' => ['required', Rule::in($this->motorService->statusEnum())],
+    //         'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
+    //         'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
+    //         'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
+    //         'material_number' => ['nullable', 'digits:8', 'numeric'],
+    //         'unique_id' => ['required', 'numeric', 'exists:App\Models\Motor,unique_id'],
+    //         'qr_code_link' => ['required', 'exists:App\Models\Motor,qr_code_link'],
+    //         'motor_detail' => ['required', 'same:id'],
+    //         'manufacturer' => ['nullable', 'max:50'],
+    //         'serial_number' => ['nullable', 'max:50'],
+    //         'type' => ['nullable', 'max:50'],
+    //         'power_rate' => ['nullable', 'max:10'],
+    //         'power_unit' => ['nullable', Rule::in($this->motorService->powerUnitEnum())],
+    //         'voltage' => ['nullable', 'max:10'],
+    //         'electrical_current' => ['nullable', Rule::in($this->motorService->electricalCurrentEnum())],
+    //         'current_nominal' => ['nullable', 'max:10'],
+    //         'frequency' => ['nullable', 'max:10'],
+    //         'pole' => ['nullable', 'max:10'],
+    //         'rpm' => ['nullable', 'max:10'],
+    //         'bearing_de' => ['nullable', 'max:25'],
+    //         'bearing_nde' => ['nullable', 'max:25'],
+    //         'frame_type' => ['nullable', 'max:25'],
+    //         'shaft_diameter' => ['nullable', 'max:10'],
+    //         'phase_supply' => ['nullable', 'max:3', 'numeric', 'digits_between:1,3'],
+    //         'cos_phi' => ['nullable', 'max:10'],
+    //         'efficiency' => ['nullable', 'max:10'],
+    //         'ip_rating' => ['nullable', 'max:10'],
+    //         'insulation_class' => ['nullable', 'max:10'],
+    //         'duty' => ['nullable', 'max:10'],
+    //         'connection_type' => ['nullable', 'max:25'],
+    //         'nipple_grease' => ['nullable', Rule::in($this->motorService->nippleGreaseEnum())],
+    //         'greasing_type' => ['nullable', 'max:25'],
+    //         'greasing_qty_de' => ['nullable', 'max:10'],
+    //         'greasing_qty_nde' => ['nullable', 'max:10'],
+    //         'length' => ['nullable', 'max:10'],
+    //         'width' => ['nullable', 'max:10'],
+    //         'height' => ['nullable', 'max:10'],
+    //         'weight' => ['nullable', 'max:10'],
+    //         'cooling_fan' => ['nullable', Rule::in($this->motorService->coolingFanEnum())],
+    //         'mounting' => ['nullable', Rule::in($this->motorService->mountingEnum())],
+    //     ];
+
+    //     $validator = Validator::make($request->all(), $rules);
+
+    //     if ($validator->passes()) {
+
+    //         $validated_motor = $validator->safe()->except($this->getColumns('motor_details', ['id']));
+    //         $validated_motor_details = $validator->safe()->merge(['motor_detail' => $validated_motor['id']])->except($this->getColumns('motors'));
+
+    //         try {
+    //             $this->motorService->updateMotor($validated_motor);
+    //             $this->motorDetailService->updateMotorDetail($validated_motor_details);
+    //         } catch (Exception $error) {
+    //             Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+    //             return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+    //         }
+
+    //         Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
+    //         return redirect()->back()->with('alert', ['message' => 'The motor successfully updated.', 'variant' => 'alert-success']);
+    //     } else {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+    // }
+
     public function motorUpdate(Request $request)
     {
-        $rules = [
+        // , Rule::in($this->getEnumValue('equipment', 'status'))
+        $validated = $request->validate([
             'id' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
-            'status' => ['required', Rule::in($this->motorService->statusEnum())],
+            'status' => ['required'],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -92,9 +189,9 @@ class MotorController extends Controller
             'serial_number' => ['nullable', 'max:50'],
             'type' => ['nullable', 'max:50'],
             'power_rate' => ['nullable', 'max:10'],
-            'power_unit' => ['nullable', Rule::in($this->motorService->powerUnitEnum())],
+            'power_unit' => ['nullable', Rule::in($this->getEnumValue('motor', 'power_unit'))],
             'voltage' => ['nullable', 'max:10'],
-            'electrical_current' => ['nullable', Rule::in($this->motorService->electricalCurrentEnum())],
+            'electrical_current' => ['nullable', Rule::in($this->getEnumValue('motor', 'electrical_current'))],
             'current_nominal' => ['nullable', 'max:10'],
             'frequency' => ['nullable', 'max:10'],
             'pole' => ['nullable', 'max:10'],
@@ -110,7 +207,7 @@ class MotorController extends Controller
             'insulation_class' => ['nullable', 'max:10'],
             'duty' => ['nullable', 'max:10'],
             'connection_type' => ['nullable', 'max:25'],
-            'nipple_grease' => ['nullable', Rule::in($this->motorService->nippleGreaseEnum())],
+            'nipple_grease' => ['nullable', Rule::in($this->getEnumValue('motor', 'nipple_grease'))],
             'greasing_type' => ['nullable', 'max:25'],
             'greasing_qty_de' => ['nullable', 'max:10'],
             'greasing_qty_nde' => ['nullable', 'max:10'],
@@ -118,30 +215,26 @@ class MotorController extends Controller
             'width' => ['nullable', 'max:10'],
             'height' => ['nullable', 'max:10'],
             'weight' => ['nullable', 'max:10'],
-            'cooling_fan' => ['nullable', Rule::in($this->motorService->coolingFanEnum())],
-            'mounting' => ['nullable', Rule::in($this->motorService->mountingEnum())],
-        ];
+            'cooling_fan' => ['nullable', Rule::in($this->getEnumValue('motor', 'cooling_fan'))],
+            'mounting' => ['nullable', Rule::in($this->getEnumValue('motor', 'mounting'))],
+        ]);
 
-        $validator = Validator::make($request->all(), $rules);
+        $validated_motor = Arr::except($validated, $this->getColumns('motor_details', ['id']));
+        $validated_motor_details = Arr::except(Arr::add($validated, 'motor_detail', $validated['id']), $this->getColumns('motor_details', ['id']));
 
-        if ($validator->passes()) {
-
-            $validated_motor = $validator->safe()->except($this->getColumns('motor_details', ['id']));
-            $validated_motor_details = $validator->safe()->merge(['motor_detail' => $validated_motor['id']])->except($this->getColumns('motors'));
-
-            try {
-                $this->motorService->updateMotor($validated_motor);
-                $this->motorDetailService->updateMotorDetail($validated_motor_details);
-            } catch (Exception $error) {
-                Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
-            }
-
-            Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
-            return redirect()->back()->with('alert', ['message' => 'The motor successfully updated.', 'variant' => 'alert-success']);
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+        DB::beginTransaction();
+        try {
+            $this->motorService->updateMotor($validated_motor);
+            $this->motorDetailService->updateMotorDetail($validated_motor_details);
+        } catch (Exception $error) {
+            DB::rollBack();
+            Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+            return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
         }
+
+        DB::commit();
+        Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
+        return back()->with('alert', new Alert('The motor successfully updated.', 'alert-success'));
     }
 
     public function motorRegistration()

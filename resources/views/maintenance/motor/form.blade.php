@@ -1,84 +1,132 @@
-@include('utility.prefix')
+<x-app-layout>
 
-<div class="py-4">
+    @inject('utility', 'App\Services\Utility')
 
-    <div class="mb-3">
-        <h3 class="mb-1">{{ $title }}</h3>
-        <nav aria-label=" breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/motors">Table</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ isset($motor) != null ? $motor->id : $title }}</li>
-            </ol>
-        </nav>
-    </div>
+    {{-- BREADCUMB --}}
+    <section>
+        @isset($motor)
+        <x-breadcumb-table :title='$title' :table="'Motors'" :table_item='$motor' />
+        @else
+        <x-breadcumb-table :title='$title' :table="'Motors'" />
+        @endisset
+    </section>
 
-    @include('utility.alert')
+    @if(session("alert"))
+    <x-alert :alert='session("alert")'>
+    </x-alert>
+    @endisset
 
-    @switch($title)
+    @if($errors->any())
+    <x-alerts :alert='$errors'>
+    </x-alerts>
+    @endisset
 
-    @case('Motor registration')
-    @include('maintenance.motor.registration')
-    @break
+    <!-- {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["motor_detail"]' /> -->
 
-    @case('Edit motor')
-    @include('maintenance.motor.edit')
-    @break
+    <section>
+        <form action="/{{ $action ?? '' }}" id="forms" method="POST">
+            @csrf
 
-    @default
-    @include('maintenance.motor.details')
-    @endswitch
+            {{-- MOTOR DATA --}}
+            @isset($motor)
+            <x-form-equipment :equipment='$motor' :utility='$utility' :table='"motors"' />
+            @else
+            <x-form-equipment :utility='$utility' :table='"motors"' :qr_code_link='"Fajar-MotorList"' />
+            @endisset
 
-</div>
+            {{-- MOTOR DETAIL --}}
+            <x-alert :alert='new App\Data\Alert("All fields below can be blank.", "alert-info")' :button_close='true' />
 
-<script>
-    let id = document.getElementById('id');
-    let unique_id = document.getElementById('unique_id');
-    let qr_code_link = document.getElementById('qr_code_link');
-    let status = document.getElementById('status');
-    let funcloc = document.getElementById('funcloc')
-    let sort_field = document.getElementById('sort_field')
-    let current_funcloc = <?php echo (isset($motor)) ? (json_encode($motor->funcloc)) : "''" ?>;
-    let current_sort_field = <?php echo (isset($motor)) ? (json_encode($motor->sort_field)) : "''" ?>;
+            @isset($motorDetail)
+            <x-motor.motor-detail :motorDetail='$motorDetail' :utility='$utility' :motor='$motor' />
+            @else
+            <x-motor.motor-detail :utility='$utility' :motor='$motor' />
+            @endisset
 
-    function disabledFunclocAndSortField() {
-        if (status.value == 'Repaired' || status.value == 'Available') {
-            // IF STATUS VALUE IS NOT INSTALLED
-            if (funcloc.value.length > 0 && sort_field.value.length > 0) {
-                current_funcloc = funcloc.value;
-                current_sort_field = sort_field.value;
-            }
+            @if (Auth::user()->isAdmin())
+            {{-- BUTTON SUBMIT --}}
+            <div class="mb-3">
+                <x-button-primary>
+                    @isset($motor)
+                    {{ __('Save changes') }}
+                    @else
+                    {{ __('Submit') }}
+                    @endisset
+                </x-button-primary>
+            </div>
+            @endif
 
-            funcloc.setAttribute('disabled', true);
-            sort_field.setAttribute('disabled', true);
+            <!-- 
 
-            funcloc.value = '';
-            sort_field.value = '';
-        } else if (status.value == 'Installed') {
-            // IF STATUS VALUE IS INSTALLED
-            funcloc.value = current_funcloc;
-            sort_field.value = current_sort_field;
+            
 
-            funcloc.removeAttribute('disabled');
-            sort_field.removeAttribute('disabled');
-        }
-    }
+            {{-- STATUS --}}
+            <div class="mb-3">
+                <x-input-label for="status" :value="__('Status *')" />
+                <x-input-select id="status" name="status" :options="['Open', 'Closed']" :value='old("status", $finding->status ?? "")' />
+                <x-input-error :message="$errors->first('status')" />
+            </div>
 
-    status.onchange = () => {
-        disabledFunclocAndSortField();
-    }
+            {{-- EQUIPMENT --}}
+            <div class="mb-3">
+                <x-input-label for="equipment" :value="__('Equipment')" />
+                <x-input-text id="equipment" name="equipment" :value='old("equipment", $finding->equipment ?? "")' />
+                <x-input-error :message="$errors->first('equipment')" />
+            </div>
 
-    unique_id.oninput = () => {
-        qr_code_link.value = "";
-        let link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList";
-        qr_code_link.value = link + unique_id.value;
-    }
+            {{-- FUNCLOC --}}
+            <div class="mb-3">
+                <x-input-label for="funcloc" :value="__('Funcloc')" />
+                <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $finding->funcloc ?? "")' />
+                <x-input-error :message="$errors->first('funcloc')" />
+            </div>
 
-    window.onload = () => {
-        if (window.location.pathname.split('/')[1] !== 'motor-details') {
-            disabledFunclocAndSortField();
-        }
-    }
-</script>
-@include('utility.script.toupper')
-@include('utility.script.onlynumber')
-@include('utility.suffix')
+            {{-- NOTIFICATION --}}
+            <div class="mb-3">
+                <x-input-label for="notification" :value="__('Notification')" />
+                <x-input-number-text id="notification" name="notification" maxlength="8" :value='old("notification", $finding->notification ?? "")' />
+                <x-input-error :message="$errors->first('notification')" />
+            </div>
+
+            {{-- DESCRIPTION --}}
+            <div class="mb-3">
+                <x-input-label for="description" :value="__('Description *')" />
+                <x-input-textarea id="description" name="description" placeholder="Minimal 15 characters">{{ old('description', $finding->description ?? '') }}</x-input-textarea>
+                <x-input-error :message="$errors->first('description')" />
+            </div>
+
+            {{-- IMAGE --}}
+            <div class="mb-3">
+                <x-input-label for="image" :value="__('Image')" />
+                <div class="input-group">
+                    <x-input-file id="image" name="image" accept="image/*" />
+                    @if( isset($finding) && $finding->image !== null)
+                    <button class="btn btn-outline-secondary" type="button" id="image"><a target="_blank" class="text-reset text-decoration-none" href="/storage/findings/{{ $finding->image }}">Existing</a></button>
+                    @endif
+                </div>
+
+                @if ($errors->first('image'))
+                <x-input-error :message="$errors->first('image')" />
+                @else
+                <x-input-help>
+                    {{ __('Maximum upload file size: 5 MB.') }}
+                </x-input-help>
+                @endif
+            </div>
+
+            {{-- BUTTON SUBMIT --}}
+            <div class="mb-3">
+                <x-button-primary>
+                    @isset($finding)
+                    {{ __('Save changes') }}
+                    @else
+                    {{ __('Submit') }}
+                    @endisset
+                </x-button-primary>
+            </div> -->
+
+        </form>
+    </section>
+
+</x-app-layout>

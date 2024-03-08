@@ -5,22 +5,91 @@ namespace App\Traits;
 use App\Models\Funcloc;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 trait Utility
 {
-    public array $equipmentStatus = ['Installed', 'Available', 'Repaired'];
+    public static function getEnumValue(string $table, string $column)
+    {
+        switch ($table) {
 
-    public static array $departments = [
-        'EI1',
-        'EI2',
-        'EI3',
-        'EI4',
-        'EI5',
-        'EI6',
-        'EI7',
-    ];
+            case ('user'):
+                switch ($column) {
+                    case ('department'):
+                        return ['EI1', 'EI2', 'EI3', 'EI4', 'EI5', 'EI6', 'EI7'];
+                        break;
+
+                    default:
+                        [];
+                        break;
+                }
+
+            case ('motor'):
+                switch ($column) {
+                    case ('power_unit'):
+                        return  ['kW', 'HP'];
+                        break;
+                    case ('electrical_current'):
+                        return ['AC', 'DC'];
+                        break;
+                    case ('nipple_grease'):
+                        return ['Available', 'Not Available'];
+                        break;
+                    case ('cooling_fan'):
+                        return ['Internal', 'External', 'Not Available'];
+                        break;
+                    case ('mounting'):
+                        return ['Horizontal', 'Vertical', 'V/H', 'MGM'];
+                        break;
+                    default:
+                        [];
+                        break;
+                }
+                break;
+
+            case ('trafo'):
+                switch ($column) {
+                    case ('power_unit'):
+                        return  ['VA', 'kVA', 'MVA'];
+                        break;
+                    case ('type'):
+                        return  ['Step up', 'Step down'];
+                        break;
+                    default:
+                        [];
+                        break;
+                }
+                break;
+
+            case ('equipment'):
+                switch ($column) {
+                    case ('status'):
+                        return ['Installed', 'Available', 'Repaired'];
+                        break;
+                    default:
+                        [];
+                        break;
+                }
+        }
+    }
+
+    public static function firstSlotUnique($table)
+    {
+        $pluck = DB::table($table)->pluck('unique_id')->sort();
+        $unique =  $pluck->values()->all();
+
+        for ($i = 0; $i < count($unique); $i++) {
+            if (array_key_exists($i + 1, $unique)) {
+                if ($unique[$i] + 1 != $unique[$i + 1]) {
+                    return $unique[$i] + 1;
+                }
+            } else {
+                return $unique[$i] + 1;
+            }
+        }
+    }
 
     public static function getColumns(string $table, array $skipped = [])
     {

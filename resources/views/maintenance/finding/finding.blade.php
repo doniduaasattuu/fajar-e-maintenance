@@ -18,7 +18,7 @@
             {{-- BY DEPT --}}
             <div class="col pe-1">
                 <x-input-label for="dept" :value="__('Dept')" />
-                <x-input-select id="dept" name="dept" :options='$utility::$departments' :choose="''"></x-input-select>
+                <x-input-select id="dept" name="dept" :options="$utility::getEnumValue('user', 'department')" :choose="''"></x-input-select>
                 </select>
             </div>
 
@@ -33,9 +33,7 @@
                 <x-input-label for="search" class="d-none d-md-block" :value="__('Search')" />
                 <x-input-text id="search" type="text" name="search" class="mt-3 mt-md-0" placeholder="Description"></x-input-text>
             </div>
-
-            <div class="form-text">The total finding is {{ $paginator->total() }} records.</div>
-
+            <x-footer-header-table :paginator='$paginator' />
         </div>
     </section>
 

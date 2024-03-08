@@ -1,7 +1,7 @@
-@props(['href'])
+@props(['href', 'dropdown' => null])
 
 <div class="mb-3">
-    <div class="btn-group">
+    <div class="btn-group dropend">
         <button type="button" class="btn btn-primary">
             <a class="text-white nav-link d-inline-block" aria-current="page" href="{{ $href }}">
                 <svg class="my-1 me-1" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
@@ -10,5 +10,6 @@
                 {{ $slot }}
             </a>
         </button>
+        {{ $dropdown }}
     </div>
 </div>

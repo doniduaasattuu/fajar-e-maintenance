@@ -24,24 +24,6 @@ class User extends Authenticatable
         'phone_number',
     ];
 
-    public static array $departments = [
-        'EI1',
-        'EI2',
-        'EI3',
-        'EI4',
-        'EI5',
-        'EI6',
-        'EI7',
-    ];
-
-    public static array $registered;
-
-    public static function columns(string $table, ?array $skipped): array
-    {
-        $columns =  DB::getSchemaBuilder()->getColumnListing($table);
-        return array_values(array_diff($columns, $skipped));
-    }
-
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'user_role', 'nik', 'role');
