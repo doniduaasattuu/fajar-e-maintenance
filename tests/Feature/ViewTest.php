@@ -16,8 +16,6 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-use function Termwind\ask;
-
 class ViewTest extends TestCase
 {
     public function testViewRegistration()

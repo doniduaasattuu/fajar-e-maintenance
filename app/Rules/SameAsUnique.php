@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class SameAsUnique implements ValidationRule
 {
 
-    public function __construct(private string $unique_id)
+    public function __construct(private ?string $unique_id)
     {
     }
     /**
@@ -18,10 +18,12 @@ class SameAsUnique implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $id = preg_replace('/[^0-9]/i', '', $value);
+        if ($value !== null) {
+            $id = preg_replace('/[^0-9]/i', '', $value);
 
-        if ($id !== $this->unique_id) {
-            $fail('The ' . str_replace('_', ' ', $attribute) . ' id must be same as unique id.');
+            if ($id !== $this->unique_id) {
+                $fail('The ' . str_replace('_', ' ', $attribute) . ' id must be same as unique id.');
+            }
         }
     }
 }

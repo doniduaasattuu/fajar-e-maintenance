@@ -29,6 +29,13 @@ export function preventmaxvibration(id, max = 45) {
     }
 }
 
+export function preventSubmitForm(event) {
+    let key = event.keyCode || event.charChode || 0;
+    if (key == 13) {
+        return false;
+    }
+}
+
 // CHANGE VIBRATION START
 export function changeVibrationDescriptionColor(id) {
     let input = document.getElementById(id);
@@ -192,6 +199,175 @@ export const debounce = (mainFunction, delay) => {
     };
 };
 
-// export function hello() {
-//     console.log("hello");
-// }
+// INSTALL DISMANTLE
+
+function requestEquipment(token, input, table) {
+    let request = new Request(`/equipment-${table}`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": token,
+        },
+        body: JSON.stringify({
+            equipment: input.value,
+            status: input.getAttribute("status"),
+        }),
+    });
+
+    return request;
+}
+
+export function fetchEquipment(token, input, field, table) {
+    if (input.value.length == 9) {
+        let response = fetch(requestEquipment(token, input, table));
+        response
+            .then((value) => value.json())
+            .then((equipment) => {
+                if (equipment.id !== undefined) {
+                    for (const [key, value] of Object.entries(equipment)) {
+                        //  RENDER DATA
+                        if (key == `${table}_detail` && value != null) {
+                            for (const [
+                                detail_key,
+                                detail_value,
+                            ] of Object.entries(value)) {
+                                // CREATE ELEMENT MOTOR DETAIL
+                                if (
+                                    detail_key == "id" ||
+                                    detail_key == `${table}_detail` ||
+                                    detail_key == "created_at" ||
+                                    detail_key == "updated_at"
+                                ) {
+                                    continue;
+                                } else {
+                                    createElement(
+                                        field,
+                                        detail_key,
+                                        detail_value
+                                    );
+                                }
+                            }
+                        } else {
+                            // CREATE ELEMENT MOTOR
+                            if (key == `${table}_detail` && value == null) {
+                                continue;
+                            } else if (
+                                key == "created_at" ||
+                                key == "updated_at"
+                            ) {
+                                continue;
+                            } else if (key == "qr_code_link") {
+                                createElement(field, key, value.split("=")[1]);
+                            } else {
+                                createElement(field, key, value);
+                            }
+                        }
+                    }
+                } else {
+                    // CREATE ALERT
+                    createAlert(field, "Not found.", "alert-info");
+                }
+            });
+    }
+}
+
+export function doFetchEquipment(token, table) {
+    for (const action of ["install", "dismantle"]) {
+        const button = document.getElementById(`${action}_button`);
+        const input = document.getElementById(`${action}_input`);
+        const field = document.getElementById(`${action}_field`);
+
+        button.onclick = () => {
+            JS.removeAllChildren(field);
+            JS.fetchEquipment(token, input, field, table);
+        };
+    }
+}
+
+function enableButtonSwap() {
+    let button = document.getElementById("button_swap");
+    let dismantled_equipment =
+        document.getElementById("dismantle_field")?.firstElementChild
+            ?.lastElementChild ?? null;
+    let installed_equipment =
+        document.getElementById("install_field")?.firstElementChild
+            ?.lastElementChild ?? null;
+
+    if (
+        dismantled_equipment != null &&
+        installed_equipment != null &&
+        dismantled_equipment.value.length == 9 &&
+        installed_equipment.value.length == 9
+    ) {
+        button.classList.remove("d-none");
+    } else {
+        button.classList.add("d-none");
+    }
+}
+
+export function callEnableButtonSwap() {
+    setInterval(() => {
+        enableButtonSwap();
+    }, 1000);
+}
+
+// -------------------
+
+function myucfirst(words) {
+    const firstString = words.charAt(0);
+    const firstStringCap = firstString.toUpperCase();
+    const remainingLetters = words.slice(1);
+    const result = firstStringCap + remainingLetters;
+    return result;
+}
+
+function createElement(form, key, value) {
+    let div = document.createElement("div");
+    div.setAttribute("class", "mb-3");
+
+    let label = document.createElement("label");
+    label.setAttribute("class", "fw-semibold form-label");
+    label.textContent = myucfirst(key).split("_").join(" ");
+
+    let input = document.createElement("input");
+    input.setAttribute("class", "form-control");
+    input.setAttribute("value", value ?? "");
+    input.setAttribute("readonly", true);
+    if (key == "id") {
+        switch (form.id) {
+            case "dismantle_field":
+                input.setAttribute("name", key + "_dismantle");
+                break;
+            case "install_field":
+                input.setAttribute("name", key + "_install");
+                break;
+        }
+    }
+
+    div.appendChild(label);
+    div.appendChild(input);
+    form.appendChild(div);
+}
+
+export function removeAllChildren(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+function createAlert(form, message, variant, buttonClose = null) {
+    let alert = document.createElement("div");
+    alert.setAttribute("class", "alert alert-dismissible px-3" + ` ${variant}`);
+    alert.setAttribute("role", "alert");
+    alert.textContent = message;
+    if (buttonClose == true) {
+        closeButton = document.createElement("button");
+        closeButton.setAttribute("type", "button");
+        closeButton.setAttribute("class", "btn-close");
+        closeButton.setAttribute("data-bs-dismiss", "alert");
+        closeButton.setAttribute("aria-label", "Close");
+        alert.appendChild(closeButton);
+    }
+    form.appendChild(alert);
+}

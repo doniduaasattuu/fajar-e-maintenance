@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Services\UserService;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Auth;
@@ -742,8 +740,8 @@ class UserControllerTest extends TestCase
             ->assertSee('EI5')
             ->assertSee('EI6')
             ->assertSee('EI7')
-            ->assertSeeText('The total registered user is')
-            ->assertSeeText('people')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('NIK')
             ->assertSeeText('Fullname')
             ->assertSeeText('Department')

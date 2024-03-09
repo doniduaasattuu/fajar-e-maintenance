@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\Alert;
+use App\Data\Modal;
 use App\Models\Motor;
 use App\Rules\SameAsUnique;
 use App\Services\FunclocService;
@@ -252,7 +253,7 @@ class MotorController extends Controller
     {
         $rules = [
             'id' => ['required', 'regex:/^[a-zA-Z\d]+$/u', 'size:9', 'starts_with:EMO,MGM,MGB,MDO,MFB', Rule::notIn($this->motorService->registeredMotors())],
-            'status' => ['nullable', Rule::in($this->getEnumValue('equipment', 'status'))],
+            'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -357,13 +358,13 @@ class MotorController extends Controller
                 $this->motorService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
                 Log::error('motor install dismantle error', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error', 'message' => $error->getMessage()]);
+                return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
             Log::info('motor install dismantle success', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "The motor was successfully swapped."]);
+            return back()->with('modal', new Modal('[200] Success', 'The motor was successfully swapped.'));
         } else {
-            return redirect()->back()->with('message', ['header' => '[403] Forbidden', 'message' => $validator->errors()->first()]);
+            return back()->with('modal', new Modal('[403] Forbidden', $validator->errors()->first()));
         }
     }
 }

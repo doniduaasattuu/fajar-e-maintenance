@@ -1,5 +1,7 @@
 <x-guest-layout>
 
+    @inject('utility', 'App\Services\Utility')
+
     <x-h1>{{ $title }}</x-h1>
 
     <form action="{{ route('registration') }}" method="POST">
@@ -33,7 +35,7 @@
         {{-- DEPARTMENT --}}
         <div class="mb-3">
             <x-input-label for="department" :value="__('Department *')" />
-            <x-input-select id="department" name="department" :options="App\Models\User::$departments" :value="old('department')" :choose="'-- Choose --'" />
+            <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value="old('department')" :choose="'-- Choose --'" />
             <x-input-error :message="$errors->first('department')" />
         </div>
 

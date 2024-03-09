@@ -38,7 +38,7 @@ class UserController extends Controller
             'nik' => ['required', 'digits:8', 'numeric', new UserExists()],
             'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
-            'department' => ['required', Rule::in(User::$departments)],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
         ]);
@@ -87,7 +87,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik'],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
-            'department' => ['required', Rule::in(User::$departments)],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],

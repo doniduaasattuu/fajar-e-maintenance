@@ -118,41 +118,34 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000153',
-                'user' => 'Jamal Mirdad'
-            ])
-            ->get('/motor-edit/EMO000008')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testGetEditMotorUregisteredAuthorized()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
-
         Auth::attempt([
             'nik' => '55000135',
             'password' => 'rahasia'
         ]);
 
         $this
+            ->followingRedirects()
             ->get('/motor-edit/EMO000008')
-            ->assertSeeText('Unique id')
-            ->assertSee('4592');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testGetEditMotorUregisteredAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
 
         $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000154',
-                'user' => 'Doni Darmawan'
-            ])
             ->get('/motor-edit/EMO000001')
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('The motor EMO000001 is unregistered.');
     }
 
-    public function testGetEditMotorAuthorized()
+    public function testGetEditMotorAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
@@ -180,13 +173,13 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Qr code link')
             ->assertSeeText('Created at')
             ->assertDontSeeText('Submit')
-            ->assertSeeText('Update');
+            ->assertSeeText('Update')
+            ->assertDontSeeText('[403] Forbidden')
+            ->assertDontSeeText('You are not allowed to perform this operation!');
     }
 
     public function testGetMotorDetailsGuest()
     {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
-
         $this->get('/motor-details/EMO000105')
             ->assertRedirect('/login');
     }
@@ -196,7 +189,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -213,13 +206,13 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Unique id')
             ->assertSee('56')
             ->assertSeeText('Qr code link')
-            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56')
+            ->assertSee('id=Fajar-MotorList56')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertSee('disabled');
     }
 
-    public function testGetMotorDetailsAuthorized()
+    public function testGetMotorDetailsAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
@@ -241,33 +234,24 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Unique id')
             ->assertSee('56')
             ->assertSeeText('Qr code link')
-            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56')
+            ->assertSee('id=Fajar-MotorList56')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertSee('disabled');
     }
 
-    public function testGetMotorDetailsUregisteredAuthorized()
+    public function testGetMotorDetailsUregisteredAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
         $this
-            ->get('/motor-edit/EMO000008')
-            ->assertSeeText('Unique id')
-            ->assertSee('4592');
-
-        $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000154',
-                'user' => 'Doni Darmawan'
-            ])
             ->get('/motor-edit/EMO000001')
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('The motor EMO000001 is unregistered.');
     }
 
@@ -277,17 +261,17 @@ class MotorControllerTest extends TestCase
         $this->post('/motor-update', [
             'status' => 'Installed',
             'funcloc' => null,
-            'sor_field' => null,
+            'sort_field' => null,
         ])
             ->assertRedirect('/login');
     }
 
-    public function testUpdateMotorUnregistered()
+    public function testUpdateMotorUnregisteredAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -299,11 +283,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000000',
                 'status' => 'Available',
                 'funcloc' => null,
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
             ])
             ->assertSessionHasErrors([
                 'id' => 'The selected id is invalid.',
@@ -315,7 +299,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -327,11 +311,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO00105',
                 'status' => 'Available',
                 'funcloc' => null,
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
             ])
             ->assertSessionHasErrors([
                 'id' => 'The id field must be 9 characters.',
@@ -343,7 +327,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -355,11 +339,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Installed',
                 'funcloc' => null,
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -405,7 +389,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -417,11 +401,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Repaired',
                 'funcloc' => null,
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
                 'motor_detail' => 'EMO000105',
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -464,7 +448,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -476,11 +460,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Available',
                 'funcloc' => null,
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
                 'motor_detail' => 'EMO000105',
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -523,7 +507,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -535,11 +519,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Installed',
                 'funcloc' => 'SP3-OCC-PU02',
-                'sor_field' => 'SP3.SP-04/M',
+                'sort_field' => 'SP3.SP-04/M',
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
             ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The funcloc field must start with one of the following: FP-01.',
@@ -551,7 +535,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -563,11 +547,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Installed',
                 'funcloc' => 'FP-01-SP',
-                'sor_field' => 'SP3.SP-04/M',
+                'sort_field' => 'SP3.SP-04/M',
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
             ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The funcloc field must be at least 9 characters.',
@@ -579,7 +563,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -591,11 +575,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO000105',
                 'status' => 'Installed',
                 'funcloc' => 'FP-01-SP3-INVALID-LENGTH-MAX-MORE-THAN-FIFTY-CHARACTER-CANNOT-UPDATE-AN-MOTOR-STATUS',
-                'sor_field' => 'SP3.SP-04/M',
+                'sort_field' => 'SP3.SP-04/M',
                 'description' => 'AC MOTOR;380V,50Hz,7.5kW,4P,132M,B3',
                 'material_number' => '10010923',
                 'unique_id' => '56',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList56',
+                'qr_code_link' => 'id=Fajar-MotorList56',
             ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The funcloc field must not be greater than 50 characters.',
@@ -607,7 +591,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -618,11 +602,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO001056',
                 'status' => 'Installed',
                 'funcloc' => 'FP-01-CH3-ALM-T089-P085',
-                'sor_field' => null,
+                'sort_field' => null,
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field is required when status is Installed.',
@@ -634,7 +618,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -649,7 +633,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field must be at least 3 characters.',
@@ -661,7 +645,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -672,11 +656,11 @@ class MotorControllerTest extends TestCase
                 'id' => 'EMO001056',
                 'status' => 'Installed',
                 'funcloc' => 'FP-01-CH3-ALM-T089-P085',
-                'sort_field' => 'SORT-FIELD-INVALID-LENGTH-MAX-MORE-THAN-FIFTY-CHARACTER-CANNOT-UPDATE-AN-MOTOR-STATUS',
+                'sort_field' => 'SORT-FIELD-INVALID-LENGTH-MAX-MORE-THAN-FIFTY-CHARACTER-CANNOT-UPDATE-AN-MOTOR-STATUS-BECAUSE IS TOO LOOONG',
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field must not be greater than 50 characters.',
@@ -688,7 +672,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -704,7 +688,7 @@ class MotorControllerTest extends TestCase
                 'description' => null,
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
                 'motor_detail' => 'EMO001056',
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -747,7 +731,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -762,7 +746,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'description' => 'The description field must be at least 3 characters.',
@@ -774,7 +758,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -789,7 +773,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3,INVALID-LENGTH-MAX-MORE-THAN-FIFTY-CHARACTER-CANNOT-UPDATE-AN-MOTOR-STATUS',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'description' => 'The description field must not be greater than 50 characters.',
@@ -801,7 +785,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -816,7 +800,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => null,
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
                 'motor_detail' => 'EMO001056',
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -860,7 +844,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -875,7 +859,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '1O013364',
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'material_number' => 'The material number field must be a number.',
@@ -887,7 +871,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -902,7 +886,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '1234',
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'material_number' => 'The material number field must be 8 digits.',
@@ -914,7 +898,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -929,7 +913,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '123456789',
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'material_number' => 'The material number field must be 8 digits.',
@@ -941,7 +925,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -956,7 +940,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '123456789',
                 'unique_id' => null,
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'unique_id' => 'The unique id field is required.',
@@ -968,7 +952,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -983,7 +967,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '123456789',
                 'unique_id' => '1O2',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'unique_id' => 'The unique id field must be a number.',
@@ -995,7 +979,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -1010,19 +994,20 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '123456789',
                 'unique_id' => '112',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2008',
+                'qr_code_link' => 'id=Fajar-MotorList2008',
             ])
             ->assertSessionHasErrors([
                 'unique_id' => 'The selected unique id is invalid.',
             ]);
     }
 
+    // QR CODE LINK
     public function testUpdateMotorQrCodeLinkNull()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -1049,7 +1034,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -1064,10 +1049,38 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
                 'material_number' => '123456789',
                 'unique_id' => '2008',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList2001',
+                'qr_code_link' => 'id=Fajar-MotorList2001',
             ])
             ->assertSessionHasErrors([
                 'qr_code_link' => 'The selected qr code link is invalid.',
+            ]);
+    }
+
+    public function testUpdateMotorQrCodeLinkNotSameAsUniqueId()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this->get('/motor-edit/EMO001056');
+
+        $this
+            ->post('/motor-update', [
+                'id' => 'EMO001056',
+                'status' => 'Installed',
+                'funcloc' => 'FP-01-CH3-ALM-T089-P085',
+                'sort_field' => 'CH3.C06/M',
+                'description' => 'AC MOTOR;380V,50Hz,3kW,4P,100L,B3',
+                'material_number' => '123456789',
+                'unique_id' => '2008',
+                'qr_code_link' => 'id=Fajar-MotorList208',
+            ])
+            ->assertSessionHasErrors([
+                'qr_code_link' => 'The selected qr code link is invalid.',
+                'qr_code_link' => 'The qr code link id must be same as unique id.',
             ]);
     }
 
@@ -1098,19 +1111,19 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
             ])
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testRegisterMotorAuthorizedSuccess()
+    public function testRegisterMotorAdminSuccess()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1129,7 +1142,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1172,9 +1185,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/motor-registration');
@@ -1188,7 +1201,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1230,9 +1243,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1251,7 +1264,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1294,9 +1307,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1315,7 +1328,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1357,9 +1370,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1378,7 +1391,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1420,9 +1433,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1440,7 +1453,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
             'motor_detail' => null,
             'manufacturer' => null,
             'serial_number' => null,
@@ -1484,9 +1497,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1504,7 +1517,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
             'motor_detail' => null,
             'manufacturer' => null,
             'serial_number' => null,
@@ -1548,9 +1561,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1568,7 +1581,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
             'motor_detail' => null,
             'manufacturer' => null,
             'serial_number' => null,
@@ -1612,9 +1625,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1632,7 +1645,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
             'motor_detail' => null,
             'manufacturer' => null,
             'serial_number' => null,
@@ -1677,9 +1690,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1697,7 +1710,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'status' => 'The status field is required.'
@@ -1708,9 +1721,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1729,7 +1742,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1771,9 +1784,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1791,7 +1804,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
             'motor_detail' => null,
             'manufacturer' => null,
             'serial_number' => null,
@@ -1835,9 +1848,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1855,7 +1868,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The funcloc field must start with one of the following: FP-01.'
@@ -1866,9 +1879,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1886,7 +1899,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The funcloc field must start with one of the following: FP-01.',
@@ -1898,9 +1911,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/motor-registration');
@@ -1913,7 +1926,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'funcloc' => 'The selected funcloc is invalid.'
@@ -1925,9 +1938,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -1946,7 +1959,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -1988,9 +2001,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2008,7 +2021,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field is required when status is Installed.'
@@ -2019,9 +2032,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2039,7 +2052,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field must be at least 3 characters.'
@@ -2050,9 +2063,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2070,7 +2083,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field must not be greater than 50 characters.'
@@ -2081,9 +2094,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2101,7 +2114,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field format is invalid.'
@@ -2113,9 +2126,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2134,7 +2147,7 @@ class MotorControllerTest extends TestCase
                 'description' => null,
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => null,
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -2176,9 +2189,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2196,7 +2209,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'description' => 'The description field must be at least 3 characters.'
@@ -2207,9 +2220,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2227,7 +2240,7 @@ class MotorControllerTest extends TestCase
             'description' => 'THIS-DESCRIPTION-IS-TOO-LONG-MORE-THAN-FIFTY-CHARACTER-MAKE-THE-SORTFIELD-IS-INVALID',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'description' => 'The description field must not be greater than 50 characters.'
@@ -2239,9 +2252,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2260,7 +2273,7 @@ class MotorControllerTest extends TestCase
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => null,
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
                 'motor_detail' => 'EMO000123',
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -2302,9 +2315,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2322,7 +2335,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '1001219',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'material_number' => 'The material number field must be 8 digits.'
@@ -2333,9 +2346,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2353,7 +2366,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '1001O110',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'material_number' => 'The material number field must be a number.'
@@ -2365,9 +2378,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2385,7 +2398,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => null,
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'unique_id' => 'The unique id field is required.'
@@ -2396,9 +2409,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2416,7 +2429,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '999a9',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9999',
+            'qr_code_link' => 'id=Fajar-MotorList9999',
         ])
             ->assertSessionHasErrors([
                 'unique_id' => 'The unique id field must be a number.'
@@ -2427,9 +2440,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2447,7 +2460,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '9999',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+            'qr_code_link' => 'id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
                 'id' => 'The selected id is invalid.'
@@ -2459,9 +2472,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2490,9 +2503,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2513,7 +2526,7 @@ class MotorControllerTest extends TestCase
             'qr_code_link' => 'http://www.safesave.info/MIC.php?id=Fajar-MotorList123',
         ])
             ->assertSessionHasErrors([
-                'qr_code_link' => 'The qr code link field must start with one of the following: https://www.safesave.info/MIC.php?id=Fajar-MotorList.'
+                'qr_code_link' => 'The qr code link field must start with one of the following: id=Fajar-MotorList.'
             ]);
     }
 
@@ -2521,9 +2534,9 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->post('/funcloc-register', [
@@ -2541,7 +2554,7 @@ class MotorControllerTest extends TestCase
             'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
             'material_number' => '10012345',
             'unique_id' => '123',
-            'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList9999',
+            'qr_code_link' => 'id=Fajar-MotorList9999',
         ])
             ->assertSessionHasErrors([
                 'qr_code_link' => 'The selected qr code link is invalid.'
@@ -2561,23 +2574,28 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->get('/motor-install-dismantle')
-            ->assertSeeText('[403] You are not authorized!')
+            ->assertSeeText('[403] Forbidden')
             ->assertSeeText('You are not allowed to perform this operation!.');
     }
 
-    public function testGetInstallDismantlePageAuthorized()
+    public function testGetInstallDismantlePageAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/motor-install-dismantle')
             ->assertSeeText('Install dismantle')
             ->assertSeeText('Table')
@@ -2602,10 +2620,13 @@ class MotorControllerTest extends TestCase
         self::assertNull($install->funcloc);
         self::assertNull($install->sort_field);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000426',
                 'id_install' => 'EMO000075',
@@ -2628,10 +2649,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => null,
                 'id_install' => null,
@@ -2643,10 +2667,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => null,
                 'id_install' => 'EMO000075',
@@ -2658,10 +2685,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000426',
                 'id_install' => null,
@@ -2673,10 +2703,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000000',
                 'id_install' => 'EMO000075',
@@ -2688,10 +2721,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000426',
                 'id_install' => 'EMO000000',
@@ -2703,10 +2739,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000426',
                 'id_install' => 'EMO000426',
@@ -2718,10 +2757,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO00046',
                 'id_install' => 'EMO000426',
@@ -2733,10 +2775,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/motor-install-dismantle', [
                 'id_dismantle' => 'EMO000426',
                 'id_install' => 'EMO00057',
@@ -2750,10 +2795,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [
@@ -2772,10 +2820,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [
@@ -2792,10 +2843,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [
@@ -2813,10 +2867,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [
@@ -2837,10 +2894,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [
@@ -2857,10 +2917,13 @@ class MotorControllerTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+
             ->get('/motor-install-dismantle');
 
         $response = $this->post('/equipment-motor', [

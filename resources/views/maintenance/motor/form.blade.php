@@ -34,9 +34,10 @@
             <x-alert :alert='new App\Data\Alert("All fields below can be blank.", "alert-info")' :button_close='true' />
 
             @isset($motorDetail)
+            <x-input-number-text type="hidden" id="motor_detail" name="motor_detail" :value='old("motor_detail", $motorDetail->motor_detail ?? $motor->id ?? "" )' :disabled='!Auth::user()->isAdmin()' />
             <x-motor.motor-detail :motorDetail='$motorDetail' :utility='$utility' :motor='$motor' />
             @else
-            <x-motor.motor-detail :utility='$utility' :motor='$motor' />
+            <x-motor.motor-detail :utility='$utility' />
             @endisset
 
             @if (Auth::user()->isAdmin())
