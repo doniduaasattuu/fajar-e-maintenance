@@ -150,7 +150,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -181,7 +181,7 @@ class MotorControllerTest extends TestCase
     public function testGetMotorDetailsGuest()
     {
         $this->get('/motor-details/EMO000105')
-            ->assertRedirect('/login');
+            ->assertRedirectToRoute('login');
     }
 
     public function testGetMotorDetailsEmployee()
@@ -189,7 +189,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000153',
+            'nik' => '55000135',
             'password' => 'rahasia'
         ]);
 
@@ -217,7 +217,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000135',
+            'nik' => '55000153',
             'password' => 'rahasia'
         ]);
 
@@ -250,6 +250,10 @@ class MotorControllerTest extends TestCase
         ]);
 
         $this
+            ->get('/motors');
+
+        $this
+            ->followingRedirects()
             ->get('/motor-edit/EMO000001')
             ->assertSeeText('[404] Not found')
             ->assertSeeText('The motor EMO000001 is unregistered.');
@@ -263,7 +267,7 @@ class MotorControllerTest extends TestCase
             'funcloc' => null,
             'sort_field' => null,
         ])
-            ->assertRedirect('/login');
+            ->assertRedirectToRoute('login');
     }
 
     public function testUpdateMotorUnregisteredAdmin()
@@ -2575,7 +2579,7 @@ class MotorControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
         Auth::attempt([
-            'nik' => '55000153',
+            'nik' => '55000135',
             'password' => 'rahasia',
         ]);
 
@@ -2583,7 +2587,7 @@ class MotorControllerTest extends TestCase
             ->followingRedirects()
             ->get('/motor-install-dismantle')
             ->assertSeeText('[403] Forbidden')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
     public function testGetInstallDismantlePageAdmin()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Modal;
 use App\Models\Trafo;
 use App\Services\FunclocService;
 use App\Services\TrafoDetailService;
@@ -115,7 +116,7 @@ class TrafoController extends Controller
     {
         $rules = [
             'id' => ['required', 'size:9', 'exists:App\Models\Trafo,id'],
-            'status' => ['required', Rule::in($this->trafoService->equipmentStatus)],
+            'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -124,7 +125,7 @@ class TrafoController extends Controller
             'qr_code_link' => ['required', 'exists:App\Models\Trafo,qr_code_link'],
             'trafo_detail' => ['required', 'same:id'],
             'power_rate' => ['nullable', 'max:10'],
-            'power_unit' => ['nullable', Rule::in($this->trafoService->powerUnitEnum)],
+            'power_unit' => ['nullable', Rule::in($this->getEnumValue('trafo', 'power_unit'))],
             'primary_voltage' => ['nullable', 'max:10'],
             'secondary_voltage' => ['nullable', 'max:10'],
             'primary_current' => ['nullable', 'max:10'],
@@ -182,7 +183,7 @@ class TrafoController extends Controller
     {
         $rules = [
             'id' => ['required', 'regex:/^[a-zA-Z\d]+$/u', 'size:9', 'starts_with:ETF', Rule::notIn($this->trafoService->registeredTrafos())],
-            'status' => ['required', Rule::in($this->trafoService->equipmentStatus)],
+            'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -191,7 +192,7 @@ class TrafoController extends Controller
             'qr_code_link' => ['required', 'starts_with:id=Fajar-TrafoList', Rule::notIn($this->trafoService->registeredQrCodeLinks())],
 
             'power_rate' => ['nullable', 'max:10'],
-            'power_unit' => ['nullable', Rule::in($this->trafoService->powerUnitEnum)],
+            'power_unit' => ['nullable', Rule::in($this->getEnumValue('trafo', 'power_unit'))],
             'primary_voltage' => ['nullable', 'max:10'],
             'secondary_voltage' => ['nullable', 'max:10'],
             'primary_current' => ['nullable', 'max:10'],
@@ -199,7 +200,7 @@ class TrafoController extends Controller
             'primary_connection_type' => ['nullable', 'max:10'],
             'secondary_connection_type' => ['nullable', 'max:10'],
             'frequency' => ['nullable', 'max:10'],
-            'type' => ['nullable', Rule::in($this->trafoService->typeEnum)],
+            'type' => ['nullable', Rule::in($this->getEnumValue('trafo', 'type'))],
             'manufacturer' => ['nullable', 'max:50'],
             'year_of_manufacture' => ['nullable', 'size:4'],
             'serial_number' => ['nullable', 'max:25'],
@@ -238,8 +239,9 @@ class TrafoController extends Controller
 
     public function trafoInstallDismantle()
     {
-        return response()->view('maintenance.trafo.install-dismantle', [
-            'title' => 'Install dismantle'
+        return response()->view('maintenance.install-dismantle', [
+            'title' => 'Install dismantle',
+            'table' => 'Trafos',
         ]);
     }
 
@@ -280,13 +282,13 @@ class TrafoController extends Controller
                 $this->trafoService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
                 Log::error('trafo install dismantle error', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error', 'message' => $error->getMessage()]);
+                return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
             Log::info('trafo install dismantle success', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "The trafo was successfully swapped."]);
+            return back()->with('modal', new Modal('[200] Success', 'The trafo was successfully swapped.'));
         } else {
-            return redirect()->back()->with('message', ['header' => '[403] Forbidden', 'message' => $validator->errors()->first()]);
+            return back()->with('modal', new Modal('[403] Forbidden', $validator->errors()->first()));
         }
     }
 }

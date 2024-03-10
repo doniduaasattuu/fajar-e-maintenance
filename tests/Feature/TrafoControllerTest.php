@@ -3,14 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Trafo;
-use App\Models\TrafoDetails;
 use Database\Seeders\FunclocSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\UserRoleSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class TrafoControllerTest extends TestCase
@@ -23,53 +20,58 @@ class TrafoControllerTest extends TestCase
 
     public function testGetTrafosEmployee()
     {
-        $this->seed([FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+        $this
+            ->get('/trafos')
+            ->assertSeeText('Trafos')
+            ->assertDontSeeText('New trafo')
+            ->assertSeeText('Filter')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Trend')
+            ->assertSeeText('Details');
+    }
+
+    public function testGetTrafosAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafos')
-            ->assertSeeText('Table trafo')
+            ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered trafo is')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('ETF001234');
     }
 
-    public function testGetTrafosAuthorized()
+    public function testGetTrafosAdminEmptyDb()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafos')
-            ->assertSeeText('Table trafo')
+            ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered trafo')
-            ->assertSeeText('Trend')
-            ->assertSeeText('Edit')
-            ->assertSeeText('ETF001234');
-    }
-
-    public function testGetTrafosAuthorizedEmptyDb()
-    {
-        $this->seed([FunclocSeeder::class, UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->get('/trafos')
-            ->assertSeeText('Table trafo')
-            ->assertSeeText('New trafo')
-            ->assertSeeText('Filter')
-            ->assertSeeText('The total registered trafo is 0 records.')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertDontSeeText('ETF001234');
@@ -83,48 +85,49 @@ class TrafoControllerTest extends TestCase
 
     public function testGetEditTrafoEmployee()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
 
         $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000153',
-                'user' => 'Jamal Mirdad'
-            ])
             ->get('/trafo-edit/ETF000085')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testGetEditTrafoUregisteredAuthorized()
+    public function testGetEditTrafoUregisteredAdmin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/trafo-edit/ETF000085')
             ->assertSeeText('Unique id')
             ->assertSee('TRAFO PLN');
 
-        $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000154',
-                'user' => 'Doni Darmawan'
-            ])
-            ->get('/trafo-edit/ETF000008')
-            ->assertSeeText('[404] Not found.')
-            ->assertSeeText('The trafo ETF000008 is unregistered.');
+        $this
+            ->followingRedirects()
+            ->get('/trafo-edit/ETF000000')
+            ->assertSeeText('[404] Not found')
+            ->assertSeeText('The trafo ETF000000 is unregistered.');
     }
 
-    public function testGetEditTrafoAuthorized()
+    public function testGetEditTrafoAdmin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006')
             ->assertSeeText('Edit trafo')
             ->assertSeeText('Status')
@@ -148,7 +151,7 @@ class TrafoControllerTest extends TestCase
 
     public function testGetTrafoDetailsGuest()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
         $this->get('/trafo-details/ETF000026')
             ->assertRedirect('/login');
@@ -156,12 +159,13 @@ class TrafoControllerTest extends TestCase
 
     public function testGetTrafoDetailsEmployee()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->get('/trafo-details/ETF000026')
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-details/ETF000026')
             ->assertSeeText('Trafo details')
             ->assertSeeText('Status')
             ->assertSee('Installed')
@@ -179,14 +183,15 @@ class TrafoControllerTest extends TestCase
             ->assertSee('disabled');
     }
 
-    public function testGetTrafoDetailsAuthorized()
+    public function testGetTrafoDetailsAdmin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->get('/trafo-details/ETF000026')
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-details/ETF000026')
             ->assertSeeText('Trafo details')
             ->assertSeeText('Status')
             ->assertSee('Installed')
@@ -204,25 +209,23 @@ class TrafoControllerTest extends TestCase
             ->assertSee('disabled');
     }
 
-    public function testGetTrafoDetailsUregisteredAuthorized()
+    public function testGetTrafoDetailsUregisteredAdmin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000026')
             ->assertSeeText('Unique id')
             ->assertSee('4');
 
         $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000154',
-                'user' => 'Doni Darmawan'
-            ])
+
             ->get('/trafo-edit/ETF000001')
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('The trafo ETF000001 is unregistered.');
     }
 
@@ -239,12 +242,14 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoUnregistered()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -265,12 +270,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoInvalidIdLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000105');
 
         $this
@@ -291,12 +297,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoInstalledFunclocAndSortfieldNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -340,12 +347,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoRepairedFunclocAndSortfieldNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this->followingRedirects()
@@ -386,12 +394,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoAvailableFunclocAndSortfieldNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this->followingRedirects()
@@ -432,12 +441,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoFunclocInvalidPrefix()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000105');
 
         $this
@@ -458,12 +468,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoFunclocInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -484,12 +495,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoFunclocInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -510,12 +522,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoSortfieldNullStatusInstalled()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-edit/ETF000006');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-edit/ETF000006');
 
         $this
             ->post('/trafo-update', [
@@ -535,12 +548,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoSortfieldInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-edit/ETF000006');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-edit/ETF000006');
 
         $this
             ->post('/trafo-update', [
@@ -560,12 +574,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoSortfieldInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-edit/ETF000006');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-edit/ETF000006');
 
         $this
             ->post('/trafo-update', [
@@ -585,12 +600,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoDescriptionNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this->followingRedirects()
@@ -631,12 +647,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoDescriptionInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -679,12 +696,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoDescriptionInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -727,12 +745,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoMaterialNumberNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this->followingRedirects()
@@ -773,12 +792,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoMaterialNumberInvalidType()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -821,12 +841,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoMaterialNumberInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -869,12 +890,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoMaterialNumberInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -917,12 +939,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoUniqueIdNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -965,12 +988,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoUniqueIdInvalidType()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -1013,12 +1037,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoUniqueIdUnregistered()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -1061,12 +1086,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoQrCodeLinkNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -1109,12 +1135,13 @@ class TrafoControllerTest extends TestCase
 
     public function testUpdateTrafoQrCodeLinkUnregistered()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-edit/ETF000006');
 
         $this
@@ -1158,7 +1185,7 @@ class TrafoControllerTest extends TestCase
     // REGISTER
     public function testRegisterTrafoGuest()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
         $this->post('/trafo-register', [])
             ->assertRedirect('/login');
@@ -1166,12 +1193,14 @@ class TrafoControllerTest extends TestCase
 
     public function testRegisterTrafoEmployee()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->post('/trafo-register', [
                 'id' => 'ETF000001',
                 'status' => 'Available',
@@ -1182,18 +1211,19 @@ class TrafoControllerTest extends TestCase
                 'unique_id' => '123',
                 'qr_code_link' => 'id=Fajar-TrafoList123',
             ])
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testRegisterTrafoAuthorizedSuccess()
+    public function testRegisterTrafoAdminSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1215,14 +1245,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // PROHIBITED FUNCLOC AND SORTFIELD
-    public function testRegisterTrafoAuthorizedProhibitedFunclocAvailable()
+    public function testRegisterTrafoAdminProhibitedFunclocAvailable()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1243,14 +1274,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The funcloc field is prohibited when status is Available.');
     }
 
-    public function testRegisterTrafoAuthorizedProhibitedSortFieldAvailable()
+    public function testRegisterTrafoAdminProhibitedSortFieldAvailable()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1272,14 +1304,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // PROHIBITED REPAIRED STATUS
-    public function testRegisterTrafoAuthorizedProhibitedFunclocRepaired()
+    public function testRegisterTrafoAdminProhibitedFunclocRepaired()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1300,14 +1333,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The funcloc field is prohibited when status is Repaired.');
     }
 
-    public function testRegisterTrafoAuthorizedProhibitedSortFieldRepaired()
+    public function testRegisterTrafoAdminProhibitedSortFieldRepaired()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1328,14 +1362,16 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The sort field field is prohibited when status is Repaired.');
     }
 
-    public function testRegisterTrafoAuthorizedInvalidIdNull()
+    public function testRegisterTrafoAdminInvalidIdNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1380,14 +1416,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedInvalidIdLengthMin()
+    public function testRegisterTrafoAdminInvalidIdLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1432,14 +1469,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedIdDuplicate()
+    public function testRegisterTrafoAdminIdDuplicate()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1484,14 +1522,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedIdInvalidPrefix()
+    public function testRegisterTrafoAdminIdInvalidPrefix()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1537,14 +1576,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // STATUS
-    public function testRegisterTrafoAuthorizedStatusNull()
+    public function testRegisterTrafoAdminStatusNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1589,14 +1629,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedFunclocNullSuccess()
+    public function testRegisterTrafoAdminFunclocNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1639,14 +1680,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The trafo successfully registered.');
     }
 
-    public function testRegisterTrafoAuthorizedFunclocNullFailed()
+    public function testRegisterTrafoAdminFunclocNullFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1691,14 +1733,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedFunclocInvalidPrefix()
+    public function testRegisterTrafoAdminFunclocInvalidPrefix()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1743,14 +1786,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedFunclocInvalidFormat()
+    public function testRegisterTrafoAdminFunclocInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->post('/funcloc-register', [
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->post('/funcloc-register', [
             'id' => 'FP-01-IN1-@TRF',
             'description' => 'Trafo IN1'
         ]);
@@ -1796,14 +1840,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedFunclocUnregistered()
+    public function testRegisterTrafoAdminFunclocUnregistered()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -1844,14 +1889,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // SORT FIELD
-    public function testRegisterTrafoAuthorizedSortFieldNullSuccess()
+    public function testRegisterTrafoAdminSortFieldNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this->followingRedirects()
             ->post('/trafo-register', [
@@ -1889,14 +1935,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The trafo successfully registered.');
     }
 
-    public function testRegisterTrafoAuthorizedSortFieldNullFailed()
+    public function testRegisterTrafoAdminSortFieldNullFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -1935,14 +1982,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedSortFieldInvalidLengthMin()
+    public function testRegisterTrafoAdminSortFieldInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -1982,14 +2030,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedSortFieldInvalidLengthMax()
+    public function testRegisterTrafoAdminSortFieldInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2029,14 +2078,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedSortFieldInvalidFormat()
+    public function testRegisterTrafoAdminSortFieldInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2077,14 +2127,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // DESCRIPTION
-    public function testRegisterTrafoAuthorizedDescriptionNullSuccess()
+    public function testRegisterTrafoAdminDescriptionNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this->followingRedirects()
             ->post('/trafo-register', [
@@ -2122,14 +2173,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The trafo successfully registered.');
     }
 
-    public function testRegisterTrafoAuthorizedDescriptionInvalidLengthMax()
+    public function testRegisterTrafoAdminDescriptionInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2170,14 +2222,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // MATERIAL NUMBER
-    public function testRegisterTrafoAuthorizedMaterialNumberNullSuccess()
+    public function testRegisterTrafoAdminMaterialNumberNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this->followingRedirects()
             ->post('/trafo-register', [
@@ -2215,14 +2268,15 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('The trafo successfully registered.');
     }
 
-    public function testRegisterTrafoAuthorizedMaterialNumberInvalidLengthMin()
+    public function testRegisterTrafoAdminMaterialNumberInvalidLengthMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2262,14 +2316,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedMaterialNumberInvalidFormat()
+    public function testRegisterTrafoAdminMaterialNumberInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2310,14 +2365,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // UNIQUE ID
-    public function testRegisterTrafoAuthorizedUniqueIdNullFailed()
+    public function testRegisterTrafoAdminUniqueIdNullFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2357,14 +2413,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedUniqueIdInvalidFormat()
+    public function testRegisterTrafoAdminUniqueIdInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2404,14 +2461,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedUniqueIdDuplicate()
+    public function testRegisterTrafoAdminUniqueIdDuplicate()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2452,14 +2510,15 @@ class TrafoControllerTest extends TestCase
     }
 
     // QR CODE LINK
-    public function testRegisterTrafoAuthorizedQrCodeLinkFailed()
+    public function testRegisterTrafoAdminQrCodeLinkFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2499,14 +2558,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedQrCodeLinkInvalidPrefix()
+    public function testRegisterTrafoAdminQrCodeLinkInvalidPrefix()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2546,14 +2606,15 @@ class TrafoControllerTest extends TestCase
             ]);
     }
 
-    public function testRegisterTrafoAuthorizedQrCodeLinkDuplicate()
+    public function testRegisterTrafoAdminQrCodeLinkDuplicate()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trafo-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->get('/trafo-registration');
 
         $this
             ->post('/trafo-register', [
@@ -2604,25 +2665,29 @@ class TrafoControllerTest extends TestCase
 
     public function testGetInstallDismantlePageEmployee()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->get('/trafo-install-dismantle')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testTrafoGetInstallDismantlePageAuthorized()
+    public function testTrafoGetInstallDismantlePageAdmin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/trafo-install-dismantle')
             ->assertSeeText('Install dismantle')
             ->assertSeeText('Table')
@@ -2635,7 +2700,7 @@ class TrafoControllerTest extends TestCase
     // POST
     public function testTrafoDoInstallDismantleSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
         $dismantle = Trafo::query()->find('ETF000085');
         self::assertEquals($dismantle->status, 'Installed');
@@ -2647,10 +2712,11 @@ class TrafoControllerTest extends TestCase
         self::assertNull($install->funcloc);
         self::assertNull($install->sort_field);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000085',
                 'id_install' => 'ETF001234',
@@ -2671,12 +2737,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => null,
                 'id_install' => null,
@@ -2686,12 +2753,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleNullDismantleField()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => null,
                 'id_install' => 'ETF001234',
@@ -2701,12 +2769,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleNullInstallField()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000085',
                 'id_install' => null,
@@ -2716,12 +2785,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleDismantleInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000000',
                 'id_install' => 'ETF000026',
@@ -2731,12 +2801,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleInstallInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000085',
                 'id_install' => 'ETF000000',
@@ -2746,12 +2817,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleInstallDismantleNotDifferent()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000085',
                 'id_install' => 'ETF000085',
@@ -2761,12 +2833,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleInstallInvalidSize()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF00085',
                 'id_install' => 'ETF001234',
@@ -2776,12 +2849,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoDoInstallDismantleDismantleInvalidSize()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this->followingRedirects()
             ->post('/trafo-install-dismantle', [
                 'id_dismantle' => 'ETF000085',
                 'id_install' => 'ETF01234',
@@ -2793,12 +2867,13 @@ class TrafoControllerTest extends TestCase
     // DISMANTLE
     public function testTrafoGetEquipmentDismantleValid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [
@@ -2815,12 +2890,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoGetEquipmentDismantleInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [
@@ -2835,12 +2911,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoGetEquipmentDismantleRepairedTrafo()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [
@@ -2856,12 +2933,13 @@ class TrafoControllerTest extends TestCase
     // INSTALL
     public function testTrafoGetEquipmentInstallValid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [
@@ -2880,12 +2958,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoGetEquipmentInstallInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [
@@ -2900,12 +2979,13 @@ class TrafoControllerTest extends TestCase
 
     public function testTrafoGetEquipmentInstallRepairedTrafo()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
             ->get('/trafo-install-dismantle');
 
         $response = $this->post('/equipment-trafo', [

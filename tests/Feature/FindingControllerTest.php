@@ -54,13 +54,13 @@ class FindingControllerTest extends TestCase
             ->assertSee('Closed')
             ->assertSeeText('Search')
             ->assertSee('Description')
-            ->assertSeeText('The total finding is')
-            ->assertSeeText('records')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('Area')
             ->assertSeeText('Status')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
             ->assertSeeText('Edit')
@@ -94,13 +94,13 @@ class FindingControllerTest extends TestCase
             ->assertSee('Closed')
             ->assertSeeText('Search')
             ->assertSee('Description')
-            ->assertSeeText('The total finding is')
-            ->assertSeeText('records')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('Area')
             ->assertSeeText('Status')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
             ->assertSeeText('Edit')
@@ -134,13 +134,13 @@ class FindingControllerTest extends TestCase
             ->assertSee('Closed')
             ->assertSeeText('Search')
             ->assertSee('Description')
-            ->assertSeeText('The total finding is')
-            ->assertSeeText('records')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('Area')
             ->assertSeeText('Status')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
             ->assertSeeText('Edit')
@@ -160,6 +160,33 @@ class FindingControllerTest extends TestCase
         $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
 
         Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/finding-registration')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Findings')
+            ->assertSeeText('Area *')
+            ->assertSeeText('Department *')
+            ->assertSeeText('Status *')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Description *')
+            ->assertSeeText('Image')
+            ->assertSeeText('Maximum upload file size: 5 MB.')
+            ->assertSeeText('Submit');
+    }
+
+    public function testGetFindingRegistrationAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
             'nik' => '55000153',
             'password' => 'rahasia'
         ]);
@@ -175,34 +202,7 @@ class FindingControllerTest extends TestCase
             ->assertSee('Closed')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
-            ->assertSeeText('Description *')
-            ->assertSeeText('Image')
-            ->assertSeeText('Maximum upload file size: 5 MB.')
-            ->assertSeeText('Submit');
-    }
-
-    public function testGetFindingRegistrationAuthorized()
-    {
-        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
-
-        Auth::attempt([
-            'nik' => '55000154',
-            'password' => 'rahasia'
-        ]);
-
-        $this
-            ->get('/finding-registration')
-            ->assertSeeText('New finding')
-            ->assertSeeText('Findings')
-            ->assertSeeText('Area *')
-            ->assertSeeText('Department *')
-            ->assertSeeText('Status *')
-            ->assertSee('Open')
-            ->assertSee('Closed')
-            ->assertSeeText('Equipment')
-            ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Description *')
             ->assertSeeText('Image')
             ->assertSeeText('Maximum upload file size: 5 MB.')
@@ -756,7 +756,7 @@ class FindingControllerTest extends TestCase
             ->assertSee('MGM000481')
             ->assertSeeText('Funcloc')
             ->assertSee('FP-01-PM3-REL-PPRL-PRAR')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSee('Doni Darmawan')
             ->assertSeeText('Description')
             ->assertSeeText('Image');

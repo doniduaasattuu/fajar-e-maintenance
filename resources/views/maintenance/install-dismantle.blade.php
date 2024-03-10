@@ -1,8 +1,8 @@
 <x-app-layout>
 
     <section>
-        <x-breadcumb-table :title='$title' :table="'Motors'" :action='"Instal dismantle"' />
-        <x-alert-info :information='["Only installed motors can be dismantled.", "Only available motors can be installed.", "Dismantled motor automatically changes status to repair."]' />
+        <x-breadcumb-table :title='$title' :table="$table" :action='$title' />
+        <x-alert-info :information='["Only installed " . strtolower($table) . " can be dismantled.",  "Only available " . strtolower($table) . " can be installed.", "Dismantled " . strtolower($table) . " automatically changes status to repair."]' />
     </section>
 
     @if ($errors->any())
@@ -10,7 +10,7 @@
     @endif
 
     <section>
-        <form onkeypress="return JS.preventSubmitForm(event)" action="/motor-install-dismantle" method="post">
+        <form onkeypress="return JS.preventSubmitForm(event)" action="/{{ request()->path() }}" method="POST">
             @csrf
 
             <div class="row">
@@ -51,16 +51,11 @@
         </form>
     </section>
 
-    <script>
-        window.onload = async () => {
-
-        };
-    </script>
-
     <script type="module">
+        let equipment_type = <?php echo json_encode(strtolower(substr_replace($table, "", -1))) ?>;
         let token = <?php echo json_encode(csrf_token()) ?>
 
-        JS.doFetchEquipment(token, 'motor');
+        JS.doFetchEquipment(token, equipment_type);
         JS.callEnableButtonSwap();
     </script>
 </x-app-layout>

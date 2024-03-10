@@ -316,8 +316,9 @@ class MotorController extends Controller
 
     public function motorInstallDismantle()
     {
-        return response()->view('maintenance.motor.install-dismantle', [
-            'title' => 'Install dismantle'
+        return response()->view('maintenance.install-dismantle', [
+            'title' => 'Install dismantle',
+            'table' => 'Motors',
         ]);
     }
 
