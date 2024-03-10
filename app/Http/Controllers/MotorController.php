@@ -96,7 +96,7 @@ class MotorController extends Controller
         $motor = Motor::query()->with(['MotorDetail'])->find($id);
 
         if (is_null($motor)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The motor $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The motor $id is unregistered."));
         }
 
         return response()->view('maintenance.motor.form', [

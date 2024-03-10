@@ -39,7 +39,6 @@ class HomeController extends Controller
     public function search(Request $request): RedirectResponse
     {
         $search = $request->input('search_equipment');
-        $current_user = Auth::user();
 
         if ($search != null && strlen($search) === 9 && !str_starts_with(strtolower($search), 'motor')) {
 
@@ -81,8 +80,9 @@ class HomeController extends Controller
 
             if (!is_null($motor)) {
                 $equipment_id = explode('=', $motor->qr_code_link)[1];
-
                 return redirect()->action([RecordController::class, 'checkingForm'], ['equipment_id' => $equipment_id]);
+            } else {
+                return back()->with('modal', new Modal('[404] Not found', "The motor with unique id $unique_id was not found."));
             }
         } else if ($search != null && str_starts_with(strtolower($search), 'trafo')) {
 
@@ -93,6 +93,8 @@ class HomeController extends Controller
                 $equipment_id = explode('=', $trafo->qr_code_link)[1];
 
                 return redirect()->action([RecordController::class, 'checkingForm'], ['equipment_id' => $equipment_id]);
+            } else {
+                return back()->with('modal', new Modal('[404] Not found', "The trafo with unique id $unique_id was not found."));
             }
         } else {
             return back()->with('modal', new Modal('[404] Not found', "The submitted value is invalid."));

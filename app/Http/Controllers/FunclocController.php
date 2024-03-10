@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
+use App\Data\Modal;
 use App\Http\Controllers\Controller;
 use App\Models\Funcloc;
 use App\Services\FunclocService;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -43,7 +43,8 @@ class FunclocController extends Controller
         $paginator = Funcloc::query()
             ->when($search, function ($query, $search) {
                 $query
-                    ->where('id', 'LIKE', "%{$search}%");
+                    ->where('id', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%");
             })
             ->orderBy('created_at', 'DESC')
             ->paginate(50)
@@ -60,7 +61,7 @@ class FunclocController extends Controller
         $funcloc = Funcloc::query()->find($id);
 
         if (is_null($funcloc)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The funcloc $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The funcloc $id is unregistered."));
         }
 
         return response()->view('maintenance.funcloc.form', [
@@ -75,7 +76,7 @@ class FunclocController extends Controller
     {
         $rules = [
             'id' => ['required', 'regex:/^[A-Z\d\-]+$/u', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[A-Z\s\.\d\/\-\#]+$/u'],
+            'description' => ['nullable', 'min:3', 'max:50'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -88,11 +89,11 @@ class FunclocController extends Controller
                 $this->funclocService->updateFuncloc($validated);
             } catch (Exception $error) {
                 Log::error('funcloc tries to updated', ['funcloc' => $validated['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+                return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
             }
 
             Log::info('funcloc updated success', ['funcloc' => $validated['id'], 'admin' => session('user')]);
-            return redirect()->back()->with('alert', ['message' => 'The funcloc successfully updated.', 'variant' => 'alert-success']);
+            return back()->with('alert', new Alert('The funcloc successfully updated.', 'alert-success'));
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -111,7 +112,7 @@ class FunclocController extends Controller
     {
         $rules = [
             'id' => ['required', 'regex:/^[A-Z\d\-]+$/u', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::notIn($this->funclocService->registeredFunclocs())],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
+            'description' => ['nullable', 'min:3', 'max:50'],
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -124,11 +125,11 @@ class FunclocController extends Controller
                 $this->funclocService->register($validated);
             } catch (Exception $error) {
                 Log::error('funcloc registration error', ['funcloc' => $validated['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+                return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
             }
 
             Log::info('funcloc register success', ['funcloc' => $validated['id'], 'admin' => session('user')]);
-            return redirect()->back()->with('alert', ['message' => 'The funcloc successfully registered.', 'variant' => 'alert-success']);
+            return back()->with('alert', new Alert('The funcloc successfully registered.', 'alert-success'));
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }

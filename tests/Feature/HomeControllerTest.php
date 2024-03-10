@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
@@ -20,22 +23,40 @@ class HomeControllerTest extends TestCase
 
     public function testGetHomeEmployee()
     {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad',
-        ])
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::find('55000135');
+
+        $this
+            ->actingAs($user)
             ->get('/')
-            ->assertSeeText('We make daily inspection checks easier.');
+            ->assertSeeText('Hello Edi Supriadi')
+            ->assertSeeText('We make daily inspection checks easier');
     }
 
-    public function testGetHomeAuthorized()
+    public function testGetHomeAdmin()
     {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan',
-        ])
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::find('55000153');
+
+        $this
+            ->actingAs($user)
             ->get('/')
-            ->assertSeeText('We make daily inspection checks easier.');
+            ->assertSeeText('Hello Jamal Mirdad')
+            ->assertSeeText('We make daily inspection checks easier');
+    }
+
+    public function testGetHomeSuperAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::find('55000154');
+
+        $this
+            ->actingAs($user)
+            ->get('/')
+            ->assertSeeText('We make daily inspection checks easier');
     }
 
     // SCANNER
@@ -47,22 +68,28 @@ class HomeControllerTest extends TestCase
 
     public function testGetScannerEmployee()
     {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad',
-        ])
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::find('55000135');
+
+        $this
+            ->actingAs($user)
             ->get('/scanner')
-            ->assertSeeText('Request Camera Permissions');
+            ->assertStatus(200)
+            ->assertSee('Scan');
     }
 
-    public function testGetScannerAuthorized()
+    public function testGetScannerAdmin()
     {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan',
-        ])
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::find('55000153');
+
+        $this
+            ->actingAs($user)
             ->get('/scanner')
-            ->assertSeeText('Request Camera Permissions');
+            ->assertStatus(200)
+            ->assertSee('Scan');
     }
 
     public function testSearchGuestMotor()
@@ -77,12 +104,14 @@ class HomeControllerTest extends TestCase
 
     public function testSearchMemberMotor()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->post('/search', [
                 'search_equipment' => 'EMO000426'
             ])
@@ -93,10 +122,12 @@ class HomeControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->post('/search', [
                 'search_equipment' => null,
             ])
@@ -107,10 +138,12 @@ class HomeControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->post('/search', [
                 'search_equipment' => 'EMO00426'
             ])
@@ -118,119 +151,150 @@ class HomeControllerTest extends TestCase
     }
 
     // SEARCH BY UNIQUE ID
-    public function testSearchMotorUniqueIdNotFoundAuthorized()
+    public function testSearchMotorUniqueIdNotFoundAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->post('/search', [
                 'search_equipment' => 'MOTOR876'
             ])
-            ->assertSeeText('The submitted unique id 876 was not found.');
+            ->assertSeeText('The motor with unique id 876 was not found.');
     }
 
     public function testSearchMotorUniqueIdNotFoundEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/search', [
                 'search_equipment' => 'MOTOR876'
             ])
-            ->assertSeeText('The submitted unique id 876 was not found.');
+            ->assertSeeText('The motor with unique id 876 was not found.');
     }
 
-    public function testSearchTrafoUniqueIdNotFoundAuthorized()
+    public function testSearchTrafoUniqueIdNotFoundAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->followingRedirects()
             ->post('/search', [
                 'search_equipment' => 'TRAFO876'
             ])
-            ->assertSeeText('The submitted unique id 876 was not found.');
+            ->assertSeeText('The trafo with unique id 876 was not found.');
     }
 
     public function testSearchTrafoUniqueIdNotFoundEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
             ->post('/search', [
                 'search_equipment' => 'TRAFO876'
             ])
-            ->assertSeeText('The submitted unique id 876 was not found.');
+            ->assertSeeText('The trafo with unique id 876 was not found.');
     }
 
-    public function testSearchMotorUniqueIdSuccessAuthorized()
+    public function testSearchMotorUniqueIdSuccessAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->post('/search', [
-                'search_equipment' => 'MOTOR580'
+                'search_equipment' => 'MOTOR1804',
             ])
-            ->assertRedirect('/motor-edit/EMO000042')
-            ->assertDontSeeText('The submitted unique id 580 was not found.');
+            ->assertRedirect('/checking-form/Fajar-MotorList1804');
     }
 
     public function testSearchMotorUniqueIdSuccessEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->post('/search', [
-                'search_equipment' => 'MOTOR580'
+                'search_equipment' => 'MOTOR1804',
             ])
-            ->assertRedirect('/motor-details/EMO000042')
-            ->assertDontSeeText('The submitted unique id 580 was not found.');
+            ->assertRedirect('/checking-form/Fajar-MotorList1804');
     }
 
-    public function testSearchTrafoUniqueIdSuccessAuthorized()
+    public function testSearchTrafoUniqueIdSuccessAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->post('/search', [
                 'search_equipment' => 'TRAfo10'
             ])
-            ->assertRedirect('/trafo-edit/ETF000091')
-            ->assertDontSeeText('The submitted unique id 10 was not found.');
+            ->assertRedirect('/checking-form/Fajar-TrafoList10');
     }
 
     public function testSearchTrafoUniqueIdSuccessEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->post('/search', [
                 'search_equipment' => 'TRAfo10'
             ])
-            ->assertRedirect('/trafo-details/ETF000091')
-            ->assertDontSeeText('The submitted unique id 10 was not found.');
+            ->assertRedirect('/checking-form/Fajar-TrafoList10');
+    }
+
+    public function testSearchInvalidValueEmployee()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/search', [
+                'search_equipment' => 'P.23'
+            ])
+            ->assertSeeText('The submitted value is invalid.');
     }
 }
