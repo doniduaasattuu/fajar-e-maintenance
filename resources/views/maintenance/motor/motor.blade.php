@@ -50,9 +50,9 @@
 
                     {{-- VIEW OR EDIT MOTOR --}}
                     @if (Auth::user()->isAdmin())
-                    <th style="width: 50px;">Edit</th>
+                    <th style="width: 50px; line-height: 30px">Edit</th>
                     @else
-                    <th style="width: 50px;">Details</th>
+                    <th style="width: 50px; line-height: 30px">Details</th>
                     @endif
                 </tr>
             </thead>

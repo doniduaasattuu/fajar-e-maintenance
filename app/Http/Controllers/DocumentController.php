@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
+use App\Data\Modal;
 use App\Models\Document;
 use App\Models\User;
 use App\Services\DocumentService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +29,7 @@ class DocumentController extends Controller
 
     // public function documents()
     // {
-    //     return response()->view('documents.documents', [
+    //     return response()->view('maintenance.documents.documents', [
     //         'title' => 'Documents',
     //         'documentService' => $this->documentService,
     //     ]);
@@ -35,17 +38,22 @@ class DocumentController extends Controller
     public function documents(Request $request)
     {
         $search = $request->query('search');
+        $dept = $request->query('dept');
 
         $paginator = Document::query()
             ->when($search, function ($query, $search) {
                 $query
                     ->where('title', 'LIKE', "%{$search}%");
             })
+            ->when($dept, function ($query, $dept) {
+                $query
+                    ->where('department', '=', $dept);
+            })
             ->orderBy('created_at', 'DESC')
-            ->paginate(50)
+            ->paginate(10)
             ->withQueryString();
 
-        return view('documents.documents', [
+        return view('maintenance.documents.documents', [
             'title' => 'Documents',
             'paginator' => $paginator,
         ]);
@@ -65,15 +73,15 @@ class DocumentController extends Controller
             $document->delete();
 
             Log::info('document with title "' . $document->title . '" was deleted', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => 'Document successfully deleted.']);
+            return back()->with('modal', new Modal('[200] Success', 'Document successfully deleted.'));
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found.']);
+            return back()->with('modal', new Modal('[404] Not found', 'Document not found.'));
         }
     }
 
     public function documentRegistration()
     {
-        return response()->view('documents.form', [
+        return response()->view('maintenance.documents.form', [
             'title' => 'New document',
             'documentService' => $this->documentService,
             'action' => 'document-register'
@@ -82,7 +90,9 @@ class DocumentController extends Controller
 
     public function documentRegister(Request $request)
     {
-        $request->mergeIfMissing(['id' => uniqid(), 'uploaded_by' => User::query()->find(session('nik'))->fullname]);
+        $request->mergeIfMissing(['id' => uniqid(), 'uploaded_by' => Auth::user()->fullname]);
+
+        return response()->json($request->all());
 
         $rules = [
             'id' => ['required', 'size:13'],
@@ -111,12 +121,12 @@ class DocumentController extends Controller
                 }
             } catch (Exception $error) {
                 Log::error('document inserted error', ['user' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->withErrors($error->getMessage())->withInput();
+                return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
 
             Log::info('document inserted with title "' . $validated['title'] . '" success', ['user' => session('user')]);
-            return redirect()->back()->with('alert', ['message' => 'The document successfully saved.', 'variant' => 'alert-success']);
+            return back()->with('alert', new Alert('The document successfully saved.', 'alert-success'));
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -129,14 +139,14 @@ class DocumentController extends Controller
 
         if (!is_null($document)) {
 
-            return response()->view('documents.form', [
+            return response()->view('maintenance.documents.form', [
                 'title' => 'Edit document',
                 'documentService' => $this->documentService,
                 'action' => 'document-update',
                 'document' => $document,
             ]);
         } else {
-            return redirect()->back()->with('message', ['header' => '[404] Not found!', 'message' => 'Document not found!.']);
+            return back()->with('modal', new Modal('[404] Not found', 'Document not found'));
         }
     }
 
@@ -169,10 +179,10 @@ class DocumentController extends Controller
                 }
 
                 Log::info('document with title "' . $validated['title'] . '" was updated', ['user' => session('user')]);
-                return redirect()->back()->with('alert', ['message' => 'The document successfully updated.', 'variant' => 'alert-success'])->withInput();
+                return back()->with('alert', new Alert('The document successfully updated.', 'alert-success'));
             } catch (Exception $error) {
                 Log::error('document updated error', ['user' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->withErrors($error->getMessage())->withInput();
+                return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
         } else {
             return redirect()->back()->withErrors($validator)->withInput();

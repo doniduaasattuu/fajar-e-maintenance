@@ -39,7 +39,7 @@
 
                     {{-- VIEW OR EDIT FUNCLOC --}}
                     @if (Auth::user()->isAdmin())
-                    <th style="width: 50px;">Edit</th>
+                    <th style="width: 50px; line-height: 30px">Edit</th>
                     @endif
                 </tr>
             </thead>

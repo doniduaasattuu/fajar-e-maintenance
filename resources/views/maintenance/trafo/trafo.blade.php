@@ -1,10 +1,10 @@
 <x-app-layout>
 
+    @inject('utility', 'App\Services\Utility')
+
     @php
     $skipped = ['sort_field', 'description', 'material_number', 'qr_code_link', 'created_at'];
     @endphp
-
-    @inject('utility', 'App\Services\Utility')
 
     <section class="mb-4">
         <x-h3>{{ $title }}</x-h3>
@@ -50,9 +50,9 @@
 
                     {{-- VIEW OR EDIT trafo --}}
                     @if (Auth::user()->isAdmin())
-                    <th style="width: 50px;">Edit</th>
+                    <th style="width: 50px; line-height: 30px">Edit</th>
                     @else
-                    <th style="width: 50px;">Details</th>
+                    <th style="width: 50px; line-height: 30px">Details</th>
                     @endif
                 </tr>
             </thead>

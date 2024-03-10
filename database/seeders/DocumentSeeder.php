@@ -9,6 +9,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 class DocumentSeeder extends Seeder
@@ -39,6 +40,7 @@ class DocumentSeeder extends Seeder
             $document->id = $id;
             $document->title =  $titles[rand(0, sizeof($titles) - 1)] . ' ' . $pm;
             $document->area = $pm;
+            $document->department = Arr::random(["EI1", "EI2", "EI3", "EI4", "EI5", "EI6", "EI7"]);
             $document->equipment = null;
             $document->funcloc = null;
             $document->uploaded_by = $users[rand(0, count($users) - 1)]->abbreviated_name;

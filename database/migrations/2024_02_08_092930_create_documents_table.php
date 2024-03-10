@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('id')->nullable(false)->primary();
             $table->string('title')->nullable(false);
             $table->string('area')->nullable(true);
+            $table->enum("department", ["EI1", "EI2", "EI3", "EI4", "EI5", "EI6", "EI7"])->nullable(true);
             $table->string('equipment')->nullable(true);
             $table->string('funcloc')->nullable(true);
             $table->string('uploaded_by')->nullable(true);
