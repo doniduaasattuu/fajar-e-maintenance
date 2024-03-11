@@ -32,7 +32,7 @@ class OwnTest extends TestCase
         }
 
         assertCount(7, getSlot($unique));
-        assertCount(0, getSlot($unique));
+        assertCount(0, getSlot($normal));
     }
 
     public function testGetFirstUniqueId()

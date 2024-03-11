@@ -121,7 +121,7 @@ class PdfController extends Controller
                     'table' => $input['table'] ?? null,
                     'date' => $input['date'] ?? null,
                 ])
-                ->with('message', ['header' => '[404] Not found.', 'message' => 'No records found.']);
+                ->with('modal', new Modal('[404] Not found', 'No records found.'));
         } else {
             return $this->renderPdf($html, $title);
         }

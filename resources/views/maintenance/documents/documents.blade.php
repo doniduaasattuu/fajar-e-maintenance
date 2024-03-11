@@ -80,7 +80,7 @@
                     <td class="text-center text-break {{ $column }}" scope="row">
                         <a href="/storage/documents/{{ $document->$column }}">
 
-                            @switch(explode('.', $document->$column)[1])
+                            @switch(strtolower(explode('.', $document->$column)[1]))
 
                             {{-- PDF --}}
                             @case('pdf')
@@ -140,6 +140,7 @@
 
                     @if (Auth::user()->isAdmin())
                     {{-- EDIT DOCUMENT --}}
+                    @can('update', $document)
                     <td class="text-center" style="width: 50px;">
                         <a href="/document-edit/{{ $document->id }}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#0d6efd" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -148,6 +149,9 @@
                             </svg>
                         </a>
                     </td>
+                    @else
+                    <td></td>
+                    @endcan
 
                     @if (Auth::user()->isSuperAdmin())
                     {{-- DELETE DOCUMENT --}}

@@ -19,7 +19,7 @@
                 <x-input-label for="start_date" :value="__('Start date')" />
                 <x-input-date id="start_date" name="start_date" :value="old('start_date')" />
                 @if ($errors->get('start_date'))
-                <x-input-error :message="$errors->first('equipment')" />
+                <x-input-error :message="$errors->first('start_date')" />
                 @else
                 <x-input-help>
                     {{ __('The default date is one year from today.') }}

@@ -536,5 +536,11 @@ class FunclocSeeder extends Seeder
         $funcloc87->description = 'WW2.SCD.A/O.C6/P2(WP-52)/M';
         $funcloc87->created_at = Carbon::now();
         $funcloc87->save();
+
+        $funcloc88 = new Funcloc();
+        $funcloc88->id = 'FP-01-PM3';
+        $funcloc88->description = 'PM3';
+        $funcloc88->created_at = Carbon::now();
+        $funcloc88->save();
     }
 }

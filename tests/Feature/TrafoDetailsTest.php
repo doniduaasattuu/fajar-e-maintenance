@@ -7,9 +7,11 @@ use Database\Seeders\FunclocSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class TrafoDetailsTest extends TestCase
@@ -56,11 +58,11 @@ class TrafoDetailsTest extends TestCase
     // MOTOR CONTROLLER
     public function testRegisterTrafoDetailSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -104,11 +106,11 @@ class TrafoDetailsTest extends TestCase
     // POWER RATE
     public function testRegisterTrafoDetailPowerRateInvalidLengthMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -154,11 +156,11 @@ class TrafoDetailsTest extends TestCase
     // POWER UNIT
     public function testRegisterTrafoDetailPowerUnitInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -203,11 +205,11 @@ class TrafoDetailsTest extends TestCase
 
     public function testRegisterTrafoDetailPowerUnitVaSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -250,11 +252,11 @@ class TrafoDetailsTest extends TestCase
 
     public function testRegisterTrafoDetailPowerUnitKvaSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -297,11 +299,11 @@ class TrafoDetailsTest extends TestCase
 
     public function testRegisterTrafoDetailPowerUnitMvaSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -345,11 +347,11 @@ class TrafoDetailsTest extends TestCase
     // PRIMARY VOLTAGE
     public function testRegisterTrafoDetailPrimaryVoltageInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -395,11 +397,11 @@ class TrafoDetailsTest extends TestCase
     // SECONDARY VOLTAGE
     public function testRegisterTrafoDetailSecondaryVoltageInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -445,11 +447,11 @@ class TrafoDetailsTest extends TestCase
     // PRIMARY CURRENT
     public function testRegisterTrafoDetailPrimaryCurrentInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -495,11 +497,11 @@ class TrafoDetailsTest extends TestCase
     // SECONDARY CURRENT
     public function testRegisterTrafoDetailSecondaryCurrentInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -545,11 +547,11 @@ class TrafoDetailsTest extends TestCase
     // PRIMARY CONNECTION TYPE
     public function testRegisterTrafoDetailPrimaryConnectionTypeInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -595,11 +597,11 @@ class TrafoDetailsTest extends TestCase
     // SECONDARY CONNECTION TYPE
     public function testRegisterTrafoDetailSecondaryConnectionTypeInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -645,11 +647,11 @@ class TrafoDetailsTest extends TestCase
     // FREQUENCY
     public function testRegisterTrafoDetailFrequencyTypeInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -695,11 +697,11 @@ class TrafoDetailsTest extends TestCase
     // TYPE
     public function testRegisterTrafoDetailTypeInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -744,11 +746,11 @@ class TrafoDetailsTest extends TestCase
 
     public function testRegisterTrafoDetailTypeStepUpSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -791,11 +793,11 @@ class TrafoDetailsTest extends TestCase
 
     public function testRegisterTrafoDetailTypeStepDownSuccess()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -839,11 +841,11 @@ class TrafoDetailsTest extends TestCase
     // MANUFACTURER
     public function testRegisterTrafoDetailManufacturerInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -889,11 +891,11 @@ class TrafoDetailsTest extends TestCase
     // YEAR OF MANUFACTURE
     public function testRegisterTrafoDetailYearOfManufactureInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -939,11 +941,11 @@ class TrafoDetailsTest extends TestCase
     // SERIAL NUMBER
     public function testRegisterTrafoDetailSerialNumberInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -989,11 +991,11 @@ class TrafoDetailsTest extends TestCase
     // VECTOR GROUP
     public function testRegisterTrafoDetailVectorGroupInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1039,11 +1041,11 @@ class TrafoDetailsTest extends TestCase
     // VECTOR GROUP
     public function testRegisterTrafoDetailInsulationClassInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1089,11 +1091,11 @@ class TrafoDetailsTest extends TestCase
     // TYPE OF COOLING
     public function testRegisterTrafoDetailTypeOfCoolingInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1139,11 +1141,11 @@ class TrafoDetailsTest extends TestCase
     // TEMP RISE OF OIL WINDING
     public function testRegisterTrafoDetailTempRiseOfOilWindingInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1189,11 +1191,11 @@ class TrafoDetailsTest extends TestCase
     // WEIGHT
     public function testRegisterTrafoDetailWeightInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1239,11 +1241,11 @@ class TrafoDetailsTest extends TestCase
     // WEIGHT OF OIL
     public function testRegisterTrafoDetailWeightOfOilInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1289,11 +1291,11 @@ class TrafoDetailsTest extends TestCase
     // OIL TYPE
     public function testRegisterTrafoDetailOilTypeInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');
@@ -1339,11 +1341,11 @@ class TrafoDetailsTest extends TestCase
     // IP RATING
     public function testRegisterTrafoDetailIpRatingInvalidLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
         ]);
 
         $this->get('/trafo-registration');

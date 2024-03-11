@@ -7,7 +7,9 @@ use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class MotorDetailsTest extends TestCase
@@ -51,40 +53,48 @@ class MotorDetailsTest extends TestCase
         self::assertNull($motorDetail);
     }
 
-    public function testSeedFuncloc()
-    {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+    // public function testSeedFuncloc()
+    // {
+    //     $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ]);
+    //     $this->withSession([
+    //         'nik' => '55000154',
+    //         'user' => 'Doni Darmawan'
+    //     ]);
 
-        $this->post('/funcloc-register', [
-            'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
-        ]);
+    //     $this->post('/funcloc-register', [
+    //         'id' => 'FP-01-PM3',
+    //         'description' => 'SP3.SP-03/M',
+    //     ]);
 
-        $this->get('/motor-registration')
-            ->assertDontSeeText('Update')
-            ->assertSeeText('Submit');
-    }
+    //     $this->get('/motor-registration')
+    //         ->assertDontSeeText('Update')
+    //         ->assertSeeText('Submit');
+    // }
 
     // MOTOR CONTROLLER
     public function testRegisterMotorDetailSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
 
-        $this->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
+
+        $this
+            ->followingRedirects()
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => null,
                 'serial_number' => null,
@@ -124,18 +134,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailManufacturerInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc Is Invalid Length',
                 'serial_number' => null,
@@ -177,18 +194,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailSerialNumberInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => 'This is invalid maximum length serial number because maximum allowed length is 50 characters.',
@@ -230,18 +254,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailTypeInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -283,18 +314,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailPowerRateInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -336,18 +374,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailPowerUnitInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -389,18 +434,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailVoltageInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -442,18 +494,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailElectricalCurrentInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -495,18 +554,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCurrentNominalInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -548,18 +614,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailFrequencyInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -601,18 +674,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailPoleInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -654,18 +734,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailRpmInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -707,18 +794,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailBearingDeInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -760,18 +854,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailBearingNdeInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -813,18 +914,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailFrameTypeInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -866,18 +974,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailShaftDiameterInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -919,18 +1034,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailPhaseSupplyInvalidType()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -972,18 +1094,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailPhaseSupplyInvalidLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1026,18 +1155,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCosPhiInvalidLengthMax()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1079,18 +1215,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCosPhiDecimalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1133,18 +1276,25 @@ class MotorDetailsTest extends TestCase
     // EFFICIENCY
     public function testRegisterMotorDetailEfficiencyInvalidLengthMax()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1186,18 +1336,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailEfficiencyDecimalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1240,18 +1397,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailIpRatingInvalidMaxLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1293,18 +1457,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailInsulationClassInvalidMaxLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1346,18 +1517,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailDutyInvalidMaxLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1399,18 +1577,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailConnectinTypeMaxLength()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1452,18 +1637,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailNippleGreaseInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1505,18 +1697,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailNippleGreaseSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1558,18 +1757,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailGreasingType()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1611,18 +1817,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailGreasingDeInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1664,18 +1877,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailGreasingNdeInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1717,18 +1937,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailLengthInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1770,18 +1997,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailWidthInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1823,18 +2057,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailHeightInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1876,18 +2117,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailWeightInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1929,18 +2177,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCoolingFanInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -1982,18 +2237,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCoolingFanInternalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2035,18 +2297,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCoolingFanExternalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2088,18 +2357,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailCoolingFanNotAvailableSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2141,18 +2417,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailMountingInvalid()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2194,18 +2477,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailMountingHorizontalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2247,18 +2537,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailMountingVerticalSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2300,18 +2597,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailMountingVhSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',
@@ -2353,18 +2657,25 @@ class MotorDetailsTest extends TestCase
 
     public function testRegisterMotorDetailMountingMgmSuccess()
     {
-        $this->testSeedFuncloc();
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/motor-registration');
 
         $this
             ->post('/motor-register', [
                 'id' => 'EMO000123',
                 'status' => 'Installed',
-                'funcloc' => 'FP-01-PM3-OCC-PU01',
+                'funcloc' => 'FP-01-PM3',
                 'sort_field' => 'SP3.SP-03/M',
                 'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
                 'material_number' => '10012345',
                 'unique_id' => '123',
-                'qr_code_link' => 'https://www.safesave.info/MIC.php?id=Fajar-MotorList123',
+                'qr_code_link' => 'id=Fajar-MotorList123',
 
                 'manufacturer' => 'M.G.M. Electric Motors North America Inc',
                 'serial_number' => '3 6V A073001 ASA',

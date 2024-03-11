@@ -90,14 +90,17 @@ class DocumentController extends Controller
 
     public function documentRegister(Request $request)
     {
-        $request->mergeIfMissing(['id' => uniqid(), 'uploaded_by' => Auth::user()->fullname]);
-
-        return response()->json($request->all());
+        $request->mergeIfMissing([
+            'id' => uniqid(),
+            'uploaded_by' => Auth::user()->fullname,
+            'department' => Auth::user()->department,
+        ]);
 
         $rules = [
             'id' => ['required', 'size:13'],
             'title' => ['required', 'min:15', 'max:50'],
             'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],
             'uploaded_by' => ['required', 'max:50'],
@@ -156,6 +159,7 @@ class DocumentController extends Controller
             'id' => ['required', 'size:13', 'exists:App\Models\Document,id'],
             'title' => ['required', 'min:15', 'max:50'],
             'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
+            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],
             'uploaded_by' => ['required', 'max:50'],

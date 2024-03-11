@@ -3,7 +3,7 @@
     @inject('utility', 'App\Services\Utility')
 
     @php
-    $skipped = ['id', 'uploaded_by', 'created_at', 'updated_at'];
+    $skipped = ['id', 'uploaded_by', 'department', 'created_at', 'updated_at'];
     @endphp
 
     {{-- BREADCUMB --}}
@@ -30,6 +30,7 @@
             @isset($document)
             <x-input-number-text type="hidden" id="id" name="id" :value='$document->id ?? ""' :disabled='!Auth::user()->isAdmin()' />
             <x-input-number-text type="hidden" id="uploaded_by" name="uploaded_by" :value='$document->uploaded_by ?? ""' :disabled='!Auth::user()->isAdmin()' />
+            <x-input-number-text type="hidden" id="department" name="department" :value='$document->department ?? ""' :disabled='!Auth::user()->isAdmin()' />
             @endisset
 
             @foreach ($utility::getColumns('documents', $skipped) as $column)
@@ -38,15 +39,7 @@
             @case('area')
             <div class="mb-3">
                 <x-input-label for="{{ $column }}" :value="__(ucfirst(str_replace('_', ' ', $column)) . ' *')" />
-                <x-input-select id="{{ $column }}" name="{{ $column }}" :options="$utility::areas()" :value="old($column, $document->$column ?? '')" :disabled='!Auth::user()->isAdmin()' />
-                <x-input-error :message="$errors->first($column)" />
-            </div>
-            @break
-
-            @case('department')
-            <div class="mb-3">
-                <x-input-label for="{{ $column }}" :value="__(ucfirst(str_replace('_', ' ', $column)) . ' *')" />
-                <x-input-select id="{{ $column }}" name="{{ $column }}" :options="$utility->getEnumValue('user', 'department')" :value="old($column, $document->$column ?? '')" :disabled='!Auth::user()->isAdmin()' />
+                <x-input-select id="{{ $column }}" name="{{ $column }}" :options="$utility::areas()" :value="old($column, $document->$column ?? '')" :disabled='!Auth::user()->isAdmin()' :choose='"-- Choose --"' />
                 <x-input-error :message="$errors->first($column)" />
             </div>
             @break
@@ -54,8 +47,22 @@
             @case('attachment')
             <div class="mb-3">
                 <x-input-label for="{{ $column }}" :value="__(ucfirst(str_replace('_', ' ', $column)) . ' *')" />
-                <x-input-file id="{{ $column }}" name="{{ $column }}" :disabled='!Auth::user()->isAdmin()' />
+
+                <div class="input-group">
+                    <x-input-file id="{{ $column }}" name="{{ $column }}" :disabled='!Auth::user()->isAdmin()' />
+                    @if( isset($document) && $document->attachment !== null)
+                    <button class="btn btn-outline-secondary" type="button"><a target="_blank" class="text-reset text-decoration-none" href="/storage/documents/{{ $document->attachment }}">Existing</a></button>
+                    @endif
+                </div>
+
+                @if ($errors->first($column))
                 <x-input-error :message="$errors->first($column)" />
+                @else
+                <x-input-help>
+                    {{ __('Maximum upload file size: 25 MB.') }}
+                </x-input-help>
+                @endif
+
             </div>
             @break
 
@@ -68,7 +75,7 @@
                 @default
                 <x-input-label for="{{ $column }}" :value="__(ucfirst(str_replace('_', ' ', $column)))" />
                 @endswitch
-                <x-input-number-text id="{{ $column }}" name="{{ $column }}" :value='$document->$column ?? ""' :disabled='!Auth::user()->isAdmin()' />
+                <x-input-text id="{{ $column }}" name="{{ $column }}" :value='$document->$column ?? ""' :disabled='!Auth::user()->isAdmin()' />
                 <x-input-error :message="$errors->first($column)" />
             </div>
             @endswitch

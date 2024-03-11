@@ -172,8 +172,8 @@ class TrendController extends Controller
 
         $data = [
             'equipment' => $request->input('equipment'),
-            'start_date' => !is_null($request->input('start_date')) ? $request->input('start_date') : Carbon::now()->addYears(-1)->addDays(-1),
-            'end_date' => !is_null($request->input('end_date')) ? $request->input('end_date') : Carbon::now()->addDays(1),
+            'start_date' => $request->input('start_date') ?? Carbon::now()->addYears(-1)->addDays(-1),
+            'end_date' => $request->input('end_date') ?? Carbon::now()->addDays(1),
             'generate_pdf' => $request->input('generate_pdf'),
         ];
 

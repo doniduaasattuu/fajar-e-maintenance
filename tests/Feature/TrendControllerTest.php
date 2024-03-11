@@ -11,9 +11,11 @@ use Database\Seeders\MotorRecordSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class TrendControllerTest extends TestCase
@@ -26,12 +28,16 @@ class TrendControllerTest extends TestCase
 
     public function testGetTrendsEmployee()
     {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/trends')
-            ->assertSeeText('Trends')
+            ->assertSeeText('Equipment trends')
             ->assertSeeText('Equipment')
             ->assertSeeText('Start date')
             ->assertSeeText('The default date is one year from today.')
@@ -40,14 +46,18 @@ class TrendControllerTest extends TestCase
             ->assertSeeText('Submit');
     }
 
-    public function testGetTrendsAuthorized()
+    public function testGetTrendsAdmin()
     {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/trends')
-            ->assertSeeText('Trends')
+            ->assertSeeText('Equipment trends')
             ->assertSeeText('Equipment')
             ->assertSeeText('Start date')
             ->assertSeeText('The default date is one year from today.')
@@ -57,14 +67,18 @@ class TrendControllerTest extends TestCase
     }
 
     // POST
-    public function testGetTrendsSuccess()
+    public function testGetTrendsSuccessMGM()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -73,19 +87,23 @@ class TrendControllerTest extends TestCase
             ])
             ->assertSeeText('Temperature of MGM000481')
             ->assertSeeText('Vibration DE of MGM000481')
-            ->assertSeeText('Greasing record of MGM000481')
+            ->assertSeeText('Number of greasing of MGM000481')
             ->assertSeeText('Findings of MGM000481')
             ->assertSeeText('The top one is the newest.');
     }
 
     public function testGetTrendsFailedEquipmentNull()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => null,
@@ -97,12 +115,16 @@ class TrendControllerTest extends TestCase
 
     public function testGetTrendsSuccessStartDateNull()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -111,19 +133,23 @@ class TrendControllerTest extends TestCase
             ])
             ->assertSeeText('Temperature of MGM000481')
             ->assertSeeText('Vibration DE of MGM000481')
-            ->assertSeeText('Greasing record of MGM000481')
+            ->assertSeeText('Number of greasing of MGM000481')
             ->assertSeeText('Findings of MGM000481')
             ->assertSeeText('The top one is the newest.');
     }
 
     public function testGetTrendsSuccessStartDateInvalidDate()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -135,12 +161,16 @@ class TrendControllerTest extends TestCase
 
     public function testGetTrendsSuccessEndDateNull()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -149,19 +179,23 @@ class TrendControllerTest extends TestCase
             ])
             ->assertSeeText('Temperature of MGM000481')
             ->assertSeeText('Vibration DE of MGM000481')
-            ->assertSeeText('Greasing record of MGM000481')
+            ->assertSeeText('Number of greasing of MGM000481')
             ->assertSeeText('Findings of MGM000481')
             ->assertSeeText('The top one is the newest.');
     }
 
     public function testGetTrendsSuccessEndDateInvalidDate()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -173,12 +207,16 @@ class TrendControllerTest extends TestCase
 
     public function testGetTrendsSuccessStartDateNullEndDateNull()
     {
-        $this->seed(FindingSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
+
+        $this
             ->followingRedirects()
             ->post('/trends', [
                 'equipment' => 'MGM000481',
@@ -187,7 +225,7 @@ class TrendControllerTest extends TestCase
             ])
             ->assertSeeText('Temperature of MGM000481')
             ->assertSeeText('Vibration DE of MGM000481')
-            ->assertSeeText('Greasing record of MGM000481')
+            ->assertSeeText('Number of greasing of MGM000481')
             ->assertSeeText('Findings of MGM000481')
             ->assertSeeText('The top one is the newest.');
     }
@@ -195,12 +233,15 @@ class TrendControllerTest extends TestCase
     // POST GET TREND AS PDF
     public function testPostEquipmentTrendAsPdfEmptyRecords()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trends');
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
 
         $this
             ->followingRedirects()
@@ -210,23 +251,26 @@ class TrendControllerTest extends TestCase
                 'end_date' => Carbon::now()->format('Y-m-d'),
                 'generate_pdf' => 'true'
             ])
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('No records found.');
     }
 
     public function testPostEquipmentTrendAsPdfInvalidEquipment()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trends');
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/trends');
 
         $this
             ->followingRedirects()
             ->post('/trends', [
-                'equipment' => 'EMO000023',
+                'equipment' => 'EMO000000',
                 'start_date' => Carbon::now()->addYears(-1)->format('Y-m-d'),
                 'end_date' => Carbon::now()->format('Y-m-d'),
                 'generate_pdf' => 'true'
@@ -236,18 +280,19 @@ class TrendControllerTest extends TestCase
 
     public function testPostEquipmentTrendAsPdfSuccess()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorRecordSeeder::class, FindingSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/trends');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
 
+        $this->get('/trends');
         $equipment = 'MGM000481';
 
         $this
             ->post('/trends', [
-                'equipment' => 'MGM000481',
+                'equipment' => $equipment,
                 'start_date' => Carbon::now()->addYears(-1)->format('Y-m-d'),
                 'end_date' => Carbon::now()->format('Y-m-d'),
                 'generate_pdf' => 'true'
