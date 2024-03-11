@@ -3,9 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserRoleSeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 

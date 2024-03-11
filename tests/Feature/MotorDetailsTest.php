@@ -6,9 +6,7 @@ use App\Models\MotorDetails;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\UserRoleSeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
@@ -52,25 +50,6 @@ class MotorDetailsTest extends TestCase
         $motorDetail = MotorDetails::query()->with(['Motor', 'Funcloc'])->where('motor_detail', 'EMO000023')->first();
         self::assertNull($motorDetail);
     }
-
-    // public function testSeedFuncloc()
-    // {
-    //     $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
-
-    //     $this->withSession([
-    //         'nik' => '55000154',
-    //         'user' => 'Doni Darmawan'
-    //     ]);
-
-    //     $this->post('/funcloc-register', [
-    //         'id' => 'FP-01-PM3',
-    //         'description' => 'SP3.SP-03/M',
-    //     ]);
-
-    //     $this->get('/motor-registration')
-    //         ->assertDontSeeText('Update')
-    //         ->assertSeeText('Submit');
-    // }
 
     // MOTOR CONTROLLER
     public function testRegisterMotorDetailSuccess()

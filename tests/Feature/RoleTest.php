@@ -6,7 +6,6 @@ use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\UserRoleSeeder;
 use Exception;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 use Illuminate\Support\Str;

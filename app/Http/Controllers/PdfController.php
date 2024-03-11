@@ -16,7 +16,6 @@ use Mpdf\Mpdf;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
 class PdfController extends Controller

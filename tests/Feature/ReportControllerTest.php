@@ -2,20 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\Funcloc;
-use App\Models\MotorRecord;
 use Carbon\Carbon;
 use Database\Seeders\DailyRecordSeeder;
 use Database\Seeders\FunclocSeeder;
-use Database\Seeders\MotorRecordSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
-use Database\Seeders\TrafoRecordSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 

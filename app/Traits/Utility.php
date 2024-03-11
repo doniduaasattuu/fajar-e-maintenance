@@ -126,7 +126,7 @@ trait Utility
         return $equipment_id;
     }
 
-    private function getEquipmentCode(string $equipment): string
+    private static function getEquipmentCode(string $equipment): string
     {
         $equipment_code = preg_replace('/[0-9]/i', '', $equipment);
         return $equipment_code;

@@ -6,8 +6,6 @@ use App\Models\Trafo;
 use App\Services\TrafoService;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\TrafoSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 

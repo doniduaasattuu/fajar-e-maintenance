@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\User;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;

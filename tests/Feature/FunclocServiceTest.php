@@ -4,12 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Funcloc;
 use App\Services\FunclocService;
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class FunclocServiceTest extends TestCase

@@ -33,6 +33,13 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('member')->group(function () {
+
+    // USER
+    Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
 
@@ -40,8 +47,8 @@ Route::middleware('member')->group(function () {
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm'])->name('checkingForm');
 
     // FORMS
-    Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
-    Route::post("/populating-forms", [HomeController::class, 'populating']);
+    // Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
+    // Route::post("/populating-forms", [HomeController::class, 'populating']);
 
     // DOCUMENTS
     Route::get('/documents', [DocumentController::class, 'documents']);
@@ -50,12 +57,6 @@ Route::middleware('member')->group(function () {
     Route::post('/document-update', [DocumentController::class, 'documentUpdate']);
     Route::get('/document-registration', [DocumentController::class, 'documentRegistration']);
     Route::post('/document-register', [DocumentController::class, 'documentRegister']);
-
-    // USER
-    Route::get('/', [HomeController::class, 'home'])->name('home');
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
-    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
     // TABLES
     Route::get('/funclocs/{page?}/{filter?}', [FunclocController::class, 'funclocs'])->name('funclocs');
@@ -133,8 +134,8 @@ Route::middleware('member')->group(function () {
     });
 
     Route::middleware('role:superadmin')->group(function () {
-        Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);
-        Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
+        Route::get('/user-reset/{nik}', [UserController::class, 'userReset'])->name('user-reset');
+        Route::get('/user-delete/{nik}', [UserController::class, 'userDelete'])->name('user-delete');
         // ADMIN
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
         Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);

@@ -4,13 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\TrafoDetails;
 use Database\Seeders\FunclocSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 

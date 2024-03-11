@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Models;
+// namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 
-class UserRole extends Model
-{
-    protected $table = 'user_role';
-    public $increments = false;
-}
+// class UserRole extends Model
+// {
+//     protected $table = 'user_role';
+//     public $increments = false;
+// }

@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Data\Modal;
 use App\Models\User;
-use App\Services\RoleService;
-use App\Services\UserService;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;

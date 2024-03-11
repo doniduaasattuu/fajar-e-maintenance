@@ -25,6 +25,23 @@ class UserController extends Controller
         ]);
     }
 
+    public function doLogin(Request $request)
+    {
+        $credentials = $request->validate([
+            'nik' => ['required', 'numeric'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended();
+        }
+
+        return back()->withErrors([
+            'nik' => 'The nik or password is wrong.',
+        ])->onlyInput('nik');
+    }
+
     public function registration()
     {
         return view('auth.registration', [
@@ -54,23 +71,6 @@ class UserController extends Controller
 
         Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
         return redirect('login')->with('alert', new Alert('Your account successfully registered.', 'alert-success'));
-    }
-
-    public function doLogin(Request $request)
-    {
-        $credentials = $request->validate([
-            'nik' => ['required', 'numeric'],
-            'password' => ['required'],
-        ]);
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended();
-        }
-
-        return back()->withErrors([
-            'nik' => 'The nik or password is wrong.',
-        ])->onlyInput('nik');
     }
 
     public function profile()
@@ -103,27 +103,6 @@ class UserController extends Controller
 
         Log::info('user updated', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
         return back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
-    }
-
-    public function userReset(string $nik)
-    {
-        $user = User::query()->find($nik);
-
-        if ($nik == '55000154') {
-            Log::alert('user tries to reset creator password', ['admin' => Auth::user()->fullname]);
-            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot reset the creator!.'));
-        }
-
-        if (!is_null($user) && Auth::user()->isSuperAdmin()) {
-            $user->password = bcrypt(env('DEFAULT_PASSWORD', '@Fajarpaper123'));
-            $user->updated_at = Carbon::now()->toDateTimeString();
-            $user->update();
-
-            Log::info('user password reset success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
-            return back()->with('modal', new Modal('[200] Success', 'User password reset successfully.'));
-        } else {
-            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
-        }
     }
 
     public function users(Request $request)
@@ -164,6 +143,27 @@ class UserController extends Controller
             'title' => 'User management',
             'paginator' => $paginator,
         ]);
+    }
+
+    public function userReset(string $nik)
+    {
+        $user = User::query()->find($nik);
+
+        if ($nik == '55000154') {
+            Log::alert('user tries to reset creator password', ['admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot reset the creator!.'));
+        }
+
+        if (!is_null($user) && Auth::user()->isSuperAdmin()) {
+            $user->password = bcrypt(env('DEFAULT_PASSWORD', '@Fajarpaper123'));
+            $user->updated_at = Carbon::now()->toDateTimeString();
+            $user->update();
+
+            Log::info('user password reset success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'User password reset successfully.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
+        }
     }
 
     public function userDelete(string $nik)

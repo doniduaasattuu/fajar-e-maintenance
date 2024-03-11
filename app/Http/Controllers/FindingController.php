@@ -12,7 +12,6 @@ use App\Services\MotorService;
 use App\Services\TrafoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
@@ -36,25 +35,6 @@ class FindingController extends Controller
         $this->motorService = $motorService;
         $this->trafoService = $trafoService;
     }
-
-    // public function findings()
-    // {
-    //     $findings = DB::table('findings')
-    //         ->orderBy('created_at', 'desc')
-    //         ->get();
-
-    //     $equipments = DB::table('findings')->distinct()->get(['equipment']);
-    //     $equipments = $equipments->map(function ($value, $key) {
-    //         return $value->equipment;
-    //     });
-
-    //     return response()->view('maintenance.finding.finding', [
-    //         'title' => 'Findings',
-    //         'findings' => $findings,
-    //         'equipments' => $equipments->whereNotNull()->all(),
-    //         'findingService' => $this->findingService,
-    //     ]);
-    // }
 
     public function findings(Request $request)
     {
@@ -92,50 +72,6 @@ class FindingController extends Controller
             'action' => 'finding-register'
         ]);
     }
-
-    // public function findingRegister(Request $request)
-    // {
-    //     $request->mergeIfMissing(['id' => uniqid(), 'reporter' => Auth::user()->fullname]);
-
-    //     $rules = [
-    //         'id' => ['required', 'size:13'],
-    //         'area' => ['required', Rule::in($this->areas())],
-    //         'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
-    //         'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
-    //         'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
-    //         'notification' => ['nullable', 'numeric', 'digits:8'],
-    //         'reporter' => ['required'],
-    //         'description' => ['required', 'min:15'],
-    //         'image' => ['nullable', 'prohibited_if:description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
-    //     ];
-
-    //     $validator = Validator::make($request->all(), $rules);
-
-    //     if ($validator->passes()) {
-
-    //         try {
-
-    //             $image = $request->file('image');
-    //             $validated = $validator->safe()->except(['image']);
-
-    //             if (!is_null($image) && $image->isValid()) {
-    //                 $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
-    //                 $this->findingService->insertWithImage($image, $validated);
-    //                 Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' with image was inserted', ['user' => session('user')]);
-    //             } else {
-    //                 Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' without image was inserted', ['user' => session('user')]);
-    //                 $this->findingService->insert($validated);
-    //             }
-    //         } catch (Exception $error) {
-    //             Log::error('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'], ['user' => session('user'), 'message' => $error->getMessage()]);
-    //             return redirect()->back()->withErrors($error->getMessage())->withInput();
-    //         }
-
-    //         return redirect()->back()->with('alert', ['message' => 'The finding successfully saved.', 'variant' => 'alert-success']);
-    //     } else {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-    // }
 
     public function findingRegister(Request $request)
     {
@@ -183,47 +119,6 @@ class FindingController extends Controller
             return back()->with('modal', new Modal('[404] Not found', 'Finding not found.'));
         }
     }
-
-    // public function findingUpdate(Request $request)
-    // {
-    //     $rules = [
-    //         'id' => ['required', 'exists:App\Models\Finding,id'],
-    //         'area' => ['required', Rule::in($this->areas())],
-    //         'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
-    //         'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
-    //         'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
-    //         'notification' => ['nullable', 'numeric', 'digits:8'],
-    //         'reporter' => ['required'],
-    //         'description' => ['required', 'min:15'],
-    //         'image' => ['nullable', 'prohibited_if:description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
-    //     ];
-
-    //     $validator = Validator::make($request->all(), $rules);
-
-    //     if ($validator->passes()) {
-
-    //         $validated = $validator->validated();
-    //         $image = $request->file('image');
-
-    //         try {
-
-    //             if (!is_null($image) && $image->isValid()) {
-    //                 $validated['image'] = $validated['id'] . '.' . strtolower($image->getClientOriginalExtension());
-    //                 $this->findingService->updateWithImage($image, $validated);
-    //                 Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' was updated with image', ['user' => session('user')]);
-    //             } else {
-    //                 Log::info('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' was updated without image', ['user' => session('user')]);
-    //                 $this->findingService->update($validated);
-    //             }
-    //             return redirect()->back()->with('alert', ['message' => 'The finding successfully updated.', 'variant' => 'alert-success'])->withInput();
-    //         } catch (Exception $error) {
-    //             Log::error('finding of ' . (!is_null($validated['equipment']) ? $validated['equipment'] : 'equipment not set') . ' ' . $validated['area'] . ' error', ['user' => session('user'), 'message' => $error->getMessage()]);
-    //             return redirect()->back()->withErrors($error->getMessage())->withInput();
-    //         }
-    //     } else {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-    // }
 
     public function findingUpdate(Request $request)
     {

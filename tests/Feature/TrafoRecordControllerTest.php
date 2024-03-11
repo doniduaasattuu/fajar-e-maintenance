@@ -11,8 +11,6 @@ use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;

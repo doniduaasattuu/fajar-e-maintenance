@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\FindingSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;

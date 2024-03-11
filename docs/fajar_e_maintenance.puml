@@ -1,12 +1,37 @@
 @startuml fajar_e_maintenance
 
+entity users {
+  * nik VARCHAR(8) <<PK>>
+  --
+  * password VARCHAR(255)
+  * fullname VARCHAR(50)
+  * department ENUM("EI1-EI7");
+  * phone_number VARCHAR(15)
+    remember_token VARCHAR(100)
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
+}
+
+entity user_role {
+  * nik VARCHAR(8) <<PK>>
+  * role VARCHAR(255) <<PK>>
+  --
+}
+
+entity roles {
+  * role VARCHAR(255) <<PK>>
+  --
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
+}
+
 entity funclocs
 {
   * id VARCHAR(50) <<PK>>
   --
     description VARCHAR(50)
-    created_at TIMESTAMP NULL
-    updated_at TIMESTAMP NULL
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
 }
 
 entity motors
@@ -14,7 +39,7 @@ entity motors
   * id VARCHAR(9) <<PK>>
   --
   * status ENUM(["Installed", "Repaired", "Available"])
-    funcloc VARCHAR (50)
+    funcloc VARCHAR (50) <<FK>>
     sort_field VARCHAR(50)
     description VARCHAR(50)
     material_number VARCHAR(8)
@@ -27,7 +52,7 @@ entity motors
 entity motor_details {
   * id BIGINT(20) UNSIGNED AUTO_INCREMENT
   --
-    motor_detail VARCHAR(9) <<FK>> UNIQUE
+  * motor_detail VARCHAR(9) <<FK>> UNIQUE
     manufacturer VARCHAR(50)
     serial_number VARCHAR(50)
     type VARCHAR(50)
@@ -65,7 +90,7 @@ entity motor_details {
 }
 
 entity motor_records {
-  * id VARCHAR() <<PK>>
+  * id VARCHAR(255) <<PK>>
   --
   * funcloc VARCHAR (50)
   * motor VARCHAR(9)
@@ -74,9 +99,9 @@ entity motor_records {
     cleanliness ENUM(["Clean", "Dirty"])
     nipple_grease ENUM(["Available", "Not Available"])
     number_of_greasing UNSIGNED TINYINT(3) 0
-    temperature_de SMALLINT(5) DECIMAL(5,2) 0.00
-    temperature_body SMALLINT(5) DECIMAL(5,2) 0.00
-    temperature_nde SMALLINT(5) DECIMAL(5,2) 0.00    
+    temperature_de DECIMAL(5,2) 0.00
+    temperature_body DECIMAL(5,2) 0.00
+    temperature_nde DECIMAL(5,2) 0.00    
     vibration_de_vertical_value DECIMAL(4,2) 0.00
     vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
     vibration_de_horizontal_value DECIMAL(4,2) 0.00
@@ -95,24 +120,6 @@ entity motor_records {
     noise_nde ENUM(["Normal", "Abnormal"])
   * nik VARCHAR(8)
     created_at TIMESTAMP CURRENT
-    updated_at TIMESTAMP NULL
-}
-
-entity users {
-  * nik VARCHAR(8)
-  --
-  * password VARCHAR(25)
-  * fullname VARCHAR(50)
-  * department ENUM("EI1-EI7");
-  * phone_number VARCHAR(15)
-}
-
-entity roles {
-  * id BIGINT(20) <<PK>>
-  --
-  * nik VARCHAR(8) <<FK>>
-  * role ENUM ['db_admin', 'admin']
-    created_at TIMESTAMP NULL
     updated_at TIMESTAMP NULL
 }
 
@@ -216,24 +223,26 @@ entity documents {
     updated_at TIMESTAMP
 }
  
-funclocs ||--o{ motors : Have
-funclocs ||--o{ motor_records : Have
-motors ||--o{ motor_records : Have
+users }|--|| user_role : Have
+roles }|--|| user_role : Have
+
+funclocs ||--o{ motors
+' funclocs ||--o{ motor_records : Have
+' motors ||--o{ motor_records : Have
 motors ||--|| motor_details : Contain
-motor_records ||--|| users : Include
-roles ||--|| users : Registered
+' motor_records ||--|| users : Include
 
-funclocs ||--o{ trafos : Have
-funclocs ||--o{ trafo_records : Have
-trafos ||--o{ trafo_records : Have
-trafos ||--|| trafo_details : Contain
-trafo_records ||--|| users : Include
+' funclocs ||--o{ trafos : Have
+' funclocs ||--o{ trafo_records : Have
+' trafos ||--o{ trafo_records : Have
+' trafos ||--|| trafo_details : Contain
+' trafo_records ||--|| users : Include
 
-findings ||--|| users : Include
-motor_records ||--o{ findings : Have
-trafo_records ||--o{ findings : Have
+' findings ||--|| users : Include
+' motor_records ||--o{ findings : Have
+' trafo_records ||--o{ findings : Have
 
-motors ||--o{ documents : Have
-trafos ||--o{ documents : Have
+' motors ||--o{ documents : Have
+' trafos ||--o{ documents : Have
 
 @enduml

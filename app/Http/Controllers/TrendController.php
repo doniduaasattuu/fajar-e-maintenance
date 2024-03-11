@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Finding;
 use App\Services\MotorService;
 use App\Services\TrafoService;
 use App\Traits\Utility;

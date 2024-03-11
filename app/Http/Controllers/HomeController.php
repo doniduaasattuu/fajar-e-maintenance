@@ -10,18 +10,16 @@ use App\Services\TrafoService;
 use App\Traits\Utility;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     use Utility;
     private MotorService $motorService;
-    private TrafoService $trafoService;
 
-    public function __construct(MotorService $motorService, TrafoService $trafoService)
-    {
+    public function __construct(
+        MotorService $motorService,
+    ) {
         $this->motorService = $motorService;
-        $this->trafoService = $trafoService;
     }
 
     public function home()
@@ -101,37 +99,37 @@ class HomeController extends Controller
         }
     }
 
-    public function populatingForms()
-    {
+    // public function populatingForms()
+    // {
 
-        return response()->view('maintenance.populating-forms', [
-            'title' => 'Populating forms',
-        ]);
-    }
+    //     return response()->view('maintenance.populating-forms', [
+    //         'title' => 'Populating forms',
+    //     ]);
+    // }
 
-    public function populating(Request $request)
-    {
-        $equipments = $request->input("equipments");
-        $equipments = explode(",", $equipments);
+    // public function populating(Request $request)
+    // {
+    //     $equipments = $request->input("equipments");
+    //     $equipments = explode(",", $equipments);
 
-        $result = [];
-        foreach ($equipments as $equipment) {
-            if (in_array($this->getEquipmentCode($equipment), $this->motorService->motorCodes())) {
-                $motor = Motor::query()->find($equipment);
-                if ($motor) {
-                    array_push($result, "/checking-form/Fajar-MotorList" . $motor->unique_id);
-                }
-            } else {
-                $trafo = Trafo::query()->find($equipment);
-                if ($trafo) {
-                    array_push($result, "/checking-form/Fajar-TrafoList" . $trafo->unique_id);
-                }
-            };
-        }
+    //     $result = [];
+    //     foreach ($equipments as $equipment) {
+    //         if (in_array($this->getEquipmentCode($equipment), $this->motorService->motorCodes())) {
+    //             $motor = Motor::query()->find($equipment);
+    //             if ($motor) {
+    //                 array_push($result, "/checking-form/Fajar-MotorList" . $motor->unique_id);
+    //             }
+    //         } else {
+    //             $trafo = Trafo::query()->find($equipment);
+    //             if ($trafo) {
+    //                 array_push($result, "/checking-form/Fajar-TrafoList" . $trafo->unique_id);
+    //             }
+    //         };
+    //     }
 
-        return response()->view('maintenance.populating-forms', [
-            'title' => 'Populating forms',
-            'links' => $result,
-        ]);
-    }
+    //     return response()->view('maintenance.populating-forms', [
+    //         'title' => 'Populating forms',
+    //         'links' => $result,
+    //     ]);
+    // }
 }

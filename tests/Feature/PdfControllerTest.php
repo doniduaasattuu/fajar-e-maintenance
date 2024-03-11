@@ -5,11 +5,8 @@ namespace Tests\Feature;
 use Database\Seeders\DailyRecordSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 

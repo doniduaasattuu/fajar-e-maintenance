@@ -27,14 +27,6 @@ class DocumentController extends Controller
         $this->documentService = $documentService;
     }
 
-    // public function documents()
-    // {
-    //     return response()->view('maintenance.documents.documents', [
-    //         'title' => 'Documents',
-    //         'documentService' => $this->documentService,
-    //     ]);
-    // }
-
     public function documents(Request $request)
     {
         $search = $request->query('search');
@@ -64,7 +56,6 @@ class DocumentController extends Controller
         $document = Document::query()->find($id);
 
         if (!is_null($document)) {
-            // DO DELETE
 
             if (!is_null($document->attachment)) {
                 Storage::disk('public')->delete("documents/$document->attachment");

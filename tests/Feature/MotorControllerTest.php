@@ -3,14 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Motor;
-use Database\Seeders\DatabaseEraser;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class MotorControllerTest extends TestCase
