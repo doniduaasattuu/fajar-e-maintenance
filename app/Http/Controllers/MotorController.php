@@ -48,7 +48,7 @@ class MotorController extends Controller
                     ->where('status', '=', $status);
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(1000)
+            ->paginate(800)
             ->withQueryString();
 
         return view('maintenance.motor.motor', [
