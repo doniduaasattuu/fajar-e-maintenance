@@ -2,82 +2,15 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\RoleSeeder;
-use Database\Seeders\UserSeeder;
+use App\Models\User;
+use Database\Seeders\UserRoleSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class RoleControllerTest extends TestCase
 {
-    // DELETE DB ADMIN
-    public function testDeleteDbAdminGuest()
-    {
-        $this->get('/role-delete/db_admin/55000153')
-            ->assertRedirectToRoute('login');
-    }
-
-    public function testDeleteDbAdminEmployee()
-    {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
-            ->get('/role-delete/db_admin/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testDeleteDbAdminAuthorized()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/role-delete/db_admin/31811016')
-            ->assertSeeText('User removed from database administrator.');
-    }
-
-    public function testDeleteDbAdminAuthorizedTheCreator()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/role-delete/db_admin/55000154')
-            ->assertSeeText('You cannot delete the creator!.');
-    }
-
-    // ASSIGN DB ADMIN
-    public function testAssignDbAdminGuest()
-    {
-        $this->get('/role-assign/db_admin/55000153')
-            ->assertRedirectToRoute('login');
-    }
-
-    public function testAssignDbAdminEmployee()
-    {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
-            ->get('/role-assign/db_admin/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testAssignDbAdminAuthorized()
-    {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/role-assign/db_admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
-    }
-
-    // DELETE ADMIN
-    public function testDeleteAdminGuest()
+    // ADMIN
+    public function testDeleteAdminAsGuest()
     {
         $this->get('/role-delete/admin/55000153')
             ->assertRedirectToRoute('login');
@@ -85,62 +18,268 @@ class RoleControllerTest extends TestCase
 
     public function testDeleteAdminEmployee()
     {
-        $this->withSession([
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/admin/31100019')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testDeleteAdminAsAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::findOrFail('31100019');
+        $user->roles()->attach('admin');
+        self::assertTrue($user->isAdmin());
+
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/admin/31100019')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testDeleteAdminAsSuperAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
             ->get('/role-delete/admin/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('User removed from admin.');
     }
 
-    public function testDeleteAdminAuthorized()
+    public function testDeleteSelfAdminAsSuperAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/role-delete/admin/31811016')
-            ->assertSeeText('User removed from administrator.');
-    }
+            'password' => 'rahasia'
+        ]);
 
-    public function testDeleteAdminAuthorizedTheCreator()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
+        $this
+            ->followingRedirects()
             ->get('/role-delete/admin/55000154')
-            ->assertSeeText('You cannot unassign yourself, this action causes an error.');
+            ->assertSeeText('The user must be removed from super admin first.');
     }
 
-    // ASSIGN DB ADMIN
-    public function testAssignAdminGuest()
+    // SUPER ADMIN
+    public function testDeleteSuperAdminAsGuest()
     {
-        $this->get('/role-assign/admin/55000153')
+        $this->get('/role-delete/superadmin/55000154')
             ->assertRedirectToRoute('login');
     }
 
-    public function testAssignAdminEmployee()
+    public function testDeleteSuperAdminEmployee()
     {
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
-            ->get('/role-assign/admin/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/superadmin/55000154')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testAssignAdminAuthorized()
+    public function testDeleteSuperAdminAsAdmin()
     {
-        $this->withSession([
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/superadmin/55000154')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testDeleteSuperAdminTheCreatorAsSuperAdmin()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::findOrFail('55000153');
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/superadmin/55000154')
+            ->assertSeeText('You cannot delete the creator.');
+    }
+
+    public function testDeleteSuperAdminAsSuperAdminSuccess()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::findOrFail('55000153');
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/superadmin/55000153')
+            ->assertSeeText('User removed from super admin.');
+    }
+
+    public function testDeleteSelfSuperAdminAsSuperAdminSuccess()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $user = User::findOrFail('55000153');
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-delete/superadmin/55000153')
+            ->assertSeeText('You cannot unassign yourself, this action causes an error.');
+    }
+
+    public function testAssignAdminAlreadyAnAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000153')
+            ->assertSeeText('The user is already an admin.');
+    }
+
+    public function testAssignAdminSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000135')
+            ->assertSeeText('The user assigned as admin.');
+    }
+
+    public function testAssignAdminNotFound()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000321')
+            ->assertSeeText('User not found.');
+    }
+
+    // ASSIGN SUPER ADMIN
+    public function testAssignSuperAdminAlreadyAnSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        $user = User::find('55000153');
+        $user->roles()->attach('superadmin');
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000153')
+            ->assertSeeText('The user is already an super admin.');
+    }
+
+    public function testAssignSuperAdminFailedMustBeAdminFirst()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000135')
+            ->assertSeeText('The user must become admin first.');
+    }
+
+    public function testAssignSuperAdminSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000153')
+            ->assertSeeText('The user assigned as super admin.');
+    }
+
+    public function testAssignSuperAdminNotFound()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000321')
+            ->assertSeeText('User not found.');
     }
 }

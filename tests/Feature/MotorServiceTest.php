@@ -89,9 +89,9 @@ class MotorServiceTest extends TestCase
         self::assertNotNull($qrCodeLinks);
         self::assertNotEmpty($qrCodeLinks);
         self::assertTrue(count($qrCodeLinks) > 70);
-        self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList4592', $qrCodeLinks));
-        self::assertTrue(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList155', $qrCodeLinks));
-        self::assertFalse(in_array('https://www.safesave.info/MIC.php?id=Fajar-MotorList111', $qrCodeLinks));
+        self::assertTrue(in_array('id=Fajar-MotorList4592', $qrCodeLinks));
+        self::assertTrue(in_array('id=Fajar-MotorList155', $qrCodeLinks));
+        self::assertFalse(in_array('id=Fajar-MotorList111', $qrCodeLinks));
     }
 
     public function testMotorCodes()

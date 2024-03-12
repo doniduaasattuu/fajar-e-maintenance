@@ -28,10 +28,11 @@ class FindingSeeder extends Seeder
         $finding1 = new Finding();
         $finding1->id = $id;
         $finding1->area = 'PM3';
+        $finding1->department = 'EI2';
         $finding1->status = 'Open';
         $finding1->equipment = 'MGM000481';
         $finding1->funcloc = 'FP-01-PM3-REL-PPRL-PRAR';
-        $finding1->notification = null;
+        $finding1->notification = '80012235';
         $finding1->description = 'Motor panas tertutup buburan';
         $finding1->image = "$id.jpg";
         $finding1->reporter = 'Doni Darmawan';
@@ -42,6 +43,7 @@ class FindingSeeder extends Seeder
         $finding2 = new Finding();
         $finding2->id = uniqid();
         $finding2->area = 'PM3';
+        $finding2->department = 'EI2';
         $finding2->status = 'Open';
         $finding2->equipment = 'MGM000481';
         $finding2->funcloc = 'FP-01-PM3-REL-PPRL-PRAR';
@@ -56,6 +58,7 @@ class FindingSeeder extends Seeder
         $finding3 = new Finding();
         $finding3->id = uniqid();
         $finding3->area = 'PM7';
+        $finding3->department = 'EI2';
         $finding3->status = 'Open';
         $finding3->equipment = 'EMO005614';
         $finding3->funcloc = 'FP-01-PM7-VAS-VP13';
@@ -70,6 +73,7 @@ class FindingSeeder extends Seeder
         $finding4 = new Finding();
         $finding4->id = uniqid();
         $finding4->area = 'IN1';
+        $finding4->department = 'EI2';
         $finding4->status = 'Closed';
         $finding4->equipment = 'ETF000085';
         $finding4->funcloc = 'FP-01-IN1';
@@ -84,6 +88,7 @@ class FindingSeeder extends Seeder
         $finding5 = new Finding();
         $finding5->id = uniqid();
         $finding5->area = 'ENC';
+        $finding5->department = 'EI2';
         $finding5->status = 'Closed';
         $finding5->equipment = 'ETF000006';
         $finding5->funcloc = 'FP-01-ENC';
@@ -98,8 +103,9 @@ class FindingSeeder extends Seeder
         $finding6 = new Finding();
         $finding6->id = uniqid();
         $finding6->area = 'PM3';
+        $finding6->department = 'EI2';
         $finding6->status = 'Open';
-        $finding6->equipment = 'EMO000428';
+        $finding6->equipment = 'EMO000656';
         $finding6->funcloc = 'FP-01-PM3';
         $finding6->notification = null;
         $finding6->description = 'Motor noise bearing NDE';
@@ -112,6 +118,7 @@ class FindingSeeder extends Seeder
         $finding7 = new Finding();
         $finding7->id = uniqid();
         $finding7->area = 'PM3';
+        $finding7->department = 'EI2';
         $finding7->status = 'Closed';
         $finding7->equipment = null;
         $finding7->funcloc = null;

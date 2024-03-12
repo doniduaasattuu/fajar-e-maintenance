@@ -38,7 +38,7 @@ class TrafoRecordSeeder extends Seeder
             $record1->oil_temperature = rand(3750, 6000) / 100;
             $record1->winding_temperature = rand(3750, 6000) / 100;
             $record1->noise = array(0 => 'Normal', 1 => 'Abnormal')[rand(0, 1)];
-            $record1->silica_gel = array(0 => 'Dark blue', 1 => 'Light blue', 2 => 'Pink', 3 => 'Brown')[rand(0, 1)];
+            $record1->silica_gel = array(0 => 'Good', 1 => 'Satisfactory', 2 => 'Unsatisfactory', 3 => 'Unacceptable')[rand(0, 1)];
             $record1->earthing_connection = array(0 => 'No loose', 1 => 'Loose')[rand(0, 1)];
             $record1->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
             $record1->oil_level = rand(70, 88);
@@ -65,7 +65,7 @@ class TrafoRecordSeeder extends Seeder
             $record2->oil_temperature = rand(3750, 6000) / 100;
             $record2->winding_temperature = rand(3750, 6000) / 100;
             $record2->noise = array(0 => 'Normal', 1 => 'Abnormal')[rand(0, 1)];
-            $record2->silica_gel = array(0 => 'Dark blue', 1 => 'Light blue', 2 => 'Pink', 3 => 'Brown')[rand(0, 1)];
+            $record2->silica_gel = array(0 => 'Good', 1 => 'Satisfactory', 2 => 'Unsatisfactory', 3 => 'Unacceptable')[rand(0, 1)];
             $record2->earthing_connection = array(0 => 'No loose', 1 => 'Loose')[rand(0, 1)];
             $record2->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
             $record2->oil_level = rand(70, 88);

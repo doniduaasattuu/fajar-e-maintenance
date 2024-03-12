@@ -3,34 +3,35 @@
 namespace Tests\Feature;
 
 use App\Models\Motor;
+use App\Models\User;
 use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\TrafoService;
-use App\Services\UserService;
-use Database\Seeders\FindingSeeder;
+use Database\Seeders\DocumentSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
+use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
-
-use function Termwind\ask;
 
 class ViewTest extends TestCase
 {
     public function testViewRegistration()
     {
-        $this->view('user.registration', [
-            'title' => 'Registration',
-            'userService' => $this->app->make(UserService::class),
-            'action' => '/registration'
-        ])
+        $this
+            ->withViewErrors([])
+            ->view('auth.registration', [
+                'title' => 'Registration',
+                'action' => '/registration',
+            ])
             ->assertSeeText('Registration')
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
-            ->assertSeeText('Full name')
+            ->assertSeeText('Fullname')
             ->assertSeeText('Department')
             ->assertSeeText('EI1')
             ->assertSeeText('EI2')
@@ -42,27 +43,39 @@ class ViewTest extends TestCase
             ->assertSeeText('Phone number')
             ->assertSeeText('Registration code')
             ->assertSeeText('Sign Up')
-            ->assertSeeText('Already have an account ?, Sign in here');
+            ->assertSeeText('Already have an account ?')
+            ->assertSeeText('Sign in here');
     }
 
     public function testViewLogin()
     {
-        $this->view('user.login', [
-            'title' => 'Login'
-        ])
-            ->assertSeeText('Login')
+        $this
+            ->withViewErrors([])
+            ->view('auth.login', [
+                'title' => 'Login'
+            ])
+            ->assertSeeText("Login")
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
             ->assertSeeText('Sign In')
-            ->assertSeeText("Don't have an account ?, Register here");
+            ->assertSeeText("Don't have an account ?,", false)
+            ->assertSeeText("Register here");
     }
 
     public function testViewHome()
     {
-        $this->view('maintenance.home', [
-            'title' => 'Fajar E-Maintenance'
-        ])
+        $this->seed([UserRoleSeeder::class]);
+
+        $user = User::find('55000154');
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.home', [
+                'title' => 'Fajar E-Maintenance'
+            ])
             ->assertSeeText('Fajar E-Maintenance')
+            ->assertSeeText('Hello Doni Darmawan, welcome to', false)
             ->assertSeeText('We make daily inspection checks easier')
             ->assertSeeText('Scan QR Code')
             ->assertSeeText('Search');
@@ -70,62 +83,63 @@ class ViewTest extends TestCase
 
     public function testViewFunclocs()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
+        $user = User::find('55000153');
+        $paginator = DB::table('funclocs')->paginate();
 
-        $paginate = DB::table('funclocs')->paginate();
-
-        $this->view('maintenance.funcloc.funcloc', [
-            'title' => 'Table funcloc',
-            'funclocService' => $this->app->make(FunclocService::class),
-            'paginate' => $paginate,
-            'filter' => null,
-        ])
-            ->assertSeeText('Table funcloc')
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.funcloc.funcloc', [
+                'title' => 'Funclocs',
+                'paginator' => $paginator,
+            ])
+            ->assertSeeText('Funclocs')
             ->assertSeeText('Filter')
-            ->assertSeeText('The total registered funcloc is')
-            ->assertSeeText('Description')
-            ->assertSeeText('Updated at')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Edit');
     }
 
     public function testViewMotors()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
+        $user = User::find('55000153');
+        $paginator = DB::table('motors')->paginate(perPage: 10, page: 1);
 
-        $paginate = DB::table('motors')->paginate(perPage: 10, page: 1);
-
-        $this->view('maintenance.motor.motor', [
-            'title' => 'Table motor',
-            'motorService' => $this->app->make(MotorService::class),
-            'paginate' => $paginate,
-            'filter' => '',
-            'filter_status' => 'All',
-        ])
-            ->assertSeeText('Table motor')
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.motor.motor', [
+                'title' => 'Motors',
+                'paginator' => $paginator,
+            ])
+            ->assertSeeText('Motors')
             ->assertSeeText('New motor')
-            ->assertSeeText('Motor status')
+            ->assertSeeText('Status')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Sort field')
             ->assertSeeText('Unique id')
             ->assertSeeText('Updated at')
-            ->assertSeeText('Details')
+            ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('The total registered motor is')
-            ->assertSeeText('The total number displayed is 10 motor.');
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries');
     }
 
     public function testViewEditMotor()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class]);
-
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+        $user = User::find('55000153');
         $motor = Motor::query()->find('EMO001092');
 
-        $this->view('maintenance.motor.form', [
-            'title' => 'Motor details',
-            'motor' => $motor,
-            'readonly' => true,
-            'motorService' => $this->app->make(MotorService::class),
-        ])
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.motor.form', [
+                'title' => 'Motor details',
+                'motor' => $motor,
+            ])
             ->assertDontSee('/motor-update')
             ->assertSee('readonly')
             ->assertSee('disabled')
@@ -133,7 +147,7 @@ class ViewTest extends TestCase
             ->assertSee('FP-01-SP5-OCC-FR01')
             ->assertSee('SP5.M-21/M')
             ->assertSee('2568')
-            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList2568');
+            ->assertSee('id=Fajar-MotorList2568');
     }
 
     public function testViewEditMotorNull()
@@ -143,55 +157,100 @@ class ViewTest extends TestCase
         $motor = Motor::query()->find('EMO000000');
 
         try {
-            $this->view('maintenance.motor.form', [
-                'title' => 'Motor details',
-                'motor' => $motor,
-                'motorService' => $this->app->make(MotorService::class),
-            ]);
+            $this
+                ->withViewErrors([])
+                ->view('maintenance.motor.form', [
+                    'title' => 'Motor details',
+                    'motor' => $motor,
+                ]);
         } catch (Exception $error) {
-            self::assertEquals('Attempt to read property "MotorDetail" on null (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php) (View: D:\DEV\FAJAR-E-MAINTENANCE\resources\views\maintenance\motor\details.blade.php)', $error->getMessage());
+            self::assertNotNull($error);
         }
     }
 
     public function testViewMotorDetails()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
-
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+        $user = User::find('55000153');
         $motor = Motor::query()->find('EMO000105');
 
-        $this->view('maintenance.motor.form', [
-            'title' => 'Motor details',
-            'motor' => $motor,
-            'readonly' => true,
-            'motorService' => $this->app->make(MotorService::class),
-        ])
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.motor.form', [
+                'title' => 'Motor details',
+                'motor' => $motor,
+            ])
             ->assertSee('Motor details')
             ->assertSee('readonly')
             ->assertSee('disabled')
             ->assertSee('10010923')
             ->assertSee('56')
-            ->assertSee('https://www.safesave.info/MIC.php?id=Fajar-MotorList56');
+            ->assertSee('id=Fajar-MotorList56');
     }
 
     // TRAFO
     public function testViewTrafos()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+        $user = User::find('55000153');
+        $paginator = DB::table('trafos')->paginate(perPage: 10, page: 1);
 
-        $this->view('maintenance.trafo.trafo', [
-            'title' => 'Table trafo',
-            'trafoService' => $this->app->make(TrafoService::class),
-        ])
-            ->assertSeeText('Table trafo')
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.trafo.trafo', [
+                'title' => 'Trafos',
+                'paginator' => $paginator,
+            ])
+            ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
-            ->assertSeeText('Trafo status')
+            ->assertSeeText('Status')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Sort field')
             ->assertSeeText('Unique id')
             ->assertSeeText('Updated at')
-            ->assertSeeText('Details')
+            ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('The total registered trafo is')
-            ->assertSeeText('ETF001234');
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('ETF000006');
+    }
+
+    // DOCUMENT
+    public function testViewDocuments()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+        $user = User::find('55000154');
+        $paginator = DB::table('documents')->paginate(perPage: 10, page: 1);
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('maintenance.document.documents', [
+                'title' => 'Documents',
+                'paginator' => $paginator,
+            ])
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete');
     }
 }

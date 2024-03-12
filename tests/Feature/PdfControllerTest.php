@@ -2,38 +2,32 @@
 
 namespace Tests\Feature;
 
-use App\Models\Funcloc;
-use App\Models\MotorRecord;
-use App\Models\User;
-use Carbon\Carbon;
 use Database\Seeders\DailyRecordSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\UserRoleSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class PdfControllerTest extends TestCase
 {
     public function testGetDailyActivityReportPageGuest()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DailyRecordSeeder::class]);
-
         $this->get('/report')
             ->assertRedirectToRoute('login');
     }
 
     public function testGetDailyActivityReportPageEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DailyRecordSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DailyRecordSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/report')
             ->assertSeeText('Daily activity report')
             ->assertSeeText('Equipment')

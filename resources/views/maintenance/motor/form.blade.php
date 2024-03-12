@@ -1,84 +1,95 @@
-@include('utility.prefix')
+<x-app-layout>
 
-<div class="py-4">
+    @inject('utility', 'App\Services\Utility')
 
-    <div class="mb-3">
-        <h3 class="mb-1">{{ $title }}</h3>
-        <nav aria-label=" breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/motors">Table</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{ isset($motor) != null ? $motor->id : $title }}</li>
-            </ol>
-        </nav>
-    </div>
+    {{-- BREADCUMB --}}
+    <section>
+        @isset($motor)
+        <x-breadcumb-table :title='$title' :table="'Motors'" :table_item='$motor' />
+        @else
+        <x-breadcumb-table :title='$title' :table="'Motors'" />
+        @endisset
+    </section>
 
-    @include('utility.alert')
+    @if(session("alert"))
+    <x-alert :alert='session("alert")'>
+    </x-alert>
+    @endisset
 
-    @switch($title)
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["motor_detail"]' />
 
-    @case('Motor registration')
-    @include('maintenance.motor.registration')
-    @break
+    <section>
+        <form action="/{{ $action ?? '' }}" id="forms" method="POST">
+            @csrf
 
-    @case('Edit motor')
-    @include('maintenance.motor.edit')
-    @break
+            {{-- MOTOR DATA --}}
+            @isset($motor)
+            <x-form-equipment :equipment='$motor' :utility='$utility' :table='"motors"' />
+            @else
+            <x-form-equipment :utility='$utility' :table='"motors"' :qr_code_link='"id=Fajar-MotorList"' />
+            @endisset
 
-    @default
-    @include('maintenance.motor.details')
-    @endswitch
+            {{-- MOTOR DETAIL --}}
+            <x-alert :alert='new App\Data\Alert("All fields below can be blank.", "alert-info")' :button_close='true' />
 
-</div>
+            @isset($motorDetail)
+            <x-input-number-text type="hidden" id="motor_detail" name="motor_detail" :value='old("motor_detail", $motorDetail->motor_detail ?? $motor->id ?? "" )' :disabled='!Auth::user()->isAdmin()' />
+            <x-motor.motor-detail :motorDetail='$motorDetail' :utility='$utility' :motor='$motor' />
+            @else
+            <x-motor.motor-detail :utility='$utility' />
+            @endisset
 
-<script>
-    let id = document.getElementById('id');
-    let unique_id = document.getElementById('unique_id');
-    let qr_code_link = document.getElementById('qr_code_link');
-    let status = document.getElementById('status');
-    let funcloc = document.getElementById('funcloc')
-    let sort_field = document.getElementById('sort_field')
-    let current_funcloc = <?php echo (isset($motor)) ? (json_encode($motor->funcloc)) : "''" ?>;
-    let current_sort_field = <?php echo (isset($motor)) ? (json_encode($motor->sort_field)) : "''" ?>;
+            @if (Auth::user()->isAdmin())
+            {{-- BUTTON SUBMIT --}}
+            <div class="mb-3">
+                <x-button-primary>
+                    @isset($motor)
+                    {{ __('Save changes') }}
+                    @else
+                    {{ __('Submit') }}
+                    @endisset
+                </x-button-primary>
+            </div>
+            @endif
 
-    function disabledFunclocAndSortField() {
-        if (status.value == 'Repaired' || status.value == 'Available') {
-            // IF STATUS VALUE IS NOT INSTALLED
-            if (funcloc.value.length > 0 && sort_field.value.length > 0) {
-                current_funcloc = funcloc.value;
-                current_sort_field = sort_field.value;
+        </form>
+    </section>
+
+    <script>
+        let current_funcloc = '';
+        let current_sort_field = '';
+
+        const status = document.getElementById('status');
+        const funcloc = document.getElementById('funcloc');
+        const sort_field = document.getElementById('sort_field');
+
+        function disabledFunclocAndSortField(status, funcloc, sort_field) {
+            if (status.value == 'Repaired' || status.value == 'Available') {
+                // IF STATUS VALUE IS NOT INSTALLED
+                if (funcloc.value.length > 0 || sort_field.value.length > 0) {
+                    current_funcloc = funcloc.value;
+                    current_sort_field = sort_field.value;
+                }
+
+                funcloc.setAttribute('disabled', true);
+                sort_field.setAttribute('disabled', true);
+
+                funcloc.value = '';
+                sort_field.value = '';
+            } else if (status.value == 'Installed') {
+                // IF STATUS VALUE IS INSTALLED
+                funcloc.value = current_funcloc;
+                sort_field.value = current_sort_field;
+
+                funcloc.removeAttribute('disabled');
+                sort_field.removeAttribute('disabled');
             }
-
-            funcloc.setAttribute('disabled', true);
-            sort_field.setAttribute('disabled', true);
-
-            funcloc.value = '';
-            sort_field.value = '';
-        } else if (status.value == 'Installed') {
-            // IF STATUS VALUE IS INSTALLED
-            funcloc.value = current_funcloc;
-            sort_field.value = current_sort_field;
-
-            funcloc.removeAttribute('disabled');
-            sort_field.removeAttribute('disabled');
         }
-    }
 
-    status.onchange = () => {
-        disabledFunclocAndSortField();
-    }
-
-    unique_id.oninput = () => {
-        qr_code_link.value = "";
-        let link = "https://www.safesave.info/MIC.php?id=Fajar-MotorList";
-        qr_code_link.value = link + unique_id.value;
-    }
-
-    window.onload = () => {
-        if (window.location.pathname.split('/')[1] !== 'motor-details') {
-            disabledFunclocAndSortField();
+        status.onchange = () => {
+            disabledFunclocAndSortField(status, funcloc, sort_field);
         }
-    }
-</script>
-@include('utility.script.toupper')
-@include('utility.script.onlynumber')
-@include('utility.suffix')
+    </script>
+
+</x-app-layout>

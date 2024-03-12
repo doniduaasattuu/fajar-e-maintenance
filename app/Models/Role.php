@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
     protected $table = "roles";
-    protected $primaryKey = "id";
+    protected $primaryKey = "role";
     protected $keyType = "string";
-    public $incrementing = true;
+    public $incrementing = false;
     public $timestamps = true;
 
-    public function User(): HasOne
+    public function users(): BelongsToMany
     {
-        return $this->hasOne(User::class, 'nik', 'nik');
+        return $this->belongsToMany(User::class, 'user_role', 'role', 'nik');
     }
+
+    // public function userAsAdmin()
+    // {
+    //     return $this->users->where('role', '=', 'admin')->get();
+    // }
 }

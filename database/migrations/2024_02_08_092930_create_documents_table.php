@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->string('id')->nullable(false)->primary();
-            $table->string('title')->nullable(false);
-            $table->string('area')->nullable(true);
-            $table->string('equipment')->nullable(true);
-            $table->string('funcloc')->nullable(true);
-            $table->string('uploaded_by')->nullable(true);
+            $table->string('title', 50)->nullable(false);
+            $table->string('area', 50)->nullable(true);
+            $table->enum("department", ["EI1", "EI2", "EI3", "EI4", "EI5", "EI6", "EI7"])->nullable(true);
+            $table->string('equipment', 9)->nullable(true);
+            $table->string('funcloc', 50)->nullable(true);
+            $table->string('uploaded_by', 50)->nullable(true);
             $table->string('attachment')->nullable(false);
             $table->timestamps();
         });

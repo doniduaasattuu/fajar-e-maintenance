@@ -55,7 +55,7 @@
          @endforeach <!-- FORM MOTOR -->
      </div>
 
-     <div class="alert alert-info alert-dismissible mt-4 shadow-md shadow" role=" alert">
+     <div class="alert alert-info alert-dismissible mt-4 shadow-md" role=" alert">
          All fields below can be blank.
          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
      </div>

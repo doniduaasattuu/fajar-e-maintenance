@@ -2,83 +2,108 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\RoleService;
-use App\Services\UserService;
-use Exception;
+use App\Data\Modal;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class RoleController extends Controller
 {
 
-    private UserService $userService;
-    private RoleService $roleService;
-
-    public function __construct(RoleService $roleService, UserService $userService)
+    public function roleAssignAdmin(string $nik): RedirectResponse
     {
-        $this->roleService = $roleService;
-        $this->userService = $userService;
-    }
+        $user = User::query()->find($nik);
 
-    public function roleDeleteDbAdmin(string $nik)
-    {
-        if ($nik == env('CREATOR', '55000154')) {
-            Log::alert('user tries to unassign the creator from db_admin', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot delete the creator!.']);
+        if ($user->isAdmin()) {
+            return back()->with('modal', new Modal('[204] Success', 'The user is already an admin.'));
         }
 
-        try {
-            $this->roleService->deleteDbAdmin($nik);
-        } catch (Exception $error) {
-            Log::error('user tries to unassign db_admin', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
-            return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
+        if (!is_null($user)) {
+            $user->roles()->attach('admin');
+            Log::info('user assigned as admin success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'The user assigned as admin.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
         }
-        Log::info("user removed $nik from db_admin", ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from database administrator."]);
-    }
-
-    public function roleAssignDbAdmin(string $nik)
-    {
-        try {
-            $this->roleService->assignDbAdmin($nik);
-        } catch (Exception $error) {
-            Log::error('user assigned as db_admin', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
-            return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
-        }
-        Log::info('user assigned as db_admin success', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User assigned as database administrator."]);
     }
 
     public function roleDeleteAdmin(string $nik)
     {
-        if ($nik == session('nik')) {
-            Log::alert('user tries to unnasign himself from admin', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot unassign yourself, this action causes an error.']);
+        $user = User::query()->find($nik);
+
+        if ($user->isSuperAdmin()) {
+            return back()->with('modal', new Modal('[403] Forbidden', 'The user must be removed from super admin first.'));
         }
 
-        if ($nik == env('CREATOR', '55000154')) {
-            Log::alert('user tries to unnasign the creator from admin', ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[405] Method Not Allowed!', 'message' => 'You cannot delete the creator!.']);
+        if (!$user->isAdmin()) {
+            return back()->with('modal', new Modal('[204] Success', 'The user is no longer an admin.'));
         }
 
-        try {
-            $this->roleService->deleteAdmin($nik);
-        } catch (Exception $error) {
-            Log::error("user tries to unnasign $nik from admin", ['admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
+        if ($nik == Auth::user()->nik) {
+            Log::alert('user tries to unnasign himself from admin', ['super admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot unassign yourself, this action causes an error.'));
         }
-        Log::info("user removed $nik from admin", ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User removed from administrator."]);
+
+        if ($nik == '55000154') {
+            Log::alert('user tries to unnasign the creator from admin', ['super admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete the creator.'));
+        }
+
+        if (!is_null($user)) {
+            $user->roles()->detach('admin');
+            Log::info('user assigned as admin success', ['user' => $user->fullname, 'admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'User removed from admin.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
+        }
     }
 
-    public function roleAssignAdmin(string $nik)
+    public function roleAssignSuperAdmin(string $nik): RedirectResponse
     {
-        try {
-            $this->roleService->assignAdmin($nik);
-        } catch (Exception $error) {
-            Log::error('user tries to assign admin', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user'), 'message' => $error->getMessage()]);
-            return redirect()->back()->with('message', ['header' => '[500] Internal Server Error!', 'message' => $error->getMessage()]);
+        $user = User::query()->find($nik);
+
+        if ($user->isSuperAdmin()) {
+            return back()->with('modal', new Modal('[204] Success', 'The user is already an super admin.'));
         }
-        Log::info('user assigned as admin success', ['user' => $this->userService->user($nik)->fullname, 'admin' => session('user')]);
-        return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "User assigned as administrator."]);
+
+        if (!is_null($user) && !$user->isAdmin()) {
+            return back()->with('modal', new Modal('[403] Forbidden', 'The user must become admin first.'));
+        }
+
+        if (!is_null($user)) {
+            $user->roles()->attach('superadmin');
+            Log::info('user assigned as superadmin success', ['user' => $user->fullname, 'superadmin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'The user assigned as super admin.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
+        }
+    }
+
+    public function roleDeleteSuperAdmin(string $nik)
+    {
+        $user = User::query()->find($nik);
+
+        if (!$user->isSuperAdmin()) {
+            return back()->with('modal', new Modal('[204] Success', 'The user is no longer an super admin.'));
+        }
+
+        if ($nik == '55000154') {
+            Log::alert('user tries to unnasign the creator from super admin', ['super admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete the creator.'));
+        }
+
+        if ($nik == Auth::user()->nik) {
+            Log::alert('user tries to unnasign himself from super admin', ['super admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[403] Forbidden', 'You cannot unassign yourself, this action causes an error.'));
+        }
+
+        if (!is_null($user)) {
+            $user->roles()->detach('superadmin');
+            Log::info('user assigned as superadmin success', ['user' => $user->fullname, 'superadmin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'User removed from super admin.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
+        }
     }
 }

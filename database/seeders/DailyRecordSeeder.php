@@ -81,7 +81,7 @@ class DailyRecordSeeder extends Seeder
                 $record->oil_temperature = rand(3750, 6000) / 100;
                 $record->winding_temperature = rand(3750, 6000) / 100;
                 $record->noise = array(0 => 'Normal', 1 => 'Abnormal')[rand(0, 1)];
-                $record->silica_gel = array(0 => 'Dark blue', 1 => 'Light blue', 2 => 'Pink', 3 => 'Brown')[rand(0, 1)];
+                $record->silica_gel = array(0 => 'Good', 1 => 'Satisfactory', 2 => 'Unsatisfactory', 3 => 'Unacceptable')[rand(0, 1)];
                 $record->earthing_connection = array(0 => 'No loose', 1 => 'Loose')[rand(0, 1)];
                 $record->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
                 $record->oil_level = rand(70, 88);

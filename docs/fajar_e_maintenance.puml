@@ -1,12 +1,37 @@
 @startuml fajar_e_maintenance
 
+entity users {
+  * nik VARCHAR(8) <<PK>>
+  --
+  * password VARCHAR(255)
+  * fullname VARCHAR(50)
+  * department ENUM("EI1 ~ EI7");
+  * phone_number VARCHAR(15)
+    remember_token VARCHAR(100)
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
+}
+
+entity user_role {
+  * nik VARCHAR(8) <<PK>>
+  * role VARCHAR(255) <<PK>>
+  --
+}
+
+entity roles {
+  * role VARCHAR(255) <<PK>>
+  --
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
+}
+
 entity funclocs
 {
   * id VARCHAR(50) <<PK>>
   --
-    description VARCHAR(50)
-    created_at TIMESTAMP NULL
-    updated_at TIMESTAMP NULL
+    sort_field VARCHAR(50)
+    created_at TIMESTAMP
+    updated_at TIMESTAMP
 }
 
 entity motors
@@ -14,7 +39,7 @@ entity motors
   * id VARCHAR(9) <<PK>>
   --
   * status ENUM(["Installed", "Repaired", "Available"])
-    funcloc VARCHAR (50)
+    funcloc VARCHAR (50) <<FK>>
     sort_field VARCHAR(50)
     description VARCHAR(50)
     material_number VARCHAR(8)
@@ -27,7 +52,7 @@ entity motors
 entity motor_details {
   * id BIGINT(20) UNSIGNED AUTO_INCREMENT
   --
-    motor_detail VARCHAR(9) <<FK>> UNIQUE
+  * motor_detail VARCHAR(9) <<FK>> UNIQUE
     manufacturer VARCHAR(50)
     serial_number VARCHAR(50)
     type VARCHAR(50)
@@ -65,7 +90,7 @@ entity motor_details {
 }
 
 entity motor_records {
-  * id VARCHAR() <<PK>>
+  * id VARCHAR(255) <<PK>>
   --
   * funcloc VARCHAR (50)
   * motor VARCHAR(9)
@@ -74,9 +99,9 @@ entity motor_records {
     cleanliness ENUM(["Clean", "Dirty"])
     nipple_grease ENUM(["Available", "Not Available"])
     number_of_greasing UNSIGNED TINYINT(3) 0
-    temperature_de SMALLINT(5) DECIMAL(5,2) 0.00
-    temperature_body SMALLINT(5) DECIMAL(5,2) 0.00
-    temperature_nde SMALLINT(5) DECIMAL(5,2) 0.00    
+    temperature_de DECIMAL(5,2) 0.00
+    temperature_body DECIMAL(5,2) 0.00
+    temperature_nde DECIMAL(5,2) 0.00    
     vibration_de_vertical_value DECIMAL(4,2) 0.00
     vibration_de_vertical_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"]) 
     vibration_de_horizontal_value DECIMAL(4,2) 0.00
@@ -94,39 +119,6 @@ entity motor_records {
     vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])   
     noise_nde ENUM(["Normal", "Abnormal"])
   * nik VARCHAR(8)
-    created_at TIMESTAMP CURRENT
-    updated_at TIMESTAMP NULL
-}
-
-entity users {
-  * nik VARCHAR(8)
-  --
-  * password VARCHAR(25)
-  * fullname VARCHAR(50)
-  * department ENUM("EI1-EI7");
-  * phone_number VARCHAR(15)
-}
-
-entity roles {
-  * id BIGINT(20) <<PK>>
-  --
-  * nik VARCHAR(8) <<FK>>
-  * role ENUM ['db_admin', 'admin']
-    created_at TIMESTAMP NULL
-    updated_at TIMESTAMP NULL
-}
-
-entity findings {
-  * id VARCHAR() <<PK>>
-  --
-  * area VARCHAR(20)
-    status ENUM(["Open", "Closed"])
-    equipment VARCHAR(9)
-    funcloc VARCHAR(50)
-    notification VARCHAR(8)
-    reporter VARCHAR(50)
-  * description TEXT
-    image VARCHAR(20)
     created_at TIMESTAMP NULL
     updated_at TIMESTAMP NULL
 }
@@ -149,7 +141,7 @@ entity trafo_details {
   * id BIGINT UNSIGNED AUTO_INCREMENT
   --
   * trafo_detail VARCHAR(9) <<FK>>
-    power_rate VARCHAR(25)
+    power_rate VARCHAR(50)
     power_unit ENUM(["VA", "kVA", "MVA"])
     primary_voltage VARCHAR(50)
     secondary_voltage VARCHAR(50)  
@@ -175,7 +167,7 @@ entity trafo_details {
 }
 
 entity trafo_records {
-  * id BIGINT UNSIGNED AUTO_INCREMENT
+  * id BIGINT(20) UNSIGNED AUTO_INCREMENT
   --
   * funcloc VARCHAR (50)
   * trafo VARCHAR(9)
@@ -193,35 +185,54 @@ entity trafo_records {
     winding_temperature DECIMAL(5,2) 
     cleanliness ENUM(["Clean", "Dirty"])
     noise ENUM(["Normal", "Abnormal"])
-    silica_gel(["Dark blue", "Light blue", "Pink", "Brown"])
+    silica_gel(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])
     earthing_connection (["No loose", "Loose"])
     oil_leakage (["No leaks", "Leaks"])
     oil_level UNISIGNED TINYINT(3)
     blower_condition (["Good", "Not good"])
   * nik VARCHAR(8)
-    created_at TIMESTAMP
-    updated_at TIMESTAMP
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
+}
+
+entity findings {
+  * id VARCHAR(255) <<PK>>
+  --
+  * area VARCHAR(20)
+  * department ENUM("EI1 ~ EI7");
+  * status ENUM(["Open", "Closed"])
+    equipment VARCHAR(9)
+    funcloc VARCHAR(50)
+    notification VARCHAR(8)
+    reporter VARCHAR(50)  
+  * description TEXT
+    image VARCHAR(20)
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
 }
 
 entity documents {
-  * id VARCHAR() <<PK>>
+  * id VARCHAR(255) <<PK>>
   --
   * title VARCHAR(50)
-    area VARCHAR(20)
+    area VARCHAR(50)
+    department ENUM("EI1 ~ EI7");
     equipment VARCHAR(9)
     funcloc VARCHAR(50)
     uploaded_by VARCHAR(50)
-  * attachment VARCHAR(20)
-    created_at TIMESTAMP
-    updated_at TIMESTAMP
+  * attachment VARCHAR(255)
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
 }
  
-funclocs ||--o{ motors : Have
+users }|--|| user_role : Have
+roles }|--|| user_role : Have
+
+funclocs ||--o{ motors
 funclocs ||--o{ motor_records : Have
 motors ||--o{ motor_records : Have
 motors ||--|| motor_details : Contain
 motor_records ||--|| users : Include
-roles ||--|| users : Registered
 
 funclocs ||--o{ trafos : Have
 funclocs ||--o{ trafo_records : Have

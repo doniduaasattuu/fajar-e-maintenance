@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('funclocs', function (Blueprint $table) {
             $table->string("id", 50)->nullable(false)->primary();
-            $table->string("description", 50)->nullable(true);
+            $table->string("sort_field", 50)->nullable(true);
             $table->timestamps();
         });
     }

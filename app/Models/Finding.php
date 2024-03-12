@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Finding extends Model
@@ -15,5 +14,17 @@ class Finding extends Model
 
     protected $attributes = [
         'status' => 'Open'
+    ];
+
+    protected $fillable = [
+        'id',
+        'area',
+        'status',
+        'equipment',
+        'funcloc',
+        'notification',
+        'reporter',
+        'description',
+        'image',
     ];
 }

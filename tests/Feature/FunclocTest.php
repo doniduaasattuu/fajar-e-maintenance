@@ -3,14 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Funcloc;
-use App\Models\MotorDetails;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
-use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 

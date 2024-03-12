@@ -12,12 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string("nik", 8)->nullable(false);
-            $table->enum('role', ['db_admin', 'admin'])->nullable(false);
+            $table->string('role')->primary()->nullable(false);
             $table->timestamps();
-
-            $table->foreign('nik')->references('nik')->on('users');
         });
     }
 

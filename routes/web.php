@@ -33,12 +33,22 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('member')->group(function () {
+
+    // USER
+    Route::get('/', [HomeController::class, 'home'])->name('home');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
+    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
 
+    // MOTOR & TRAFO
+    Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm'])->name('checkingForm');
+
     // FORMS
-    Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
-    Route::post("/populating-forms", [HomeController::class, 'populating']);
+    // Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
+    // Route::post("/populating-forms", [HomeController::class, 'populating']);
 
     // DOCUMENTS
     Route::get('/documents', [DocumentController::class, 'documents']);
@@ -47,11 +57,6 @@ Route::middleware('member')->group(function () {
     Route::post('/document-update', [DocumentController::class, 'documentUpdate']);
     Route::get('/document-registration', [DocumentController::class, 'documentRegistration']);
     Route::post('/document-register', [DocumentController::class, 'documentRegister']);
-
-    Route::get('/', [HomeController::class, 'home'])->name('home');
-    Route::get('/profile', [UserController::class, 'profile'])->name('profile');
-    Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
     // TABLES
     Route::get('/funclocs/{page?}/{filter?}', [FunclocController::class, 'funclocs'])->name('funclocs');
@@ -70,30 +75,33 @@ Route::middleware('member')->group(function () {
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
-    // MOTOR & TRAFO
-    Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm']);
     // MOTOR
-    Route::post('/record-motor', [RecordController::class, 'saveRecordMotor']);
-    Route::get('/record-edit/motor/{uniqid}', [RecordController::class, 'editRecordMotor']);
+    Route::post('/record-motor', [RecordController::class, 'saveRecordMotor'])->name('motor-record');
+    Route::get('/record-edit/motor/{uniqid}', [RecordController::class, 'editRecordMotor'])->name('record-edit-motor');
+    Route::post('/record-edit/motor/{uniqid}', [RecordController::class, 'updateRecordMotor'])->name('update-record-motor');
     // TRAFO
-    Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo']);
-    Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo']);
+    Route::post('/record-trafo', [RecordController::class, 'saveRecordTrafo'])->name('trafo-record');
+    Route::get('/record-edit/trafo/{uniqid}', [RecordController::class, 'editRecordTrafo'])->name('record-edit-trafo');
+    Route::post('/record-edit/trafo/{uniqid}', [RecordController::class, 'updateRecordTrafo'])->name('update-record-trafo');
 
     // TREND
     Route::get('/trends', [TrendController::class, 'trends']);
     Route::post('/trends', [TrendController::class, 'getTrends']);
-    Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipmentTrend');
+    Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipment-trend');
 
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);
-    Route::post('/report', [PdfController::class, 'generateReport']);
+    Route::post('/report', [PdfController::class, 'generateReport'])->name('report');
     // Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
     // Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
 
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
-    Route::middleware('role:db_admin')->group(function () {
+    Route::middleware('role:admin')->group(function () {
+        // USERS
+        Route::get('/users', [UserController::class, 'users'])->name('users');
+
         // DOCUMENT
         Route::get('/document-delete/{id}', [DocumentController::class, 'documentDelete']);
 
@@ -125,17 +133,14 @@ Route::middleware('member')->group(function () {
         Route::post('/trafo-install-dismantle', [TrafoController::class, 'doTrafoInstallDismantle']);
     });
 
-    Route::middleware('role:admin')->group(function () {
-        Route::get('/users', [UserController::class, 'users']);
-        Route::get('/user-delete/{nik}', [UserController::class, 'userDelete']);
-        Route::get('/user-reset/{nik}', [UserController::class, 'userReset']);
-
-        Route::get('/role-delete/db_admin/{nik}', [RoleController::class, 'roleDeleteDbAdmin']);
-        Route::get('/role-assign/db_admin/{nik}', [RoleController::class, 'roleAssignDbAdmin']);
-        Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
+    Route::middleware('role:superadmin')->group(function () {
+        Route::get('/user-reset/{nik}', [UserController::class, 'userReset'])->name('user-reset');
+        Route::get('/user-delete/{nik}', [UserController::class, 'userDelete'])->name('user-delete');
+        // ADMIN
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
-
-        Route::get('/user-registration', [App\Http\Controllers\UserController::class, 'userRegistration']);
-        Route::post('/user-registration', [App\Http\Controllers\UserController::class, 'register']);
+        Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
+        // SUPER ADMIN
+        Route::get('/role-assign/superadmin/{nik}', [RoleController::class, 'roleAssignSuperAdmin']);
+        Route::get('/role-delete/superadmin/{nik}', [RoleController::class, 'roleDeleteSuperAdmin']);
     });
 });

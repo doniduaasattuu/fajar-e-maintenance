@@ -6,12 +6,10 @@ use App\Models\Finding;
 use Database\Seeders\FindingSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\UserRoleSeeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -22,114 +20,186 @@ class FindingControllerTest extends TestCase
     // FINDINGS
     public function testGetFindingsGuest()
     {
-        $this->seed(FindingSeeder::class);
         $this->get('/findings')
             ->assertRedirectToRoute('login');
     }
 
     public function testGetFindingsEmployee()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FindingSeeder::class]);
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/findings')
             ->assertSeeText('Findings')
             ->assertSeeText('New finding')
-            ->assertSeeText('Equipment')
-            ->assertSeeText('The total finding is')
-            ->assertSeeText('Finding status')
-            ->assertSeeText('All')
-            ->assertSeeText('Open')
-            ->assertSeeText('Closed')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
             ->assertSeeText('Status')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
-            ->assertSeeText('Inner bearing defect motor refiner PM7')
-            ->assertSeeText('Area licin oli lubrikasi tumpah');
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('Inner bearing defect motor refiner PM7');
     }
 
-    public function testGetFindingsAuthorized()
+    public function testGetFindingsAdmin()
     {
-        $this->seed(FindingSeeder::class);
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/findings')
             ->assertSeeText('Findings')
             ->assertSeeText('New finding')
-            ->assertSeeText('Equipment')
-            ->assertSeeText('The total finding is')
-            ->assertSeeText('Finding status')
-            ->assertSeeText('All')
-            ->assertSeeText('Open')
-            ->assertSeeText('Closed')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
             ->assertSeeText('Status')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSeeText('Reporter')
             ->assertSeeText('Date')
-            ->assertSeeText('Inner bearing defect motor refiner PM7')
-            ->assertSeeText('Area licin oli lubrikasi tumpah');
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('Inner bearing defect motor refiner PM7');
+    }
+
+    public function testGetFindingsSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('Inner bearing defect motor refiner PM7');
     }
 
     // REGISTRATION
     public function testGetFindingRegistrationGuest()
     {
-        $this->seed(FindingSeeder::class);
         $this->get('/finding-registration')
             ->assertRedirectToRoute('login');
     }
 
     public function testGetFindingRegistrationEmployee()
     {
-        $this->seed(FindingSeeder::class);
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/finding-registration')
             ->assertSeeText('New finding')
-            ->assertSeeText('Table')
-            ->assertSeeText('Area')
-            ->assertSeeText('-- Choose --')
-            ->assertSeeText('Status')
-            ->assertSeeText('Open')
-            ->assertSeeText('Closed')
+            ->assertSeeText('Findings')
+            ->assertSeeText('Area *')
+            ->assertSeeText('Department *')
+            ->assertSeeText('Status *')
+            ->assertSee('Open')
+            ->assertSee('Closed')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
-            ->assertSeeText('Description')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Description *')
             ->assertSeeText('Image')
             ->assertSeeText('Maximum upload file size: 5 MB.')
             ->assertSeeText('Submit');
     }
 
-    public function testGetFindingRegistrationAuthorized()
+    public function testGetFindingRegistrationAdmin()
     {
-        $this->seed(FindingSeeder::class);
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/finding-registration')
             ->assertSeeText('New finding')
-            ->assertSeeText('Table')
-            ->assertSeeText('Area')
-            ->assertSeeText('-- Choose --')
-            ->assertSeeText('Status')
-            ->assertSeeText('Open')
-            ->assertSeeText('Closed')
+            ->assertSeeText('Findings')
+            ->assertSeeText('Area *')
+            ->assertSeeText('Department *')
+            ->assertSeeText('Status *')
+            ->assertSee('Open')
+            ->assertSee('Closed')
             ->assertSeeText('Equipment')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Notification')
-            ->assertSeeText('Description')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Description *')
             ->assertSeeText('Image')
             ->assertSeeText('Maximum upload file size: 5 MB.')
             ->assertSeeText('Submit');
@@ -138,77 +208,123 @@ class FindingControllerTest extends TestCase
     // AREA
     public function testPostFindingTrafoSuccessWithoutImageEmployee()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
         self::assertCount(1, $findings);
+        self::assertEquals('Edi Supriadi', $findings->first()->reporter);
     }
 
-    public function testPostFindingMotorSuccessWithoutImageEmployee()
+    public function testPostFindingMotorSuccessWithoutImageAdmin()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'CH3',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'equipment' => 'EMO001056',
+                'funcloc' => 'FP-01-BO3-CAS-COM2',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(1, $findings);
+        self::assertEquals('Jamal Mirdad', $findings->first()->reporter);
+    }
+
+    public function testPostFindingMotorSuccessWithoutImageSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'CH3',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'EMO001056',
                 'funcloc' => 'FP-01-CH3-ALM-T089-P085',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
         self::assertCount(1, $findings);
+        self::assertEquals('Doni Darmawan', $findings->first()->reporter);
     }
 
     public function testPostFindingFailedAreaNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => null,
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The area field is required.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -220,25 +336,93 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingFailedAreaInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'GK5',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The selected area is invalid.')
+            ->assertDontSeeText('The finding successfully saved. ');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
+    public function testPostFindingFailedDepartmentNull()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'PM3',
+                'department' => null,
+                'status' => 'Open',
+                'equipment' => 'ETF000085',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The department field is required.')
+            ->assertDontSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
+    public function testPostFindingFailedDepartmentInvalid()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'PM3',
+                'department' => 'EI9',
+                'status' => 'Open',
+                'equipment' => 'ETF000085',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The selected department is invalid.')
             ->assertDontSeeText('The finding successfully saved. ');
 
         $findings = Finding::query()->get();
@@ -249,23 +433,27 @@ class FindingControllerTest extends TestCase
     // STATUS
     public function testPostFindingFailedStatusNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => null,
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The status field is required.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -277,23 +465,27 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingFailedStatusInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Unknown',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The selected status is invalid.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -306,23 +498,27 @@ class FindingControllerTest extends TestCase
     // EQUIPMENT
     public function testPostFindingSuccessEquipmentNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => null,
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The finding successfully saved.');
 
@@ -333,23 +529,27 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingFailedEquipmentInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ELP000123',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The selected equipment is invalid.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -362,23 +562,27 @@ class FindingControllerTest extends TestCase
     // FUNCLOC
     public function testPostFindingSuccessFunclocNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => null,
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The finding successfully saved.');
 
@@ -389,23 +593,27 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingSuccessFunclocInvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-SP9-OCC-PU01',
                 'notification' => '10012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The selected funcloc is invalid.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -418,23 +626,27 @@ class FindingControllerTest extends TestCase
     // NOTIFICATION
     public function testPostFindingSuccessNotificationNull()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => null,
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The finding successfully saved.');
 
@@ -445,23 +657,27 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingFailedNotificationLength()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => '100012235',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The notification field must be 8 digits.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -473,23 +689,27 @@ class FindingControllerTest extends TestCase
 
     public function testPostFindingFailedNotificationInvalidType()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
         $this->get('/finding-registration');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-register', [
                 'area' => 'IN1',
+                'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
                 'funcloc' => 'FP-01-IN1',
                 'notification' => 'abcdefgh',
                 'description' => 'Warna silica gel cokelat perlu diganti segera',
                 'image' => null,
+                'reporter' => Auth::user()->fullname,
             ])
             ->assertSeeText('The notification field must be a number.')
             ->assertDontSeeText('The finding successfully saved.');
@@ -502,7 +722,7 @@ class FindingControllerTest extends TestCase
     // EDIT FINDING
     public function testGetEditFindingGuest()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class]);
 
         $finding = Finding::query()->first();
 
@@ -512,18 +732,19 @@ class FindingControllerTest extends TestCase
 
     public function testGetEditFindingEmployee()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class]);
 
         $finding = Finding::query()->first();
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get("/finding-edit/$finding->id")
             ->assertSeeText('Edit finding')
             ->assertSeeText('Area')
-            ->assertSeeText('-- Choose --')
             ->assertSeeText('Status')
             ->assertSeeText('Open')
             ->assertSeeText('Closed')
@@ -531,7 +752,7 @@ class FindingControllerTest extends TestCase
             ->assertSee('MGM000481')
             ->assertSeeText('Funcloc')
             ->assertSee('FP-01-PM3-REL-PPRL-PRAR')
-            ->assertSeeText('Notification')
+            ->assertSeeText('Notif')
             ->assertSee('Doni Darmawan')
             ->assertSeeText('Description')
             ->assertSeeText('Image');
@@ -540,7 +761,7 @@ class FindingControllerTest extends TestCase
     // UPDATE FINDING
     public function testUpdateFindingGuest()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class]);
 
         $finding = Finding::query()->first();
 
@@ -550,6 +771,7 @@ class FindingControllerTest extends TestCase
             ->post('/finding-update', [
                 'id' => $finding->id,
                 'area' => $finding->area,
+                'department' => 'EI2',
                 'status' => $finding->status,
                 'equipment' => $finding->equipment,
                 'funcloc' => $finding->funcloc,
@@ -565,7 +787,7 @@ class FindingControllerTest extends TestCase
 
     public function testUpdateFindingSuccess()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class]);
 
         $finding = Finding::query()->first();
 
@@ -573,14 +795,17 @@ class FindingControllerTest extends TestCase
 
         $image = UploadedFile::fake()->image("$finding->id" . '.jpg');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-update', [
                 'id' => $finding->id,
                 'area' => $finding->area,
+                'department' => 'EI2',
                 'status' => $finding->status,
                 'equipment' => $finding->equipment,
                 'funcloc' => $finding->funcloc,
@@ -599,22 +824,26 @@ class FindingControllerTest extends TestCase
 
     public function testUpdateFindingFailedIdIvalid()
     {
-        $this->seed([FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, FindingSeeder::class]);
 
         $finding = Finding::query()->first();
+        self::assertNotNull($finding);
 
         $this->get("/finding-edit/$finding->id");
 
         $image = UploadedFile::fake()->image("$finding->id" . '.jpg');
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->followingRedirects()
             ->post('/finding-update', [
                 'id' => uniqid(),
                 'area' => $finding->area,
+                'department' => 'EI2',
                 'status' => $finding->status,
                 'equipment' => $finding->equipment,
                 'funcloc' => $finding->funcloc,

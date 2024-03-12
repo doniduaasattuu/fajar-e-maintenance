@@ -15,7 +15,6 @@ use App\Repositories\Impl\RoleRepositoryImpl;
 use App\Repositories\Impl\TrafoDetailRepositoryImpl;
 use App\Repositories\Impl\TrafoRecordRepositoryImpl;
 use App\Repositories\Impl\TrafoRepositoryImpl;
-use App\Repositories\Impl\UserRepositoryImpl;
 use App\Repositories\MotorDetailRepository;
 use App\Repositories\MotorRecordRepository;
 use App\Repositories\MotorRepository;
@@ -23,7 +22,6 @@ use App\Repositories\RoleRepository;
 use App\Repositories\TrafoDetailRepository;
 use App\Repositories\TrafoRecordRepository;
 use App\Repositories\TrafoRepository;
-use App\Repositories\UserRepository;
 use App\Services\DocumentService;
 use App\Services\FindingService;
 use App\Services\FunclocService;
@@ -37,7 +35,6 @@ use App\Services\Impl\RoleServiceImpl;
 use App\Services\Impl\TrafoDetailServiceImpl;
 use App\Services\Impl\TrafoRecordServiceImpl;
 use App\Services\Impl\TrafoServiceImpl;
-use App\Services\Impl\UserServiceImpl;
 use App\Services\MotorDetailService;
 use App\Services\MotorRecordService;
 use App\Services\MotorService;
@@ -45,14 +42,11 @@ use App\Services\RoleService;
 use App\Services\TrafoDetailService;
 use App\Services\TrafoRecordService;
 use App\Services\TrafoService;
-use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
     public array $singletons = [
-        UserService::class => UserServiceImpl::class,
-        UserRepository::class => UserRepositoryImpl::class,
         FunclocService::class => FunclocServiceImpl::class,
         FunclocRepository::class => FunclocRepositoryImpl::class,
         MotorService::class => MotorServiceImpl::class,
@@ -80,7 +74,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // 🤲🏻 IT DEPT 2026
     }
 
     /**

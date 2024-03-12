@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -14,6 +13,19 @@ class Motor extends Model
     protected $keyType = "string";
     public $incrementing = false;
     public $timestamps = true;
+
+    protected $fillable = [
+        'id',
+        'status',
+        'funcloc',
+        'sort_field',
+        'description',
+        'material_number',
+        'unique_id',
+        'qr_code_link',
+        'created_at',
+        'updated_at',
+    ];
 
     public function Funcloc(): BelongsTo
     {

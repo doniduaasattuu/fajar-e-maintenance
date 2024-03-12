@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Modal;
 use App\Models\Trafo;
 use App\Services\FunclocService;
 use App\Services\TrafoDetailService;
@@ -9,6 +10,7 @@ use App\Services\TrafoService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -29,20 +31,36 @@ class TrafoController extends Controller
         $this->trafoDetailService = $trafoDetailService;
     }
 
-    public function trafos()
+    public function trafos(Request $request)
     {
-        return response()->view('maintenance.trafo.trafo', [
-            'title' => 'Table trafo',
-            'trafoService' => $this->trafoService,
+        $search = $request->query('search');
+        $status = $request->query('status');
+
+        $paginator = Trafo::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where('id', 'LIKE', "%{$search}%");
+            })
+            ->when($status, function ($query, $status) {
+                $query
+                    ->where('status', '=', $status);
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate(1000)
+            ->withQueryString();
+
+        return view('maintenance.trafo.trafo', [
+            'title' => 'Trafos',
+            'paginator' => $paginator,
         ]);
     }
 
     public function trafoEdit(string $id)
     {
-        $trafo = Trafo::query()->with(['trafoDetail'])->find($id);
+        $trafo = Trafo::query()->with(['TrafoDetail'])->find($id);
 
         if (is_null($trafo)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The trafo $id is unregistered."));
         }
 
         return response()->view('maintenance.trafo.form', [
@@ -50,6 +68,7 @@ class TrafoController extends Controller
             'trafoService' => $this->trafoService,
             'action' => 'trafo-update',
             'trafo' => $trafo,
+            'trafoDetail' => $trafo->TrafoDetail,
         ]);
     }
 
@@ -72,7 +91,7 @@ class TrafoController extends Controller
     {
         $rules = [
             'id' => ['required', 'size:9', 'exists:App\Models\Trafo,id'],
-            'status' => ['required', Rule::in($this->trafoService->equipmentStatus)],
+            'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -81,7 +100,7 @@ class TrafoController extends Controller
             'qr_code_link' => ['required', 'exists:App\Models\Trafo,qr_code_link'],
             'trafo_detail' => ['required', 'same:id'],
             'power_rate' => ['nullable', 'max:10'],
-            'power_unit' => ['nullable', Rule::in($this->trafoService->powerUnitEnum)],
+            'power_unit' => ['nullable', Rule::in($this->getEnumValue('trafo', 'power_unit'))],
             'primary_voltage' => ['nullable', 'max:10'],
             'secondary_voltage' => ['nullable', 'max:10'],
             'primary_current' => ['nullable', 'max:10'],
@@ -115,11 +134,11 @@ class TrafoController extends Controller
                 $this->trafoService->updateTrafo($validated_trafo);
                 $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
             } catch (Exception $error) {
-                Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => session('user')]);
+            Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
             return redirect()->back()->with('alert', ['message' => 'The trafo successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -139,7 +158,7 @@ class TrafoController extends Controller
     {
         $rules = [
             'id' => ['required', 'regex:/^[a-zA-Z\d]+$/u', 'size:9', 'starts_with:ETF', Rule::notIn($this->trafoService->registeredTrafos())],
-            'status' => ['required', Rule::in($this->trafoService->equipmentStatus)],
+            'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
             'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
@@ -148,7 +167,7 @@ class TrafoController extends Controller
             'qr_code_link' => ['required', 'starts_with:id=Fajar-TrafoList', Rule::notIn($this->trafoService->registeredQrCodeLinks())],
 
             'power_rate' => ['nullable', 'max:10'],
-            'power_unit' => ['nullable', Rule::in($this->trafoService->powerUnitEnum)],
+            'power_unit' => ['nullable', Rule::in($this->getEnumValue('trafo', 'power_unit'))],
             'primary_voltage' => ['nullable', 'max:10'],
             'secondary_voltage' => ['nullable', 'max:10'],
             'primary_current' => ['nullable', 'max:10'],
@@ -156,7 +175,7 @@ class TrafoController extends Controller
             'primary_connection_type' => ['nullable', 'max:10'],
             'secondary_connection_type' => ['nullable', 'max:10'],
             'frequency' => ['nullable', 'max:10'],
-            'type' => ['nullable', Rule::in($this->trafoService->typeEnum)],
+            'type' => ['nullable', Rule::in($this->getEnumValue('trafo', 'type'))],
             'manufacturer' => ['nullable', 'max:50'],
             'year_of_manufacture' => ['nullable', 'size:4'],
             'serial_number' => ['nullable', 'max:25'],
@@ -182,11 +201,11 @@ class TrafoController extends Controller
                 $this->trafoService->register($validated_trafo);
                 $this->trafoDetailService->register($validated_trafo_details);
             } catch (Exception $error) {
-                Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => session('user')]);
+            Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
             return redirect()->back()->with('alert', ['message' => 'The trafo successfully registered.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -195,8 +214,9 @@ class TrafoController extends Controller
 
     public function trafoInstallDismantle()
     {
-        return response()->view('maintenance.trafo.install-dismantle', [
-            'title' => 'Install dismantle'
+        return response()->view('maintenance.install-dismantle', [
+            'title' => 'Install dismantle',
+            'table' => 'Trafos',
         ]);
     }
 
@@ -236,14 +256,14 @@ class TrafoController extends Controller
             try {
                 $this->trafoService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
-                Log::error('trafo install dismantle error', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
-                return redirect()->back()->with('message', ['header' => '[500] Internal Server Error', 'message' => $error->getMessage()]);
+                Log::error('trafo install dismantle error', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
+                return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
-            Log::info('trafo install dismantle success', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user')]);
-            return redirect()->back()->with('message', ['header' => '[200] Success!', 'message' => "The trafo was successfully swapped."]);
+            Log::info('trafo install dismantle success', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => Auth::user()->fullname]);
+            return back()->with('modal', new Modal('[200] Success', 'The trafo was successfully swapped.'));
         } else {
-            return redirect()->back()->with('message', ['header' => '[403] Forbidden', 'message' => $validator->errors()->first()]);
+            return back()->with('modal', new Modal('[403] Forbidden', $validator->errors()->first()));
         }
     }
 }

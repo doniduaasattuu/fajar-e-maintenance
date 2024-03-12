@@ -6,14 +6,13 @@ use App\Models\Finding;
 use App\Models\TrafoRecord;
 use Carbon\Carbon;
 use Database\Seeders\FunclocSeeder;
-use Database\Seeders\RoleSeeder;
 use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class TrafoRecordControllerTest extends TestCase
@@ -26,27 +25,28 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testGetCheckingFormTrafoInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
-        $this->withSession([
+        $this->seed([UserSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+            'password' => 'rahasia',
         ]);
 
         $this->get('/scanner');
 
         $this->followingRedirects()
             ->get('/checking-form/Fajar-TrafoListI12')
-            ->assertSeeText('[404] Not found.')
-            ->assertSeeText('The scanned qr code not found.');
+            ->assertSeeText('[404] Not found')
+            ->assertSeeText('The equipment was not found.');
     }
 
     public function testGetCheckingValidSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
+            'password' => 'rahasia',
         ]);
 
         $this->get('/checking-form/Fajar-TrafoList1')
@@ -72,10 +72,10 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSee('Normal')
             ->assertSee('Abnormal')
             ->assertSeeText('Silica gel')
-            ->assertSee('Dark blue')
-            ->assertSee('Light blue')
-            ->assertSee('Pink')
-            ->assertSee('Brown')
+            ->assertSee('Good')
+            ->assertSee('Satisfactory')
+            ->assertSee('Unsatisfactory')
+            ->assertSee('Unacceptable')
             ->assertSeeText('Earthing connection')
             ->assertSee('No loose')
             ->assertSee('Loose')
@@ -89,19 +89,21 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSee('Not good')
             ->assertSeeText('Finding')
             ->assertSee('Description of findings if any')
-            ->assertSeeText('Finding attachment')
+            ->assertSeeText('Finding image')
             ->assertSee('Submit');
     }
 
     // POST
     public function testPostRecordTrafoSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -123,7 +125,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -141,12 +143,13 @@ class TrafoRecordControllerTest extends TestCase
     // FUNCLOC
     public function testPostRecordTrafoFunclocNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -168,7 +171,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -182,12 +185,13 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoFunclocInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -209,7 +213,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -224,12 +228,13 @@ class TrafoRecordControllerTest extends TestCase
     // ID TRAFO NULL
     public function testPostRecordTrafoIdTrafoNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -251,7 +256,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -265,12 +270,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoIdTrafoInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -292,7 +299,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -307,12 +314,14 @@ class TrafoRecordControllerTest extends TestCase
     // SORT FIELD
     public function testPostRecordTrafoSortFieldNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -334,7 +343,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -349,12 +358,14 @@ class TrafoRecordControllerTest extends TestCase
     // TRAFO STATUS
     public function testPostRecordTrafoTrafoStatusNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -376,7 +387,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -390,12 +401,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoTrafoStatusInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -417,7 +430,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -431,12 +444,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoTrafoStatusOnlineSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -458,7 +473,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -472,12 +487,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoTrafoStatusOfflineSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -499,7 +516,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -513,12 +530,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoTrafoStatusOfflineFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -540,7 +559,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -560,12 +579,14 @@ class TrafoRecordControllerTest extends TestCase
     // PRIMARY CURRENT
     public function testPostRecordTrafoPrimaryCurrentNullSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -587,7 +608,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -602,12 +623,14 @@ class TrafoRecordControllerTest extends TestCase
     // PRIMARY CURRENT
     public function testPostRecordTrafoPrimaryCurrentInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -629,7 +652,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -645,12 +668,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryCurrentInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -672,7 +697,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -688,12 +713,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryCurrentInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -715,7 +742,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -731,12 +758,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryCurrentInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -758,7 +787,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -775,12 +804,14 @@ class TrafoRecordControllerTest extends TestCase
     // SECONDARY CURRENT
     public function testPostRecordTrafoSecondaryCurrentInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -802,7 +833,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -818,12 +849,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryCurrentInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -845,7 +878,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -861,12 +894,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryCurrentInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -888,7 +923,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -904,12 +939,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryCurrentInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -931,7 +968,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -948,12 +985,14 @@ class TrafoRecordControllerTest extends TestCase
     // PRIMARY VOLTAGE
     public function testPostRecordTrafoPrimaryVoltageNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -975,7 +1014,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -989,12 +1028,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryVoltageInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1016,7 +1057,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1030,12 +1071,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryVoltageInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1057,7 +1100,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1071,12 +1114,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryVoltageInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1098,7 +1143,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1112,12 +1157,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoPrimaryVoltageInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1139,7 +1186,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1154,12 +1201,14 @@ class TrafoRecordControllerTest extends TestCase
     // SECONDARY VOLTAGE
     public function testPostRecordTrafoSecondaryVoltageNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1181,7 +1230,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1195,12 +1244,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryVoltageInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1222,7 +1273,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1236,12 +1287,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryVoltageInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1263,7 +1316,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1277,12 +1330,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryVoltageInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1304,7 +1359,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1318,12 +1373,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSecondaryVoltageInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1345,7 +1402,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1360,12 +1417,14 @@ class TrafoRecordControllerTest extends TestCase
     // OIL TEMPERATURE
     public function testPostRecordTrafoOilTemperatureNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1387,7 +1446,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1401,12 +1460,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilTemperatureInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1428,7 +1489,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1442,12 +1503,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilTemperatureInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1469,7 +1532,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1483,12 +1546,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilTemperatureInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1510,7 +1575,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1524,12 +1589,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilTemperatureInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1551,7 +1618,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1566,12 +1633,14 @@ class TrafoRecordControllerTest extends TestCase
     // WINDING TEMPERATURE
     public function testPostRecordTrafoWindingTemperatureNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1593,7 +1662,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => null,
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1607,12 +1676,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoWindingTemperatureInvalidMaxLength()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1634,7 +1705,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '01111',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1648,12 +1719,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoWindingTemperatureInvalidDecimal()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1675,7 +1748,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '9999..12',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1689,12 +1762,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoWindingTemperatureInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1716,7 +1791,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '14',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1730,12 +1805,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoWindingTemperatureInvalidMaxValue()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1757,7 +1834,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '255.01',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1772,12 +1849,14 @@ class TrafoRecordControllerTest extends TestCase
     // CLEANLINESS
     public function testPostRecordTrafoCleanlinessNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1799,7 +1878,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => null,
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1813,12 +1892,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoCleanlinessInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1840,7 +1921,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Lumayan',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1854,12 +1935,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoCleanlinessCleanSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1881,7 +1964,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1895,12 +1978,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoCleanlinessDirtySuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1922,7 +2007,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1937,12 +2022,14 @@ class TrafoRecordControllerTest extends TestCase
     // NOISE
     public function testPostRecordTrafoNoiseNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -1964,7 +2051,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => null,
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -1978,12 +2065,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoNoiseInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2005,7 +2094,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Not bad',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2019,12 +2108,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoNoiseNormalSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2046,7 +2137,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2060,12 +2151,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoNoiseAbnormalSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2087,7 +2180,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2102,12 +2195,14 @@ class TrafoRecordControllerTest extends TestCase
     // SILICA GEL
     public function testPostRecordTrafoSilicaGelNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2143,12 +2238,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoSilicaGelInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2182,14 +2279,16 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSeeText('The selected silica gel is invalid.');
     }
 
-    public function testPostRecordTrafoSilicaGelDarkBlueSuccess()
+    public function testPostRecordTrafoSilicaGelGoodSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2211,7 +2310,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Dark blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2223,14 +2322,16 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSeeText('The trafo record successfully saved.');
     }
 
-    public function testPostRecordTrafoSilicaGelLightBlueSuccess()
+    public function testPostRecordTrafoSilicaGelSatisfactorySuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2252,7 +2353,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Satisfactory',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2264,14 +2365,16 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSeeText('The trafo record successfully saved.');
     }
 
-    public function testPostRecordTrafoSilicaGelPinkSuccess()
+    public function testPostRecordTrafoSilicaGelUnsatisfactorySuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2293,7 +2396,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Normal',
-                'silica_gel' => 'Pink',
+                'silica_gel' => 'Unsatisfactory',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2305,14 +2408,16 @@ class TrafoRecordControllerTest extends TestCase
             ->assertSeeText('The trafo record successfully saved.');
     }
 
-    public function testPostRecordTrafoSilicaGelBrownSuccess()
+    public function testPostRecordTrafoSilicaGelUnacceptableSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2334,7 +2439,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Normal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2349,12 +2454,14 @@ class TrafoRecordControllerTest extends TestCase
     // EARTHING CONNECTION
     public function testPostRecordTrafoEarthingConnectionNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2376,7 +2483,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => null,
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2390,12 +2497,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoEarthingConnectionInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2431,12 +2540,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoEarthingConnectionNoLooseSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2458,7 +2569,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2472,12 +2583,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoEarthingConnectionLooseSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2499,7 +2612,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2514,12 +2627,14 @@ class TrafoRecordControllerTest extends TestCase
     // OIL LEAKAGE
     public function testPostRecordTrafoOilLeakageNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2541,7 +2656,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => null,
                 'oil_level' => '85',
@@ -2555,12 +2670,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLeakageInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2596,12 +2713,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLeakageNoLooseSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2623,7 +2742,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2637,12 +2756,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLeakageLooseSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2664,7 +2785,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2679,12 +2800,14 @@ class TrafoRecordControllerTest extends TestCase
     // OIL LEVEL
     public function testPostRecordTrafoOilLevelNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2706,7 +2829,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => null,
@@ -2720,12 +2843,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLevelInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2747,7 +2872,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '8O',
@@ -2761,12 +2886,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLevelInvalidMin()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2788,7 +2915,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '-1',
@@ -2802,12 +2929,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoOilLevelInvalidMax()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2829,7 +2958,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '100.1',
@@ -2844,12 +2973,14 @@ class TrafoRecordControllerTest extends TestCase
     // BLOWER CONDITION
     public function testPostRecordTrafoBlowerConditionNull()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2871,7 +3002,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2885,12 +3016,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoBlowerConditionInvalid()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2926,12 +3059,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoBlowerConditionGoodSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2953,7 +3088,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -2967,12 +3102,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostRecordTrafoBlowerConditionNotGoodSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -2994,7 +3131,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '45.2',
                 'cleanliness' => 'Dirty',
                 'noise' => 'Abnormal',
-                'silica_gel' => 'Brown',
+                'silica_gel' => 'Unacceptable',
                 'earthing_connection' => 'Loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3011,12 +3148,14 @@ class TrafoRecordControllerTest extends TestCase
     // =====================================================
     public function testPostTrafoRecordWithTextAndImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $image = UploadedFile::fake()->image('photo.jpg');
@@ -3040,7 +3179,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3063,12 +3202,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithTextOnlySuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -3090,7 +3231,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3112,12 +3253,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithoutTextAndImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -3139,7 +3282,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3165,12 +3308,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithTextAndWithoutImageSuccess()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $this->followingRedirects()
@@ -3192,7 +3337,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3218,12 +3363,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithoutTextAndWithImageFailed()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $image = UploadedFile::fake()->image('photo.jpg');
@@ -3247,7 +3394,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3272,12 +3419,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithTextAndImageFailedMaxSize()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $image = UploadedFile::fake()->create('photo', 5500, 'jpg');
@@ -3301,7 +3450,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3326,12 +3475,14 @@ class TrafoRecordControllerTest extends TestCase
 
     public function testPostTrafoRecordWithTextAndImageInvalidFormat()
     {
-        $this->seed([FunclocSeeder::class, TrafoSeeder::class, UserSeeder::class, RoleSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class]);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/checking-form/Fajar-TrafoList1');
 
         $image = UploadedFile::fake()->create('photo', 2500, 'gif');
@@ -3355,7 +3506,7 @@ class TrafoRecordControllerTest extends TestCase
                 'winding_temperature' => '48.5',
                 'cleanliness' => 'Clean',
                 'noise' => 'Normal',
-                'silica_gel' => 'Light blue',
+                'silica_gel' => 'Good',
                 'earthing_connection' => 'No loose',
                 'oil_leakage' => 'No leaks',
                 'oil_level' => '85',
@@ -3379,7 +3530,7 @@ class TrafoRecordControllerTest extends TestCase
     }
 
     // ===============================================
-    // ================== EDIT FUNCLOC =============== 
+    // ================ EDIT RECORD ==================
     // ===============================================
     public function testGetEditRecordTrafo()
     {
@@ -3390,7 +3541,8 @@ class TrafoRecordControllerTest extends TestCase
         $id = $records->first()->id;
 
         $this->get("/record-edit/trafo/$id")
-            ->assertSeeText('Trafo record edit')
+            ->assertSeeText('[ EDIT')
+            ->assertSeeText('RECORD ]')
             ->assertSeeText('Maximum upload file size: 5 MB.')
             ->assertDontSeeText('Existing');
     }
@@ -3410,7 +3562,8 @@ class TrafoRecordControllerTest extends TestCase
         $id = $findings->first()->id;
 
         $this->get("/record-edit/trafo/$id")
-            ->assertSeeText('Trafo record edit')
+            ->assertSeeText('[ EDIT')
+            ->assertSeeText('RECORD ]')
             ->assertSeeText('Existing');
     }
 }

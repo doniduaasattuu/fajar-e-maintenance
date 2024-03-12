@@ -3,21 +3,22 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Services\UserService;
-use Database\Seeders\RoleSeeder;
+use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
-    public function testGetRegistration()
+    public function testGetRegistrationGuest()
     {
         $this->get('/registration')
             ->assertStatus(200)
             ->assertSeeText('Registration')
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
-            ->assertSeeText('Full name')
+            ->assertSeeText('Fullname')
             ->assertSeeText('Department')
             ->assertSeeText('EI1')
             ->assertSeeText('EI2')
@@ -28,32 +29,40 @@ class UserControllerTest extends TestCase
             ->assertSeeText('EI7')
             ->assertSeeText('Phone number')
             ->assertSeeText('Registration code')
-            ->assertDontSee($this->app->make(UserService::class)->registrationCode)
             ->assertSeeText('Sign Up')
-            ->assertSeeText('Already have an account ?, Sign in here');
+            ->assertSeeText('Already have an account ?,')
+            ->assertSeeText('Sign in here');
     }
 
-    public function testGetRegistrationRedirect()
+    public function testGetRegistrationUser()
     {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        $this->seed(UserSeeder::class);
+
+        $user = Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        self::assertTrue($user);
+
+        $this
             ->get('/registration')
             ->assertStatus(302)
-            ->assertRedirect('/');
+            ->assertRedirectToRoute('home');
     }
 
     public function testRegistrationSuccess()
     {
         $data = [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234',
-            'fullname' => 'dOnI dArMawAN',
+            'password' => '@Rahasia123',
+            'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
+
+        $this->get('/registration');
 
         $this
             ->followingRedirects()
@@ -62,9 +71,8 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Your account successfully registered.')
             ->assertDontSeeText('User account successfully registered.');
 
-        $userService = $this->app->make(UserService::class);
-        $user = $userService->user($data['nik']);
-
+        $user = User::find($data['nik']);
+        self::assertNotNull($user);
         self::assertEquals('Doni Darmawan', $user->fullname);
     }
 
@@ -97,11 +105,11 @@ class UserControllerTest extends TestCase
 
         $data = [
             'nik' => '55000154',
-            'password' => '44',
+            'password' => '@Rahasia123',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -115,11 +123,11 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '5500154',
-            'password' => '44',
+            'password' => '@Rahasia123',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -133,11 +141,11 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => 'abcdefgh',
-            'password' => '44',
+            'password' => '@Rahasia123',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -156,7 +164,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -170,11 +178,11 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => '@SangatRahasiaSekaliBahkanSampaiLupa12345',
+            'password' => '@VeryLongAndSecretPasswordHaveEverMade123',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -192,7 +200,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -210,7 +218,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -228,7 +236,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -246,7 +254,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -261,10 +269,10 @@ class UserControllerTest extends TestCase
         $data = [
             'nik' => '55000154',
             'password' => 'Rahasia@1234',
-            'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi Damara Putra Tan Malaka',
-            'department' => 'EI4',
+            'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi Putra Tan Malaka',
+            'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -280,9 +288,9 @@ class UserControllerTest extends TestCase
             'nik' => '55000154',
             'password' => 'Rahasia@1234',
             'fullname' => 'Doni_Darmawan',
-            'department' => 'EI4',
+            'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'RG9uaSBEYXJtYXdhbg==',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -298,9 +306,9 @@ class UserControllerTest extends TestCase
             'nik' => '55000154',
             'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
-            'department' => 'EI4',
+            'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'RG9uaSBEYXJtYXdhbg==',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -318,7 +326,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni-Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
-            'registration_code' => 'Ada',
+            'registration_code' => env('REGISTRATION_CODE'),
         ];
 
         $this->post('/registration', $data)
@@ -332,7 +340,7 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => '44',
+            'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
             'phone_number' => '08983456945',
@@ -350,9 +358,9 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => '44',
+            'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
-            'department' => 'EI11',
+            'department' => 'EI2',
             'phone_number' => 'abcdefgh',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
@@ -368,9 +376,9 @@ class UserControllerTest extends TestCase
     {
         $data = [
             'nik' => '55000154',
-            'password' => '44',
+            'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
-            'department' => 'EI11',
+            'department' => 'EI2',
             'phone_number' => '123456789',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
@@ -389,15 +397,19 @@ class UserControllerTest extends TestCase
             ->assertSeeText('NIK')
             ->assertSeeText('Password')
             ->assertSeeText('Sign In')
-            ->assertSeeText("Don't have an account ?");
+            ->assertSeeText("Don't have an account ?", false);
     }
 
     public function testGetLoginRedirect()
     {
-        $this->withSession([
+        $this->seed(UserSeeder::class);
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+            'password' => 'rahasia'
+        ]);
+
+        $this
             ->get('/login')
             ->assertStatus(302)
             ->assertRedirect('/');
@@ -407,12 +419,28 @@ class UserControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
+        $this->get('/login');
+
         $this->post('/login', [
             'nik' => '55000154',
-            'password' => '@Fajarpaper123'
+            'password' => 'rahasia',
         ])
             ->assertStatus(302)
-            ->assertRedirect('/');
+            ->assertRedirectToRoute('home');
+    }
+
+    public function testLoginFailed()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->get('/login');
+
+        $this->post('/login', [
+            'nik' => '55000154',
+            'password' => 'wrond_password',
+        ])
+            ->assertStatus(302)
+            ->assertRedirectToRoute('login');
     }
 
     public function testLoginEmpty()
@@ -429,13 +457,39 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    public function testLoginEmptyNik()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '',
+            'password' => 'rahasia'
+        ])
+            ->assertSessionHasErrors([
+                'nik' => 'The nik field is required.',
+            ]);
+    }
+
+    public function testLoginEmptyPassword()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->post('/login', [
+            'nik' => '55000154',
+            'password' => ''
+        ])
+            ->assertSessionHasErrors([
+                'password' => 'The password field is required.'
+            ]);
+    }
+
     public function testLoginUnregisteredNik()
     {
         $this->seed(UserSeeder::class);
 
         $this->post('/login', [
             'nik' => '55000123',
-            'password' => 'Rahasia@1234'
+            'password' => 'rahasia'
         ])
             ->assertSessionHasErrors([
                 'nik' => 'The nik or password is wrong.',
@@ -448,7 +502,7 @@ class UserControllerTest extends TestCase
 
         $this->post('/login', [
             'nik' => '55000123',
-            'password' => '@Fajarpaper123'
+            'password' => 'rahasia'
         ])
             ->assertSessionHasErrors([
                 'nik' => 'The nik or password is wrong.',
@@ -461,7 +515,7 @@ class UserControllerTest extends TestCase
 
         $this->post('/login', [
             'nik' => '55000154',
-            'password' => 'Rahasia@1234'
+            'password' => 'Rahasia@123'
         ])
             ->assertSessionHasErrors([
                 'nik' => 'The nik or password is wrong.',
@@ -485,10 +539,12 @@ class UserControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan',
-        ])
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/profile')
             ->assertSeeText('My profile')
             ->assertSeeText('Phone number')
@@ -498,7 +554,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Update profile')
             ->assertSeeText('New password')
             ->assertSeeText('New password confirmation')
-            ->assertSeeText('Submit');
+            ->assertSeeText('Update');
     }
 
     public function testUpdateProfileSuccess()
@@ -506,32 +562,33 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
-                'phone_number' => '08983456945',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
             ])
             ->assertSeeText('Your profile successfully updated.');
     }
 
-    public function testUpdateProfileNikChanged()
+    public function testUpdateProfileNikOverride()
     {
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000153',
-                'fullname' => 'Jamal Mirdad',
-                'department' => 'EI6',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
                 'phone_number' => '08983456945',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'new_password' => 'OverridePassword123',
+                'new_password_confirmation' => 'OverridePassword123',
             ])
-            ->assertSeeText('The selected nik is invalid.');
+            ->assertSeeText('The nik field must match current nik.');
     }
 
     public function testUpdateProfileDepartmentInvalid()
@@ -539,13 +596,14 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI9',
                 'phone_number' => '08983456945',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
             ])
             ->assertSeeText('The selected department is invalid.');
     }
@@ -555,13 +613,14 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
-                'department' => 'EI9',
+                'department' => 'EI2',
                 'phone_number' => '0898',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
             ])
             ->assertSeeText('The phone number field must be between 10 and 13 digits.');
     }
@@ -571,13 +630,14 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
-                'department' => 'EI9',
+                'department' => 'EI2',
                 'phone_number' => '08983456945081',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
             ])
             ->assertSeeText('The phone number field must be between 10 and 13 digits.');
     }
@@ -587,15 +647,16 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
-                'department' => 'EI9',
-                'phone_number' => '+628983456945',
-                'new_password' => 'Rahasia@1234',
-                'new_password_confirmation' => 'Rahasia@1234',
+                'department' => 'EI2',
+                'phone_number' => 'string',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
             ])
-            ->assertSeeText('The phone number field must be between 10 and 13 digits.');
+            ->assertSeeText('The phone number field must be a number.');
     }
 
     public function testUpdateProfilePasswordMissing()
@@ -603,7 +664,8 @@ class UserControllerTest extends TestCase
         $this->testGetProfile();
 
         $this
-            ->followingRedirects()->post('/update-profile', [
+            ->followingRedirects()
+            ->post('/update-profile', [
                 'nik' => '55000154',
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
@@ -615,7 +677,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('The new password confirmation field is required.');
     }
 
-    public function testUpdateProfilePasswordMissmatching()
+    public function testUpdateProfilePasswordMissMatching()
     {
         $this->testGetProfile();
 
@@ -631,7 +693,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('The new password confirmation field must match new password.');
     }
 
-    // USERS MANAGEMENT PAGE FOR ADMINISTRATOR
+    // USERS MANAGEMENT PAGE FOR SUPERADMIN
     public function testGetUserManagementGuest()
     {
         $this->seed(UserSeeder::class);
@@ -642,31 +704,35 @@ class UserControllerTest extends TestCase
 
     public function testGetUserManagementEmployee()
     {
-        $this->seed(UserSeeder::class);
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        self::assertFalse(Auth::user()->isSuperAdmin());
+
+        $this
+            ->followingRedirects()
             ->get('/users')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testGetUserManagementAuthorized()
+    public function testGetUserManagementAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/users')
             ->assertSeeText('User management')
-            ->assertSeeText('New User')
-            ->assertSeeText('Filter')
-            ->assertSee('Name')
+            ->assertSeeText('Search')
             ->assertSeeText('Dept')
-            ->assertSee('All')
             ->assertSee('EI1')
             ->assertSee('EI2')
             ->assertSee('EI3')
@@ -674,16 +740,15 @@ class UserControllerTest extends TestCase
             ->assertSee('EI5')
             ->assertSee('EI6')
             ->assertSee('EI7')
-            ->assertSeeText('The total registered user is')
-            ->assertSeeText('people')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
             ->assertSeeText('NIK')
-            ->assertSeeText('Name')
-            ->assertSeeText('Dept')
-            ->assertSeeText('DB')
-            ->assertSeeText('Admin')
-            ->assertSeeText('Reset')
-            ->assertSeeText('55000154')
-            ->assertSeeText('EI2');
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
     }
 
     // DELETE USER
@@ -700,69 +765,67 @@ class UserControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
             ->get('/user-delete/31903007')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testDeleteUserAuthorized()
+    public function testDeleteUserSuperAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        $this->seed(UserRoleSeeder::class);
 
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->get('/users')
-            ->assertSeeText('Yuan Lucky P');
+            'password' => 'rahasia'
+        ]);
 
-        $this->followingRedirects()
-            ->get('/user-delete/31903007')
-            ->assertSeeText('User successfully deleted!.');
-
-        $this->get('/users')
-            ->assertDontSeeText('Yuan Lucky P');
+        $this
+            ->followingRedirects()
+            ->get('/user-delete/31100171')
+            ->assertSeeText('User successfully deleted.');
     }
 
     public function testDeleteUserSelf()
     {
-        $this->withSession([
+        $this->seed(UserRoleSeeder::class);
+
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
+            'password' => 'rahasia'
+        ]);
 
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
+        $user = Auth::user();
 
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
-            ->get('/user-delete/31903007')
+        $this
+            ->actingAs($user)
+            ->followingRedirects()
+            ->get('/user-delete/55000154')
             ->assertSeeText('You cannot delete your self, this action causes an error.');
     }
 
-    public function testDeleteUserAuthorizedTheCreator()
+    public function testUserSuperAdminDeleteTheCreator()
     {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
+        $this->seed(UserRoleSeeder::class);
 
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
+        $user = User::query()->find('55000153');
+        $user->roles()->attach('superadmin');
+        self::assertTrue($user->isSuperAdmin());
 
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
             ->get('/user-delete/55000154')
-            ->assertSeeText('You cannot delete the creator!.');
+            ->assertSeeText('You cannot delete the creator.');
     }
 
     // RESET PASSWORD
@@ -770,153 +833,48 @@ class UserControllerTest extends TestCase
     {
         $this->seed(UserSeeder::class);
 
-        $this->get('/user-reset/55000153')
+        $this->get('/user-reset/55000154')
             ->assertRedirectToRoute('login');
     }
 
     public function testResetPasswordEmployee()
     {
-        $this->seed(UserSeeder::class);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->followingRedirects()
-            ->get('/user-reset/55000153')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
+        $this->seed(UserRoleSeeder::class);
 
-    public function testResetPasswordAuthorizedSuccess()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
 
-        $user = User::query()->find('55000153');
-        self::assertNotNull($user);
-        $user->password = '@JamalMirdad123';
-        $user->update();
+        $user = Auth::user();
 
-        self::assertEquals($user->password, '@JamalMirdad123');
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->followingRedirects()
-            ->get('/user-reset/55000153')
-            ->assertSeeText('User password reset successfully.');
-
-        $user = User::query()->find('55000153');
-        self::assertNotEquals($user->password, '@JamalMirdad123');
-    }
-
-    public function testResetPasswordAuthorizedTheCreator()
-    {
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/');
-
-        $this->followingRedirects()
-            ->get('/role-assign/admin/31903007')
-            ->assertSeeText('User assigned as database administrator.');
-
-        $this->withSession([
-            'nik' => '31903007',
-            'user' => 'Yuan Lucky P'
-        ])->followingRedirects()
+        $this
+            ->actingAs($user)
+            ->followingRedirects()
             ->get('/user-reset/55000154')
-            ->assertSeeText('You cannot reset the creator!.');
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    // ADMIN REGISTER NEW USER
-    public function testGetPageAdminRegisterNewUserGuest()
+    public function testResetPasswordSuperAdminSuccess()
     {
-        $this->get('/user-registration')
-            ->assertRedirectToRoute('login');
-    }
+        $this->seed(UserRoleSeeder::class);
 
-    public function testGetPageAdminRegisterNewUserEmployee()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
+        $user = User::query()->find('55000153');
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
-            ->followingRedirects()
-            ->get('/user-registration')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
+        self::assertTrue(Hash::check('rahasia', $user->password));
 
-    public function testGetPageAdminRegisterNewUserAuthorized()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $this->withSession([
+        Auth::attempt([
             'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
-            ->followingRedirects()
-            ->get('/user-registration')
-            ->assertSeeText('User registration')
-            ->assertSeeText('Table')
-            ->assertSeeText('NIK')
-            ->assertSeeText('Password')
-            ->assertSeeText('Full name')
-            ->assertSeeText('Department')
-            ->assertSeeText('Phone number')
-            ->assertSeeText('Registration code')
-            ->assertSee($this->app->make(UserService::class)->registrationCode)
-            ->assertDontSeeText('Sign Up')
-            ->assertDontSeeText('Already have an account ?, Sign in here');
-    }
-
-    // POST NEW USER
-    public function testPostRegisterNewUserEmployee()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $data = [
-            'nik' => '55000555',
-            'password' => 'Rahasia@1234',
-            'fullname' => 'dOnI dArMawAN',
-            'department' => 'EI2',
-            'phone_number' => '08983456945',
-            'registration_code' => env('REGISTRATION_CODE'),
-        ];
-
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])
-            ->followingRedirects()
-            ->post('/user-registration', $data)
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
-    }
-
-    public function testPostRegisterNewUserAuthorizedSuccess()
-    {
-        $this->seed([UserSeeder::class, RoleSeeder::class]);
-
-        $data = [
-            'nik' => '55000555',
-            'password' => 'Rahasia@1234',
-            'fullname' => 'dOnI dArMawAN',
-            'department' => 'EI2',
-            'phone_number' => '08983456945',
-            'registration_code' => env('REGISTRATION_CODE'),
-        ];
-
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/user-registration');
+            'password' => 'rahasia'
+        ]);
 
         $this
             ->followingRedirects()
-            ->post('/user-registration', $data)
-            ->assertDontSeeText('Your account successfully registered.')
-            ->assertSeeText('User account successfully registered.');
+            ->get('/user-reset/55000153')
+            ->assertSeeText('User password reset successfully.');
+
+        $user = $user->fresh();
+        self::assertTrue(Hash::check('@Fajarpaper123', $user->password));
     }
 }

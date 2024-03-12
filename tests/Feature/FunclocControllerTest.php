@@ -4,10 +4,8 @@ namespace Tests\Feature;
 
 use App\Models\Funcloc;
 use Database\Seeders\FunclocSeeder;
-use Database\Seeders\RoleSeeder;
-use Database\Seeders\UserSeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Database\Seeders\UserRoleSeeder;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class FunclocControllerTest extends TestCase
@@ -17,40 +15,41 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocGuest()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->get('/funclocs', [])
+        $this->get('/funclocs')
             ->assertRedirectToRoute('login');
     }
 
-    public function testGetFunclocNotAuthorized()
+    public function testGetFunclocEmployee()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->get('/profile')
-            ->assertSeeText('Update profile');
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
 
         $this->get('/funclocs')
-            ->assertSessionHasNoErrors([
-                'message' => ['header' => 'Oops!', 'message' => "You're not allowed."]
-            ]);
+            ->assertDontSeeText('Edit');
     }
 
-    public function testGetFunclocAuthorized()
+    public function testGetFunclocAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funclocs')
-            ->assertSeeText('Table funcloc')
-            ->assertSeeText('Filter')
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funclocs')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Search')
+            ->assertSeeText('Edit')
             ->assertDontSeeText('Created at')
-            ->assertSeeText('records.');
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries');
     }
 
     // ======================================================
@@ -58,40 +57,46 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocRegistrationGuest()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
         $this->get('/funcloc-registration')
             ->assertRedirectToRoute('login');
     }
 
-    public function testGetFunclocRegistrationNotAuthorized()
+    public function testGetFunclocRegistrationEmployee()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->get('/funclocs');
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
 
-        $this->followingRedirects()
+        $this->get('/funclocs');
+
+        $this
+            ->followingRedirects()
             ->get('/funcloc-registration')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testGetFunclocRegistrationAuthorized()
+    public function testGetFunclocRegistrationAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration')
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration')
             ->assertSeeText('Funcloc registration')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Description')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
+            ->assertDontSeeText('Save changes')
             ->assertSeeText('Submit');
     }
 
@@ -100,46 +105,53 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testRegisterFunclocGuest()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])
             ->assertStatus(302)
             ->assertRedirectToRoute('login');
     }
 
-    public function testRegisterFunclocNotAuthorized()
+    public function testRegisterFunclocEmployee()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000153',
-            'user' => 'Jamal Mirdad'
-        ])->post('/funcloc-register', [
-            'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
-        ])->assertStatus(302)
-            ->assertRedirect('/');
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/funcloc-register', [
+                'id' => 'FP-01-PM3-OCC-PU01',
+                'sort_field' => 'SP3.SP-03/M',
+            ])
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
 
         $funcloc = Funcloc::query()->find('FP-01-PM3-OCC-PU01');
         self::assertNull($funcloc);
     }
 
-    public function testRegisterFunclocAuthorizedSuccess()
+    public function testRegisterFunclocAdminSuccess()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $response = $this->followingRedirects()
             ->post('/funcloc-register', [
                 'id' => 'FP-01-PM3-OCC-PU01',
-                'description' => 'SP3.SP-03/M',
+                'sort_field' => 'SP3.SP-03/M',
             ]);
 
         $response->assertSeeText('The funcloc successfully registered.');
@@ -150,16 +162,18 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalid()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01 PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field must only contain letters, numbers, and dashes.'
         ]);
@@ -167,16 +181,18 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalidUnderscore()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01_PM3_OCC- PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field format is invalid.'
         ]);
@@ -184,51 +200,57 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocInvalidPrefix()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $this->post('/funcloc-register', [
             'id' => 'PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field must start with one of the following: FP-01.'
         ]);
     }
 
-    public function testRegisterFunclocDescriptionInvalid()
+    public function testRegisterFunclocSortFieldInvalid()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'AU',
+            'sort_field' => 'AU',
         ])->assertSessionHasErrors([
-            'description' => 'The description field must be at least 3 characters.'
+            'sort_field' => 'The sort field field must be at least 3 characters.'
         ]);
     }
 
-    public function testRegisterFunclocDescriptionNull()
+    public function testRegisterFunclocSortFieldNull()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-registration');
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-registration');
 
         $response = $this->followingRedirects()
             ->post('/funcloc-register', [
                 'id' => 'FP-01-PM3-OCC-PU01',
-                'description' => '',
+                'sort_field' => '',
             ]);
 
         $response->assertSeeText('The funcloc successfully registered.');
@@ -240,11 +262,11 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocDuplicate()
     {
-        $this->testRegisterFunclocDescriptionNull();
+        $this->testRegisterFunclocSortFieldNull();
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => '',
+            'sort_field' => '',
         ])->assertSessionHasErrors([
             'id' => 'The selected id is invalid.'
         ]);
@@ -255,7 +277,7 @@ class FunclocControllerTest extends TestCase
     // ======================================================
     public function testGetFunclocUpdateGuest()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
         $this->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertRedirectToRoute('login');
@@ -263,59 +285,67 @@ class FunclocControllerTest extends TestCase
 
     public function testGetEditFunclocEmployee()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia',
+        ]);
 
         $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000153',
-                'user' => 'Jamal Mirdad'
-            ])
             ->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
-            ->assertSeeText('[403] You are not authorized!')
-            ->assertSeeText('You are not allowed to perform this operation!.');
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
     }
 
-    public function testGetEditFunclocUnregisteredAuthorized()
+    public function testGetEditFunclocUnregisteredAdmin()
     {
-        $this->seed(FunclocSeeder::class);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
 
         $this->followingRedirects()
-            ->withSession([
-                'nik' => '55000154',
-                'user' => 'Doni Darmawan'
-            ])
+
             ->get('/funcloc-edit/FP-01-PM9-OCC-PU01')
-            ->assertSeeText('[404] Not found.')
+            ->assertSeeText('[404] Not found')
             ->assertSeeText('The funcloc FP-01-PM9-OCC-PU01 is unregistered.');
     }
 
-    public function testGetFunclocUpdateAuthorized()
+    public function testGetFunclocUpdateAdmin()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertSeeText('Edit funcloc')
             ->assertSeeText('FP-01-CH3-ALM-T089-P085')
             ->assertSeeText('Updated at')
             ->assertSeeText('Created at')
-            ->assertSeeText('Update');
+            ->assertDontSeeText('Submit')
+            ->assertSeeText('Save changes');
     }
 
     public function testGetFunclocUpdate()
     {
-        $this->seed([UserSeeder::class, RoleSeeder::class, FunclocSeeder::class]);
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
-        $this->withSession([
-            'nik' => '55000154',
-            'user' => 'Doni Darmawan'
-        ])
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
             ->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertSeeText('Edit funcloc')
             ->assertSeeText('Table')
-            ->assertSeeText('Description')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertSeeText('Update');

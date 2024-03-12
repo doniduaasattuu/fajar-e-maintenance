@@ -1,286 +1,249 @@
-@php
-$skipped = [
-'id',
-'funcloc',
-'motor',
-'sort_field',
-'vibration_de_vertical_desc',
-'vibration_de_horizontal_desc',
-'vibration_de_axial_desc',
-'vibration_de_frame_desc',
-'vibration_nde_vertical_desc',
-'vibration_nde_horizontal_desc',
-'vibration_nde_frame_desc',
-'nik',
-'created_at',
-'updated_at'];
-@endphp
+<x-app-layout>
 
-@include('utility.prefix')
-<div class="py-4">
+    @php
+    $motor_installed = ($motor->status != 'Installed');
+    $power_rate = $motorDetail->power_rate ?? 45;
+    @endphp
 
     {{-- HEADER --}}
-    @isset($motor)
-    <div class="mb-3">
-        @if ($motor->status != 'Installed')
-        <h5 class="text-break lh-sm mb-0">{{ $motor->status }}</h5>
-        @endif
-        <h5 class="text-break lh-sm mb-0">{{ ($motor->sort_field != null) ? $motor->sort_field : '' }}</h5>
-        <p class="text-break mb-0 text-secondary">{{ ($motor->description != null) ? $motor->description : '' }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ ($motor->funcloc != null) ? $motor->funcloc : '' }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $motor->id . ' (' .$motor->unique_id .')' }}</p>
-    </div>
-    @endisset
+    <section>
+        {{-- CHECKING FORM HEADER --}}
+        <x-checking-form.header :equipment='$motor' :record='isset($record)'>
+        </x-checking-form.header>
 
-    {{-- HEADER FOR RECORD EDIT --}}
-    @isset($record)
-    <div class="mb-3">
-        <h4 class="text-break lh-sm">{{ $title }}</h4>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->sort_field }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->funcloc }}</p>
-        <p class="text-break lh-sm mb-0 text-secondary">{{ $record->motor }}</p>
-    </div>
-    @endisset
+        {{-- TREND --}}
+        <x-checking-form.button-trend :equipment='$motor'>
+        </x-checking-form.button-trend>
 
-    @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <!-- The data you submitted is invalid. -->
-        {{ $errors->first() }}
-    </div>
-    @endif
-
-    {{-- ALERT SUCCESS CHECKING FORM --}}
-    @isset($motor)
-    @include('utility.alert-with-link')
-    @endisset
-
-    {{-- ALERT SUCCESS FOR UPDATE RECORD --}}
-    @isset($record)
-    @include('utility.alert')
-    @endisset
-
-    {{-- TREND --}}
-    @isset($motor)
-    <a href="/equipment-trend/{{ isset($motor) ? $motor->id : '' }}" title="Year to date">
-        <button class="btn btn-success mb-2 text-white">
-            <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z" />
-            </svg>
-            <div class="d-inline fw-semibold">TRENDS</div>
-        </button>
-    </a>
-    @endisset
-
-    {{-- MOTOR DETAIL --}}
-    @isset($motorDetail)
-    @include('utility.motor-detail-accordion')
-    @endisset
-
-    <!-- ========================================= -->
-    <!-- ========== CHECKING FORM START ========== -->
-    <!-- ========================================= -->
-    <form id="myform" action="{{ isset($action) ? $action :'/record-motor' }}" method="post" enctype="multipart/form-data"> <!-- CHECKING FORM -->
-        @csrf
-
-        {{-- DATA MOTOR SEND TO RECORD --}}
-        @isset($motor)
-        <input type="hidden" name="funcloc" id="funcloc" value="{{ isset($motor) ? $motor->funcloc : '' }}">
-        <input type="hidden" name="motor" id="motor" value="{{ isset($motor) ? $motor->id : '' }}">
-        <input type="hidden" name="sort_field" id="sort_field" value="{{ isset($motor) ? $motor->sort_field : '' }}">
-        <input type="hidden" name="nik" id="nik" value="{{ session('nik') }}">
+        {{-- EQUIPMENT DETAIL --}}
+        @isset($motorDetail)
+        <x-checking-form.equipment-detail :equipmentDetail='$motorDetail' :table='"motor_details"' :skipped='["id", "motor_detail"]'>
+            {{ __('MOTOR DETAIL') }}
+        </x-checking-form.equipment-detail>
         @endisset
+    </section>
 
-        {{-- DATA RECORD TO UPDATE --}}
-        @isset($record)
-        <input type="hidden" name="id" id="id" value="{{ isset($record) ? $record->id : '' }}">
-        <input type="hidden" name="funcloc" id="funcloc" value="{{ isset($record) ? $record->funcloc : '' }}">
-        <input type="hidden" name="motor" id="motor" value="{{ isset($record) ? $record->motor : '' }}">
-        <input type="hidden" name="sort_field" id="sort_field" value="{{ isset($record) ? $record->sort_field : '' }}">
-        <input type="hidden" name="nik" id="nik" value="{{ session('nik') }}">
-        @endisset
+    @if(session("alert"))
+    <x-alert :alert='session("alert")'>
+    </x-alert>
+    @endisset
 
-        <div> <!-- MOTOR RECORD WRAPPER -->
+    {{-- ALERT HIDDEN INPUT --}}
+    <x-alert-hidden :hidden='["funcloc", "motor", "sort_field", "nik"]' />
 
-            @foreach ($motorService->getColumns('motor_records', $skipped) as $column) <!-- MOTOR RECORD COLUMNS -->
+    {{-- FORM --}}
+    <section>
+        <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-            {{-- IMAGE FOR TEMPERATURE --}}
-            @if ($loop->iteration == 5)
-            @include('utility.image-temperature')
-            @endif
-
-            {{-- IMAGE FOR VIBRATION --}}
-            @if ($loop->iteration == 8)
-            @include('utility.image-vibration')
-            @endif
+            @isset($record)
+            <input type="hidden" id="id" name="id" value="{{ $record->id }}">
+            @endisset
+            <input type="hidden" id="funcloc" name="funcloc" value="{{ $motor->funcloc ?? $record->funcloc ?? '' }}">
+            <input type="hidden" id="motor" name="motor" value="{{ $motor->id ?? $record->motor ?? '' }}">
+            <input type="hidden" id="sort_field" name="sort_field" value="{{ $motor->sort_field ?? $record->sort_field ?? '' }}">
+            <input type="hidden" id="nik" name="nik" value="{{ Auth::user()->nik }}">
 
             {{-- MOTOR STATUS --}}
-            @switch($column)
-            @case('motor_status')
-            @case('cleanliness')
-            @case('nipple_grease')
-            @case('noise_de')
-            @case('noise_nde')
             <div class="mb-3">
-                <label for="{{ $column }}" class="fw-semibold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
-                <select name="{{ $column }}" id="{{ $column }}" class="form-select" aria-label="Default select example">
-                    @switch($column)
-
-                    @case('motor_status')
-                    @include('utility.looping-option', ['array' => $motorService->motorStatusEnum()])
-                    @break
-
-                    @case('cleanliness')
-                    @include('utility.looping-option', ['array' => $motorService->cleanlinessEnum()])
-                    @break
-
-                    @case('nipple_grease')
-                    @include('utility.looping-option', ['array' => $motorService->nippleGreaseEnum()])
-                    @break
-
-                    @case('noise_de')
-                    @case('noise_nde')
-                    @include('utility.looping-option', ['array' => $motorService->noiseEnum()])
-                    @break
-
-                    @default
-                    <option></option>
-                    @endswitch
-
-                </select>
-                @include('utility.error-help')
-            </div>
-            @break
-
-            {{-- TEMPERATURE --}}
-            @case('temperature_de')
-            @case('temperature_body')
-            @case('temperature_nde')
-            @include('utility.temperature-input')
-            @break
-
-            {{-- VIBRATION --}}
-            @case('vibration_de_vertical_value')
-            @case('vibration_de_horizontal_value')
-            @case('vibration_de_axial_value')
-            @case('vibration_de_frame_value')
-            @case('vibration_nde_vertical_value')
-            @case('vibration_nde_horizontal_value')
-            @case('vibration_nde_frame_value')
-            @include('utility.vibration-input')
-            @break
-
-            @include('utility.errors')
-
-            {{-- DEFAULT INPUT FORM --}}
-            @default
-            <div class="mb-3">
-                <label for="{{ $column }}" class="fw-semibold form-label">{{ ucfirst(str_replace('_', ' ', $column)) }}</label>
-                <input value="{{ isset($record) ? $record->$column : old($column) }}" inputmode="numeric" class="form-control" name="{{ $column }}" id="{{ $column }}" type="text" step="10" min="0" max="255" onkeypress="return onlynumber(event, 48, 57)" oninput="return preventmax(this.id, 255)" pattern="\d*" maxlength="4">
-                @include('utility.error-help')
+                <x-input-label for="motor_status" :value="__('Motor status *')" />
+                <x-input-select id="motor_status" name="motor_status" :options='["Running", "Not Running"]' :value="old('motor_status', $record->motor_status ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('motor_status')" />
             </div>
 
-            @endswitch
-            @endforeach <!-- MOTOR RECORD COLUMNS -->
+            {{-- CLEANLINESS --}}
+            <div class="mb-3">
+                <x-input-label for="cleanliness" :value="__('Cleanliness *')" />
+                <x-input-select id="cleanliness" name="cleanliness" :options='["Clean", "Dirty"]' :value="old('cleanliness', $record->cleanliness ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('cleanliness')" />
+            </div>
 
-        </div> <!-- MOTOR RECORD WRAPPER -->
+            {{-- NIPPLE GREASE --}}
+            <div class="mb-3">
+                <x-input-label for="nipple_grease" :value="__('Nipple grease *')" />
+                <x-input-select id="nipple_grease" name="nipple_grease" :options='["Available", "Not Available"]' :value="old('nipple_grease', $record->nipple_grease ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('nipple_grease')" />
+            </div>
 
-        {{-- FINDING FORM --}}
-        @include('utility.finding-checking-form')
+            {{-- NUMBER OF GREASING --}}
+            <div class="mb-3">
+                <x-input-label for="number_of_greasing" :value="__('Number of greasing')" />
+                <x-input-number id="number_of_greasing" name="number_of_greasing" :value="old('number_of_greasing', $record->number_of_greasing ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('number_of_greasing')" />
+            </div>
 
-        {{-- BUTTON SUBMIT --}}
-        @isset($motor)
-        @if ($motor->status == 'Installed')
-        <div>
-            <input id="buttonSubmit" class="btn btn-primary" type="submit" value="Submit">
-        </div>
-        @endif
-        @endisset
+            {{-- IMAGE HELPER TEMPERATURE --}}
+            <div class="mb-3">
+                <x-checking-form.image.motor-temperature>
+                </x-checking-form.image.motor-temperature>
+            </div>
 
-        {{-- BUTTON UPLOAD --}}
-        @isset($record)
-        <div>
-            <input id="buttonSubmit" class="btn btn-primary" type="submit" value="Update">
-        </div>
-        @endisset
+            {{-- TEMPERATURE DE --}}
+            <div class="mb-3">
+                <x-input-label for="temperature_de" :value="__('Temperature DE')" />
+                <x-input-number-coma id="temperature_de" name="temperature_de" :value="old('temperature_de', $record->temperature_de ?? '')" :disabled='$motor_installed' oninput="return JS.preventmaxtemperature(this.id)" />
+                <x-input-error :message="$errors->first('temperature_de')" />
+            </div>
 
-    </form> <!-- CHECKING FORM -->
+            {{-- TEMPERATURE BODY --}}
+            <div class="mb-3">
+                <x-input-label for="temperature_body" :value="__('Temperature Body')" />
+                <x-input-number-coma id="temperature_body" name="temperature_body" :value="old('temperature_body', $record->temperature_body ?? '')" :disabled='$motor_installed' oninput="return JS.preventmaxtemperature(this.id)" />
+                <x-input-error :message="$errors->first('temperature_body')" />
+            </div>
 
-</div>
+            {{-- TEMPERATURE NDE --}}
+            <div class="mb-3">
+                <x-input-label for="temperature_nde" :value="__('Temperature NDE')" />
+                <x-input-number-coma id="temperature_nde" name="temperature_nde" :value="old('temperature_nde', $record->temperature_nde ?? '')" :disabled='$motor_installed' oninput="return JS.preventmaxtemperature(this.id)" />
+                <x-input-error :message="$errors->first('temperature_nde')" />
+            </div>
 
-{{-- IF MOTOR IS NOT INSTALLED FORM WILL BE DISABLED--}}
-@isset($motor)
-@if ($motor->status != 'Installed')
-<script>
-    for (input of myform) {
-        input.setAttribute('disabled', true);
-    }
-</script>
-@endif
-@endisset
+            {{-- IMAGE HELPER VIBRATION --}}
+            <div class="mb-3">
+                <x-checking-form.image.motor-vibration>
+                </x-checking-form.image.motor-vibration>
+            </div>
 
-<!-- CHECKING FORM END -->
-@include('utility.script.preventmax')
-@include('utility.script.changevibrationdescriptioncolor')
-@include('utility.script.onlynumber')
-@include('utility.script.onlynumbercoma')
-@include('utility.script.prevent-submit-form')
+            {{-- VIBRATION DE VERTICAL --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_de_vertical_value" :value="__('Vibration DEV')" />
+                <x-input-number-coma id="vibration_de_vertical_value" name="vibration_de_vertical_value" :value="old('vibration_de_vertical_value', $record->vibration_de_vertical_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_de_vertical_desc' name='vibration_de_vertical_desc' :value="old('vibration_de_vertical_desc', $record->vibration_de_vertical_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_de_vertical_value')" />
+                <x-input-error :message="$errors->first('vibration_de_vertical_desc')" />
+            </div>
 
-<script>
-    // PREVENT SUBMIT ON ENTER
-    let myform = document.getElementById('myform');
-    preventSubmitForm(myform);
+            {{-- VIBRATION DE HORIZONTAL --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_de_horizontal_value" :value="__('Vibration DEH')" />
+                <x-input-number-coma id="vibration_de_horizontal_value" name="vibration_de_horizontal_value" :value="old('vibration_de_horizontal_value', $record->vibration_de_horizontal_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_de_horizontal_desc' name='vibration_de_horizontal_desc' :value="old('vibration_de_horizontal_desc', $record->vibration_de_horizontal_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_de_horizontal_value')" />
+                <x-input-error :message="$errors->first('vibration_de_horizontal_desc')" />
+            </div>
 
-    window.onload = () => {
-        let vibration_descriptions = document.getElementsByClassName('vibration_description');
+            {{-- VIBRATION DE AXIAL --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_de_axial_value" :value="__('Vibration DEA')" />
+                <x-input-number-coma id="vibration_de_axial_value" name="vibration_de_axial_value" :value="old('vibration_de_axial_value', $record->vibration_de_axial_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_de_axial_desc' name='vibration_de_axial_desc' :value="old('vibration_de_axial_desc', $record->vibration_de_axial_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_de_axial_value')" />
+                <x-input-error :message="$errors->first('vibration_de_axial_desc')" />
+            </div>
 
-        for (let i = 0; i < vibration_descriptions.length; i++) {
-            if (vibration_descriptions[i].value == 'Good') {
-                good(vibration_descriptions[i]);
-            } else if (vibration_descriptions[i].value == 'Satisfactory') {
-                satisfactory(vibration_descriptions[i]);
-            } else if (vibration_descriptions[i].value == 'Unsatisfactory') {
-                unsatisfactory(vibration_descriptions[i]);
-            } else {
-                unacceptable(vibration_descriptions[i]);
+            {{-- VIBRATION DE FRAME --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_de_frame_value" :value="__('Vibration DE Frame')" />
+                <x-input-number-coma id="vibration_de_frame_value" name="vibration_de_frame_value" :value="old('vibration_de_frame_value', $record->vibration_de_frame_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_de_frame_desc' name='vibration_de_frame_desc' :value="old('vibration_de_frame_desc', $record->vibration_de_frame_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_de_frame_value')" />
+                <x-input-error :message="$errors->first('vibration_de_frame_desc')" />
+            </div>
+
+            {{-- NOISE DE --}}
+            <div class="mb-3">
+                <x-input-label for="noise_de" :value="__('Noise DE *')" />
+                <x-input-select id="noise_de" name="noise_de" :options='["Normal", "Abnormal"]' :value="old('noise_de', $record->noise_de ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('noise_de')" />
+            </div>
+
+            <hr>
+
+            {{-- VIBRATION NDE VERTICAL --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_nde_vertical_value" :value="__('Vibration NDEV')" />
+                <x-input-number-coma id="vibration_nde_vertical_value" name="vibration_nde_vertical_value" :value="old('vibration_nde_vertical_value', $record->vibration_nde_vertical_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_nde_vertical_desc' name='vibration_nde_vertical_desc' :value="old('vibration_nde_vertical_desc', $record->vibration_nde_vertical_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_nde_vertical_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_vertical_desc')" />
+            </div>
+
+            {{-- VIBRATION NDE HORIZONTAL --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_nde_horizontal_value" :value="__('Vibration NDEH')" />
+                <x-input-number-coma id="vibration_nde_horizontal_value" name="vibration_nde_horizontal_value" :value="old('vibration_nde_horizontal_value', $record->vibration_nde_horizontal_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_nde_horizontal_desc' name='vibration_nde_horizontal_desc' :value="old('vibration_nde_horizontal_desc', $record->vibration_nde_horizontal_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_nde_horizontal_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_horizontal_desc')" />
+            </div>
+
+            {{-- VIBRATION NDE FRAME --}}
+            <div class="mb-3">
+                <x-input-label for="vibration_nde_frame_value" :value="__('Vibration NDE Frame')" />
+                <x-input-number-coma id="vibration_nde_frame_value" name="vibration_nde_frame_value" :value="old('vibration_nde_frame_value', $record->vibration_nde_frame_value ?? '')" :disabled='$motor_installed' power_rate="{{ $power_rate }}" oninput="JS.preventmaxvibration(this.id); JS.changeVibrationDescriptionColor(this.id)" />
+                <x-input-vibration-level id='vibration_nde_frame_desc' name='vibration_nde_frame_desc' :value="old('vibration_nde_frame_desc', $record->vibration_nde_frame_desc ?? '')" :disabled='$motor_installed' :readonly='true' />
+                <x-input-error :message="$errors->first('vibration_nde_frame_value')" />
+                <x-input-error :message="$errors->first('vibration_nde_frame_desc')" />
+            </div>
+
+            {{-- NOISE NDE --}}
+            <div class="mb-3">
+                <x-input-label for="noise_nde" :value="__('Noise NDE *')" />
+                <x-input-select id="noise_nde" name="noise_nde" :options='["Normal", "Abnormal"]' :value="old('noise_nde', $record->noise_nde ?? '')" :disabled='$motor_installed' />
+                <x-input-error :message="$errors->first('noise_nde')" />
+            </div>
+
+            {{-- FINDING DESCRIPTION --}}
+            <div class="mb-3">
+                <x-input-label for="finding_description" :value="__('Finding description')" />
+                <x-input-textarea id="finding_description" name="finding_description" placeholder="Description of findings if any (min 15 character)." :disabled='$motor_installed'>{{ old('finding_description', $finding->description ?? '') }}</x-input-textarea>
+                <x-input-error :message="$errors->first('finding_description')" />
+            </div>
+
+            {{-- FINDING IMAGE --}}
+            <div class="mb-3">
+                <x-input-label for="finding_image" :value="__('Finding image')" />
+                <div class="input-group">
+                    <x-input-file id="finding_image" name="finding_image" :disabled='$motor_installed' accept="image/*" />
+                    @if( isset($finding) && $finding->image !== null)
+                    <button class="btn btn-outline-secondary" type="button" id="image"><a target="_blank" class="text-reset text-decoration-none" href="/storage/findings/{{ $finding->image }}">Existing</a></button>
+                    @endif
+                </div>
+
+                @if ($errors->first('finding_image'))
+                <x-input-error :message="$errors->first('finding_image')" />
+                @else
+                <x-input-help>
+                    {{ __('Maximum upload file size: 5 MB.') }}
+                </x-input-help>
+                @endif
+            </div>
+
+            {{-- BUTTON SUBMIT --}}
+            @if ($motor->status === 'Installed')
+            <div class="mb-3">
+                <x-button-primary>
+                    @isset($record)
+                    {{ __('Save changes') }}
+                    @else
+                    {{ __('Submit') }}
+                    @endisset
+                </x-button-primary>
+            </div>
+            @endif
+
+        </form>
+    </section>
+
+    <script type="module">
+        function doChangeColorDescriptionOnload(...ids) {
+            for (let id of ids) {
+                JS.changeVibrationDescriptionColor(id)
             }
         }
-    }
 
-    // CHANGE COLOR ON SELECT CHANGED
-    let vibration_descriptions = document.getElementsByClassName('vibration_description');
-    for (let i = 0; i < vibration_descriptions.length; i++) {
-        vibration_descriptions[i].onchange = () => {
-            select = vibration_descriptions[i];
-
-            switch (select.value) {
-                case 'Good':
-                    good(select)
-                    break;
-
-                case 'Satisfactory':
-                    satisfactory(select)
-                    break;
-
-                case 'Unsatisfactory':
-                    unsatisfactory(select)
-                    break;
-
-                default:
-                    unacceptable(select)
-                    break;
-            }
+        window.onload = () => {
+            doChangeColorDescriptionOnload(
+                'vibration_de_vertical_value',
+                'vibration_de_horizontal_value',
+                'vibration_de_axial_value',
+                'vibration_de_frame_value',
+                'vibration_nde_vertical_value',
+                'vibration_nde_horizontal_value',
+                'vibration_nde_frame_value'
+            );
         }
-    }
+    </script>
 
-    // DELETE NUMBER OF GREASING WHEN NIPPLE GREASE IS NOT AVAILABLE
-    let nipple_grease = document.getElementById('nipple_grease');
-    let number_of_greasing = document.getElementById('number_of_greasing');
-
-    nipple_grease.onchange = () => {
-        if (nipple_grease.value !== 'Available') {
-            number_of_greasing.value = '';
-        }
-    }
-</script>
-
-@include('utility.suffix')
+</x-app-layout>
