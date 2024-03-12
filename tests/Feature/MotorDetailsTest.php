@@ -40,7 +40,7 @@ class MotorDetailsTest extends TestCase
         self::assertNotNull($motorDetail);
         $funcloc = $motorDetail->Funcloc;
         self::assertNotNull($funcloc);
-        self::assertEquals('PM3.SUM.P70', $funcloc->description);
+        self::assertEquals('PM3.SUM.P70', $funcloc->sort_field);
     }
 
     public function testMotorDetailsRelationToFunclocNull()

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
@@ -123,6 +124,7 @@ class RecordController extends Controller
             $validated_record = Arr::except($validated, ['finding_description', 'finding_image']);
             $record = MotorRecord::create($validated_record);
             $record->save();
+            Log::info('record ' . $validated['motor'] . ' inserted', ['checker' => Auth::user()->fullname]);
 
             $image = $request->file('finding_image');
             $validated_finding = [
@@ -140,8 +142,10 @@ class RecordController extends Controller
                 if (!is_null($image) && $image->isValid()) {
                     $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                     $this->findingService->insertWithImage($image, $validated_finding);
+                    Log::info('record ' . $validated['motor'] . ' with finding description and image inserted', ['checker' => Auth::user()->fullname]);
                 } else {
                     $this->findingService->insert($validated_finding);
+                    Log::info('record ' . $validated['motor'] . ' with finding description inserted', ['checker' => Auth::user()->fullname]);
                 }
             }
         } catch (Exception $error) {
@@ -219,6 +223,7 @@ class RecordController extends Controller
         try {
             $validated_record = Arr::except($validated, ['finding_description', 'finding_image']);
             $record->update($validated_record);
+            Log::info('record ' . $validated['motor'] . ' updated', ['checker' => Auth::user()->fullname]);
 
             $finding = Finding::find($record_id);
             $image = $request->file('finding_image');
@@ -298,6 +303,7 @@ class RecordController extends Controller
             $validated_record = Arr::except($validated, ['finding_description', 'finding_image']);
             $record = TrafoRecord::create($validated_record);
             $record->save();
+            Log::info('record ' . $validated['trafo'] . ' inserted', ['checker' => Auth::user()->fullname]);
 
             $image = $request->file('finding_image');
             $validated_finding = [
@@ -315,8 +321,10 @@ class RecordController extends Controller
                 if (!is_null($image) && $image->isValid()) {
                     $validated_finding['image'] = $validated['id'] . '.' . $image->getClientOriginalExtension();
                     $this->findingService->insertWithImage($image, $validated_finding);
+                    Log::info('record ' . $validated['trafo'] . ' with finding description and image inserted', ['checker' => Auth::user()->fullname]);
                 } else {
                     $this->findingService->insert($validated_finding);
+                    Log::info('record ' . $validated['trafo'] . ' with finding description inserted', ['checker' => Auth::user()->fullname]);
                 }
             }
 

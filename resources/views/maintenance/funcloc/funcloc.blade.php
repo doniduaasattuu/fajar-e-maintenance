@@ -21,7 +21,7 @@
             {{-- FILTER SEARCH --}}
             <div class="col">
                 <x-input-label for="search" :value="__('Search')" />
-                <x-input-text id="search" type="text" name="search" placeholder="Functional location or description"></x-input-text>
+                <x-input-text id="search" type="text" name="search" placeholder="Functional location or sort field"></x-input-text>
             </div>
             <x-footer-header-table :paginator='$paginator' />
         </div>

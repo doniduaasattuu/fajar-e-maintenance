@@ -136,7 +136,7 @@ class UserController extends Controller
                 $query
                     ->where('department', '=', $dept);
             })
-            ->paginate(5)
+            ->paginate(50)
             ->withQueryString();
 
         return view('auth.users', [

@@ -42,6 +42,7 @@
                     {{-- EDIT AND DELETE USER --}}
                     @if (Auth::user()->isSuperAdmin())
                     <th style="width: 50px;">Admin</th>
+                    <th style="width: 50px;">Super</th>
                     <th style="width: 50px;">Reset</th>
                     <th style="width: 50px;">Delete</th>
                     @endif
@@ -55,10 +56,17 @@
                     @endforeach
 
                     @if (Auth::user()->isSuperAdmin())
-                    {{-- ASSIGN ADMIN --}}
+                    {{-- ASSIGN/UNASSIGN ADMIN --}}
                     <td class="text-center" style="width: 50px;">
                         <div class="form-check form-switch">
                             <input style="cursor: pointer" class="form-check-input" value="{{ (null != $user->isAdmin()) ? 'true' : 'false' }}" onchange="(this.value == 'true') ? window.location='/role-delete/admin/{{ $user->nik }}' : window.location='/role-assign/admin/{{ $user->nik }}'" type="checkbox" role="switch" @checked($user->isAdmin())>
+                        </div>
+                    </td>
+
+                    {{-- ASSIGN/UNASSIGN SUPER ADMIN --}}
+                    <td class="text-center" style="width: 50px;">
+                        <div class="form-check form-switch">
+                            <input style="cursor: pointer" class="form-check-input" value="{{ (null != $user->isSuperAdmin()) ? 'true' : 'false' }}" onchange="(this.value == 'true') ? window.location='/role-delete/superadmin/{{ $user->nik }}' : window.location='/role-assign/superadmin/{{ $user->nik }}'" type="checkbox" role="switch" @checked($user->isSuperAdmin())>
                         </div>
                     </td>
 

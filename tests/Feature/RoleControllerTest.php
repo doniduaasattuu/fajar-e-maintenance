@@ -77,7 +77,7 @@ class RoleControllerTest extends TestCase
         $this
             ->followingRedirects()
             ->get('/role-delete/admin/55000154')
-            ->assertSeeText('You cannot unassign yourself, this action causes an error.');
+            ->assertSeeText('The user must be removed from super admin first.');
     }
 
     // SUPER ADMIN
@@ -172,5 +172,114 @@ class RoleControllerTest extends TestCase
             ->followingRedirects()
             ->get('/role-delete/superadmin/55000153')
             ->assertSeeText('You cannot unassign yourself, this action causes an error.');
+    }
+
+    public function testAssignAdminAlreadyAnAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000153')
+            ->assertSeeText('The user is already an admin.');
+    }
+
+    public function testAssignAdminSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000135')
+            ->assertSeeText('The user assigned as admin.');
+    }
+
+    public function testAssignAdminNotFound()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/admin/55000321')
+            ->assertSeeText('User not found.');
+    }
+
+    // ASSIGN SUPER ADMIN
+    public function testAssignSuperAdminAlreadyAnSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        $user = User::find('55000153');
+        $user->roles()->attach('superadmin');
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000153')
+            ->assertSeeText('The user is already an super admin.');
+    }
+
+    public function testAssignSuperAdminFailedMustBeAdminFirst()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000135')
+            ->assertSeeText('The user must become admin first.');
+    }
+
+    public function testAssignSuperAdminSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000153')
+            ->assertSeeText('The user assigned as super admin.');
+    }
+
+    public function testAssignSuperAdminNotFound()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/role-assign/superadmin/55000321')
+            ->assertSeeText('User not found.');
     }
 }

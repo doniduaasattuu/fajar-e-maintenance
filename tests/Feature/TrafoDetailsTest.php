@@ -40,7 +40,7 @@ class TrafoDetailsTest extends TestCase
         self::assertNotNull($trafoDetail);
         $funcloc = $trafoDetail->Funcloc;
         self::assertNotNull($funcloc);
-        self::assertEquals('Trafo PLN1', $funcloc->description);
+        self::assertEquals('Trafo PLN1', $funcloc->sort_field);
     }
 
     public function testTrafoDetailsRelationToFunclocNull()

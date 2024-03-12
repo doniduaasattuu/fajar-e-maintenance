@@ -36,6 +36,11 @@ export function preventSubmitForm(event) {
     }
 }
 
+export function focusToSearch() {
+    navbarSupportedContent.classList.toggle("show");
+    document.getElementById("search_equipment").focus();
+}
+
 // CHANGE VIBRATION START
 export function changeVibrationDescriptionColor(id) {
     let input = document.getElementById(id);
@@ -200,7 +205,6 @@ export const debounce = (mainFunction, delay) => {
 };
 
 // INSTALL DISMANTLE
-
 function requestEquipment(token, input, table) {
     let request = new Request(`/equipment-${table}`, {
         method: "POST",
@@ -370,4 +374,26 @@ function createAlert(form, message, variant, buttonClose = null) {
         alert.appendChild(closeButton);
     }
     form.appendChild(alert);
+}
+
+// SET CURRENT TIME
+export function setCurrentTime(...input_id) {
+    function fetchTime(...input_id) {
+        async function fetchServerTime() {
+            const response = await fetch("/server-time");
+            return await response.text();
+        }
+
+        for (let id of input_id) {
+            let input = document.getElementById(id);
+
+            fetchServerTime().then((time) => {
+                input.value = time;
+            });
+        }
+    }
+
+    setInterval(() => {
+        fetchTime(input_id);
+    }, 1000);
 }

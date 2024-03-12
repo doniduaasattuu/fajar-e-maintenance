@@ -32,15 +32,21 @@ class RoleController extends Controller
     {
         $user = User::query()->find($nik);
 
+        if ($user->isSuperAdmin()) {
+            return back()->with('modal', new Modal('[403] Forbidden', 'The user must be removed from super admin first.'));
+        }
+
         if (!$user->isAdmin()) {
             return back()->with('modal', new Modal('[204] Success', 'The user is no longer an admin.'));
         }
 
         if ($nik == Auth::user()->nik) {
+            Log::alert('user tries to unnasign himself from admin', ['super admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[403] Forbidden', 'You cannot unassign yourself, this action causes an error.'));
         }
 
         if ($nik == '55000154') {
+            Log::alert('user tries to unnasign the creator from admin', ['super admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete the creator.'));
         }
 
@@ -61,6 +67,10 @@ class RoleController extends Controller
             return back()->with('modal', new Modal('[204] Success', 'The user is already an super admin.'));
         }
 
+        if (!is_null($user) && !$user->isAdmin()) {
+            return back()->with('modal', new Modal('[403] Forbidden', 'The user must become admin first.'));
+        }
+
         if (!is_null($user)) {
             $user->roles()->attach('superadmin');
             Log::info('user assigned as superadmin success', ['user' => $user->fullname, 'superadmin' => Auth::user()->fullname]);
@@ -79,10 +89,12 @@ class RoleController extends Controller
         }
 
         if ($nik == '55000154') {
+            Log::alert('user tries to unnasign the creator from super admin', ['super admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[403] Forbidden', 'You cannot delete the creator.'));
         }
 
         if ($nik == Auth::user()->nik) {
+            Log::alert('user tries to unnasign himself from super admin', ['super admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[403] Forbidden', 'You cannot unassign yourself, this action causes an error.'));
         }
 

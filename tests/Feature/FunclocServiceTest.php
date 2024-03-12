@@ -47,19 +47,19 @@ class FunclocServiceTest extends TestCase
 
         $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
         self::assertNotNull($funcloc);
-        self::assertEquals('PM3.SUM.P70', $funcloc->description);
+        self::assertEquals('PM3.SUM.P70', $funcloc->sort_field);
 
         $validated = [
             'id' => $funcloc->id,
-            'description' => 'PM3.SUM.P-70',
+            'sort_field' => 'PM3.SUM.P-70',
         ];
 
         $funclocService = $this->app->make(FunclocService::class);
         self::assertTrue($funclocService->updateFuncloc($validated));
 
         $funcloc = Funcloc::query()->find('FP-01-SP3-RJS-T092-P092');
-        self::assertNotEquals('PM3.SUM.P70', $funcloc->description);
-        self::assertEquals('PM3.SUM.P-70', $funcloc->description);
+        self::assertNotEquals('PM3.SUM.P70', $funcloc->sort_field);
+        self::assertEquals('PM3.SUM.P-70', $funcloc->sort_field);
     }
 
     public function testGetAreaFromFuncloc()

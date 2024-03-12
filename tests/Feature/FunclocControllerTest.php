@@ -93,7 +93,7 @@ class FunclocControllerTest extends TestCase
         $this->get('/funcloc-registration')
             ->assertSeeText('Funcloc registration')
             ->assertSeeText('Funcloc')
-            ->assertSeeText('Description')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertDontSeeText('Save changes')
@@ -109,7 +109,7 @@ class FunclocControllerTest extends TestCase
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])
             ->assertStatus(302)
             ->assertRedirectToRoute('login');
@@ -128,7 +128,7 @@ class FunclocControllerTest extends TestCase
             ->followingRedirects()
             ->post('/funcloc-register', [
                 'id' => 'FP-01-PM3-OCC-PU01',
-                'description' => 'SP3.SP-03/M',
+                'sort_field' => 'SP3.SP-03/M',
             ])
             ->assertSeeText('[403] Forbidden')
             ->assertSeeText('You are not allowed to perform this operation!');
@@ -151,7 +151,7 @@ class FunclocControllerTest extends TestCase
         $response = $this->followingRedirects()
             ->post('/funcloc-register', [
                 'id' => 'FP-01-PM3-OCC-PU01',
-                'description' => 'SP3.SP-03/M',
+                'sort_field' => 'SP3.SP-03/M',
             ]);
 
         $response->assertSeeText('The funcloc successfully registered.');
@@ -173,7 +173,7 @@ class FunclocControllerTest extends TestCase
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01 PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field must only contain letters, numbers, and dashes.'
         ]);
@@ -192,7 +192,7 @@ class FunclocControllerTest extends TestCase
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01_PM3_OCC- PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field format is invalid.'
         ]);
@@ -211,13 +211,13 @@ class FunclocControllerTest extends TestCase
 
         $this->post('/funcloc-register', [
             'id' => 'PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
+            'sort_field' => 'SP3.SP-03/M',
         ])->assertSessionHasErrors([
             'id' => 'The id field must start with one of the following: FP-01.'
         ]);
     }
 
-    public function testRegisterFunclocDescriptionInvalid()
+    public function testRegisterFunclocSortFieldInvalid()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
@@ -230,13 +230,13 @@ class FunclocControllerTest extends TestCase
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'AU',
+            'sort_field' => 'AU',
         ])->assertSessionHasErrors([
-            'description' => 'The description field must be at least 3 characters.'
+            'sort_field' => 'The sort field field must be at least 3 characters.'
         ]);
     }
 
-    public function testRegisterFunclocDescriptionNull()
+    public function testRegisterFunclocSortFieldNull()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
 
@@ -250,7 +250,7 @@ class FunclocControllerTest extends TestCase
         $response = $this->followingRedirects()
             ->post('/funcloc-register', [
                 'id' => 'FP-01-PM3-OCC-PU01',
-                'description' => '',
+                'sort_field' => '',
             ]);
 
         $response->assertSeeText('The funcloc successfully registered.');
@@ -262,11 +262,11 @@ class FunclocControllerTest extends TestCase
 
     public function testRegisterFunclocDuplicate()
     {
-        $this->testRegisterFunclocDescriptionNull();
+        $this->testRegisterFunclocSortFieldNull();
 
         $this->post('/funcloc-register', [
             'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => '',
+            'sort_field' => '',
         ])->assertSessionHasErrors([
             'id' => 'The selected id is invalid.'
         ]);
@@ -345,7 +345,7 @@ class FunclocControllerTest extends TestCase
             ->get('/funcloc-edit/FP-01-CH3-ALM-T089-P085')
             ->assertSeeText('Edit funcloc')
             ->assertSeeText('Table')
-            ->assertSeeText('Description')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
             ->assertSeeText('Update');

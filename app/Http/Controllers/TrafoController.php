@@ -10,6 +10,7 @@ use App\Services\TrafoService;
 use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,14 +31,6 @@ class TrafoController extends Controller
         $this->trafoDetailService = $trafoDetailService;
     }
 
-    // public function trafos()
-    // {
-    //     return response()->view('maintenance.trafo.trafo', [
-    //         'title' => 'Table trafo',
-    //         'trafoService' => $this->trafoService,
-    //     ]);
-    // }
-
     public function trafos(Request $request)
     {
         $search = $request->query('search');
@@ -53,7 +46,7 @@ class TrafoController extends Controller
                     ->where('status', '=', $status);
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(50)
+            ->paginate(1000)
             ->withQueryString();
 
         return view('maintenance.trafo.trafo', [
@@ -61,23 +54,6 @@ class TrafoController extends Controller
             'paginator' => $paginator,
         ]);
     }
-
-
-    // public function trafoEdit(string $id)
-    // {
-    //     $trafo = Trafo::query()->with(['trafoDetail'])->find($id);
-
-    //     if (is_null($trafo)) {
-    //         return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
-    //     }
-
-    //     return response()->view('maintenance.trafo.form', [
-    //         'title' => 'Edit trafo',
-    //         'trafoService' => $this->trafoService,
-    //         'action' => 'trafo-update',
-    //         'trafo' => $trafo,
-    //     ]);
-    // }
 
     public function trafoEdit(string $id)
     {
@@ -95,7 +71,6 @@ class TrafoController extends Controller
             'trafoDetail' => $trafo->TrafoDetail,
         ]);
     }
-
 
     public function trafoDetails(string $id)
     {
@@ -159,11 +134,11 @@ class TrafoController extends Controller
                 $this->trafoService->updateTrafo($validated_trafo);
                 $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
             } catch (Exception $error) {
-                Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => session('user')]);
+            Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
             return redirect()->back()->with('alert', ['message' => 'The trafo successfully updated.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -226,11 +201,11 @@ class TrafoController extends Controller
                 $this->trafoService->register($validated_trafo);
                 $this->trafoDetailService->register($validated_trafo_details);
             } catch (Exception $error) {
-                Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
             }
 
-            Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => session('user')]);
+            Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
             return redirect()->back()->with('alert', ['message' => 'The trafo successfully registered.', 'variant' => 'alert-success']);
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
@@ -281,11 +256,11 @@ class TrafoController extends Controller
             try {
                 $this->trafoService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
-                Log::error('trafo install dismantle error', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('trafo install dismantle error', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
-            Log::info('trafo install dismantle success', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => session('user')]);
+            Log::info('trafo install dismantle success', ['trafo_dismantle' => $dismantle, 'trafo_install' => $install, 'admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[200] Success', 'The trafo was successfully swapped.'));
         } else {
             return back()->with('modal', new Modal('[403] Forbidden', $validator->errors()->first()));

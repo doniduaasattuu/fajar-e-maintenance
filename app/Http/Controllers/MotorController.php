@@ -11,6 +11,7 @@ use App\Services\MotorDetailService;
 use App\Services\MotorService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,7 @@ class MotorController extends Controller
                     ->where('status', '=', $status);
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(50)
+            ->paginate(1000)
             ->withQueryString();
 
         return view('maintenance.motor.motor', [
@@ -143,12 +144,12 @@ class MotorController extends Controller
             $this->motorDetailService->updateMotorDetail($validated_motor_details);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+            Log::error('motor tries to updated', ['motor' => $validated_motor['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
             return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
         }
 
         DB::commit();
-        Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => session('user')]);
+        Log::info('motor updated success', ['motor' => $validated_motor['id'], 'admin' => Auth::user()->fullname]);
         return back()->with('alert', new Alert('The motor successfully updated.', 'alert-success'));
     }
 
@@ -217,7 +218,7 @@ class MotorController extends Controller
             $this->motorDetailService->register($validated_motor_details);
         } catch (Exception $error) {
             DB::rollBack();
-            Log::error('motor registration error', ['motor' => $validated_motor['id'], 'admin' => session('user'), 'message' => $error->getMessage()]);
+            Log::error('motor registration error', ['motor' => $validated_motor['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
             return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'))->withInput();
         }
 
@@ -269,11 +270,11 @@ class MotorController extends Controller
             try {
                 $this->motorService->installDismantle($dismantle, $install);
             } catch (Exception $error) {
-                Log::error('motor install dismantle error', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user'), 'message' => $error->getMessage()]);
+                Log::error('motor install dismantle error', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
                 return back()->with('modal', new Modal('[500] Internal Server Error', $error->getMessage()));
             }
 
-            Log::info('motor install dismantle success', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => session('user')]);
+            Log::info('motor install dismantle success', ['motor_dismantle' => $dismantle, 'motor_install' => $install, 'admin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[200] Success', 'The motor was successfully swapped.'));
         } else {
             return back()->with('modal', new Modal('[403] Forbidden', $validator->errors()->first()));

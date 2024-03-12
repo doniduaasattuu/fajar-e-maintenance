@@ -56,7 +56,7 @@ class FindingController extends Controller
                     ->where('description', 'LIKE', "%{$search}%");
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(4)
+            ->paginate(50)
             ->withQueryString();
 
         return view('maintenance.finding.finding', [

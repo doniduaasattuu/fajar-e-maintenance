@@ -98,7 +98,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Filter')
             ->assertSeeText('Displays')
             ->assertSeeText('entries')
-            ->assertSeeText('Description')
+            ->assertSeeText('Sort field')
             ->assertSeeText('Edit');
     }
 
@@ -226,7 +226,7 @@ class ViewTest extends TestCase
         $this
             ->actingAs($user)
             ->withViewErrors([])
-            ->view('maintenance.documents.documents', [
+            ->view('maintenance.document.documents', [
                 'title' => 'Documents',
                 'paginator' => $paginator,
             ])

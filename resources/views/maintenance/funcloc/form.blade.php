@@ -25,7 +25,7 @@
             @foreach ($utility::getColumns('funclocs') as $column)
             <div class="mb-3">
                 <x-input-label for="{{ $column }}" :value="__($column == 'id' ? 'Functional location' : ucfirst(str_replace('_' , ' ', $column)))" />
-                <x-input-number-text id="{{ $column }}" name="{{ $column }}" :value='old($column, $funcloc->$column ?? "" )' :disabled='!Auth::user()->isAdmin()' :readonly='$column != "description"' />
+                <x-input-number-text id="{{ $column }}" name="{{ $column }}" :value='old($column, $funcloc->$column ?? "" )' :disabled='!Auth::user()->isAdmin()' :readonly='$column != "sort_field"' />
                 <x-input-error :message="$errors->first($column)" />
             </div>
             @endforeach
@@ -33,7 +33,7 @@
             @foreach ($utility::getColumns('funclocs') as $column)
             <div class="mb-3">
                 <x-input-label for="{{ $column }}" :value="__($column == 'id' ? 'Functional location' : ucfirst(str_replace('_' , ' ', $column)))" />
-                <x-input-number-text id="{{ $column }}" name="{{ $column }}" :value='old($column, ($column == "created_at" || $column == "updated_at") ? Carbon\Carbon::now()->toDateTimeString() : "" )' :disabled='!Auth::user()->isAdmin()' :readonly='$column == "created_at" || $column == "updated_at"' />
+                <x-input-text id="{{ $column }}" name="{{ $column }}" :value='old($column, ($column == "created_at" || $column == "updated_at") ? Carbon\Carbon::now()->toDateTimeString() : "" )' :disabled='!Auth::user()->isAdmin()' :readonly='$column == "created_at" || $column == "updated_at"' oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first($column)" />
             </div>
             @endforeach
