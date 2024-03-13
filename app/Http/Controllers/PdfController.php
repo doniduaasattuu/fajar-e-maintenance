@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Modal;
 use App\Http\Controllers\Controller;
 use App\Models\MotorRecord;
 use App\Models\TrafoRecord;

@@ -6,7 +6,6 @@ use App\Data\Modal;
 use App\Models\Motor;
 use App\Models\Trafo;
 use App\Services\MotorService;
-use App\Services\TrafoService;
 use App\Traits\Utility;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
