@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Storage;
 | be assigned to the 'web' middleware group. Make something great!
 |
 */
+
+Route::get('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');

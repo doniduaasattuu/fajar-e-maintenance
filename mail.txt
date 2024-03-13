@@ -1,0 +1,20 @@
+password gmail = fajar-e-maintenance => oudl sfuu dlgq kzdm 
+
+// TUTORIAL
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=your@gmail.com
+MAIL_PASSWORD=your_app_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=your@gmail.com
+MAIL_FROM_NAME="laracoding.test EmailDemo"
+// ACTUAL
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=465
+MAIL_USERNAME=fajaremaintenance@gmail.com
+MAIL_PASSWORD="oudl sfuu dlgq kzdm"
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=fajaremaintenance@gmail.com
+MAIL_FROM_NAME="Fajar E-Maintenance"
