@@ -145,5 +145,10 @@ Route::middleware('member')->group(function () {
         // SUPER ADMIN
         Route::get('/role-assign/superadmin/{nik}', [RoleController::class, 'roleAssignSuperAdmin']);
         Route::get('/role-delete/superadmin/{nik}', [RoleController::class, 'roleDeleteSuperAdmin']);
+
+        // EMAIL
+        Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
+        Route::post('/email-recipients', [EmailController::class, 'addRecipients']);
+        Route::get('/recipient-delete/{email}', [EmailController::class, 'deleteRecipients']);
     });
 });
