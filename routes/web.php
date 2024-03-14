@@ -27,12 +27,13 @@ use Illuminate\Support\Facades\Storage;
 */
 
 Route::get('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
+Route::get('/send-report-email', [EmailController::class, 'sendReportEmail']);
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
     Route::post('/login', [App\Http\Controllers\UserController::class, 'doLogin']);
-    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration'])->name('registration');
-    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register']);
+    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration']);
+    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register'])->name('register');
 });
 
 Route::middleware('member')->group(function () {
@@ -148,7 +149,7 @@ Route::middleware('member')->group(function () {
 
         // EMAIL
         Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
-        Route::post('/email-recipients', [EmailController::class, 'addRecipients']);
-        Route::get('/recipient-delete/{email}', [EmailController::class, 'deleteRecipients']);
+        Route::post('/email-recipients/add', [EmailController::class, 'addRecipients'])->name('add-email-recipient');
+        Route::post('/email-recipients/delete', [EmailController::class, 'deleteRecipients'])->name('delete-email-recipient');
     });
 });

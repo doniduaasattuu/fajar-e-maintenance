@@ -19,6 +19,7 @@ class SuperAdminSeeder extends Seeder
             'password' => bcrypt('@Fajarpaper123'),
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
+            'email_address' => 'doni.duaasattuu@gmail.com',
             'phone_number' => '08983456945',
             'created_at' => Carbon::now()->toDateTimeString(),
         ]);

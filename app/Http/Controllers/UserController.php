@@ -6,6 +6,7 @@ use App\Data\Alert;
 use App\Data\Modal;
 use App\Models\Role;
 use App\Models\User;
+use App\Rules\EmailUnique;
 use App\Rules\UserExists;
 use App\Rules\ValidRegistrationCode;
 use Carbon\Carbon;
@@ -56,16 +57,18 @@ class UserController extends Controller
             'password' => ['required', 'max:25', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
+            'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'unique:App\Models\User,email'],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
         ]);
 
         User::insert([
-            'nik' => $request->nik,
-            'password' => bcrypt($request->password),
-            'fullname' => $request->fullname,
-            'department' => $request->department,
-            'phone_number' => $request->phone_number,
+            'nik' => $validated['nik'],
+            'password' => bcrypt($validated['password']),
+            'fullname' => $validated['fullname'],
+            'department' => $validated['department'],
+            'email' => $validated['email'],
+            'phone_number' => $validated['phone_number'],
             'created_at' => Carbon::now()->toDateTimeString(),
         ]);
 
@@ -85,9 +88,10 @@ class UserController extends Controller
         $request->merge(['current_nik' => Auth::user()->nik]);
 
         $validated = $request->validate([
-            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik'],
+            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', 'exists:App\Models\User,nik'],
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
+            'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(Auth::user())],
             'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
@@ -98,6 +102,7 @@ class UserController extends Controller
         $user->password = bcrypt($validated['new_password']);
         $user->fullname = $validated['fullname'];
         $user->department = $validated['department'];
+        $user->email = $validated['email'];
         $user->phone_number = $validated['phone_number'];
         $user->update();
 

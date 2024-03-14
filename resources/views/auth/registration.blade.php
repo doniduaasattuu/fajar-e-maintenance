@@ -4,7 +4,7 @@
 
     <x-h1>{{ $title }}</x-h1>
 
-    <form action="{{ route('registration') }}" method="POST">
+    <form action="{{ route('register') }}" method="POST">
         @csrf
 
         @if(session("alert"))
@@ -37,6 +37,13 @@
             <x-input-label for="department" :value="__('Department *')" />
             <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value="old('department')" :choose="'-- Choose --'" />
             <x-input-error :message="$errors->first('department')" />
+        </div>
+
+        {{-- EMAIL --}}
+        <div class="mb-3">
+            <x-input-label for="email_address" :value="__('Email')" />
+            <x-input-email id="email_address" name="email_address" :value="old('email_address')" />
+            <x-input-error :message="$errors->first('email')" />
         </div>
 
         {{-- PHONE NUMBER --}}

@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
         $doni->password = bcrypt("rahasia");
         $doni->fullname = "Doni Darmawan";
         $doni->department = "EI2";
+        $doni->email = "doni.duaasattuu@gmail.com";
         $doni->phone_number = "08983456945";
         $doni->save();
 
@@ -27,6 +28,7 @@ class UserSeeder extends Seeder
         $jamal->password = bcrypt("rahasia");
         $jamal->fullname = "Jamal Mirdad";
         $jamal->department = "EI6";
+        $jamal->email = fake('id_ID')->email;
         $jamal->phone_number = "085381243342";
         $jamal->save();
 
@@ -35,6 +37,7 @@ class UserSeeder extends Seeder
         $saiful->password = bcrypt("rahasia");
         $saiful->fullname = "Saiful Bahri";
         $saiful->department = "EI2";
+        $saiful->email = fake('id_ID')->email;
         $saiful->phone_number = "08982911546";
         $saiful->save();
 
@@ -43,6 +46,7 @@ class UserSeeder extends Seeder
         $mbeat->password = bcrypt("rahasia");
         $mbeat->fullname = "R. Much Arief S";
         $mbeat->department = "EI2";
+        $mbeat->email = fake('id_ID')->email;
         $mbeat->phone_number = "087879107392";
         $mbeat->save();
 
@@ -51,6 +55,7 @@ class UserSeeder extends Seeder
         $ridwan->password = bcrypt("rahasia");
         $ridwan->fullname = "Ridwan Abdurahman";
         $ridwan->department = "EI7";
+        $ridwan->email = fake('id_ID')->email;
         $ridwan->phone_number = "08991544689";
         $ridwan->save();
 
@@ -59,6 +64,7 @@ class UserSeeder extends Seeder
         $jiyantoro->password = bcrypt("rahasia");
         $jiyantoro->fullname = "Jiyantoro";
         $jiyantoro->department = "EI7";
+        $jiyantoro->email = fake('id_ID')->email;
         $jiyantoro->phone_number = "08991544689";
         $jiyantoro->save();
 
@@ -67,6 +73,7 @@ class UserSeeder extends Seeder
         $prima->password = bcrypt("rahasia");
         $prima->fullname = "Prima Hendra Kusuma";
         $prima->department = "EI5";
+        $prima->email = fake('id_ID')->email;
         $prima->phone_number = "085159963630";
         $prima->save();
 
@@ -75,6 +82,7 @@ class UserSeeder extends Seeder
         $yuan->password = bcrypt("rahasia");
         $yuan->fullname = "Yuan Lucky Prasetyo Winarno";
         $yuan->department = "EI5";
+        $yuan->email = fake('id_ID')->email;
         $yuan->phone_number = "081383294790";
         $yuan->save();
 
@@ -83,6 +91,7 @@ class UserSeeder extends Seeder
         $darminto->password = bcrypt("rahasia");
         $darminto->fullname = "Darminto";
         $darminto->department = "EI2";
+        $darminto->email = fake('id_ID')->email;
         $darminto->phone_number = "085811043635";
         $darminto->save();
 
@@ -91,6 +100,7 @@ class UserSeeder extends Seeder
         $edi->password = bcrypt("rahasia");
         $edi->fullname = "Edi Supriadi";
         $edi->department = "EI2";
+        $edi->email = fake('id_ID')->email;
         $edi->phone_number = "082112424780";
         $edi->save();
 
@@ -99,6 +109,7 @@ class UserSeeder extends Seeder
         $suryanto->password = bcrypt("rahasia");
         $suryanto->fullname = "Suryanto";
         $suryanto->department = "EI2";
+        $suryanto->email = fake('id_ID')->email;
         $suryanto->phone_number = "085711412097";
         $suryanto->save();
     }

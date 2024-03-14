@@ -16,7 +16,7 @@ class ReportEmail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $title)
+    public function __construct()
     {
         //
     }
@@ -27,7 +27,7 @@ class ReportEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Daily Report',
+            subject: 'EI Preventive Daily Report',
         );
     }
 
@@ -37,7 +37,10 @@ class ReportEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.report',
+            with: [
+                'title' => 'Fajar E-Maintenance',
+            ]
         );
     }
 

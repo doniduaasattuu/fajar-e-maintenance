@@ -6,8 +6,10 @@ use App\Data\Modal;
 use App\Mail\ReportEmail;
 use App\Mail\WelcomeMail;
 use App\Models\EmailRecipient;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class EmailController extends Controller
 {
@@ -19,16 +21,6 @@ class EmailController extends Controller
         Mail::to('elc357@fajarpaper.com')->send(new WelcomeMail($title, $body));
 
         return 'Email sent successfully!';
-    }
-
-    public function sendReportEmail()
-    {
-        $title = 'Fajar E-Maintenance';
-        $recipients = EmailRecipient::get();
-
-        foreach ($recipients as $recipient) {
-            Mail::to($recipient)->send(new ReportEmail($title));
-        }
     }
 
     public function emailRecipients(Request $request)
@@ -52,12 +44,8 @@ class EmailController extends Controller
 
     public function addRecipients(Request $request)
     {
-        if (!is_null(EmailRecipient::find($request->input('email')))) {
-            return back()->with('modal', new Modal('[403] Forbidden', 'Recipient already subscribed.'));
-        }
-
         $validated = $request->validate([
-            'email' => ['required', 'email']
+            'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'unique:App\Models\EmailRecipient,email'],
         ]);
 
         EmailRecipient::create($validated);
@@ -65,15 +53,38 @@ class EmailController extends Controller
         return back()->with('modal', new Modal('[204] Success', 'Successfully subscribed.'));
     }
 
-    public function deleteRecipients(string $email)
+    public function deleteRecipients(Request $request)
     {
-        $recipient = EmailRecipient::find($email);
+        $validated = $request->validate([
+            'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'exists:App\Models\EmailRecipient,email'],
+        ]);
+
+        $recipient = EmailRecipient::query()->find($validated['email']);
 
         if (is_null($recipient)) {
-            return back()->with('modal', new Modal('[404] Not found', 'Recipient not found.'));
-        } else {
-            $recipient->delete();
-            return back()->with('modal', new Modal('[204] Success', 'Successfully unsubscribed.'));
+            return back()->with('modal', new Modal('[404] Not found', 'Email not found.'));
         }
+
+        $recipient->delete();
+        return back()->with('modal', new Modal('[204] Success', 'Successfully unsubscribed.'));
+    }
+
+    public function sendReportEmail()
+    {
+        $value = 'doni.duaasattuu@gmail.com';
+        $email = User::query()->where('email', $value)->first();
+        return response()->json(!is_null($email));
+
+        // $recipients = EmailRecipient::select('email')->get();
+        // $recipients = $recipients->map(function ($user) {
+        //     return $user->email;
+        // });
+
+        // $subscribe = EmailRecipient::query()->find(null);
+        // return response()->json(!is_null($subscribe));
+
+        // foreach ($recipients as $recipient) {
+        //     Mail::to($recipient)->send(new ReportEmail());
+        // }
     }
 }

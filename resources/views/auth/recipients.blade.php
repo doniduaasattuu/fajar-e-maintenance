@@ -16,11 +16,11 @@
         <div class="row mb-3">
             {{-- ADD RECIPIENT --}}
             <div class="col pe-1">
-                <form action="{{ request()->path() }}" method="POST">
+                <form action="{{ route('add-email-recipient') }}" method="POST">
                     @csrf
                     <x-input-label for="email" :value="__('Add')" />
                     <div class="input-group">
-                        <x-input-text id="email" type="email" name="email" placeholder="Email"></x-input-text>
+                        <x-input-text id="email" type="email" name="email" placeholder="Email" :value='old("email")' />
                         <x-button-primary-outline>
                             {{ __('Add') }}
                         </x-button-primary-outline>
@@ -46,7 +46,7 @@
         <table class="rounded table table-hover mb-0 border border-1 shadow-sm table-responsive-md" style="min-width: 600px;">
             <thead>
                 <tr>
-                    <th style="line-height: 30px">#</th>
+                    <th style="line-height: 30px; min-width: 30px;">#</th>
                     @foreach ($utility::getColumns('email_recipients', $skipped) as $column)
                     <th style="line-height: 30px">{{ $column == 'created_at' ? 'Subscribed at' : ucfirst(str_replace('_' , ' ', $column)) }}</th>
                     @endforeach
@@ -60,7 +60,7 @@
             <tbody>
                 @foreach ($paginator->items() as $recipient)
                 <tr class="table-row">
-                    <td>{{ $loop->iteration }}</td>
+                    <td style="min-width: 30px;">{{ $loop->iteration }}</td>
                     @foreach ($utility::getColumns('email_recipients', $skipped) as $column)
                     <td>{{ $recipient->$column }}</td>
                     @endforeach
