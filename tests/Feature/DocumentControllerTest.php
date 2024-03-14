@@ -92,6 +92,107 @@ class DocumentControllerTest extends TestCase
             ->assertDontSeeText('Delete');
     }
 
+    public function testGetDocumentsAdminFilterSearch()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?search=Outgoing')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete')
+            ->assertDontSeeText('Incoming');
+    }
+
+    public function testGetDocumentsAdminFilterDept()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?dept=EI2')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetDocumentsAdminFilterSearchAndDept()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?search=Incoming&dept=EI2')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete')
+            ->assertDontSeeText('Outgoing');
+    }
+
     public function testGetDocumentsSuperAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);

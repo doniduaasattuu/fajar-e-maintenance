@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('email_recipients', function (Blueprint $table) {
             $table->string('email')->nullable(false)->primary();
+            $table->string('name', 50)->nullable(true);
             $table->timestamps();
         });
     }

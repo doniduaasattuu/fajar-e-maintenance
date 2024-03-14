@@ -15,7 +15,12 @@ class EmailRecipient extends Model
 
     protected $fillable = [
         'email',
+        'name',
         'created_at',
         'updated_at',
+    ];
+
+    protected $attributes = [
+        'name' => null,
     ];
 }

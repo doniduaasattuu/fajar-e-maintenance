@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string("fullname", 50)->nullable(false);
             $table->enum("department", ["EI1", "EI2", "EI3", "EI4", "EI5", "EI6", "EI7"])->nullable(false);
             $table->string('email_address')->nullable(true)->unique();
-            $table->string("phone_number", 15)->nullable(false);
+            $table->string("phone_number", 15)->nullable(true);
+            $table->string("work_center", 25)->nullable(true);
             $table->rememberToken();
             $table->timestamps();
         });

@@ -8,6 +8,7 @@ use App\Mail\WelcomeMail;
 use App\Models\EmailRecipient;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -42,21 +43,39 @@ class EmailController extends Controller
         ]);
     }
 
-    public function addRecipients(Request $request)
+    public function subscribe(Request $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'unique:App\Models\EmailRecipient,email'],
-        ]);
+        $user = Auth::user();
+        $email = $request->input('email');
+        $name = $request->input('name');
 
-        EmailRecipient::create($validated);
+        if ($user->email_address == $email && $user->fullname == $name) {
 
-        return back()->with('modal', new Modal('[204] Success', 'Successfully subscribed.'));
+            $validated = $request->validate([
+                'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'exists:App\Models\User,email_address'],
+                'name' => ['required'],
+            ]);
+
+            EmailRecipient::create($validated);
+            return back()->with('modal', new Modal('[204] Success', 'Successfully subscribed.'));
+        } else if ($user->isSuperAdmin()) {
+
+            $validated = $request->validate([
+                'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com'],
+                'name' => ['nullable'],
+            ]);
+
+            EmailRecipient::create($validated);
+            return back()->with('modal', new Modal('[204] Success', 'Successfully subscribed.'));
+        } else {
+            return back()->with('modal', new Modal('[403] Forbidden', 'You are not allowed to perform this operation!'));
+        }
     }
 
-    public function deleteRecipients(Request $request)
+    public function unsubscribe(Request $request)
     {
         $validated = $request->validate([
-            'email' => ['required', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'exists:App\Models\EmailRecipient,email'],
+            'email' => ['required', 'email', 'exists:App\Models\EmailRecipient,email'],
         ]);
 
         $recipient = EmailRecipient::query()->find($validated['email']);

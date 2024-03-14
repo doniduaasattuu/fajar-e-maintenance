@@ -104,6 +104,131 @@ class FindingControllerTest extends TestCase
             ->assertSeeText('Inner bearing defect motor refiner PM7');
     }
 
+    public function testGetFindingsAdminFilterDept()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI3')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('oli lubrikasi')
+            ->assertDontSeeText('Inner bearing defect motor refiner PM7');
+    }
+
+    public function testGetFindingsAdminFilterDeptAndStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI2&status=Closed')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('Noise trafo PLN')
+            ->assertSeeText('Drop primary voltage')
+            ->assertDontSeeText('oli lubrikasi');
+    }
+
+    public function testGetFindingsAdminFilterDeptAndStatusAndSearch()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI2&status=Closed&search=Drop')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertDontSeeText('Noise trafo PLN')
+            ->assertSeeText('Drop primary voltage')
+            ->assertDontSeeText('oli lubrikasi');
+    }
+
     public function testGetFindingsSuperAdmin()
     {
         $this->seed([UserRoleSeeder::class, FindingSeeder::class]);

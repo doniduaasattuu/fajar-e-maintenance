@@ -19,8 +19,9 @@ class User extends Authenticatable
         'password',
         'fullname',
         'department',
-        'email',
+        'email_address',
         'phone_number',
+        'work_center',
     ];
 
     public function roles(): BelongsToMany

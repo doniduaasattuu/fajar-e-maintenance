@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\EmailRecipient;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,9 +14,12 @@ class EmailRecipientSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 0; $i < 10; $i++) {
+        $users = User::get();
+
+        for ($i = 0; $i < 4; $i++) {
             EmailRecipient::create([
-                'email' => fake('id_ID')->email()
+                'email' => $users[$i]->email_address,
+                'name' => $users[$i]->fullname,
             ]);
         }
     }

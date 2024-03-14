@@ -7,7 +7,7 @@
     @endphp
 
     @if (Auth::user()->isSuperAdmin())
-    <x-modal-confirm></x-modal-confirm>
+    <x-modal-confirm-post></x-modal-confirm-post>
     @endif
 
     <section class="mb-4">
@@ -16,7 +16,7 @@
         <div class="row mb-3">
             {{-- ADD RECIPIENT --}}
             <div class="col pe-1">
-                <form action="{{ route('add-email-recipient') }}" method="POST">
+                <form action="{{ route('subscribe') }}" method="POST">
                     @csrf
                     <x-input-label for="email" :value="__('Add')" />
                     <div class="input-group">
@@ -68,12 +68,16 @@
                     @if (Auth::user()->isSuperAdmin())
                     {{-- DELETE RECIPIENT --}}
                     <td class="text-center" style="width: 50px;">
-                        <span data-bs-toggle="modal" data-bs-target="#modal_confirm" onclick="return JS.modalConfirm('/recipient-delete/{{ $recipient->email }}')" style="cursor: pointer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#dc3545" class="bi bi-trash" viewBox="0 0 16 16">
-                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-                            </svg>
-                        </span>
+                        <form action="{{ route('unsubscribe') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="email" id="email" value="{{ $recipient->email }}">
+                            <x-span-submit onclick="JS.submitForm(this)" data-bs-toggle="modal" data-bs-target="#modal_confirm_post">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#dc3545" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                </svg>
+                            </x-span-submit>
+                        </form>
                     </td>
                     @endif
                 </tr>

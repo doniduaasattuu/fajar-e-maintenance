@@ -44,6 +44,10 @@ Route::middleware('member')->group(function () {
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+    // SUBSCRIBTION
+    Route::post('/subscribe', [EmailController::class, 'subscribe'])->name('subscribe');
+    Route::post('/unsubscribe', [EmailController::class, 'unsubscribe'])->name('unsubscribe');
+
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
 
@@ -149,7 +153,5 @@ Route::middleware('member')->group(function () {
 
         // EMAIL
         Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
-        Route::post('/email-recipients/add', [EmailController::class, 'addRecipients'])->name('add-email-recipient');
-        Route::post('/email-recipients/delete', [EmailController::class, 'deleteRecipients'])->name('delete-email-recipient');
     });
 });

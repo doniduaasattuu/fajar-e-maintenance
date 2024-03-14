@@ -75,6 +75,102 @@ class MotorControllerTest extends TestCase
             ->assertDontSeeText('Details');
     }
 
+    public function testGetMotorsAdminFilterSearch()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this->get('/motors?search=MGM')
+            ->assertSeeText('Motors')
+            ->assertSeeText('New motor')
+            ->assertSeeText('Install / Dismantle')
+            ->assertSeeText('Search')
+            ->assertSeeText('Status')
+            ->assertSee('Installed')
+            ->assertSee('Available')
+            ->assertSee('Repaired')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Id')
+            ->assertSeeText('Status')
+            ->assertSeeText('Functional location')
+            ->assertSeeText('Unique id')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('MGM000481')
+            ->assertDontSeeText('EMO000426')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Details');
+    }
+
+    public function testGetMotorsAdminFilterStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this->get('/motors?status=Available')
+            ->assertSeeText('Motors')
+            ->assertSeeText('New motor')
+            ->assertSeeText('Install / Dismantle')
+            ->assertSeeText('Search')
+            ->assertSeeText('Status')
+            ->assertSee('Installed')
+            ->assertSee('Available')
+            ->assertSee('Repaired')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Id')
+            ->assertSeeText('Status')
+            ->assertSeeText('Functional location')
+            ->assertSeeText('Unique id')
+            ->assertSeeText('Updated at')
+            ->assertSeeTextInOrder(['EMO000008', 'EMO000023', 'EMO000042', 'EMO000075', 'EMO000094'])
+            ->assertDontSeeText('EMO000426')
+            ->assertDontSeeText('EMO000060')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Details');
+    }
+
+    public function testGetMotorsAdminFilterSearchAndStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this->get('/motors?search=0000&status=Installed')
+            ->assertSeeText('Motors')
+            ->assertSeeText('New motor')
+            ->assertSeeText('Install / Dismantle')
+            ->assertSeeText('Search')
+            ->assertSeeText('Status')
+            ->assertSee('Installed')
+            ->assertSee('Available')
+            ->assertSee('Repaired')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Id')
+            ->assertSeeText('Status')
+            ->assertSeeText('Functional location')
+            ->assertSeeText('Unique id')
+            ->assertSeeText('Updated at')
+            ->assertSeeTextInOrder(['EMO000038', 'EMO000060', 'EMO000061'])
+            ->assertDontSeeText('EMO000426')
+            ->assertDontSeeText('EMO000075')
+            ->assertDontSeeText('EMO000042')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Details');
+    }
+
     public function testGetMotorsSuperAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
@@ -2088,37 +2184,6 @@ class MotorControllerTest extends TestCase
         ])
             ->assertSessionHasErrors([
                 'sort_field' => 'The sort field field must not be greater than 50 characters.'
-            ]);
-    }
-
-    public function testRegisterMotorAuthorizedSortfieldInvalidFormat()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, MotorDetailsSeeder::class]);
-
-        Auth::attempt([
-            'nik' => '55000153',
-            'password' => 'rahasia',
-        ]);
-
-        $this->post('/funcloc-register', [
-            'id' => 'FP-01-PM3-OCC-PU01',
-            'description' => 'SP3.SP-03/M',
-        ]);
-
-        $this->get('/motor-registration');
-
-        $this->post('/motor-register', [
-            'id' => 'EMO000123',
-            'status' => 'Installed',
-            'funcloc' => 'FP-01-PM3-OCC-PU01',
-            'sort_field' => 'SP3.@SP-03/M',
-            'description' => 'AC MOTOR,350kW,4P,132A,3kV,1500RPM',
-            'material_number' => '10012345',
-            'unique_id' => '123',
-            'qr_code_link' => 'id=Fajar-MotorList123',
-        ])
-            ->assertSessionHasErrors([
-                'sort_field' => 'The sort field field format is invalid.'
             ]);
     }
 

@@ -41,6 +41,16 @@ export function focusToSearch() {
     document.getElementById("search_equipment").focus();
 }
 
+export function submitForm(span) {
+    event.preventDefault();
+    let form = span.parentElement;
+    let confirm = document.getElementById("modal_button_confirm");
+    confirm.onclick = () => {
+        // console.log(form);
+        form.submit();
+    };
+}
+
 // CHANGE VIBRATION START
 export function changeVibrationDescriptionColor(id) {
     let input = document.getElementById(id);
