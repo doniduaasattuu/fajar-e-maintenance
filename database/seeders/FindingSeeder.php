@@ -118,7 +118,7 @@ class FindingSeeder extends Seeder
         $finding7 = new Finding();
         $finding7->id = uniqid();
         $finding7->area = 'PM3';
-        $finding7->department = 'EI2';
+        $finding7->department = 'EI3';
         $finding7->status = 'Closed';
         $finding7->equipment = null;
         $finding7->funcloc = null;

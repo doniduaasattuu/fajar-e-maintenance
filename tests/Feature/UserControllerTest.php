@@ -59,6 +59,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -94,7 +96,6 @@ class UserControllerTest extends TestCase
                 'password' => 'The password field is required.',
                 'fullname' => 'The fullname field is required.',
                 'department' => 'The department field is required.',
-                'phone_number' => 'The phone number field is required.',
                 'registration_code' => 'The registration code field is required.',
             ]);
     }
@@ -109,6 +110,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -127,6 +130,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -145,6 +150,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -164,6 +171,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -182,6 +191,10 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -200,6 +213,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -218,6 +233,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -236,6 +253,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -254,6 +273,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -272,6 +293,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi Putra Tan Malaka',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -290,6 +313,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni_Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -308,6 +333,8 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -343,7 +370,7 @@ class UserControllerTest extends TestCase
             'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
-            'phone_number' => '08983456945',
+            'phone_number' => '08983456945',            'email_address' => 'doni.duaasattuu@gmail.com',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -417,13 +444,13 @@ class UserControllerTest extends TestCase
 
     public function testLoginSuccess()
     {
-        $this->seed(UserSeeder::class);
+        $this->testRegistrationSuccess();
 
         $this->get('/login');
 
         $this->post('/login', [
             'nik' => '55000154',
-            'password' => 'rahasia',
+            'password' => '@Rahasia123',
         ])
             ->assertStatus(302)
             ->assertRedirectToRoute('home');
@@ -568,6 +595,8 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
             ])
@@ -585,6 +614,8 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
                 'new_password' => 'OverridePassword123',
                 'new_password_confirmation' => 'OverridePassword123',
             ])
@@ -602,6 +633,8 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI9',
                 'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
             ])
@@ -670,6 +703,8 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
                 'new_password' => '',
                 'new_password_confirmation' => '',
             ])
@@ -687,6 +722,8 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@1234',
                 'new_password_confirmation' => 'Rahasia@12345',
             ])
@@ -746,6 +783,143 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Fullname')
             ->assertSeeText('Department')
             ->assertSeeText('Phone number')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetUserManagementFilterSearchName()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->get('/users?search=to')
+            ->assertSeeText('User management')
+            ->assertSeeText('Search')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertSeeTextInOrder(['Jiyantoro', 'Suryanto', 'Darminto'])
+            ->assertDontSeeText('Doni Darmawan')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetUserManagementFilterSearchNik()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->get('/users?search=5500015')
+            ->assertSeeText('User management')
+            ->assertSeeText('Search')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertSeeTextInOrder(['Jamal Mirdad', 'Doni Darmawan'])
+            ->assertDontSeeText('Suryanto')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetUserManagementFilterDept()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->get('/users?dept=EI6')
+            ->assertSeeText('User management')
+            ->assertSeeText('Search')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Jamal Mirdad')
+            ->assertDontSeeText('Suryanto')
+            ->assertDontSeeText('Doni')
+            ->assertDontSeeText('Admin')
+            ->assertDontSeeText('Reset')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetUserManagementFilterSearchAndDept()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this
+            ->get('/users?search=5500&dept=EI2')
+            ->assertSeeText('User management')
+            ->assertSeeText('Search')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Phone number')
+            ->assertDontSeeText('Jamal Mirdad')
+            ->assertSeeTextInOrder(['Saiful Bahri', 'Edi Supriadi', 'Doni Darmawan'])
             ->assertDontSeeText('Admin')
             ->assertDontSeeText('Reset')
             ->assertDontSeeText('Delete');

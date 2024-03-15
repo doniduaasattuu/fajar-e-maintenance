@@ -92,6 +92,107 @@ class DocumentControllerTest extends TestCase
             ->assertDontSeeText('Delete');
     }
 
+    public function testGetDocumentsAdminFilterSearch()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?search=Outgoing')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete')
+            ->assertDontSeeText('Incoming');
+    }
+
+    public function testGetDocumentsAdminFilterDept()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?dept=EI2')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete');
+    }
+
+    public function testGetDocumentsAdminFilterSearchAndDept()
+    {
+        $this->seed([UserRoleSeeder::class, DocumentSeeder::class]);
+
+        Auth::attempt(['nik' => '55000153', 'password' => 'rahasia']);
+
+        $this
+            ->get('/documents?search=Incoming&dept=EI2')
+            ->assertSeeText('Documents')
+            ->assertSeeText('New document')
+            ->assertSeeText('Search')
+            ->assertSee('Title')
+            ->assertSeeText('Dept')
+            ->assertSee('EI1')
+            ->assertSee('EI2')
+            ->assertSee('EI3')
+            ->assertSee('EI4')
+            ->assertSee('EI5')
+            ->assertSee('EI6')
+            ->assertSee('EI7')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Title')
+            ->assertSeeText('Area')
+            ->assertSeeText('Dept')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Uploaded by')
+            ->assertSeeText('Attach')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Delete')
+            ->assertDontSeeText('Outgoing');
+    }
+
     public function testGetDocumentsSuperAdmin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
@@ -339,12 +440,11 @@ class DocumentControllerTest extends TestCase
     }
 
     // AREA
-    public function testPostDocumentRegisterFailedAreaNull()
+    public function testPostDocumentRegisterAreaNullSuccess()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
         $id = uniqid();
         $attachment = UploadedFile::fake()->image($id . '.jpeg');
-
 
         Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
 
@@ -361,63 +461,60 @@ class DocumentControllerTest extends TestCase
                 'uploaded_by' => 'Doni Darmawan',
                 'attachment' => $attachment,
             ])
-            ->assertSeeText('The area field is required.')
-            ->assertDontSeeText('The document successfully saved.');
-    }
-
-    public function testPostDocumentRegisterFailedAreaInvalid()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $id = uniqid();
-        $attachment = UploadedFile::fake()->image($id . '.jpeg');
-
-
-        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
-
-        $this->get('/document-registration');
-
-        $this
-            ->followingRedirects()
-            ->post('/document-register', [
-                'id' => $id,
-                'title' => 'Schematic diagram panel turbo vacuum PM3',
-                'area' => 'GK5',
-                'department' => 'EI2',
-                'equipment' => null,
-                'funcloc' => null,
-                'uploaded_by' => 'Doni Darmawan',
-                'attachment' => $attachment,
-            ])
-            ->assertSeeText('The selected area is invalid.')
-            ->assertDontSeeText('The document successfully saved.');
-    }
-
-    public function testPostDocumentRegisterSuccessAreaAll()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $id = uniqid();
-        $attachment = UploadedFile::fake()->image($id . '.jpeg');
-
-
-        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
-
-        $this->get('/document-registration');
-
-        $this
-            ->followingRedirects()
-            ->post('/document-register', [
-                'id' => $id,
-                'title' => 'Schematic diagram panel turbo vacuum PM3',
-                'area' => 'All',
-                'department' => 'EI2',
-                'equipment' => null,
-                'funcloc' => null,
-                'uploaded_by' => 'Doni Darmawan',
-                'attachment' => $attachment,
-            ])
             ->assertDontSeeText('The area field is required.')
-            ->assertDontSeeText('The selected area is invalid.')
             ->assertSeeText('The document successfully saved.');
+    }
+
+    public function testPostDocumentRegisterFailedAreaInvalidLengthMin()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
+        $id = uniqid();
+        $attachment = UploadedFile::fake()->image($id . '.jpeg');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
+
+        $this
+            ->followingRedirects()
+            ->post('/document-register', [
+                'id' => $id,
+                'title' => 'Schematic diagram panel turbo vacuum PM3',
+                'area' => 'PM',
+                'department' => 'EI2',
+                'equipment' => null,
+                'funcloc' => null,
+                'uploaded_by' => 'Doni Darmawan',
+                'attachment' => $attachment,
+            ])
+            ->assertSeeText('The area field must be at least 3 characters.')
+            ->assertDontSeeText('The document successfully saved.');
+    }
+
+    public function testPostDocumentRegisterFailedAreaInvalidLengthMax()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
+        $id = uniqid();
+        $attachment = UploadedFile::fake()->image($id . '.jpeg');
+
+        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
+
+        $this->get('/document-registration');
+
+        $this
+            ->followingRedirects()
+            ->post('/document-register', [
+                'id' => $id,
+                'title' => 'Schematic diagram panel turbo vacuum PM3',
+                'area' => 'This is invalid area length',
+                'department' => 'EI2',
+                'equipment' => null,
+                'funcloc' => null,
+                'uploaded_by' => 'Doni Darmawan',
+                'attachment' => $attachment,
+            ])
+            ->assertSeeText('The area field must not be greater than 15 characters.')
+            ->assertDontSeeText('The document successfully saved.');
     }
 
     // EQUIPMENT
@@ -886,65 +983,6 @@ class DocumentControllerTest extends TestCase
                 'attachment' => $attachment,
             ])
             ->assertSeeText('The title field must not be greater than 50 characters.')
-            ->assertDontSeeText('The document successfully updated.');
-    }
-
-    // AREA
-    public function testPostDocumentUpdateFailedAreaNull()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
-        $document = $documents->first();
-
-
-        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
-
-        $this
-            ->get('/document-edit/' . $document->id);
-
-        $attachment = UploadedFile::fake()->image('attachment.png');
-
-        $this
-            ->followingRedirects()
-            ->post('/document-update', [
-                'id' => $document->id,
-                'title' => $document->title,
-                'area' => null,
-                'equipment' => $document->equipment,
-                'funcloc' => $document->funcloc,
-                'uploaded_by' => $document->uploaded_by,
-                'attachment' => $attachment,
-            ])
-            ->assertSeeText('The area field is required.')
-            ->assertDontSeeText('The document successfully updated.');
-    }
-
-    public function testPostDocumentUpdateFailedAreaInvalid()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class, DocumentSeeder::class]);
-        $documents = $this->app->make(DocumentServiceImpl::class)->getAll();
-        $document = $documents->first();
-
-
-        Auth::attempt(['nik' => '55000154', 'password' => 'rahasia']);
-
-        $this
-            ->get('/document-edit/' . $document->id);
-
-        $attachment = UploadedFile::fake()->image('attachment.png');
-
-        $this
-            ->followingRedirects()
-            ->post('/document-update', [
-                'id' => $document->id,
-                'title' => $document->title,
-                'area' => 'GK5',
-                'equipment' => $document->equipment,
-                'funcloc' => $document->funcloc,
-                'uploaded_by' => $document->uploaded_by,
-                'attachment' => $attachment,
-            ])
-            ->assertSeeText('The selected area is invalid.')
             ->assertDontSeeText('The document successfully updated.');
     }
 

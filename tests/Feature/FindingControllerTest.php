@@ -104,6 +104,131 @@ class FindingControllerTest extends TestCase
             ->assertSeeText('Inner bearing defect motor refiner PM7');
     }
 
+    public function testGetFindingsAdminFilterDept()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI3')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('oli lubrikasi')
+            ->assertDontSeeText('Inner bearing defect motor refiner PM7');
+    }
+
+    public function testGetFindingsAdminFilterDeptAndStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI2&status=Closed')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertSeeText('Noise trafo PLN')
+            ->assertSeeText('Drop primary voltage')
+            ->assertDontSeeText('oli lubrikasi');
+    }
+
+    public function testGetFindingsAdminFilterDeptAndStatusAndSearch()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/findings?dept=EI2&status=Closed&search=Drop')
+            ->assertSeeText('Findings')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Dept')
+            ->assertSeeText('EI1')
+            ->assertSeeText('EI2')
+            ->assertSeeText('EI3')
+            ->assertSeeText('EI4')
+            ->assertSeeText('EI5')
+            ->assertSeeText('EI6')
+            ->assertSeeText('EI7')
+            ->assertSeeText('Status')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Search')
+            ->assertSee('Description')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('Area')
+            ->assertSeeText('Status')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Reporter')
+            ->assertSeeText('Date')
+            ->assertSeeText('Edit')
+            ->assertSeeText('Delete')
+            ->assertDontSeeText('Noise trafo PLN')
+            ->assertSeeText('Drop primary voltage')
+            ->assertDontSeeText('oli lubrikasi');
+    }
+
     public function testGetFindingsSuperAdmin()
     {
         $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
@@ -164,7 +289,7 @@ class FindingControllerTest extends TestCase
             ->get('/finding-registration')
             ->assertSeeText('New finding')
             ->assertSeeText('Findings')
-            ->assertSeeText('Area *')
+            ->assertSeeText('Area')
             ->assertSeeText('Department *')
             ->assertSeeText('Status *')
             ->assertSee('Open')
@@ -191,7 +316,7 @@ class FindingControllerTest extends TestCase
             ->get('/finding-registration')
             ->assertSeeText('New finding')
             ->assertSeeText('Findings')
-            ->assertSeeText('Area *')
+            ->assertSeeText('Area')
             ->assertSeeText('Department *')
             ->assertSeeText('Status *')
             ->assertSee('Open')
@@ -302,7 +427,7 @@ class FindingControllerTest extends TestCase
         self::assertEquals('Doni Darmawan', $findings->first()->reporter);
     }
 
-    public function testPostFindingFailedAreaNull()
+    public function testPostFindingFailedAreaNullSuccess()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
@@ -326,15 +451,15 @@ class FindingControllerTest extends TestCase
                 'image' => null,
                 'reporter' => Auth::user()->fullname,
             ])
-            ->assertSeeText('The area field is required.')
-            ->assertDontSeeText('The finding successfully saved.');
+            ->assertDontSeeText('The area field is required.')
+            ->assertSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
-        self::assertCount(0, $findings);
+        self::assertCount(1, $findings);
     }
 
-    public function testPostFindingFailedAreaInvalid()
+    public function testPostFindingFailedAreaInvalidLengthMin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
@@ -348,7 +473,7 @@ class FindingControllerTest extends TestCase
         $this
             ->followingRedirects()
             ->post('/finding-register', [
-                'area' => 'GK5',
+                'area' => '1',
                 'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
@@ -358,8 +483,40 @@ class FindingControllerTest extends TestCase
                 'image' => null,
                 'reporter' => Auth::user()->fullname,
             ])
-            ->assertSeeText('The selected area is invalid.')
-            ->assertDontSeeText('The finding successfully saved. ');
+            ->assertSeeText('The area field must be at least 3 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
+    public function testPostFindingFailedAreaInvalidLengthMax()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'This is invalid finding area',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'equipment' => 'ETF000085',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The area field must not be greater than 15 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);

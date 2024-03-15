@@ -31,7 +31,7 @@ class FunclocController extends Controller
             ->when($search, function ($query, $search) {
                 $query
                     ->where('id', 'LIKE', "%{$search}%")
-                    ->orWhere('description', 'LIKE', "%{$search}%");
+                    ->orWhere('sort_field', 'LIKE', "%{$search}%");
             })
             ->orderBy('created_at', 'DESC')
             ->paginate(1000)

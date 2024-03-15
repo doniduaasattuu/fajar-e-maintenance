@@ -6,7 +6,9 @@ entity users {
   * password VARCHAR(255)
   * fullname VARCHAR(50)
   * department ENUM("EI1 ~ EI7");
-  * phone_number VARCHAR(15)
+    email_address VARCHAR(255)
+    phone_number VARCHAR(15)
+    work_center VARCHAR(25)
     remember_token VARCHAR(100)
     created_at TIMESTAMP
     updated_at TIMESTAMP
@@ -138,7 +140,7 @@ entity trafos {
 }
 
 entity trafo_details {
-  * id BIGINT UNSIGNED AUTO_INCREMENT
+  * id BIGINT(20) UNSIGNED AUTO_INCREMENT
   --
   * trafo_detail VARCHAR(9) <<FK>>
     power_rate VARCHAR(50)
@@ -167,7 +169,7 @@ entity trafo_details {
 }
 
 entity trafo_records {
-  * id BIGINT(20) UNSIGNED AUTO_INCREMENT
+  * id VARCHAR(255) <<PK>>
   --
   * funcloc VARCHAR (50)
   * trafo VARCHAR(9)
@@ -198,12 +200,12 @@ entity trafo_records {
 entity findings {
   * id VARCHAR(255) <<PK>>
   --
-  * area VARCHAR(20)
+    area VARCHAR(20)
   * department ENUM("EI1 ~ EI7");
   * status ENUM(["Open", "Closed"])
     equipment VARCHAR(9)
     funcloc VARCHAR(50)
-    notification VARCHAR(8)
+    notification CHAR(8)
     reporter VARCHAR(50)  
   * description TEXT
     image VARCHAR(20)
@@ -215,7 +217,7 @@ entity documents {
   * id VARCHAR(255) <<PK>>
   --
   * title VARCHAR(50)
-    area VARCHAR(50)
+    area VARCHAR(20)
     department ENUM("EI1 ~ EI7");
     equipment VARCHAR(9)
     funcloc VARCHAR(50)
@@ -225,6 +227,15 @@ entity documents {
     updated_at TIMESTAMP NULL
 }
  
+entity email_recipients {
+  * email VARCHAR(255) <<PK>>
+  --
+    name VARCHAR(50)
+    created_at TIMESTAMP NULL
+    updated_at TIMESTAMP NULL
+}
+ 
+users ||--|| email_recipients : Subscribe
 users }|--|| user_role : Have
 roles }|--|| user_role : Have
 

@@ -19,7 +19,7 @@
 
 <body>
     <div class="container d-flex vh-100">
-        <div class="align-items-center py-4 m-auto justify-content-center" style="min-width: 300px;">
+        <div class="align-items-center py-4 m-auto justify-content-center" style="width: 350px; min-width: 300px">
             <main>
                 {{ $slot }}
             </main>

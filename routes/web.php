@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
@@ -25,11 +26,14 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+Route::get('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
+Route::get('/send-report-email', [EmailController::class, 'sendReportEmail']);
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
     Route::post('/login', [App\Http\Controllers\UserController::class, 'doLogin']);
-    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration'])->name('registration');
-    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register']);
+    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration']);
+    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register'])->name('register');
 });
 
 Route::middleware('member')->group(function () {
@@ -39,6 +43,10 @@ Route::middleware('member')->group(function () {
     Route::get('/profile', [UserController::class, 'profile'])->name('profile');
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
+    // SUBSCRIBTION
+    Route::post('/subscribe', [EmailController::class, 'subscribe'])->name('subscribe');
+    Route::post('/unsubscribe', [EmailController::class, 'unsubscribe'])->name('unsubscribe');
 
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
@@ -142,5 +150,8 @@ Route::middleware('member')->group(function () {
         // SUPER ADMIN
         Route::get('/role-assign/superadmin/{nik}', [RoleController::class, 'roleAssignSuperAdmin']);
         Route::get('/role-delete/superadmin/{nik}', [RoleController::class, 'roleDeleteSuperAdmin']);
+
+        // EMAIL
+        Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
     });
 });
