@@ -48,7 +48,7 @@
 
         {{-- PHONE NUMBER --}}
         <div class="mb-3">
-            <x-input-label for="phone_number" :value="__('Phone number *')" />
+            <x-input-label for="phone_number" :value="__('Phone number')" />
             <x-input-text id="phone_number" type="text" name="phone_number" :value="old('phone_number')" autofocus autocomplete="phone_number" />
             <x-input-error :message="$errors->first('phone_number')" />
         </div>

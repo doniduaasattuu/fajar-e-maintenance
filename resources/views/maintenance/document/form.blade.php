@@ -38,9 +38,10 @@
             @switch($column)
             @case('area')
             <div class="mb-3">
-                <x-input-label for="{{ $column }}" :value="__(ucfirst(str_replace('_', ' ', $column)) . ' *')" />
-                <x-input-select id="{{ $column }}" name="{{ $column }}" :options="$utility::areas()" :value="old($column, $document->$column ?? '')" :disabled='!Auth::user()->isAdmin()' :choose='"-- Choose --"' />
-                <x-input-error :message="$errors->first($column)" />
+                <x-input-label for="area" :value="__('Area')" />
+                <x-input-list list="area_option" id="area" name="area" :value='old("area", $finding->area ?? "")' oninput="return JS.toupper(this)" maxlength="15" />
+                <x-datalist :id='"area_option"' :options='$utility::areas()' />
+                <x-input-error :message="$errors->first('area')" />
             </div>
             @break
 

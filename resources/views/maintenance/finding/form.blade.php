@@ -31,8 +31,9 @@
 
             {{-- AREA --}}
             <div class="mb-3">
-                <x-input-label for="area" :value="__('Area *')" />
-                <x-input-select id="area" name="area" :options="$utility::areas()" :value='old("area", $finding->area ?? "")' :choose="''" />
+                <x-input-label for="area" :value="__('Area')" />
+                <x-input-list list="area_option" id="area" name="area" :value='old("area", $finding->area ?? "")' oninput="return JS.toupper(this)" maxlength="15" />
+                <x-datalist :id='"area_option"' :options='$utility::areas()' />
                 <x-input-error :message="$errors->first('area')" />
             </div>
 
@@ -53,14 +54,14 @@
             {{-- EQUIPMENT --}}
             <div class="mb-3">
                 <x-input-label for="equipment" :value="__('Equipment')" />
-                <x-input-text id="equipment" name="equipment" :value='old("equipment", $finding->equipment ?? "")' />
+                <x-input-text id="equipment" name="equipment" :value='old("equipment", $finding->equipment ?? "")' oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('equipment')" />
             </div>
 
             {{-- FUNCLOC --}}
             <div class="mb-3">
                 <x-input-label for="funcloc" :value="__('Funcloc')" />
-                <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $finding->funcloc ?? "")' />
+                <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $finding->funcloc ?? "")' oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('funcloc')" />
             </div>
 

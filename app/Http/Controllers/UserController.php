@@ -79,22 +79,20 @@ class UserController extends Controller
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'unique:App\Models\User,email_address'],
             'work_center' => ['nullable'],
-            'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+            'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
             'registration_code' => ['required', new ValidRegistrationCode()],
         ]);
 
-        // User::insert([
-        //     'nik' => $validated['nik'],
-        //     'password' => bcrypt($validated['password']),
-        //     'fullname' => ucwords(strtolower($validated['fullname'])),
-        //     'department' => $validated['department'],
-        //     'email_address' => $validated['email_address'],
-        //     'phone_number' => $validated['phone_number'],
-        //     'work_center' => $validated['work_center'],
-        //     'created_at' => Carbon::now()->toDateTimeString(),
-        // ]);
-
-        User::create($validated);
+        User::insert([
+            'nik' => $validated['nik'],
+            'password' => bcrypt($validated['password']),
+            'fullname' => ucwords(strtolower($validated['fullname'])),
+            'department' => $validated['department'],
+            'email_address' => $validated['email_address'],
+            'phone_number' => $validated['phone_number'],
+            'work_center' => $validated['work_center'],
+            'created_at' => Carbon::now()->toDateTimeString(),
+        ]);
 
         Log::info('user register success', ['nik' => $validated['nik'], 'user' => $validated['fullname']]);
         return redirect('login')->with('alert', new Alert('Your account successfully registered.', 'alert-success'));
@@ -116,7 +114,7 @@ class UserController extends Controller
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(Auth::user())],
-            'phone_number' => ['required', 'numeric', 'digits_between:10,13'],
+            'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
             'work_center' => ['nullable'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],

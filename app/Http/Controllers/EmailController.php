@@ -57,7 +57,7 @@ class EmailController extends Controller
             ]);
 
             EmailRecipient::create($validated);
-            return back()->with('modal', new Modal('[204] Success', 'Successfully subscribed.'));
+            return back();
         } else if ($user->isSuperAdmin()) {
 
             $validated = $request->validate([
@@ -85,7 +85,7 @@ class EmailController extends Controller
         }
 
         $recipient->delete();
-        return back()->with('modal', new Modal('[204] Success', 'Successfully unsubscribed.'));
+        return back();
     }
 
     public function sendReportEmail()

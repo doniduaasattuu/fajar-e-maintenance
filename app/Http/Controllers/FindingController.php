@@ -79,7 +79,7 @@ class FindingController extends Controller
 
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
@@ -124,7 +124,7 @@ class FindingController extends Controller
     {
         $validated = $request->validate([
             'id' => ['required', 'exists:App\Models\Finding,id'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
             'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],

@@ -8,6 +8,7 @@ use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\TrafoService;
 use Database\Seeders\DocumentSeeder;
+use Database\Seeders\EmailRecipientSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
@@ -15,6 +16,7 @@ use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -252,5 +254,111 @@ class ViewTest extends TestCase
             ->assertSeeText('Attach')
             ->assertSeeText('Edit')
             ->assertSeeText('Delete');
+    }
+
+    public function testViewProfile()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Email reports')
+            ->assertSeeText('55000154')
+            ->assertSeeText('Doni Darmawan')
+            ->assertSeeText('EI2')
+            ->assertSeeText('doni.duaasattuu@gmail.com')
+            ->assertSeeText('08983456945')
+            ->assertSeeText('Subscribe');
+    }
+
+    public function testViewProfileSubscribe()
+    {
+        $this->seed([UserRoleSeeder::class, EmailRecipientSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Email reports')
+            ->assertSeeText('55000154')
+            ->assertSeeText('Doni Darmawan')
+            ->assertSeeText('EI2')
+            ->assertSeeText('doni.duaasattuu@gmail.com')
+            ->assertSeeText('08983456945')
+            ->assertSeeText('Unsubscribe')
+            ->assertDontSeeText('Subscribe');
+    }
+
+    public function testViewProfileDoesntHaveEmail()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '31100162',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertDontSeeText('Email reports')
+            ->assertSeeText('31100162')
+            ->assertSeeText('Hasan Badri')
+            ->assertSeeText('EI2')
+            ->assertSeeText('085711412097')
+            ->assertDontSeeText('Unsubscribe')
+            ->assertDontSeeText('Subscribe');
     }
 }

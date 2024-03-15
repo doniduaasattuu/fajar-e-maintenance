@@ -14,13 +14,23 @@ class EmailRecipientSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::get();
-
-        for ($i = 0; $i < 4; $i++) {
-            EmailRecipient::create([
-                'email' => $users[$i]->email_address,
-                'name' => $users[$i]->fullname,
-            ]);
-        }
+        EmailRecipient::insert([
+            [
+                'email' => User::findOrFail('55000154')->email_address,
+                'name' => User::findOrFail('55000154')->fullname,
+            ],
+            [
+                'email' => User::findOrFail('31100019')->email_address,
+                'name' => User::findOrFail('31100019')->fullname,
+            ],
+            [
+                'email' => User::findOrFail('31100156')->email_address,
+                'name' => User::findOrFail('31100156')->fullname,
+            ],
+            [
+                'email' => User::findOrFail('31811016')->email_address,
+                'name' => User::findOrFail('31811016')->fullname,
+            ],
+        ]);
     }
 }

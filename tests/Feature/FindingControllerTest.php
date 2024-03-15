@@ -289,7 +289,7 @@ class FindingControllerTest extends TestCase
             ->get('/finding-registration')
             ->assertSeeText('New finding')
             ->assertSeeText('Findings')
-            ->assertSeeText('Area *')
+            ->assertSeeText('Area')
             ->assertSeeText('Department *')
             ->assertSeeText('Status *')
             ->assertSee('Open')
@@ -316,7 +316,7 @@ class FindingControllerTest extends TestCase
             ->get('/finding-registration')
             ->assertSeeText('New finding')
             ->assertSeeText('Findings')
-            ->assertSeeText('Area *')
+            ->assertSeeText('Area')
             ->assertSeeText('Department *')
             ->assertSeeText('Status *')
             ->assertSee('Open')
@@ -427,7 +427,7 @@ class FindingControllerTest extends TestCase
         self::assertEquals('Doni Darmawan', $findings->first()->reporter);
     }
 
-    public function testPostFindingFailedAreaNull()
+    public function testPostFindingFailedAreaNullSuccess()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
@@ -451,15 +451,15 @@ class FindingControllerTest extends TestCase
                 'image' => null,
                 'reporter' => Auth::user()->fullname,
             ])
-            ->assertSeeText('The area field is required.')
-            ->assertDontSeeText('The finding successfully saved.');
+            ->assertDontSeeText('The area field is required.')
+            ->assertSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
-        self::assertCount(0, $findings);
+        self::assertCount(1, $findings);
     }
 
-    public function testPostFindingFailedAreaInvalid()
+    public function testPostFindingFailedAreaInvalidLengthMin()
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
 
@@ -473,7 +473,7 @@ class FindingControllerTest extends TestCase
         $this
             ->followingRedirects()
             ->post('/finding-register', [
-                'area' => 'GK5',
+                'area' => '1',
                 'department' => 'EI2',
                 'status' => 'Open',
                 'equipment' => 'ETF000085',
@@ -483,8 +483,40 @@ class FindingControllerTest extends TestCase
                 'image' => null,
                 'reporter' => Auth::user()->fullname,
             ])
-            ->assertSeeText('The selected area is invalid.')
-            ->assertDontSeeText('The finding successfully saved. ');
+            ->assertSeeText('The area field must be at least 3 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
+    public function testPostFindingFailedAreaInvalidLengthMax()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'This is invalid finding area',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'equipment' => 'ETF000085',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The area field must not be greater than 15 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
 
         $findings = Finding::query()->get();
         self::assertNotNull($findings);

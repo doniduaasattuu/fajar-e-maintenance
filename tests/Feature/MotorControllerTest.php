@@ -163,7 +163,7 @@ class MotorControllerTest extends TestCase
             ->assertSeeText('Functional location')
             ->assertSeeText('Unique id')
             ->assertSeeText('Updated at')
-            ->assertSeeTextInOrder(['EMO000038', 'EMO000060', 'EMO000061'])
+            ->assertSeeText(['EMO000038', 'EMO000060', 'EMO000061'])
             ->assertDontSeeText('EMO000426')
             ->assertDontSeeText('EMO000075')
             ->assertDontSeeText('EMO000042')

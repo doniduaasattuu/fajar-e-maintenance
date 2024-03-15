@@ -114,9 +114,9 @@ class UserSeeder extends Seeder
         $suryanto->save();
 
         $hasan = new User();
-        $hasan->nik = "55000055";
+        $hasan->nik = "31100162";
         $hasan->password = bcrypt("rahasia");
-        $hasan->fullname = "Hasan";
+        $hasan->fullname = "Hasan Badri";
         $hasan->department = "EI2";
         $hasan->email_address = null;
         $hasan->phone_number = "085711412097";

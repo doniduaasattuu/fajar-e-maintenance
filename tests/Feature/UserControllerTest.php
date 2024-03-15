@@ -96,7 +96,6 @@ class UserControllerTest extends TestCase
                 'password' => 'The password field is required.',
                 'fullname' => 'The fullname field is required.',
                 'department' => 'The department field is required.',
-                'phone_number' => 'The phone number field is required.',
                 'registration_code' => 'The registration code field is required.',
             ]);
     }
@@ -445,13 +444,13 @@ class UserControllerTest extends TestCase
 
     public function testLoginSuccess()
     {
-        $this->seed(UserSeeder::class);
+        $this->testRegistrationSuccess();
 
         $this->get('/login');
 
         $this->post('/login', [
             'nik' => '55000154',
-            'password' => 'rahasia',
+            'password' => '@Rahasia123',
         ])
             ->assertStatus(302)
             ->assertRedirectToRoute('home');
