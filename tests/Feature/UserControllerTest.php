@@ -59,6 +59,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -100,6 +101,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    // NIK
     public function testRegistrationNikDuplicate()
     {
         $this->seed(UserSeeder::class);
@@ -110,6 +112,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -130,6 +133,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -150,6 +154,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -163,6 +168,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    // PASSWORD
     public function testRegistrationPasswordInvalidLengthMin()
     {
         $data = [
@@ -171,6 +177,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -191,6 +198,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
@@ -213,6 +221,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -233,6 +242,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -253,6 +263,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -265,6 +276,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    // FULLNAME
     public function testRegistrationFullnameInvalidMinLength()
     {
         $data = [
@@ -273,6 +285,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -293,6 +306,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan Wibisono Pratama Pangestu Bumi Putra Tan Malaka',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -313,6 +327,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni_Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -333,6 +348,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'email_address' => 'doni.duaasattuu@gmail.com',
             'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
@@ -353,6 +369,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni-Darmawan',
             'department' => 'EI2',
             'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -363,6 +380,7 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    // DEPARTMENT
     public function testRegistrationDepartmentInvalid()
     {
         $data = [
@@ -370,7 +388,8 @@ class UserControllerTest extends TestCase
             'password' => 'Rahasia@1234',
             'fullname' => 'Doni Darmawan',
             'department' => 'EI11',
-            'phone_number' => '08983456945',            'email_address' => 'doni.duaasattuu@gmail.com',
+            'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -381,6 +400,93 @@ class UserControllerTest extends TestCase
             ]);
     }
 
+    public function testRegistrationDepartmentNull()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni Darmawan',
+            'department' => null,
+            'phone_number' => '08983456945',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this->post('/registration', $data)
+            ->assertStatus(302)
+            ->assertSessionHasErrors([
+                'department' => 'The department field is required.',
+            ]);
+    }
+
+    // EMAIL ADDRESS
+    public function testRegistrationEmailAddressNull()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
+            'email_address' => null,
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertSessionHasNoErrors([
+                'department' => 'The department field is required.',
+            ])
+            ->assertSeeText('Your account successfully registered.');
+    }
+
+    public function testRegistrationEmailAddressInvalidSuffix()
+    {
+        $this->get('/registration');
+
+        $data = [
+            'nik' => '55000154',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
+            'email_address' => 'doni.duaasattuu@yahoo.co.id',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertSeeText('The email address field must end with one of the following: @fajarpaper.com, @gmail.com.');
+    }
+
+    public function testRegistrationEmailAddressDuplicate()
+    {
+        $this->seed(UserSeeder::class);
+
+        $this->get('/registration');
+
+        $data = [
+            'nik' => '55000155',
+            'password' => 'Rahasia@1234',
+            'fullname' => 'Rizky Setiawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertSeeText('The email address has already been taken.');
+    }
+
+    // PHONE NUMBER
     public function testRegistrationPhoneNumberInvalidNumeric()
     {
         $data = [
@@ -389,6 +495,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => 'abcdefgh',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -407,6 +514,7 @@ class UserControllerTest extends TestCase
             'fullname' => 'Doni Darmawan',
             'department' => 'EI2',
             'phone_number' => '123456789',
+            'work_center' => 'PME21001',
             'registration_code' => env('REGISTRATION_CODE'),
         ];
 
@@ -595,6 +703,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'work_center' => 'PME21001',
                 'email_address' => 'doni_duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
@@ -614,6 +723,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'work_center' => 'PME21001',
                 'email_address' => 'doni_duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'OverridePassword123',
@@ -652,6 +762,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '0898',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
             ])
@@ -669,6 +780,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945081',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
             ])
@@ -686,6 +798,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => 'string',
+                'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
             ])
@@ -703,6 +816,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'work_center' => 'PME21001',
                 'email_address' => 'doni_duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => '',
@@ -722,6 +836,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945',
+                'work_center' => 'PME21001',
                 'email_address' => 'doni_duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@1234',

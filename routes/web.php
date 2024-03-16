@@ -94,12 +94,12 @@ Route::middleware('member')->group(function () {
 
     // TREND
     Route::get('/trends', [TrendController::class, 'trends']);
-    Route::post('/trends', [TrendController::class, 'getTrends']);
+    Route::post('/trends', [TrendController::class, 'getTrends'])->name('equipment-trends');
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipment-trend');
 
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);
-    Route::post('/report', [PdfController::class, 'generateReport'])->name('report');
+    Route::post('/report', [PdfController::class, 'generateDailyReport'])->name('report');
     // Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
     // Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
 

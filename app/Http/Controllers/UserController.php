@@ -78,8 +78,8 @@ class UserController extends Controller
             'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:50'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', 'unique:App\Models\User,email_address'],
-            'work_center' => ['nullable'],
             'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
+            'work_center' => ['nullable', 'size:8'],
             'registration_code' => ['required', new ValidRegistrationCode()],
         ]);
 
@@ -115,7 +115,7 @@ class UserController extends Controller
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(Auth::user())],
             'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
-            'work_center' => ['nullable'],
+            'work_center' => ['nullable', 'size:8'],
             'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
             'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
         ]);

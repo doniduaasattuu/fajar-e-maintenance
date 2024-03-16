@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertCount;
@@ -55,5 +56,12 @@ class OwnTest extends TestCase
 
         self::assertEquals(2, getFirstSlot($unique));
         self::assertEquals(17, getFirstSlot($normal));
+    }
+
+    public function testDate()
+    {
+        $date = Carbon::now()->addDays(-1)->format('d M Y');
+        echo $date;
+        self::assertTrue(true);
     }
 }

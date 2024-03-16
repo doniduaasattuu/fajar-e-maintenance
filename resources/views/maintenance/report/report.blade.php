@@ -22,7 +22,7 @@
 
             {{-- DATE --}}
             <div class="mb-3">
-                <x-input-label for="table" :value="__('Date')" />
+                <x-input-label for="date" :value="__('Date')" />
                 <x-input-date id="date" name="date" :value="old('date')" />
                 @if ($errors->first('date'))
                 <x-input-error :message="$errors->first('date')" />

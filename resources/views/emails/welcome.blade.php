@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <p>{{ $body }}</p>
+
 </body>
 
 </html>

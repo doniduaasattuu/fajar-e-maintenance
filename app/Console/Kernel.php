@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Jobs\SendEmailJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,7 +14,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // $schedule->command('send-email-report')
+        //     ->everyFiveSeconds();
+
+        // $schedule->call(function () {
+        //     DB::table('email_recipients')->insert([
+        //         'email' => fake()->email,
+        //         'name' => fake()->name,
+        //     ]);
+        // })->everyTenSeconds();
+
         // $schedule->command('inspire')->hourly();
+
+        // $schedule
+        //     ->command("inspire")
+        //     ->everyFiveSeconds()
+        //     ->sendOutputTo("scheduler-output.log");
+
+        $schedule->job(new SendEmailJob())->everyFiveMinutes();
     }
 
     /**
@@ -20,7 +39,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

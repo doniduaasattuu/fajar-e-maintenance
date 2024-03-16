@@ -4,7 +4,7 @@
 
         <x-h2>{{ __($title) }}</x-h2>
 
-        <form action="/trends" method="POST">
+        <form action="{{ route('equipment-trends') }}" method="POST">
             @csrf
 
             {{-- EQUIPMENT --}}

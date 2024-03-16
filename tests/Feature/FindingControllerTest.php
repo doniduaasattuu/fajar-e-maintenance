@@ -290,7 +290,7 @@ class FindingControllerTest extends TestCase
             ->assertSeeText('New finding')
             ->assertSeeText('Findings')
             ->assertSeeText('Area')
-            ->assertSeeText('Department *')
+            ->assertDontSeeText('Department *')
             ->assertSeeText('Status *')
             ->assertSee('Open')
             ->assertSee('Closed')
@@ -309,6 +309,33 @@ class FindingControllerTest extends TestCase
 
         Auth::attempt([
             'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/finding-registration')
+            ->assertSeeText('New finding')
+            ->assertSeeText('Findings')
+            ->assertSeeText('Area')
+            ->assertDontSeeText('Department *')
+            ->assertSeeText('Status *')
+            ->assertSee('Open')
+            ->assertSee('Closed')
+            ->assertSeeText('Equipment')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Notif')
+            ->assertSeeText('Description *')
+            ->assertSeeText('Image')
+            ->assertSeeText('Maximum upload file size: 5 MB.')
+            ->assertSeeText('Submit');
+    }
+
+    public function testGetFindingRegistrationSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class, FindingSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
             'password' => 'rahasia'
         ]);
 

@@ -17,7 +17,7 @@
     @endisset
 
     {{-- ALERT HIDDEN INPUT --}}
-    <x-alert-hidden :hidden='["id", "reporter"]' />
+    <x-alert-hidden :hidden='["id", "reporter", "department"]' />
 
     {{-- FORM --}}
     <section>
@@ -38,11 +38,15 @@
             </div>
 
             {{-- DEPARTMENT --}}
+            @if (Auth::user()->isSuperAdmin())
             <div class="mb-3">
                 <x-input-label for="department" :value="__('Department *')" />
-                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' :choose="''" />
+                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' />
                 <x-input-error :message="$errors->first('department')" />
             </div>
+            @else
+            <input type="hidden" id="department" name="department" value="{{ $finding->department ?? Auth::user()->department ?? '' }}">
+            @endif
 
             {{-- STATUS --}}
             <div class="mb-3">

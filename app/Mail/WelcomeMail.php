@@ -2,9 +2,11 @@
 
 namespace App\Mail;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -16,7 +18,7 @@ class WelcomeMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $body, private string $title)
+    public function __construct(private string $title)
     {
         //
     }
@@ -40,7 +42,6 @@ class WelcomeMail extends Mailable
             view: 'emails.welcome',
             with: [
                 'title' => $this->title,
-                'body' => $this->body,
             ],
         );
     }
@@ -52,6 +53,11 @@ class WelcomeMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $date = Carbon::now()->format('d M Y');
+
+        return [
+            Attachment::fromStorageDisk('public', "/pdf/Motor daily report - $date.pdf"),
+            Attachment::fromStorageDisk('public', "/pdf/Trafo daily report - $date.pdf"),
+        ];
     }
 }

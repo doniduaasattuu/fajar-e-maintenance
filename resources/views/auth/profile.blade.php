@@ -114,7 +114,7 @@
 
             {{-- EMAIL --}}
             <div class="mb-3">
-                <x-input-label for="email_address" :value="__('Email')" />
+                <x-input-label for="email_address" :value="__('Email address')" />
                 <x-input-email id="email_address" name="email_address" :value="old('email_address', Auth::user()->email_address)" />
                 <x-input-error :message="$errors->first('email_address')" />
             </div>
