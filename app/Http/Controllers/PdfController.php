@@ -101,8 +101,8 @@ class PdfController extends Controller
         $pdf->WriteHTML($html);
         $file = $pdf->Output($title . '.pdf', 'S');
 
-        // $pdf_files = new Filesystem();
-        // $pdf_files->cleanDirectory('storage/pdf');
+        $pdf_files = new Filesystem();
+        $pdf_files->cleanDirectory('storage/pdf');
 
         $path = "pdf/$title.pdf";
         Storage::disk('public')->put($path, $file);
@@ -218,31 +218,25 @@ class PdfController extends Controller
         }
     }
 
-    // public function downloadPdf(string $table)
-    // {
-    //     switch ($table) {
-    //         case 'motors':
+    public function streamPdf()
+    {
+        $date = Carbon::now()->addDays(-1)->toDateString();
+        $date_after = Carbon::now()->toDateString();
 
-    //             $view = 'maintenance.report.motor';
-    //             $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
-    //             $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
-    //             $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
+        $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
+        $view = 'maintenance.report.motor';
+        $records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
 
-    //             return $this->checkRecordsIsEmpty($motor_records, $html, $title, $input);
-    //             break;
+        $html = response()->view($view, [
+            'title' => $title,
+            'records' => $records,
+            'selected_columns' => $this->motor_selected_columns,
+        ]);
 
-    //         case 'trafos':
+        $pdf = new Mpdf(config('pdf'));
+        $pdf->WriteHTML($html);
+        $file = $pdf->Output('D');
 
-    //             $view = 'maintenance.report.trafo';
-    //             $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
-    //             $title = 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
-    //             $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
-
-    //             return $this->checkRecordsIsEmpty($trafo_records, $html, $title, $input);
-    //             break;
-
-    //         default:
-    //             return back()->withErrors($validator)->withInput();
-    //     }
-    // }
+        return $file;
+    }
 }

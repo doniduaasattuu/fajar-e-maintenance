@@ -79,14 +79,6 @@
                             </div>
                             @break
 
-                            @case('funcloc')
-                            <div class="row">
-                                <div class="col-5 mb-0 fw-semibold pe-1">{{ ucfirst($column) }}</div>
-                                :
-                                <div class="col-6 mb-0 text-truncate ps-1">{{ str_replace('FP-01-', '', $finding->$column) }}</div>
-                            </div>
-                            @break
-
                             @default
                             <div class="row">
                                 <div class="col-5 mb-0 fw-semibold pe-1">{{ ucfirst($column == 'created_at' ? 'Date' : (($column == 'notification') ? 'Notif' : $column)) }}</div>

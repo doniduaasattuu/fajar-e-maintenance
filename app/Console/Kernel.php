@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         //     ->everyFiveSeconds()
         //     ->sendOutputTo("scheduler-output.log");
 
-        $schedule->job(new SendEmailJob())->everyFiveMinutes();
+        $schedule->job(new SendEmailJob())->everyTwoMinutes();
     }
 
     /**

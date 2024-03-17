@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Http\Controllers\PdfController;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,9 +19,8 @@ class ReportMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(private string $title)
+    public function __construct(private PdfController $pdfController)
     {
-        //
     }
 
     /**
@@ -41,7 +41,7 @@ class ReportMail extends Mailable
         return new Content(
             view: 'emails.report',
             with: [
-                'title' => $this->title,
+                'title' => "EI Preventive Daily Report",
             ]
         );
     }
@@ -53,11 +53,18 @@ class ReportMail extends Mailable
      */
     public function attachments(): array
     {
-        $date = Carbon::now()->addDays(-1)->format('d M Y');
+        // $date = Carbon::now()->addDays(-1)->format('d M Y');
+
+        // return [
+        //     Attachment::fromStorageDisk('public', "/pdf/Motor daily report - $date.pdf"),
+        //     Attachment::fromStorageDisk('public', "/pdf/Trafo daily report - $date.pdf"),
+        // ];
+
+        $pdf = $this->pdfController->streamPdf();
 
         return [
-            Attachment::fromStorageDisk('public', "/pdf/Motor daily report - $date.pdf"),
-            Attachment::fromStorageDisk('public', "/pdf/Trafo daily report - $date.pdf"),
+            Attachment::fromData(fn () => $this->pdf, 'Report.pdf')
+                ->withMime('application/pdf'),
         ];
     }
 }

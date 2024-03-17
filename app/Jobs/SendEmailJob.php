@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Http\Controllers\PdfController;
 use App\Mail\ReportMail;
 use App\Mail\WelcomeMail;
 use App\Models\EmailRecipient;
@@ -30,11 +31,10 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $title = "EI Preventive Daily Report";
         $recipients = EmailRecipient::all();
 
         foreach ($recipients as $recipient) {
-            Mail::to($recipient->email)->send(new ReportMail($title));
+            Mail::to($recipient->email)->send(new ReportMail(new PdfController()));
         }
     }
 }

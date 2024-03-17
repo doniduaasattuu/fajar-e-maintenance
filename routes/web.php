@@ -154,4 +154,6 @@ Route::middleware('member')->group(function () {
         // EMAIL
         Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
     });
+
+    Route::get('/stream', [PdfController::class, 'streamPdf']);
 });
