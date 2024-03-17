@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class ReportMail extends Mailable
 {
@@ -53,18 +54,20 @@ class ReportMail extends Mailable
      */
     public function attachments(): array
     {
-        // $date = Carbon::now()->addDays(-1)->format('d M Y');
+        $yesterday = Carbon::now()->addDays(-1)->format('d M Y');
+        $tables = ['Motor', 'Trafo'];
 
+        $this->pdfController->storeDailyReport($yesterday, $tables);
+
+        $attachments = [];
+
+        foreach ($tables as $table) {
+            array_push($attachments, Attachment::fromStorageDisk('public', "daily-report/$yesterday/$table daily report - $yesterday.pdf")->withMime('application/pdf'));
+        }
+
+        return $attachments;
         // return [
-        //     Attachment::fromStorageDisk('public', "/pdf/Motor daily report - $date.pdf"),
-        //     Attachment::fromStorageDisk('public', "/pdf/Trafo daily report - $date.pdf"),
+        //     Attachment::fromStorageDisk('public', "daily-report/$yesterday/Trafo daily report - $yesterday.pdf")->withMime('application/pdf'),
         // ];
-
-        $pdf = $this->pdfController->streamPdf();
-
-        return [
-            Attachment::fromData(fn () => $this->pdf, 'Report.pdf')
-                ->withMime('application/pdf'),
-        ];
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Mpdf\Mpdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,8 +101,6 @@ Route::middleware('member')->group(function () {
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);
     Route::post('/report', [PdfController::class, 'generateDailyReport'])->name('report');
-    // Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
-    // Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
 
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
@@ -155,5 +154,17 @@ Route::middleware('member')->group(function () {
         Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
     });
 
-    Route::get('/stream', [PdfController::class, 'streamPdf']);
+    Route::get('/store/{yesterday}', [PdfController::class, 'storeMotorTrafoDailyReport']);
+
+    // Route::get('/stream', [PdfController::class, 'streamPdf']);
+
+    // Route::get('/hello', function () {
+    //     $mpdf = new Mpdf(config('pdf'));
+    //     $mpdf->WriteHTML('hello world');
+    //     $mpdf->OutputFile(__DIR__ . '/file.pdf');
+    // });
+
+    // Route::get('/daily', function () {
+    //     return response()->download('storage/daily-report/15 Mar 2024/Motor daily report - 15 Mar 2024.pdf');
+    // });
 });

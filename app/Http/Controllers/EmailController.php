@@ -34,11 +34,11 @@ class EmailController extends Controller
                     ->where('email', 'like', "%{$search}%");
             })
             ->orderBy('created_at', 'DESC')
-            ->paginate(5)
+            ->paginate()
             ->withQueryString();
 
         return view('auth.recipients', [
-            'title' => 'Email Recipients',
+            'title' => 'Email recipients',
             'paginator' => $paginator,
         ]);
     }

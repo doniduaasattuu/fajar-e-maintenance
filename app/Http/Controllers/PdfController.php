@@ -218,25 +218,41 @@ class PdfController extends Controller
         }
     }
 
-    public function streamPdf()
+    public function storeDailyReport(string $yesterday, array $tables)
     {
-        $date = Carbon::now()->addDays(-1)->toDateString();
-        $date_after = Carbon::now()->toDateString();
+        $date_after = Carbon::create($yesterday)->addDay()->format('d M Y');
 
-        $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
-        $view = 'maintenance.report.motor';
-        $records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
+        foreach ($tables as $table) {
 
-        $html = response()->view($view, [
-            'title' => $title,
-            'records' => $records,
-            'selected_columns' => $this->motor_selected_columns,
-        ]);
+            switch ($table) {
+                case 'Motor':
+                    $title = "$table daily report - $yesterday";
+                    $records = $this->query(MotorRecord::class, $yesterday, $date_after, $this->motor_selected_columns);
+                    $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->motor_selected_columns);
 
-        $pdf = new Mpdf(config('pdf'));
-        $pdf->WriteHTML($html);
-        $file = $pdf->Output('D');
+                    $pdf = new Mpdf(config('pdf'));
+                    $pdf->WriteHTML($html);
+                    $file = $pdf->Output($title . '.pdf', 'S');
 
-        return $file;
+                    Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+                    break;
+
+                case 'Trafo':
+                    $title = "$table daily report - $yesterday";
+                    $records = $this->query(TrafoRecord::class, $yesterday, $date_after, $this->trafo_selected_columns);
+                    $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->trafo_selected_columns);
+
+                    $pdf = new Mpdf(config('pdf'));
+                    $pdf->WriteHTML($html);
+                    $file = $pdf->Output($title . '.pdf', 'S');
+
+                    Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+                    break;
+
+                default:
+                    throw new Exception('error saving daily report tables');
+                    break;
+            }
+        }
     }
 }

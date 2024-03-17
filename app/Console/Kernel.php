@@ -14,24 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('send-email-report')
-        //     ->everyFiveSeconds();
-
-        // $schedule->call(function () {
-        //     DB::table('email_recipients')->insert([
-        //         'email' => fake()->email,
-        //         'name' => fake()->name,
-        //     ]);
-        // })->everyTenSeconds();
-
-        // $schedule->command('inspire')->hourly();
-
-        // $schedule
-        //     ->command("inspire")
-        //     ->everyFiveSeconds()
-        //     ->sendOutputTo("scheduler-output.log");
-
-        $schedule->job(new SendEmailJob())->everyTwoMinutes();
+        $schedule->job(new SendEmailJob())->dailyAt('07:00');
     }
 
     /**
