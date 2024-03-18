@@ -107,7 +107,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $request->merge(['current_nik' => Auth::user()->nik]);
+        $request->mergeIfMissing(['current_nik' => Auth::user()->nik]);
 
         $validated = $request->validate([
             'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', 'exists:App\Models\User,nik'],
@@ -198,6 +198,25 @@ class UserController extends Controller
 
             Log::info('user deleted success', ['deleted' => $user->fullname, 'superadmin' => Auth::user()->fullname]);
             return back()->with('modal', new Modal('[200] Success', 'User successfully deleted.'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
+        }
+    }
+
+    public function userEdit(string $nik)
+    {
+
+        if ($nik == Auth::user()->nik) {
+            return redirect('/profile');
+        }
+
+        $user = User::query()->find($nik);
+
+        if (!is_null($user)) {
+            return view('auth.edit', [
+                'title' => 'Update profile',
+                'user' => $user
+            ]);
         } else {
             return back()->with('modal', new Modal('[404] Not found', 'User not found.'));
         }

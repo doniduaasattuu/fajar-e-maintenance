@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
 use App\Data\Modal;
 use App\Models\Trafo;
 use App\Services\FunclocService;
@@ -77,7 +78,7 @@ class TrafoController extends Controller
         $trafo = Trafo::query()->with(['TrafoDetail'])->find($id);
 
         if (is_null($trafo)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The trafo $id is unregistered."));
         }
 
         return response()->view('maintenance.trafo.form', [
@@ -135,11 +136,11 @@ class TrafoController extends Controller
                 $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
             } catch (Exception $error) {
                 Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+                return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
             }
 
             Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
-            return redirect()->back()->with('alert', ['message' => 'The trafo successfully updated.', 'variant' => 'alert-success']);
+            return back()->with('alert', new Alert('The trafo successfully updated.', 'alert-success'));
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -202,11 +203,11 @@ class TrafoController extends Controller
                 $this->trafoDetailService->register($validated_trafo_details);
             } catch (Exception $error) {
                 Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
+                return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
             }
 
             Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
-            return redirect()->back()->with('alert', ['message' => 'The trafo successfully registered.', 'variant' => 'alert-success']);
+            return back()->with('alert', new Alert('The trafo successfully registered.', 'alert-success', 'trafo-edit/' .  $validated_trafo['id']));
         } else {
             return redirect()->back()->withErrors($validator)->withInput();
         }

@@ -129,7 +129,7 @@
             {{-- WORK CENTER --}}
             <div class="mb-3">
                 <x-input-label for="work_center" :value="__('Work center')" />
-                <x-input-text id="work_center" type="text" name="work_center" :value="old('work_center', Auth::user()->work_center)" onkeypress="return JS.toupper(event)" />
+                <x-input-text id="work_center" type="text" name="work_center" :value="old('work_center', Auth::user()->work_center)" oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('work_center')" />
             </div>
 
