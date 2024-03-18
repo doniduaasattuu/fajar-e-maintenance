@@ -27,7 +27,7 @@
             {{-- FILTER SEARCH --}}
             <div class="col pe-1">
                 <x-input-label for="search" :value="__('Search')" />
-                <x-input-text id="search" type="text" name="search" placeholder="Equipment"></x-input-text>
+                <x-input-text id="search" type="text" name="search" placeholder="Equipment" oninput="return JS.toupper(this)" />
             </div>
             {{-- BY STATUS --}}
             <div class="col ps-1">

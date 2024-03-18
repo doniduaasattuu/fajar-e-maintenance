@@ -15,7 +15,7 @@ class OwnTest extends TestCase
         $unique = [1, 5, 8, 9, 11, 13, 14, 15, 16];
         $normal = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
-        function getSlot(array $unique)
+        function getSlot(array $unique): array
         {
             $slot = [];
             for ($i = 0; $i < count($unique); $i++) {
@@ -33,7 +33,9 @@ class OwnTest extends TestCase
         }
 
         assertCount(7, getSlot($unique));
+        self::assertEquals(2, getSlot($unique)[0]);
         assertCount(0, getSlot($normal));
+        self::assertEmpty(getSlot($normal));
     }
 
     public function testGetFirstUniqueId()
@@ -61,7 +63,6 @@ class OwnTest extends TestCase
     public function testDate()
     {
         $date = Carbon::now()->addDays(-1)->format('d M Y');
-        echo $date;
         self::assertTrue(true);
     }
 }

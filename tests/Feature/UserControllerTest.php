@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\EmailRecipientSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Support\Facades\Auth;
@@ -274,6 +275,49 @@ class UserControllerTest extends TestCase
             ->assertSessionHasErrors([
                 'password' => 'The password field must contain at least one symbol.',
             ]);
+    }
+
+    // WORK CENTER 
+    public function testRegistrationWorkCenterNull()
+    {
+        $data = [
+            'nik' => '55000154',
+            'password' => '@Rahasia123',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => null,
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertSeeText('Your account successfully registered.');
+    }
+
+    public function testRegistrationWorkCenterInvalidLength()
+    {
+        $this->get('/registration');
+
+        $data = [
+            'nik' => '55000154',
+            'password' => '@Rahasia123',
+            'fullname' => 'Doni Darmawan',
+            'department' => 'EI2',
+            'phone_number' => '08983456945',
+            'work_center' => 'PME21001',
+            'email_address' => 'doni.duaasattuu@gmail.com',
+            'work_center' => 'PM3',
+            'registration_code' => env('REGISTRATION_CODE'),
+        ];
+
+        $this
+            ->followingRedirects()
+            ->post('/registration', $data)
+            ->assertSeeText('The work center field must be 8 characters.');
     }
 
     // FULLNAME
@@ -692,6 +736,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Update');
     }
 
+    // UPDATE PROFILE
     public function testUpdateProfileSuccess()
     {
         $this->testGetProfile();
@@ -712,6 +757,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText('Your profile successfully updated.');
     }
 
+    // NIK UNMATCH
     public function testUpdateProfileNikOverride()
     {
         $this->testGetProfile();
@@ -730,6 +776,26 @@ class UserControllerTest extends TestCase
                 'new_password_confirmation' => 'OverridePassword123',
             ])
             ->assertSeeText('The nik field must match current nik.');
+    }
+
+    // DEPARTMENT
+    public function testUpdateProfileDepartmentNull()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => null,
+                'phone_number' => '08983456945',
+                'email_address' => 'doni_duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertSeeText('The department field is required.');
     }
 
     public function testUpdateProfileDepartmentInvalid()
@@ -751,6 +817,90 @@ class UserControllerTest extends TestCase
             ->assertSeeText('The selected department is invalid.');
     }
 
+    // EMAIL
+    public function testUpdateProfileEmailNullFailed()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => null,
+                'work_center' => 'PME21001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertDontSeeText('The selected email address is required.')
+            ->assertSeeText('Your profile successfully updated.');
+    }
+
+    public function testUpdateProfileEmailInvalidSuffix()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => 'doni@yahoo.co.id',
+                'work_center' => 'PME21001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertSeeText('The email address field must end with one of the following: @fajarpaper.com, @gmail.com.')
+            ->assertDontSeeText('Your profile successfully updated.');
+    }
+
+    public function testUpdateProfileEmailDuplicate()
+    {
+        $this->testGetProfile();
+        $this->seed(EmailRecipientSeeder::class);
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => 'jiyantoro@gmail.com',
+                'work_center' => 'PME21001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertSeeText('The email address has already been taken.')
+            ->assertDontSeeText('Your profile successfully updated.');
+    }
+
+    public function testUpdateProfileEmailNoChanges()
+    {
+        $this->testGetProfile();
+        $this->seed(EmailRecipientSeeder::class);
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => 'doni.duaasattuu@gmail.com',
+                'work_center' => 'PME21001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertDontSeeText('The email address has already been taken.')
+            ->assertSeeText('Your profile successfully updated.');
+    }
+
+    // PHONE NUMBER
     public function testUpdateProfilePhoneNumberInvalidMin()
     {
         $this->testGetProfile();
@@ -762,6 +912,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '0898',
+                'email_address' => 'doni.duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
@@ -780,6 +931,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => '08983456945081',
+                'email_address' => 'doni.duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
@@ -798,6 +950,7 @@ class UserControllerTest extends TestCase
                 'fullname' => 'Doni Darmawan',
                 'department' => 'EI2',
                 'phone_number' => 'string',
+                'email_address' => 'doni.duaasattuu@gmail.com',
                 'work_center' => 'PME21001',
                 'new_password' => 'Rahasia@123',
                 'new_password_confirmation' => 'Rahasia@123',
@@ -805,6 +958,48 @@ class UserControllerTest extends TestCase
             ->assertSeeText('The phone number field must be a number.');
     }
 
+    // WORK CENTER
+    public function testUpdateProfileWorkCenterNull()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => 'doni.duaasattuu@gmail.com',
+                'work_center' => null,
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertDontSeeText('The work center field is required.')
+            ->assertSeeText('Your profile successfully updated.');
+    }
+
+    public function testUpdateProfileWorkCenterInvalidLength()
+    {
+        $this->testGetProfile();
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000154',
+                'fullname' => 'Doni Darmawan',
+                'department' => 'EI2',
+                'phone_number' => '08983456945',
+                'email_address' => 'doni.duaasattuu@gmail.com',
+                'work_center' => 'PME210001',
+                'new_password' => 'Rahasia@123',
+                'new_password_confirmation' => 'Rahasia@123',
+            ])
+            ->assertSeeText('The work center field must be 8 characters.')
+            ->assertDontSeeText('Your profile successfully updated.');
+    }
+
+    // PASSWORD
     public function testUpdateProfilePasswordMissing()
     {
         $this->testGetProfile();
