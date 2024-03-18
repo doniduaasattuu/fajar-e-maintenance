@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 use function PHPUnit\Framework\assertCount;
@@ -64,5 +65,11 @@ class OwnTest extends TestCase
     {
         $date = Carbon::now()->addDays(-1)->format('d M Y');
         self::assertTrue(true);
+    }
+
+    public function testSaveError()
+    {
+        Storage::disk('public')->put('error-log.txt', '$error->getMessage()');
+        dd(Storage::disk('public')->get('error-log.txt'));
     }
 }

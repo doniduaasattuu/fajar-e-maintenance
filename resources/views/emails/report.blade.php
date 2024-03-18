@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ex tempore ea consequatur delectus deserunt possimus.
+
 </body>
 
 </html>

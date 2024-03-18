@@ -107,31 +107,54 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $request->mergeIfMissing(['current_nik' => Auth::user()->nik]);
+        if (Auth::user()->isSuperAdmin()) {
+            $validated = $request->validate([
+                'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
+                'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
+                'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
+                'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(User::query()->find($request->input('nik')))],
+                'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
+                'work_center' => ['nullable', 'size:8'],
+            ]);
 
-        $validated = $request->validate([
-            'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', 'exists:App\Models\User,nik'],
-            'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
-            'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
-            'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(Auth::user())],
-            'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
-            'work_center' => ['nullable', 'size:8'],
-            'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-            'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
-        ]);
+            $user = User::find($validated['nik']);
+            $user->nik = $validated['nik'];
+            $user->fullname = ucwords(strtolower($validated['fullname']));
+            $user->department = $validated['department'];
+            $user->email_address = $validated['email_address'];
+            $user->phone_number = $validated['phone_number'];
+            $user->work_center = $validated['work_center'];
+            $user->update();
 
-        $user = User::find($validated['nik']);
-        $user->nik = $validated['nik'];
-        $user->password = bcrypt($validated['new_password']);
-        $user->fullname = ucwords(strtolower($validated['fullname']));
-        $user->department = $validated['department'];
-        $user->email_address = $validated['email_address'];
-        $user->phone_number = $validated['phone_number'];
-        $user->work_center = $validated['work_center'];
-        $user->update();
+            Log::info('user updated', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname, 'super admin' => Auth::user()->fullname]);
+            return back()->with('alert', new Alert('User profile successfully updated.', 'alert-success'));
+        } else {
+            $request->mergeIfMissing(['current_nik' => Auth::user()->nik]);
 
-        Log::info('user updated', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
-        return back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
+            $validated = $request->validate([
+                'nik' => ['required', 'digits:8', 'numeric', 'same:current_nik', 'exists:App\Models\User,nik'],
+                'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],
+                'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
+                'email_address' => ['nullable', 'email', 'ends_with:@fajarpaper.com,@gmail.com', Rule::unique('users')->ignore(Auth::user())],
+                'phone_number' => ['nullable', 'numeric', 'digits_between:10,13'],
+                'work_center' => ['nullable', 'size:8'],
+                'new_password' => ['required',  Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+                'new_password_confirmation' => ['required', 'same:new_password', Password::min('8')->letters()->mixedCase()->numbers()->symbols()],
+            ]);
+
+            $user = User::find($validated['nik']);
+            $user->nik = $validated['nik'];
+            $user->password = bcrypt($validated['new_password']);
+            $user->fullname = ucwords(strtolower($validated['fullname']));
+            $user->department = $validated['department'];
+            $user->email_address = $validated['email_address'];
+            $user->phone_number = $validated['phone_number'];
+            $user->work_center = $validated['work_center'];
+            $user->update();
+
+            Log::info('user updated', ['nik' => Auth::user()->nik, 'user' => Auth::user()->fullname]);
+            return back()->with('alert', new Alert('Your profile successfully updated.', 'alert-success'));
+        }
     }
 
     public function users(Request $request)
@@ -203,7 +226,7 @@ class UserController extends Controller
         }
     }
 
-    public function userEdit(string $nik)
+    public function userEditBySuperAdmin(string $nik)
     {
 
         if ($nik == Auth::user()->nik) {
@@ -213,8 +236,7 @@ class UserController extends Controller
         $user = User::query()->find($nik);
 
         if (!is_null($user)) {
-            return view('auth.edit', [
-                'title' => 'Update profile',
+            return view('auth.form', [
                 'user' => $user
             ]);
         } else {

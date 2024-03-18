@@ -218,41 +218,43 @@ class PdfController extends Controller
         }
     }
 
-    public function storeDailyReport(string $yesterday, array $tables)
+    public function saveYesterdaysDailyReport(string $yesterday, array $tables)
     {
-        $date_after = Carbon::create($yesterday)->addDay()->format('d M Y');
+        throw new Exception('error saving daily report tables');
+        // $date_after = Carbon::create($yesterday)->addDay()->format('d M Y');
 
-        foreach ($tables as $table) {
+        // foreach ($tables as $table) {
 
-            switch ($table) {
-                case 'Motor':
-                    $title = "$table daily report - $yesterday";
-                    $records = $this->query(MotorRecord::class, $yesterday, $date_after, $this->motor_selected_columns);
-                    $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->motor_selected_columns);
 
-                    $pdf = new Mpdf(config('pdf'));
-                    $pdf->WriteHTML($html);
-                    $file = $pdf->Output($title . '.pdf', 'S');
+        // switch ($table) {
+        //     case 'Motor':
+        //         $title = "$table daily report - $yesterday";
+        //         $records = $this->query(MotorRecord::class, $yesterday, $date_after, $this->motor_selected_columns);
+        //         $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->motor_selected_columns);
 
-                    Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
-                    break;
+        //         $pdf = new Mpdf(config('pdf'));
+        //         $pdf->WriteHTML($html);
+        //         $file = $pdf->Output($title . '.pdf', 'S');
 
-                case 'Trafo':
-                    $title = "$table daily report - $yesterday";
-                    $records = $this->query(TrafoRecord::class, $yesterday, $date_after, $this->trafo_selected_columns);
-                    $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->trafo_selected_columns);
+        //         Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+        //         break;
 
-                    $pdf = new Mpdf(config('pdf'));
-                    $pdf->WriteHTML($html);
-                    $file = $pdf->Output($title . '.pdf', 'S');
+        //     case 'Trafo':
+        //         $title = "$table daily report - $yesterday";
+        //         $records = $this->query(TrafoRecord::class, $yesterday, $date_after, $this->trafo_selected_columns);
+        //         $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->trafo_selected_columns);
 
-                    Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
-                    break;
+        //         $pdf = new Mpdf(config('pdf'));
+        //         $pdf->WriteHTML($html);
+        //         $file = $pdf->Output($title . '.pdf', 'S');
 
-                default:
-                    throw new Exception('error saving daily report tables');
-                    break;
-            }
-        }
+        //         Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+        //         break;
+
+        //     default:
+        //         throw new Exception('error saving daily report tables');
+        //         break;
+        // }
+        // }
     }
 }

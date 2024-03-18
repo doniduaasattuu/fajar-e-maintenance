@@ -4,6 +4,7 @@ namespace App\Mail;
 
 use App\Http\Controllers\PdfController;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -30,7 +31,7 @@ class ReportMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Testing daily email reporting',
+            subject: 'Daily report',
         );
     }
 
@@ -57,17 +58,23 @@ class ReportMail extends Mailable
         $yesterday = Carbon::now()->addDays(-1)->format('d M Y');
         $tables = ['Motor', 'Trafo'];
 
-        $this->pdfController->storeDailyReport($yesterday, $tables);
+        try {
+            $this->pdfController->saveYesterdaysDailyReport($yesterday, $tables);
 
-        $attachments = [];
+            $attachments = [];
 
-        foreach ($tables as $table) {
-            array_push($attachments, Attachment::fromStorageDisk('public', "daily-report/$yesterday/$table daily report - $yesterday.pdf")->withMime('application/pdf'));
+            foreach ($tables as $table) {
+                array_push($attachments, Attachment::fromStorageDisk('public', "daily-report/$yesterday/$table daily report - $yesterday.pdf")->withMime('application/pdf'));
+            }
+
+            return $attachments;
+        } catch (Exception $error) {
+            Storage::disk('public')->put('error-log.txt', $error->getMessage());
+            $error = Storage::disk('public')->get('error-log.txt');
+
+            return [
+                $error
+            ];
         }
-
-        return $attachments;
-        // return [
-        //     Attachment::fromStorageDisk('public', "daily-report/$yesterday/Trafo daily report - $yesterday.pdf")->withMime('application/pdf'),
-        // ];
     }
 }

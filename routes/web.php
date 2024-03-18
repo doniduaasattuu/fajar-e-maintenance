@@ -143,7 +143,7 @@ Route::middleware('member')->group(function () {
     Route::middleware('role:superadmin')->group(function () {
         Route::get('/user-reset/{nik}', [UserController::class, 'userReset'])->name('user-reset');
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete'])->name('user-delete');
-        Route::get('/user-edit/{nik}', [UserController::class, 'userEdit'])->name('user-edit');
+        Route::get('/user-edit/{nik}', [UserController::class, 'userEditBySuperAdmin'])->name('user-edit');
         // ADMIN
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
         Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);

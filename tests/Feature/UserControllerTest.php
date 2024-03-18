@@ -1361,4 +1361,621 @@ class UserControllerTest extends TestCase
         $user = $user->fresh();
         self::assertTrue(Hash::check('@Fajarpaper123', $user->password));
     }
+
+    // EDIT USER BY SUPER ADMIN
+    public function testGetEditUserGuest()
+    {
+        $this->seed(UserRoleSeeder::class);
+
+        $this
+            ->get('/user-edit/55000093')
+            ->assertRedirectToRoute('login');
+    }
+
+    public function testGetEditUserEmployee()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000135',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/user-edit/55000093')
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testGetEditUserAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->get('/user-edit/55000093')
+            ->assertSeeText('[403] Forbidden')
+            ->assertSeeText('You are not allowed to perform this operation!');
+    }
+
+    public function testGetEditUserSuperAdmin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019')
+            ->assertSeeText('Update user')
+            ->assertSeeText('Users')
+            ->assertSeeText('Jiyantoro')
+            ->assertSeeText('NIK')
+            ->assertSee('31100019')
+            ->assertSeeText('Fullname')
+            ->assertSee('Jiyantoro')
+            ->assertSeeText('Department')
+            ->assertSee('EI7')
+            ->assertSeeText('Email address')
+            ->assertSee('jiyantoro@gmail.com')
+            ->assertSeeText('Phone number')
+            ->assertSee('08991544689')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Update')
+            ->assertDontSeeText('Password');
+    }
+
+    public function testGetEditUserSuperAdminSameNik()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/55000154')
+            ->assertRedirectToRoute('profile');
+    }
+
+    // SAVE USER PROFILE
+    public function testPostEditUserSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('User profile successfully updated.');
+    }
+
+    // NIK
+    public function testPostEditUserNikNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => null,
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The nik field is required.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserNikInvalidMinLength()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '5500012',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The nik field must be 8 digits.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserNikNotFound()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000123',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The selected nik is invalid.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserNikWrong()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '55000092',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The email address has already been taken.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // FULLNAME
+    public function testPostEditUserFullnameNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => null,
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The fullname field is required.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserFullnameDuplicateSuccess()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Saiful Bahri',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserFullnameMinLength()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Sai',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The fullname field must be at least 6 characters.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // DEPARTMENT
+    public function testPostEditUserDepartmentNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => null,
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The department field is required.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserDepartmentInvalid()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI9',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The selected department is invalid.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // EMAIL ADDRESS
+    public function testPostEditUserEmailAddressNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => null,
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertDontSeeText('The email address is required.')
+            ->assertSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserEmailAddressDuplicate()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'saiful@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The email address has already been taken.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserEmailAddressInvalidSuffix()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@yahoo.co.id',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The email address field must end with one of the following: @fajarpaper.com, @gmail.com.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // PHONE NUMBER
+    public function testPostEditUserPhoneNumberNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => null,
+                'work_center' => 'PME21001',
+            ])
+            ->assertDontSeeText('The phone number field is required.')
+            ->assertSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserPhoneNumberInvalidType()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '_62',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The phone number field must be a number.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserPhoneNumberInvalidLengthMin()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '085',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The phone number field must be between 10 and 13 digits.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserPhoneNumberInvalidLengthMax()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08567891201201',
+                'work_center' => 'PME21001',
+            ])
+            ->assertSeeText('The phone number field must be between 10 and 13 digits.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // WORK CENTER
+    public function testPostEditUserWorkCenterNull()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => null,
+            ])
+            ->assertDontSeeText('The work center field is required.')
+            ->assertSeeText('User profile successfully updated.');
+    }
+
+    public function testPostEditUserWorkCenterInvalid()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME',
+            ])
+            ->assertSeeText('The work center field must be 8 characters.')
+            ->assertDontSeeText('User profile successfully updated.');
+    }
+
+    // PASSWORD OVERRIDE
+    public function testPostEditUserPasswordOverride()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia'
+        ]);
+
+        $user = Auth::user();
+        self::assertTrue(Hash::check('rahasia', $user->password));
+
+        $this
+            ->get('/user-edit/31100019');
+
+        $this
+            ->followingRedirects()
+            ->post('/update-profile', [
+                'nik' => '31100019',
+                'fullname' => 'Jiyantoro',
+                'department' => 'EI7',
+                'email_address' => 'jiyantoro@gmail.com',
+                'phone_number' => '08991544689',
+                'work_center' => 'PME21001',
+                'password' => bcrypt('changed'),
+            ])
+            ->assertSeeText('User profile successfully updated.');
+
+        self::assertFalse(Hash::check('changed', $user->password));
+        self::assertTrue(Hash::check('rahasia', $user->password));
+    }
 }

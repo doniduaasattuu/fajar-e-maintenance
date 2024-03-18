@@ -3,7 +3,7 @@
     @inject('utility', 'App\Services\Utility')
 
     <div class="mb-4">
-        <x-h3>{{ __('Update profile') }}</x-h3>
+        <x-breadcumb-table :title='"Update user"' :table='"Users"' :action='$user->fullname'></x-breadcumb-table>
 
         @if(session("alert"))
         <x-alert :alert='session("alert")'></x-alert>
@@ -54,7 +54,7 @@
                 <x-input-error :message="$errors->first('work_center')" />
             </div>
 
-            {{-- PASSWORD --}}
+            <!-- {{-- PASSWORD --}}
             <div class="mb-3">
                 <x-input-label for="new_password" :value="__('New password')" />
                 <x-input-text id="new_password" type="password" name="new_password" />
@@ -66,7 +66,7 @@
                 <x-input-label for="new_password_confirmation" :value="__('New password confirmation')" />
                 <x-input-text id="new_password_confirmation" type="password" name="new_password_confirmation" />
                 <x-input-error :message="$errors->first('new_password_confirmation')" />
-            </div>
+            </div> -->
 
             {{-- BUTTON --}}
             <div class="mb-3">
