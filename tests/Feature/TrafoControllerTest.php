@@ -276,7 +276,7 @@ class TrafoControllerTest extends TestCase
             ->assertSee('id=Fajar-TrafoList4')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
-            ->assertSee('disabled');
+            ->assertSee('readonly');
     }
 
     public function testGetTrafoDetailsUregisteredAdmin()

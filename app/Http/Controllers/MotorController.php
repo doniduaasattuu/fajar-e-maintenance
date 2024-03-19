@@ -89,6 +89,7 @@ class MotorController extends Controller
 
     public function motorUpdate(Request $request)
     {
+        $request->mergeIfMissing(['motor_detail' => $request->input('id')]);
 
         $rules = [
             'id' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
@@ -134,9 +135,9 @@ class MotorController extends Controller
             'mounting' => ['nullable', Rule::in($this->getEnumValue('motor', 'mounting'))],
         ];
 
-        $validator = Validator($request->all(), $rules);
-        $validated_motor = $validator->safe()->except($this->getColumns('motor_details', ['id']));
-        $validated_motor_details = $validator->safe()->merge(['motor_detail' => $validated_motor['id']])->except($this->getColumns('motors'));
+        $validator = Validator::make($request->all(), $rules);
+        $validated_motor = $validator->safe()->only($this->getColumns('motors'));
+        $validated_motor_details = $validator->safe()->only($this->getColumns('motor_details', ['id']));
 
         DB::beginTransaction();
         try {

@@ -334,7 +334,7 @@ class MotorControllerTest extends TestCase
             ->assertSee('id=Fajar-MotorList56')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
-            ->assertSee('disabled');
+            ->assertSee('readonly');
     }
 
     public function testGetMotorDetailsUregisteredAdmin()

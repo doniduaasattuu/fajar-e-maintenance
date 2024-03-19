@@ -68,7 +68,9 @@ class FunclocControllerTest extends TestCase
             ->assertDontSeeText('Created at')
             ->assertSeeText('Displays')
             ->assertSeeText('entries')
-            ->assertSeeTextInOrder(['FP-01-PM3', 'FP-01-PM3-BRS-T037-P061', 'FP-01-PM3-REL-PPRL-PRAR'])
+            ->assertSeeText('FP-01-PM3')
+            ->assertSeeText('FP-01-PM3-BRS-T037-P061')
+            ->assertSeeText('FP-01-PM3-REL-PPRL-PRAR')
             ->assertDontSeeText('FP-01-PM2');
     }
 

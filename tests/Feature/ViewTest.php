@@ -144,7 +144,6 @@ class ViewTest extends TestCase
             ])
             ->assertDontSee('/motor-update')
             ->assertSee('readonly')
-            ->assertSee('disabled')
             ->assertSee('EMO001092')
             ->assertSee('FP-01-SP5-OCC-FR01')
             ->assertSee('SP5.M-21/M')
@@ -185,7 +184,6 @@ class ViewTest extends TestCase
             ])
             ->assertSee('Motor details')
             ->assertSee('readonly')
-            ->assertSee('disabled')
             ->assertSee('10010923')
             ->assertSee('56')
             ->assertSee('id=Fajar-MotorList56');

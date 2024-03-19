@@ -55,40 +55,4 @@
         </form>
     </section>
 
-    <script>
-        let current_funcloc = '';
-        let current_sort_field = '';
-
-        const status = document.getElementById('status');
-        const funcloc = document.getElementById('funcloc');
-        const sort_field = document.getElementById('sort_field');
-
-        function disabledFunclocAndSortField(status, funcloc, sort_field) {
-            if (status.value == 'Repaired' || status.value == 'Available') {
-                // IF STATUS VALUE IS NOT INSTALLED
-                if (funcloc.value.length > 0 || sort_field.value.length > 0) {
-                    current_funcloc = funcloc.value;
-                    current_sort_field = sort_field.value;
-                }
-
-                funcloc.setAttribute('disabled', true);
-                sort_field.setAttribute('disabled', true);
-
-                funcloc.value = '';
-                sort_field.value = '';
-            } else if (status.value == 'Installed') {
-                // IF STATUS VALUE IS INSTALLED
-                funcloc.value = current_funcloc;
-                sort_field.value = current_sort_field;
-
-                funcloc.removeAttribute('disabled');
-                sort_field.removeAttribute('disabled');
-            }
-        }
-
-        status.onchange = () => {
-            disabledFunclocAndSortField(status, funcloc, sort_field);
-        }
-    </script>
-
 </x-app-layout>
