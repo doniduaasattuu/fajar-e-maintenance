@@ -13,7 +13,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    @vite('resources/js/app.js')
+    @vite(env('APP_ENV') == 'production' ? secure_url('resources/js/app.js') : 'resources/js/app.js')
     <title>@yield('title', env('APP_NAME', 'Fajar E-Maintenance'))</title>
 </head>
 
