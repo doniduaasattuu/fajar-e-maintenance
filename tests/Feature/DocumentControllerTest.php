@@ -327,7 +327,7 @@ class DocumentControllerTest extends TestCase
             ])
             ->assertSeeText('The document successfully saved.');
 
-        $saved_attachment = Storage::disk('documents')->get($id . '.png');
+        $saved_attachment = public_path("/documents/{$id}.png");
         self::assertNotNull($saved_attachment);
     }
 
@@ -809,7 +809,7 @@ class DocumentControllerTest extends TestCase
             ])
             ->assertSeeText('The document successfully updated.');
 
-        $saved_attachment = Storage::disk('documents')->get('attachment.png');
+        $saved_attachment = public_path("/documents/attachment.png");
         self::assertNotNull($saved_attachment);
     }
 

@@ -1069,7 +1069,8 @@ class FindingControllerTest extends TestCase
             ])
             ->assertSeeText('The finding successfully updated.');
 
-        $image = Storage::disk('findings')->get($finding->image);
+        // $image = Storage::disk('findings')->get($finding->image);
+        $image = public_path("/findings/$finding->image");
         self::assertNotNull($image);
     }
 
