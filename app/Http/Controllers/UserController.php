@@ -107,7 +107,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        if (Auth::user()->isSuperAdmin()) {
+        if (Auth::user()->isSuperAdmin() && $request->input('nik') != Auth::user()->nik) {
             $validated = $request->validate([
                 'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
                 'fullname' => ['required', 'regex:/^[a-zA-Z\s]+$/u', 'min:6', 'max:25'],

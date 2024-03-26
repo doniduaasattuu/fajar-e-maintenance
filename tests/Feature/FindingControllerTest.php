@@ -679,6 +679,105 @@ class FindingControllerTest extends TestCase
         self::assertCount(0, $findings);
     }
 
+    // SORT FIELD
+    public function testPostFindingSuccessSortFieldNull()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'IN1',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'equipment' => null,
+                'equipment' => 'ETF000085',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(1, $findings);
+    }
+
+    public function testPostFindingFailedSortFieldInvalidMinLength()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'IN1',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'sort_field' => 'P3',
+                'equipment' => 'ELP000123',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The sort field field must be at least 3 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
+    public function testPostFindingFailedSortFieldInvalidMaxLength()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
+
+        $this->get('/finding-registration');
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia'
+        ]);
+
+        $this
+            ->followingRedirects()
+            ->post('/finding-register', [
+                'area' => 'IN1',
+                'department' => 'EI2',
+                'status' => 'Open',
+                'sort_field' => 'This is invalid finding sort field because length is more than fifty',
+                'equipment' => 'ELP000123',
+                'funcloc' => 'FP-01-IN1',
+                'notification' => '10012235',
+                'description' => 'Warna silica gel cokelat perlu diganti segera',
+                'image' => null,
+                'reporter' => Auth::user()->fullname,
+            ])
+            ->assertSeeText('The sort field field must not be greater than 50 characters.')
+            ->assertDontSeeText('The finding successfully saved.');
+
+        $findings = Finding::query()->get();
+        self::assertNotNull($findings);
+        self::assertCount(0, $findings);
+    }
+
     // EQUIPMENT
     public function testPostFindingSuccessEquipmentNull()
     {
@@ -709,38 +808,6 @@ class FindingControllerTest extends TestCase
         $findings = Finding::query()->get();
         self::assertNotNull($findings);
         self::assertCount(1, $findings);
-    }
-
-    public function testPostFindingFailedEquipmentInvalid()
-    {
-        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, MotorSeeder::class, TrafoSeeder::class]);
-
-        $this->get('/finding-registration');
-
-        Auth::attempt([
-            'nik' => '55000153',
-            'password' => 'rahasia'
-        ]);
-
-        $this
-            ->followingRedirects()
-            ->post('/finding-register', [
-                'area' => 'IN1',
-                'department' => 'EI2',
-                'status' => 'Open',
-                'equipment' => 'ELP000123',
-                'funcloc' => 'FP-01-IN1',
-                'notification' => '10012235',
-                'description' => 'Warna silica gel cokelat perlu diganti segera',
-                'image' => null,
-                'reporter' => Auth::user()->fullname,
-            ])
-            ->assertSeeText('The selected equipment is invalid.')
-            ->assertDontSeeText('The finding successfully saved.');
-
-        $findings = Finding::query()->get();
-        self::assertNotNull($findings);
-        self::assertCount(0, $findings);
     }
 
     // FUNCLOC

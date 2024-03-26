@@ -81,7 +81,7 @@
 
                             @default
                             <div class="row">
-                                <div class="col-5 mb-0 fw-semibold pe-1">{{ ucfirst($column == 'created_at' ? 'Date' : (($column == 'notification') ? 'Notif' : $column)) }}</div>
+                                <div class="col-5 mb-0 fw-semibold pe-1">{{ ucfirst($column == 'created_at' ? 'Date' : (($column == 'notification') ? 'Notif' : str_replace('_', ' ', $column) )) }}</div>
                                 :
                                 <div class="col-6 mb-0 text-truncate ps-1 @if ($finding->$column == 'Closed') text-success fw-semibold @endif">{{ $column == 'created_at' ? Carbon\Carbon::create($finding->$column)->format('d M Y') : $finding->$column }}</div>
                             </div>

@@ -55,6 +55,13 @@
                 <x-input-error :message="$errors->first('status')" />
             </div>
 
+            {{-- SORT FIELD --}}
+            <div class="mb-3">
+                <x-input-label for="sort_field" :value="__('Sort field')" />
+                <x-input-text id="sort_field" name="sort_field" :value='old("sort_field", $finding->sort_field ?? "")' oninput="return JS.toupper(this)" />
+                <x-input-error :message="$errors->first('sort_field')" />
+            </div>
+
             {{-- EQUIPMENT --}}
             <div class="mb-3">
                 <x-input-label for="equipment" :value="__('Equipment')" />
