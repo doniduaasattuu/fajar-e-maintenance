@@ -5,7 +5,7 @@ entity users {
   --
   * password VARCHAR(255)
   * fullname VARCHAR(50)
-  * department ENUM("EI1 ~ EI7");
+    department ENUM("EI1 ~ EI7");
     email_address VARCHAR(255)
     phone_number VARCHAR(15)
     work_center VARCHAR(25)
@@ -120,6 +120,7 @@ entity motor_records {
     vibration_nde_frame_value DECIMAL(4,2) 0.00
     vibration_nde_frame_desc ENUM(["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])   
     noise_nde ENUM(["Normal", "Abnormal"])
+    department VARCHAR(25)
   * nik VARCHAR(8)
     created_at TIMESTAMP NULL
     updated_at TIMESTAMP NULL
@@ -192,6 +193,7 @@ entity trafo_records {
     oil_leakage (["No leaks", "Leaks"])
     oil_level UNISIGNED TINYINT(3)
     blower_condition (["Good", "Not good"])
+    department VARCHAR(25)
   * nik VARCHAR(8)
     created_at TIMESTAMP NULL
     updated_at TIMESTAMP NULL

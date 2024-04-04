@@ -20,6 +20,8 @@ class TrafoRecordSeeder extends Seeder
 
         for ($i = 0; $i < $year; $i++) {
 
+            $user = $users[rand(0, sizeof($users) - 1)];
+
             $record1 = new TrafoRecord();
             $record1->id = uniqid();
             $record1->funcloc = "FP-01-IN1";
@@ -43,7 +45,8 @@ class TrafoRecordSeeder extends Seeder
             $record1->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
             $record1->oil_level = rand(70, 88);
             $record1->blower_condition = array(0 => 'Good', 1 => 'Not good')[rand(0, 1)];
-            $record1->nik = $users[rand(0, sizeof($users) - 1)]->nik;
+            $record1->department = $user->department;
+            $record1->nik = $user->nik;
             $record1->created_at = Carbon::now()->addMonths(- ($year - $i));
             $record1->save();
 
@@ -70,7 +73,8 @@ class TrafoRecordSeeder extends Seeder
             $record2->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
             $record2->oil_level = rand(70, 88);
             $record2->blower_condition = array(0 => 'Good', 1 => 'Not good')[rand(0, 1)];
-            $record2->nik = $users[rand(0, sizeof($users) - 1)]->nik;
+            $record2->department = $user->department;
+            $record2->nik = $user->nik;
             $record2->created_at = Carbon::now()->addMonths(- ($year - $i));
             $record2->save();
         }

@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\Storage;
 class PdfController extends Controller
 {
     private $motor_selected_columns = [
-        'motor',
+        // 'motor',
+        'sort_field',
         'funcloc',
         'motor_status',
         'number_of_greasing',
@@ -41,11 +42,12 @@ class PdfController extends Controller
         'noise_nde',
         'cleanliness',
         'nik',
-        'created_at'
+        // 'created_at'
     ];
 
     private $trafo_selected_columns = [
-        'trafo',
+        // 'trafo',
+        'sort_field',
         'funcloc',
         'trafo_status',
         'primary_current_phase_r',
@@ -64,7 +66,7 @@ class PdfController extends Controller
         'oil_level',
         'cleanliness',
         'nik',
-        'created_at'
+        // 'created_at'
     ];
 
     // DAILY RECORD PAGE
@@ -75,10 +77,16 @@ class PdfController extends Controller
         ]);
     }
 
-    public function query($model, string $date, string $date_after, $selected_columns)
+    public function query($model, string $date, string $date_after, $selected_columns, $department = null, $nik = null)
     {
         return $model::query()
             ->select($selected_columns)
+            ->when($department, function ($query, $department) {
+                $query->where('department', $department);
+            })
+            ->when($nik, function ($query, $nik) {
+                $query->where('nik', $nik);
+            })
             ->where('created_at', '>=', $date)
             ->where('created_at', '<', $date_after)
             ->get();
@@ -131,6 +139,9 @@ class PdfController extends Controller
     public function generateDailyReport(Request $request)
     {
 
+        $department = $request->input('department');
+        $nik = $request->input('nik');
+
         $data = [
             'table' =>  $request->input('table'),
             'date' => $request->input('date') ?? Carbon::today()->toDateString(),
@@ -158,7 +169,7 @@ class PdfController extends Controller
                     case 'motors':
 
                         $view = 'maintenance.report.motor';
-                        $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
+                        $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns, $department, $nik);
                         $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
 
@@ -168,7 +179,7 @@ class PdfController extends Controller
                     case 'trafos':
 
                         $view = 'maintenance.report.trafo';
-                        $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
+                        $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns, $department, $nik);
                         $title = 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
 

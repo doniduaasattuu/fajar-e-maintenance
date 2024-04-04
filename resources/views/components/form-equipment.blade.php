@@ -104,4 +104,8 @@
     status.onchange = () => {
         readonlyFunclocAndSortField(status, funcloc, sort_field);
     }
+
+    window.onload = () => {
+        readonlyFunclocAndSortField(status, funcloc, sort_field);
+    }
 </script>

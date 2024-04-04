@@ -41,6 +41,7 @@ class MotorRecord extends Model
         'vibration_nde_frame_value',
         'vibration_nde_frame_desc',
         'noise_nde',
+        'department',
         'nik',
     ];
 }

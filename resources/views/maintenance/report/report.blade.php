@@ -1,5 +1,7 @@
 <x-app-layout>
 
+    @inject('utility', 'App\Services\Utility')
+
     <div class="my-4 py-5 position-absolute top-50 start-50 translate-middle" style="min-width: 300px;">
 
         <x-h2>{{ __($title) }}</x-h2>
@@ -13,11 +15,33 @@
 
             {{-- EQUIPMENT TYPE --}}
             <div class="mb-3">
-                <x-input-label for="table" :value="__('Equipment')" />
+                <x-input-label for="table" :value="__('Equipment *')" />
                 <select id="table" name="table" class="form-select" aria-label="Default select example">
                     <option @selected(old('table')=='motors' ) value="motors">Motor</option>
                     <option @selected(old('table')=='trafos' ) value="trafos">Trafo</option>
                 </select>
+            </div>
+
+            {{-- DEPARTMENT --}}
+            <div class="mb-3">
+                <x-input-label for="department" :value="__('Department')" />
+                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value="old('department', Auth::user()->department ?? null)" :choose="''" />
+                <x-input-error :message="$errors->first('department')" />
+            </div>
+
+            {{-- CHECKED BY --}}
+            <div class="mb-3">
+                <x-input-label for="nik" :value="__('Checked by')" />
+                <select class="form-select" id="nik" name="nik">
+                    <option></option>
+                    @foreach ($utility->getExistUser() as $nik)
+                    <option class="department {{ App\Models\User::find($nik)->department }}" value="{{ $nik }}">{{ App\Models\User::find($nik)->department . ' - ' . App\Models\User::find($nik)->abbreviatedName }}</option>
+                    @endforeach
+                </select>
+                @if ($errors->first('nik'))
+                <x-input-error :message="$errors->first('nik')" />
+                @else
+                @endif
             </div>
 
             {{-- DATE --}}
@@ -44,7 +68,40 @@
                 </x-button-primary>
             </div>
         </form>
-
     </div>
+
+    <script>
+        const department = document.getElementById('department');
+        const departments = document.getElementsByClassName('department');
+        const nik = document.getElementById('nik');
+
+        function resetCheckedBy() {
+            nik.value = '';
+            for (let dept of departments) {
+                dept.classList.remove('d-none');
+            }
+        }
+
+        function doFilterCheckedBy() {
+            resetCheckedBy();
+
+            if (department.value != '') {
+
+                for (let dept of departments) {
+                    if (!dept.classList.contains(department.value)) {
+                        dept.classList.add('d-none');
+                    }
+                }
+            }
+        }
+
+        department.onchange = () => {
+            doFilterCheckedBy();
+        }
+
+        window.onload = () => {
+            doFilterCheckedBy();
+        }
+    </script>
 
 </x-app-layout>
