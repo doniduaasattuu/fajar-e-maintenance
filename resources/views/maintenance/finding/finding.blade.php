@@ -18,7 +18,7 @@
             {{-- BY DEPT --}}
             <div class="col pe-1">
                 <x-input-label for="dept" :value="__('Dept')" />
-                <x-input-select id="dept" name="dept" :options="$utility::getEnumValue('user', 'department')" :choose="''"></x-input-select>
+                <x-input-select id="dept" name="dept" :options="$utility::getEnumValue('user', 'department')" :choose="''" :disabled='!Auth::user()->isAdmin()' :value='!Auth::user()->isAdmin() ? Auth::user()->department : ""'></x-input-select>
                 </select>
             </div>
 

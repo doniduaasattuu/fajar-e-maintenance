@@ -43,6 +43,10 @@ class FindingController extends Controller
         $search = $request->query('search');
 
         $paginator = Finding::query()
+            ->when(!Auth::user()->isAdmin(), function ($query) {
+                $query
+                    ->where('department', '=', Auth::user()->department);
+            })
             ->when($dept, function ($query, $dept) {
                 $query
                     ->where('department', '=', $dept);
