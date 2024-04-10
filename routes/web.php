@@ -105,6 +105,16 @@ Route::middleware('member')->group(function () {
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
+    // PUB_SHARE
+    Route::get('/pub_share', function () {
+        return view(
+            'maintenance.pub_share.pub_share',
+            [
+                'title' => 'PubShare'
+            ],
+        );
+    });
+
     Route::middleware('role:admin')->group(function () {
         // USERS
         Route::get('/users', [UserController::class, 'users'])->name('users');
