@@ -7,6 +7,7 @@ use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PubShareController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrafoController;
@@ -106,14 +107,10 @@ Route::middleware('member')->group(function () {
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
     // PUB_SHARE
-    Route::get('/pub_share', function () {
-        return view(
-            'maintenance.pub_share.pub_share',
-            [
-                'title' => 'PubShare'
-            ],
-        );
-    });
+    Route::get('/pub_share', [PubShareController::class, 'pubShare']);
+    Route::post('/pub_share', [PubShareController::class, 'newFile']);
+    Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
+    Route::get('/pub_share/{id}/download', [PubShareController::class, 'downloadFile']);
 
     Route::middleware('role:admin')->group(function () {
         // USERS
