@@ -85,7 +85,6 @@
                 @endforeach
             </tbody>
         </table>
-
     </section>
 
     {{-- PAGINATION --}}

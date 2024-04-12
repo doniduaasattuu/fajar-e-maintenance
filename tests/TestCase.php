@@ -13,6 +13,7 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        DB::delete('delete from pub_shares');
         DB::delete('delete from email_recipients');
         DB::delete('delete from documents');
         DB::delete('delete from findings');
