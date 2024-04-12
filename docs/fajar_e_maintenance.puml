@@ -233,6 +233,7 @@ entity pub_share {
   * id VARCHAR(255) <<PK>>
   --
   * title VARCHAR(255)
+  * size VARCHAR(255)
   * nik VARCHAR(8) <<FK>>
   * attachment VARCHAR(255)
     created_at TIMESTAMP NULL
@@ -247,7 +248,7 @@ entity email_recipients {
     updated_at TIMESTAMP NULL
 }
  
-users ||--|| pub_share : Have
+users ||--|{ pub_share : Have
 users ||--|| email_recipients : Subscribe
 users }|--|| user_role : Have
 roles }|--|| user_role : Have

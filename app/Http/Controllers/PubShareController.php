@@ -12,15 +12,17 @@ class PubShareController extends Controller
 {
     public function pubShare()
     {
+        $this->authorize('viewAny', PubShare::class);
+
         $files = PubShare::query()
             ->where('nik', Auth::user()->nik)
             ->orderBy('created_at', 'DESC')
-            ->get(['id', 'title', 'attachment']);
+            ->get(['id', 'title', 'size', 'attachment']);
 
         return view(
             'maintenance.pub_share.pub_share',
             [
-                'title' => 'PubShare',
+                'title' => 'Pub Share',
                 'files' => $files,
             ],
         );
@@ -28,10 +30,11 @@ class PubShareController extends Controller
 
     public function newFile(Request $request)
     {
-        $nik = Auth::user()->nik;
+        $this->authorize('create', PubShare::class);
 
+        $nik = Auth::user()->nik;
         $validated = $request->validate([
-            'file' => ['required'],
+            'file' => ['required', 'max:40000'],
             'title' => ['nullable', 'min:3', 'max:30'],
         ]);
 
@@ -39,6 +42,7 @@ class PubShareController extends Controller
 
         if (!is_null($attachment) && $attachment->isValid()) {
 
+            $sizeInMb = round(($attachment->getSize() / 1000000), 2);
             $name = explode('.', $attachment->getClientOriginalName())[0];
             $extension = strtolower($attachment->getClientOriginalExtension());
             $title = $name . '.' . $extension;
@@ -50,6 +54,7 @@ class PubShareController extends Controller
             $file = new PubShare();
             $file->id = uniqid();
             $file->title = $title;
+            $file->size = $sizeInMb . ' MB';
             $file->nik = Auth::user()->nik;
             $file->attachment = $title;
             $result = $file->save();
@@ -64,12 +69,17 @@ class PubShareController extends Controller
 
     public function deleteFile(string $id)
     {
+
         $nik = Auth::user()->nik;
         $file = PubShare::query()->find($id);
 
+        $this->authorize('delete', $file);
+
         if ($file != null) {
-            Storage::disk('public')->delete("pub_share/$nik/$file->attachment");
+
+            Storage::disk('public')->move("pub_share/$nik/$file->attachment", "pub_share/$nik/deleted/$file->attachment");
             $file->delete();
+
             return back()->with('alert', new Alert('Successfully deleted.', 'alert-success'));
         } else {
             return back()->with('alert', new Alert('File not found.', 'alert-info'));
@@ -80,6 +90,8 @@ class PubShareController extends Controller
     {
         $nik = Auth::user()->nik;
         $file = PubShare::query()->find($id);
+
+        $this->authorize('view', $file);
 
         if ($file != null) {
 

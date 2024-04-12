@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('pub_shares')->delete();
         DB::table('email_recipients')->delete();
         DB::table('documents')->delete();
         DB::table('findings')->delete();

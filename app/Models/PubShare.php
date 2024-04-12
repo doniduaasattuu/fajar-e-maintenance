@@ -16,6 +16,7 @@ class PubShare extends Model
     protected $fillable = [
         'id',
         'title',
+        'size',
         'nik',
         'attachment',
     ];

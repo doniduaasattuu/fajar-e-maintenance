@@ -106,13 +106,13 @@ Route::middleware('member')->group(function () {
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
-    // PUB_SHARE
-    Route::get('/pub_share', [PubShareController::class, 'pubShare']);
-    Route::post('/pub_share', [PubShareController::class, 'newFile']);
-    Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
-    Route::get('/pub_share/{id}/download', [PubShareController::class, 'downloadFile']);
-
     Route::middleware('role:admin')->group(function () {
+        // PUB_SHARE
+        Route::get('/pub-share', [PubShareController::class, 'pubShare']);
+        Route::post('/pub-share', [PubShareController::class, 'newFile']);
+        Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
+        Route::get('/pub-share/{id}/download', [PubShareController::class, 'downloadFile']);
+
         // USERS
         Route::get('/users', [UserController::class, 'users'])->name('users');
 

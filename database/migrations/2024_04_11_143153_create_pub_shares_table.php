@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pub_shares', function (Blueprint $table) {
             $table->string('id')->primary()->nullable(false);
             $table->string('title')->nullable(false);
+            $table->string('size')->nullable(false);
             $table->string('nik', 8)->nullable(false);
             $table->string('attachment')->nullable(false);
             $table->timestamps();
