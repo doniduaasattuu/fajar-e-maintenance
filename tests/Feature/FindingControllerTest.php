@@ -10,10 +10,7 @@ use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
-
-use function PHPUnit\Framework\assertTrue;
 
 class FindingControllerTest extends TestCase
 {
