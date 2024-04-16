@@ -56,10 +56,6 @@ Route::middleware('member')->group(function () {
     // MOTOR & TRAFO
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm'])->name('checkingForm');
 
-    // FORMS
-    // Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
-    // Route::post("/populating-forms", [HomeController::class, 'populating']);
-
     // DOCUMENTS
     Route::get('/documents', [DocumentController::class, 'documents']);
     Route::get('/documents/{attachment}', [DocumentController::class, 'renderDocument']);
@@ -70,8 +66,8 @@ Route::middleware('member')->group(function () {
 
     // TABLES
     Route::get('/funclocs/{page?}/{filter?}', [FunclocController::class, 'funclocs'])->name('funclocs');
-    Route::get('/motors/{page?}/{filter_status?}/{filter?}', [MotorController::class, 'motors'])->name('motors');
-    Route::get('/trafos/{page?}', [TrafoController::class, 'trafos'])->name('trafos');
+    Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
+    Route::get('/trafos', [TrafoController::class, 'trafos'])->name('trafos');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
     Route::get('/trafo-details/{id}', [TrafoController::class, 'trafoDetails'])->name('trafo-details');
 
@@ -163,16 +159,4 @@ Route::middleware('member')->group(function () {
     });
 
     Route::get('/store/{yesterday}', [PdfController::class, 'storeMotorTrafoDailyReport']);
-
-    // Route::get('/stream', [PdfController::class, 'streamPdf']);
-
-    // Route::get('/hello', function () {
-    //     $mpdf = new Mpdf(config('pdf'));
-    //     $mpdf->WriteHTML('hello world');
-    //     $mpdf->OutputFile(__DIR__ . '/file.pdf');
-    // });
-
-    // Route::get('/daily', function () {
-    //     return response()->download('storage/daily-report/15 Mar 2024/Motor daily report - 15 Mar 2024.pdf');
-    // });
 });

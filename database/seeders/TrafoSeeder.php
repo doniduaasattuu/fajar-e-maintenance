@@ -124,7 +124,7 @@ class TrafoSeeder extends Seeder
         $trafo09->funcloc = 'FP-01-CFB-CSD-ESPR';
         $trafo09->sort_field = 'TRAFO ESP BOILER 3 NO.2';
         $trafo09->description = null;
-        $trafo09->material_number = 'TRAFO ST';
+        $trafo09->material_number = null;
         $trafo09->unique_id = '11';
         $trafo09->qr_code_link = 'id=Fajar-TrafoList11';
         $trafo09->created_at = Carbon::now();
@@ -137,7 +137,7 @@ class TrafoSeeder extends Seeder
         $trafo10->funcloc = 'FP-01-CFB-CSD-ESPR';
         $trafo10->sort_field = 'TRAFO ESP BOILER 3 NO.3';
         $trafo10->description = null;
-        $trafo10->material_number = 'TRAFO ST';
+        $trafo10->material_number = null;
         $trafo10->unique_id = '12';
         $trafo10->qr_code_link = 'id=Fajar-TrafoList12';
         $trafo10->created_at = Carbon::now();
@@ -150,7 +150,7 @@ class TrafoSeeder extends Seeder
         $trafo11->funcloc = 'FP-01-CFB-CSD-ESPR';
         $trafo11->sort_field = 'TRAFO ESP BOILER 5 NO.1';
         $trafo11->description = null;
-        $trafo11->material_number = 'TRAFO ST';
+        $trafo11->material_number = null;
         $trafo11->unique_id = '13';
         $trafo11->qr_code_link = 'id=Fajar-TrafoList13';
         $trafo11->created_at = Carbon::now();
@@ -163,7 +163,7 @@ class TrafoSeeder extends Seeder
         $trafo12->funcloc = 'FP-01-GT3-BO5-CNSY-ESPR';
         $trafo12->sort_field = 'TRAFO ESP BOILER 5 NO.2';
         $trafo12->description = null;
-        $trafo12->material_number = 'TRAFO ST';
+        $trafo12->material_number = null;
         $trafo12->unique_id = '14';
         $trafo12->qr_code_link = 'id=Fajar-TrafoList14';
         $trafo12->created_at = Carbon::now();
@@ -176,7 +176,7 @@ class TrafoSeeder extends Seeder
         $trafo13->funcloc = 'FP-01-GT3-BO5-CNSY-ESPR';
         $trafo13->sort_field = 'TRAFO ESP BOILER 5 NO.3';
         $trafo13->description = null;
-        $trafo13->material_number = 'TRAFO ST';
+        $trafo13->material_number = null;
         $trafo13->unique_id = '15';
         $trafo13->qr_code_link = 'id=Fajar-TrafoList15';
         $trafo13->created_at = Carbon::now();
@@ -189,7 +189,7 @@ class TrafoSeeder extends Seeder
         $trafo14->funcloc = 'FP-01-GT3-BO5-CNSY-ESPR';
         $trafo14->sort_field = 'TRAFO ESP BOILER 6 NO.1';
         $trafo14->description = null;
-        $trafo14->material_number = 'TRAFO ST';
+        $trafo14->material_number = null;
         $trafo14->unique_id = '16';
         $trafo14->qr_code_link = 'id=Fajar-TrafoList16';
         $trafo14->created_at = Carbon::now();
@@ -202,7 +202,7 @@ class TrafoSeeder extends Seeder
         $trafo15->funcloc = 'FP-01-GT3-BO6-CNSY-ESPR';
         $trafo15->sort_field = 'TRAFO ESP BOILER 6 NO.2';
         $trafo15->description = null;
-        $trafo15->material_number = 'TRAFO ST';
+        $trafo15->material_number = null;
         $trafo15->unique_id = '17';
         $trafo15->qr_code_link = 'id=Fajar-TrafoList17';
         $trafo15->created_at = Carbon::now();
@@ -215,7 +215,7 @@ class TrafoSeeder extends Seeder
         $trafo16->funcloc = 'FP-01-GT3-BO6-CNSY-ESPR';
         $trafo16->sort_field = 'TRAFO ESP BOILER 6 NO.3';
         $trafo16->description = null;
-        $trafo16->material_number = 'TRAFO ST';
+        $trafo16->material_number = null;
         $trafo16->unique_id = '18';
         $trafo16->qr_code_link = 'id=Fajar-TrafoList18';
         $trafo16->created_at = Carbon::now();
@@ -228,7 +228,7 @@ class TrafoSeeder extends Seeder
         $trafo17->funcloc = 'FP-01-GT3-TRB-TRF1';
         $trafo17->sort_field = 'TR START/STANBY';
         $trafo17->description = null;
-        $trafo17->material_number = 'TR START';
+        $trafo17->material_number = null;
         $trafo17->unique_id = '20';
         $trafo17->qr_code_link = 'id=Fajar-TrafoList20';
         $trafo17->created_at = Carbon::now();
@@ -241,7 +241,7 @@ class TrafoSeeder extends Seeder
         $trafo18->funcloc = 'FP-01-GT3-TRB-TRF1';
         $trafo18->sort_field = 'TR AUXILIARY';
         $trafo18->description = null;
-        $trafo18->material_number = 'TR AUXIL';
+        $trafo18->material_number = null;
         $trafo18->unique_id = '21';
         $trafo18->qr_code_link = 'id=Fajar-TrafoList21';
         $trafo18->created_at = Carbon::now();
@@ -254,7 +254,7 @@ class TrafoSeeder extends Seeder
         $trafo19->funcloc = 'FP-01-GT3-BO6-CNSY-ESPR';
         $trafo19->sort_field = 'TR GT3 STEP-UP ';
         $trafo19->description = null;
-        $trafo19->material_number = 'TR GT3 S';
+        $trafo19->material_number = null;
         $trafo19->unique_id = '19';
         $trafo19->qr_code_link = 'id=Fajar-TrafoList19';
         $trafo19->created_at = Carbon::now();
@@ -267,7 +267,7 @@ class TrafoSeeder extends Seeder
         $trafo20->funcloc = 'FP-01-GT3-TRB-TRF1';
         $trafo20->sort_field = 'TR AUX MV-LV #1';
         $trafo20->description = null;
-        $trafo20->material_number = 'TR AUX M';
+        $trafo20->material_number = null;
         $trafo20->unique_id = '22';
         $trafo20->qr_code_link = 'id=Fajar-TrafoList22';
         $trafo20->created_at = Carbon::now();
@@ -280,7 +280,7 @@ class TrafoSeeder extends Seeder
         $trafo21->funcloc = 'FP-01-GT3-TRB-TRF1';
         $trafo21->sort_field = 'TR AUX MV-LV #2';
         $trafo21->description = null;
-        $trafo21->material_number = 'TR AUX M';
+        $trafo21->material_number = null;
         $trafo21->unique_id = '23';
         $trafo21->qr_code_link = 'id=Fajar-TrafoList23';
         $trafo21->created_at = Carbon::now();
@@ -319,7 +319,7 @@ class TrafoSeeder extends Seeder
         $trafo24->funcloc = 'FP-01-GT3-TRB-TRF1';
         $trafo24->sort_field = 'INCI # 1 (New)';
         $trafo24->description = null;
-        $trafo24->material_number = 'INCI # 1';
+        $trafo24->material_number = null;
         $trafo24->unique_id = '24';
         $trafo24->qr_code_link = 'id=Fajar-TrafoList24';
         $trafo24->created_at = Carbon::now();
@@ -332,7 +332,7 @@ class TrafoSeeder extends Seeder
         $trafo25->funcloc = 'FP-01-IN1';
         $trafo25->sort_field = 'WT-1';
         $trafo25->description = null;
-        $trafo25->material_number = 'WT-1';
+        $trafo25->material_number = null;
         $trafo25->unique_id = '25';
         $trafo25->qr_code_link = 'id=Fajar-TrafoList25';
         $trafo25->created_at = Carbon::now();
@@ -345,7 +345,7 @@ class TrafoSeeder extends Seeder
         $trafo26->funcloc = 'FP-01-IN1';
         $trafo26->sort_field = 'TRAFO MV CELL';
         $trafo26->description = null;
-        $trafo26->material_number = 'TRAFO MV';
+        $trafo26->material_number = null;
         $trafo26->unique_id = '26';
         $trafo26->qr_code_link = 'id=Fajar-TrafoList26';
         $trafo26->created_at = Carbon::now();

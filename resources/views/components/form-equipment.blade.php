@@ -106,6 +106,12 @@
     }
 
     window.onload = () => {
-        readonlyFunclocAndSortField(status, funcloc, sort_field);
+        if (status.value != 'Installed') {
+            funcloc.setAttribute('readonly', true);
+            sort_field.setAttribute('readonly', true);
+
+            funcloc.value = '';
+            sort_field.value = '';
+        }
     }
 </script>

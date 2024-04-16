@@ -33,28 +33,66 @@ class TrafoController extends Controller
         $this->trafoDetailService = $trafoDetailService;
     }
 
+    // public function trafos(Request $request)
+    // {
+    //     $search = $request->query('search');
+    //     $status = $request->query('status');
+
+    //     $paginator = Trafo::query()
+    //         ->when($search, function ($query, $search) {
+    //             $query
+    //                 ->where('id', 'LIKE', "%{$search}%");
+    //         })
+    //         ->when($status, function ($query, $status) {
+    //             $query
+    //                 ->where('status', '=', $status);
+    //         })
+    //         ->orderBy('created_at', 'DESC')
+    //         ->paginate(1000)
+    //         ->withQueryString();
+
+    //     return view('maintenance.trafo.trafo', [
+    //         'title' => 'Trafos',
+    //         'paginator' => $paginator,
+    //     ]);
+    // }
+
     public function trafos(Request $request)
     {
         $search = $request->query('search');
         $status = $request->query('status');
+        $cursor = $request->query('cursor');
+        $json = $request->query('json');
 
+        $total = count(Trafo::all('id'));
         $paginator = Trafo::query()
             ->when($search, function ($query, $search) {
                 $query
-                    ->where('id', 'LIKE', "%{$search}%");
+                    ->orWhere(function ($builder) use ($search) {
+                        $builder
+                            ->orWhere('id', 'LIKE', "%{$search}%")
+                            ->orWhere('funcloc', 'LIKE', "%{$search}%")
+                            ->orWhere('unique_id', 'LIKE', "%{$search}%")
+                            ->orWhere('sort_field', 'LIKE', "%{$search}%");
+                    });
             })
             ->when($status, function ($query, $status) {
                 $query
                     ->where('status', '=', $status);
             })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(1000)
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 30, cursor: $cursor)
             ->withQueryString();
 
-        return view('maintenance.trafo.trafo', [
-            'title' => 'Trafos',
-            'paginator' => $paginator,
-        ]);
+        if ($json) {
+            return response()->json($paginator);
+        } else {
+            return view('maintenance.trafo.trafo', [
+                'title' => 'Trafos',
+                'paginator' => $paginator,
+                'total' => $total,
+            ]);
+        }
     }
 
     public function trafoEdit(string $id)
