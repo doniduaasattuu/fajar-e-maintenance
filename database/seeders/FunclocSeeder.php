@@ -542,5 +542,11 @@ class FunclocSeeder extends Seeder
         $funcloc88->sort_field = 'PM3';
         $funcloc88->created_at = Carbon::now();
         $funcloc88->save();
+
+        $funcloc89 = new Funcloc();
+        $funcloc89->id = 'FP-01-SP7-OCC-RF03';
+        $funcloc89->sort_field = 'M.2.36/M';
+        $funcloc89->created_at = Carbon::now();
+        $funcloc89->save();
     }
 }

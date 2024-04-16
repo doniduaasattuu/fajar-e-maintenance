@@ -34,6 +34,7 @@
             <x-alert :alert='new App\Data\Alert("All fields below can be blank.", "alert-info")' :button_close='true' />
 
             @isset($trafoDetail)
+            <x-input-number-text type="hidden" id="trafo_detail" name="trafo_detail" :value='old("trafo_detail", $trafoDetail->trafo_detail ?? $trafo->id ?? "" )' :disabled='!Auth::user()->isAdmin()' />
             <x-trafo.trafo-detail :trafoDetail='$trafoDetail' :utility='$utility' :trafo='$trafo' />
             @else
             <x-trafo.trafo-detail :utility='$utility' />

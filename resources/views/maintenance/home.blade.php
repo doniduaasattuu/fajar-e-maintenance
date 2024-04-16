@@ -49,7 +49,7 @@
                 <path d="M237.46713,172.73761c-7.72461,.73964-13.04395,11.17796-11.88174,23.32008,.39774,4.85674,1.95276,9.54749,4.53497,13.67993l1.48889,13.74216-.22806,.06839-3.74228,65.15799c-.87012,15.15002,5.12704,30.0369,16.68127,39.8746,6.87335,5.85223,14.20575,8.81528,18.92081,1.42099,7.82382-12.26947-2.31027-62.84671-8.96533-91.60161l-2.58023-30.72778c1.75278-4.54852,2.3905-9.45065,1.85977-14.2961-1.16016-12.13803-8.36346-21.37819-16.08804-20.63866h-.00003v0Z" fill="#ffb6b6" />
             </svg>
         </div>
-        <div>
+        <div class="mb-2">
             <a href="/scanner">
                 <button class="mt-4 d-block mx-auto btn btn-primary text-white">
                     <svg class="mb-1 me-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
@@ -69,5 +69,6 @@
                 Search
             </button>
         </div>
+        <div class="mx-auto text-center fs-6 text-secondary">&copy; 2023</div>
     </div>
 </x-app-layout>

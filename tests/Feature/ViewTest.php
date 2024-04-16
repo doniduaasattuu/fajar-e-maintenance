@@ -108,7 +108,9 @@ class ViewTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
         $user = User::find('55000153');
-        $paginator = DB::table('motors')->paginate(perPage: 10, page: 1);
+        $paginator = DB::table('motors')
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 10, cursor: 1);
 
         $this
             ->actingAs($user)
@@ -116,6 +118,7 @@ class ViewTest extends TestCase
             ->view('maintenance.motor.motor', [
                 'title' => 'Motors',
                 'paginator' => $paginator,
+                'total' => 8236
             ])
             ->assertSeeText('Motors')
             ->assertSeeText('New motor')
@@ -125,7 +128,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries');
     }
 
@@ -194,7 +197,9 @@ class ViewTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
         $user = User::find('55000153');
-        $paginator = DB::table('trafos')->paginate(perPage: 10, page: 1);
+        $paginator = DB::table('trafos')
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 10, cursor: 1);
 
         $this
             ->actingAs($user)
@@ -202,6 +207,7 @@ class ViewTest extends TestCase
             ->view('maintenance.trafo.trafo', [
                 'title' => 'Trafos',
                 'paginator' => $paginator,
+                'total' => 27
             ])
             ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
@@ -211,7 +217,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries')
             ->assertSeeText('ETF000006');
     }
