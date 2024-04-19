@@ -2,7 +2,7 @@
 
     @inject('utility', 'App\Services\Utility')
 
-    <x-modal-confirm></x-modal-confirm>
+    <x-modal-confirm />
 
     <section class="mb-4">
         <x-h3>{{ $title }}</x-h3>

@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('issues')->delete();
         DB::table('pub_shares')->delete();
         DB::table('email_recipients')->delete();
         DB::table('documents')->delete();
@@ -44,6 +45,7 @@ class DatabaseSeeder extends Seeder
             DocumentSeeder::class,
             DailyRecordSeeder::class,
             EmailRecipientSeeder::class,
+            IssueSeeder::class,
         ]);
     }
 }
