@@ -5,6 +5,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PubShareController;
@@ -78,6 +79,12 @@ Route::middleware('member')->group(function () {
     Route::get('/finding-edit/{id}', [FindingController::class, 'findingEdit']);
     Route::post('/finding-update', [FindingController::class, 'findingUpdate']);
     Route::get('/finding-delete/{id}', [FindingController::class, 'findingDelete']);
+
+    // ISSUES
+    Route::get('/issues', [IssueController::class, 'issues'])->name('issues');
+    Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
+    Route::post('/issue-register', [IssueController::class, 'issueRegister']);
+
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');

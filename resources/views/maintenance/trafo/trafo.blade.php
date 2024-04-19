@@ -115,31 +115,31 @@
         }
 
         document.body.onscroll = () => {
-            loadData();
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                loadData();
+            }
         }
 
         function loadData() {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                setTimeout(() => {
-                    if (nextPage) {
-                        getNextPageJSON(nextPage)
-                            .then((cursor) => {
+            setTimeout(() => {
+                if (nextPage) {
+                    getNextPageJSON(nextPage)
+                        .then((cursor) => {
 
-                                display_count.textContent = Number(display_count.textContent) + cursor.data.length;
+                            display_count.textContent = Number(display_count.textContent) + cursor.data.length;
 
-                                for (let trafo of cursor.data) {
-                                    addtrafoRow(trafo);
-                                }
-                                nextPage = cursor.next_page_url;
-                            })
-                            .finally(() => {
-                                if (nextPage == null) {
-                                    button_load.classList.add('d-none');
-                                }
-                            })
-                    }
-                }, 500);
-            }
+                            for (let trafo of cursor.data) {
+                                addtrafoRow(trafo);
+                            }
+                            nextPage = cursor.next_page_url;
+                        })
+                        .finally(() => {
+                            if (nextPage == null) {
+                                button_load.classList.add('d-none');
+                            }
+                        })
+                }
+            }, 500);
         }
 
         function addtrafoRow(trafo) {
