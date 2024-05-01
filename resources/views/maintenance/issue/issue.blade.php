@@ -2,7 +2,7 @@
 
     @inject('utility', 'App\Services\Utility')
     @php
-    $skipped = ['id', 'status', 'department', 'created_at', 'updated_at'];
+    $skipped = ['id', 'department', 'created_at', 'updated_at'];
     @endphp
 
     <x-modal-confirm />
@@ -40,7 +40,6 @@
                 <thead>
                     <tr>
                         <th style="width: 30px; line-height: 30px;">#</th>
-                        <th style="width: 30px; line-height: 30px">Status</th>
                         @foreach ($utility::getColumns('issues', $skipped) as $column)
                         <th style="line-height: 30px">{{ ucfirst(str_replace('_' , ' ', $column)) }}</th>
                         @endforeach
@@ -50,7 +49,6 @@
                     @foreach ($issues as $issue)
                     <tr class="table-row">
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $issue->status }}</td>
                         @foreach ($utility::getColumns('issues', $skipped) as $column)
 
                         @if ($column == 'issued_date' || $column == 'target_date' )
@@ -80,5 +78,19 @@
             </table>
         </div>
     </section>
+
+    <script type="module">
+        let status = document.getElementById("status");
+        let search = document.getElementById("search");
+
+        JS.fillInputFilterFromUrlSearchParams(status, search)
+
+        function doFilter() {
+            JS.filter(status, search);
+        }
+
+        status.onchange = JS.debounce(doFilter, 0);
+        search.oninput = JS.debounce(doFilter, 300);
+    </script>
 
 </x-app-layout>

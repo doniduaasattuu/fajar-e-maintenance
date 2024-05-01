@@ -8,9 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class IssueController extends Controller
 {
-    public function issues()
+    public function issues(Request $request)
     {
-        $issues = Issue::query()->where('department', '=', Auth::user()->department)->get();
+        $status = $request->query('status');
+        $search = $request->query('search');
+
+
+        $issues = Issue::query()
+            ->when($search, function ($query, $search) {
+                $query
+                    ->where(function ($builder) use ($search) {
+                        $builder
+                            ->orWhere('description', 'LIKE', "%{$search}%")
+                            ->orWhere('corrective_action', 'LIKE', "%{$search}%")
+                            ->orWhere('root_cause', 'LIKE', "%{$search}%")
+                            ->orWhere('preventive_action', 'LIKE', "%{$search}%")
+                            ->orWhere('remark', 'LIKE', "%{$search}%");
+                    });
+            })
+            ->when($status, function ($query, $status) {
+                $query
+                    ->where('status', $status);
+            })
+            ->where('department', Auth::user()->department)
+            ->get();
+
         return view('maintenance.issue.issue', [
             'issues' => $issues,
         ]);

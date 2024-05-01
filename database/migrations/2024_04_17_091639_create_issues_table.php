@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('issues', function (Blueprint $table) {
             $table->string('id', 13)->nullable(false)->primary();
+            $table->enum('status', ['NOT', 'MONITORING', 'DONE'])->nullable(true);
             $table->timestamp('issued_date')->nullable(true);
             $table->timestamp('target_date')->nullable(true);
             $table->string('remaining_days')->nullable(true);
@@ -22,7 +23,6 @@ return new class extends Migration
             $table->text('corrective_action')->nullable(true);
             $table->text('root_cause')->nullable(true);
             $table->text('preventive_action')->nullable(true);
-            $table->enum('status', ['NOT', 'MONITORING', 'DONE'])->nullable(true);
             $table->string('remark')->nullable(true);
             $table->string('department')->nullable(true);
             $table->string('created_by')->nullable(true);
