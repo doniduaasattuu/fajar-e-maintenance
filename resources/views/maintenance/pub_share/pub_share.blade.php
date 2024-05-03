@@ -6,6 +6,8 @@
     <section class="mb-4">
         <x-h3>{{ $title }}</x-h3>
 
+        <x-alert-info :information='["These pub share are private", "Only for transferring from factories computer to your phone and vice versa"]' />
+
         <form id="form" action="/pub-share" method="POST" enctype="multipart/form-data">
             <div class="row mb-3">
                 @csrf
@@ -13,7 +15,7 @@
                 <!-- <div class="col-md pe-md-1 mb-2 mb-md-0"> -->
                 <div class="col mb-2 pe-1">
                     <x-input-label for="file" :value="__('File *')" />
-                    <x-input-file id="file" name="file" />
+                    <x-input-file id="file" name="file" required />
                     <div id="message_file_input">
                         <x-input-error :message="$errors->first('file')" />
                     </div>

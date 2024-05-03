@@ -84,7 +84,9 @@ Route::middleware('member')->group(function () {
     Route::get('/issues', [IssueController::class, 'issues'])->name('issues');
     Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
     Route::post('/issue-register', [IssueController::class, 'issueRegister']);
-
+    Route::get('/issue-edit/{id}', [IssueController::class, 'issueEdit']);
+    Route::post('/issue-update', [IssueController::class, 'issueUpdate']);
+    Route::get('/issue-delete/{id}', [IssueController::class, 'issueDelete']);
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
