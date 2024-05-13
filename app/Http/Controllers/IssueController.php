@@ -87,7 +87,7 @@ class IssueController extends Controller
         $issue = new Issue($validated);
         $issue->save();
 
-        return back()->with('alert', new Alert('Issue successfully saved.', 'alert-success'));
+        return back()->with('alert', new Alert('Issue successfully saved.', 'alert-success', "issue-edit/$issue->id"));
     }
 
     public function issueEdit(string $id)
@@ -108,7 +108,32 @@ class IssueController extends Controller
 
     public function issueUpdate(Request $request)
     {
-        return response()->json($request->input());
+        $user = Auth::user();
+        $request->merge(['remaining_days' => $request->input('target_date'), 'updated_by' => $user->fullname]);
+
+        $validated = $request->validate([
+            'id' => ['required', 'exists:issues,id'],
+            'target_date' => ['required'],
+            'remaining_days' => ['required'],
+            'section' => ['required'],
+            'area' => ['required'],
+            'description' => ['required'],
+            'corrective_action' => ['nullable'],
+            'root_cause' => ['nullable'],
+            'preventive_action' => ['nullable'],
+            'status' => ['required'],
+            'remark' => ['nullable'],
+            'updated_by' => ['required'],
+        ]);
+
+        $issue = Issue::query()->find($validated['id']);
+        if (!is_null($issue)) {
+
+            $issue->update($validated);
+            return back()->with('alert', new Alert('Issue successfully updated.', 'alert-success'));
+        } else {
+            return back()->with('modal', new Modal('[404] Not found', 'Issue not found.'));
+        }
     }
 
     public function issueDelete(string $id)

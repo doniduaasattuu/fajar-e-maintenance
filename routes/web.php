@@ -82,11 +82,6 @@ Route::middleware('member')->group(function () {
 
     // ISSUES
     Route::get('/issues', [IssueController::class, 'issues'])->name('issues');
-    Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
-    Route::post('/issue-register', [IssueController::class, 'issueRegister']);
-    Route::get('/issue-edit/{id}', [IssueController::class, 'issueEdit']);
-    Route::post('/issue-update', [IssueController::class, 'issueUpdate']);
-    Route::get('/issue-delete/{id}', [IssueController::class, 'issueDelete']);
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
@@ -117,6 +112,13 @@ Route::middleware('member')->group(function () {
         Route::post('/pub-share', [PubShareController::class, 'newFile']);
         Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
         Route::get('/pub-share/{id}/download', [PubShareController::class, 'downloadFile']);
+
+        // ISSUE
+        Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
+        Route::post('/issue-register', [IssueController::class, 'issueRegister']);
+        Route::get('/issue-edit/{id}', [IssueController::class, 'issueEdit']);
+        Route::post('/issue-update', [IssueController::class, 'issueUpdate']);
+        Route::get('/issue-delete/{id}', [IssueController::class, 'issueDelete']);
 
         // USERS
         Route::get('/users', [UserController::class, 'users'])->name('users');

@@ -18,7 +18,7 @@ class IssueSeeder extends Seeder
 
         Issue::create([
             [
-                'id' => uniqid(),
+                'id' => '6641c5582fb8b',
                 'issued_date' => Carbon::now()->toDateString(),
                 'target_date' => $target_date,
                 'remaining_days' => $target_date,
@@ -170,24 +170,23 @@ class IssueSeeder extends Seeder
                 'created_by' => 'Nopriadi Saputra',
                 'updated_by' => 'Nopriadi Saputra',
             ],
+            [
+                'id' => uniqid(),
+                'issued_date' => Carbon::create('2024-04-11')->toDateString(),
+                'target_date' => Carbon::create('2024-04-11')->toDateString(),
+                'remaining_days' => Carbon::create('2024-04-11')->toDateString(),
+                'section' => 'ELC',
+                'area' => 'BO3',
+                'description' => 'Trafo PLN-1 trip',
+                'corrective_action' => 'Replacing trafo',
+                'root_cause' => 'Conservator empty',
+                'preventive_action' => 'Daily check oil conservator',
+                'status' => 'DONE',
+                'remark' => null,
+                'department' => 'EI6',
+                'created_by' => 'Jamal Mirdad',
+                'updated_by' => 'Jamal Mirdad',
+            ],
         ]);
-
-        // $issue = new Issue();
-        // $issue->id = uniqid();
-        // $issue->issued_date = Carbon::now()->toDateString();
-        // $issue->target_date = $target_date;
-        // $issue->remaining_days = $target_date;
-        // $issue->section = 'ELC';
-        // $issue->area = 'SP3';
-        // $issue->description = 'Drum thickener SP32 not rotating DT 98 Minute';
-        // $issue->corrective_action = 'Checking inverter (inverter not trip, Load motor SP32 high = 30A). Info to production for cleaning drum thickener and running well';
-        // $issue->root_cause = 'Load motor SP32 high and drum cannot rotating';
-        // $issue->preventive_action = 'Cleaning drum by production';
-        // $issue->status = 'DONE';
-        // $issue->remark = 'DT 98 MINUTES FROM PM3';
-        // $issue->department = 'EI2';
-        // $issue->created_by = 'Nopriadi Saputra';
-        // $issue->updated_by = 'Nopriadi Saputra';
-        // $issue->save();
     }
 }
