@@ -5,6 +5,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PubShareController;
@@ -79,6 +80,9 @@ Route::middleware('member')->group(function () {
     Route::post('/finding-update', [FindingController::class, 'findingUpdate']);
     Route::get('/finding-delete/{id}', [FindingController::class, 'findingDelete']);
 
+    // ISSUES
+    Route::get('/issues', [IssueController::class, 'issues'])->name('issues');
+
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
     // MOTOR
@@ -108,6 +112,13 @@ Route::middleware('member')->group(function () {
         Route::post('/pub-share', [PubShareController::class, 'newFile']);
         Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
         Route::get('/pub-share/{id}/download', [PubShareController::class, 'downloadFile']);
+
+        // ISSUE
+        Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
+        Route::post('/issue-register', [IssueController::class, 'issueRegister']);
+        Route::get('/issue-edit/{id}', [IssueController::class, 'issueEdit']);
+        Route::post('/issue-update', [IssueController::class, 'issueUpdate']);
+        Route::get('/issue-delete/{id}', [IssueController::class, 'issueDelete']);
 
         // USERS
         Route::get('/users', [UserController::class, 'users'])->name('users');
