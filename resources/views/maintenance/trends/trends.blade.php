@@ -4,13 +4,13 @@
 
         <x-h2>{{ __($title) }}</x-h2>
 
-        <form action="/trends" method="POST">
+        <form action="{{ route('equipment-trends') }}" method="POST">
             @csrf
 
             {{-- EQUIPMENT --}}
             <div class="mb-3">
                 <x-input-label for="equipment" :value="__('Equipment')" />
-                <x-input-text id="equipment" type="text" name="equipment" :value="old('equipment')" autofocus autocomplete="equipment" maxlength="9" />
+                <x-input-text id="equipment" type="text" name="equipment" :value="old('equipment')" autofocus autocomplete="equipment" maxlength="9" oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('equipment')" />
             </div>
 

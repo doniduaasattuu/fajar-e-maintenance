@@ -83,7 +83,7 @@ class RecordController extends Controller
 
     public function saveRecordMotor(Request $request)
     {
-        $request->merge(['id' => uniqid()]);
+        $request->merge(['id' => uniqid(), 'department' => Auth::user()->department]);
 
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
@@ -113,6 +113,7 @@ class RecordController extends Controller
             'vibration_nde_frame_value' => ['nullable', 'decimal:0,2', 'min:0', 'max:45'],
             'vibration_nde_frame_desc' => ['required', Rule::in($this->motorService->vibrationDescriptionEnum())],
             'noise_nde' => ['required', Rule::in($this->motorService->noiseEnum())],
+            'department' => ['required'],
             'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
             'finding_description' => ['nullable', 'min:15'],
             'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
@@ -132,6 +133,7 @@ class RecordController extends Controller
                 'area' => explode('-', $validated['funcloc'])[2],
                 'department' => Auth::user()->department,
                 'description' => $validated['finding_description'],
+                'sort_field' => $validated['sort_field'],
                 'equipment' => $validated['motor'],
                 'funcloc' => $validated['funcloc'],
                 'reporter' => Auth::user()->abbreviated_name,
@@ -234,6 +236,7 @@ class RecordController extends Controller
                     'area' => explode('-', $validated['funcloc'])[2],
                     'department' => Auth::user()->department,
                     'description' => $validated['finding_description'],
+                    'sort_field' => $validated['sort_field'],
                     'equipment' => $validated['motor'],
                     'funcloc' => $validated['funcloc'],
                     'reporter' => Auth::user()->abbreviated_name,
@@ -267,7 +270,7 @@ class RecordController extends Controller
 
     public function saveRecordTrafo(Request $request)
     {
-        $request->merge(['id' => uniqid()]);
+        $request->merge(['id' => uniqid(), 'department' => Auth::user()->department]);
 
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
@@ -292,6 +295,7 @@ class RecordController extends Controller
             'oil_leakage' => ['required', Rule::in($this->trafoService->oilLeakageEnum)],
             'oil_level' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'blower_condition' => ['required', Rule::in($this->trafoService->blowerConditionEnum)],
+            'department' => ['required'],
             'nik' => ['required', 'digits:8', 'numeric', 'exists:App\Models\User,nik'],
             'finding_description' => ['nullable', 'min:15'],
             'finding_image' => ['nullable', 'prohibited_if:finding_description,null', 'max:5000', File::types(['png', 'jpeg', 'jpg'])],
@@ -311,6 +315,7 @@ class RecordController extends Controller
                 'area' => explode('-', $validated['funcloc'])[2],
                 'department' => Auth::user()->department,
                 'description' => $validated['finding_description'],
+                'sort_field' => $validated['sort_field'],
                 'equipment' => $validated['trafo'],
                 'funcloc' => $validated['funcloc'],
                 'reporter' => Auth::user()->abbreviated_name,
@@ -408,6 +413,7 @@ class RecordController extends Controller
                     'area' => explode('-', $validated['funcloc'])[2],
                     'department' => Auth::user()->department,
                     'description' => $validated['finding_description'],
+                    'sort_field' => $validated['sort_field'],
                     'equipment' => $validated['trafo'],
                     'funcloc' => $validated['funcloc'],
                     'reporter' => Auth::user()->abbreviated_name,

@@ -17,7 +17,7 @@
     @endisset
 
     {{-- ALERT HIDDEN INPUT --}}
-    <x-alert-hidden :hidden='["id", "reporter"]' />
+    <x-alert-hidden :hidden='["id", "reporter", "department"]' />
 
     {{-- FORM --}}
     <section>
@@ -31,17 +31,22 @@
 
             {{-- AREA --}}
             <div class="mb-3">
-                <x-input-label for="area" :value="__('Area *')" />
-                <x-input-select id="area" name="area" :options="$utility::areas()" :value='old("area", $finding->area ?? "")' :choose="''" />
+                <x-input-label for="area" :value="__('Area')" />
+                <x-input-list list="area_option" id="area" name="area" :value='old("area", $finding->area ?? "")' oninput="return JS.toupper(this)" maxlength="15" />
+                <x-datalist :id='"area_option"' :options='$utility::areas()' />
                 <x-input-error :message="$errors->first('area')" />
             </div>
 
             {{-- DEPARTMENT --}}
+            @if (Auth::user()->isSuperAdmin())
             <div class="mb-3">
                 <x-input-label for="department" :value="__('Department *')" />
-                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' :choose="''" />
+                <x-input-select id="department" name="department" :options="$utility->getEnumValue('user', 'department')" :value='old("department", $finding->department ?? Auth::user()->department ?? "")' />
                 <x-input-error :message="$errors->first('department')" />
             </div>
+            @else
+            <input type="hidden" id="department" name="department" value="{{ $finding->department ?? Auth::user()->department ?? '' }}">
+            @endif
 
             {{-- STATUS --}}
             <div class="mb-3">
@@ -50,17 +55,24 @@
                 <x-input-error :message="$errors->first('status')" />
             </div>
 
+            {{-- SORT FIELD --}}
+            <div class="mb-3">
+                <x-input-label for="sort_field" :value="__('Sort field')" />
+                <x-input-text id="sort_field" name="sort_field" :value='old("sort_field", $finding->sort_field ?? "")' oninput="return JS.toupper(this)" />
+                <x-input-error :message="$errors->first('sort_field')" />
+            </div>
+
             {{-- EQUIPMENT --}}
             <div class="mb-3">
                 <x-input-label for="equipment" :value="__('Equipment')" />
-                <x-input-text id="equipment" name="equipment" :value='old("equipment", $finding->equipment ?? "")' />
+                <x-input-text id="equipment" name="equipment" :value='old("equipment", $finding->equipment ?? "")' oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('equipment')" />
             </div>
 
             {{-- FUNCLOC --}}
             <div class="mb-3">
                 <x-input-label for="funcloc" :value="__('Funcloc')" />
-                <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $finding->funcloc ?? "")' />
+                <x-input-text id="funcloc" name="funcloc" :value='old("funcloc", $finding->funcloc ?? "")' oninput="return JS.toupper(this)" />
                 <x-input-error :message="$errors->first('funcloc')" />
             </div>
 

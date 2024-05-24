@@ -8,6 +8,7 @@ use App\Services\FunclocService;
 use App\Services\MotorService;
 use App\Services\TrafoService;
 use Database\Seeders\DocumentSeeder;
+use Database\Seeders\EmailRecipientSeeder;
 use Database\Seeders\FunclocSeeder;
 use Database\Seeders\MotorDetailsSeeder;
 use Database\Seeders\MotorSeeder;
@@ -15,6 +16,7 @@ use Database\Seeders\TrafoDetailsSeeder;
 use Database\Seeders\TrafoSeeder;
 use Database\Seeders\UserRoleSeeder;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
@@ -106,7 +108,9 @@ class ViewTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
         $user = User::find('55000153');
-        $paginator = DB::table('motors')->paginate(perPage: 10, page: 1);
+        $paginator = DB::table('motors')
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 10, cursor: 1);
 
         $this
             ->actingAs($user)
@@ -114,6 +118,7 @@ class ViewTest extends TestCase
             ->view('maintenance.motor.motor', [
                 'title' => 'Motors',
                 'paginator' => $paginator,
+                'total' => 8236
             ])
             ->assertSeeText('Motors')
             ->assertSeeText('New motor')
@@ -123,7 +128,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries');
     }
 
@@ -142,7 +147,6 @@ class ViewTest extends TestCase
             ])
             ->assertDontSee('/motor-update')
             ->assertSee('readonly')
-            ->assertSee('disabled')
             ->assertSee('EMO001092')
             ->assertSee('FP-01-SP5-OCC-FR01')
             ->assertSee('SP5.M-21/M')
@@ -183,7 +187,6 @@ class ViewTest extends TestCase
             ])
             ->assertSee('Motor details')
             ->assertSee('readonly')
-            ->assertSee('disabled')
             ->assertSee('10010923')
             ->assertSee('56')
             ->assertSee('id=Fajar-MotorList56');
@@ -194,7 +197,9 @@ class ViewTest extends TestCase
     {
         $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
         $user = User::find('55000153');
-        $paginator = DB::table('trafos')->paginate(perPage: 10, page: 1);
+        $paginator = DB::table('trafos')
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 10, cursor: 1);
 
         $this
             ->actingAs($user)
@@ -202,6 +207,7 @@ class ViewTest extends TestCase
             ->view('maintenance.trafo.trafo', [
                 'title' => 'Trafos',
                 'paginator' => $paginator,
+                'total' => 27
             ])
             ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
@@ -211,7 +217,7 @@ class ViewTest extends TestCase
             ->assertSeeText('Updated at')
             ->assertDontSeeText('Details')
             ->assertSeeText('Edit')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries')
             ->assertSeeText('ETF000006');
     }
@@ -252,5 +258,111 @@ class ViewTest extends TestCase
             ->assertSeeText('Attach')
             ->assertSeeText('Edit')
             ->assertSeeText('Delete');
+    }
+
+    public function testViewProfile()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Email reports')
+            ->assertSeeText('55000154')
+            ->assertSeeText('Doni Darmawan')
+            ->assertSeeText('EI2')
+            ->assertSeeText('doni.duaasattuu@gmail.com')
+            ->assertSeeText('08983456945')
+            ->assertSeeText('Subscribe');
+    }
+
+    public function testViewProfileSubscribe()
+    {
+        $this->seed([UserRoleSeeder::class, EmailRecipientSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000154',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertSeeText('Email reports')
+            ->assertSeeText('55000154')
+            ->assertSeeText('Doni Darmawan')
+            ->assertSeeText('EI2')
+            ->assertSeeText('doni.duaasattuu@gmail.com')
+            ->assertSeeText('08983456945')
+            ->assertSeeText('Unsubscribe')
+            ->assertDontSeeText('Subscribe');
+    }
+
+    public function testViewProfileDoesntHaveEmail()
+    {
+        $this->seed([UserRoleSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '31100162',
+            'password' => 'rahasia',
+        ]);
+
+        $user = Auth::user();
+
+        $this
+            ->actingAs($user)
+            ->withViewErrors([])
+            ->view('auth.profile', [
+                'title' => 'My profile',
+            ])
+            ->assertSeeText('My profile')
+            ->assertSeeText('NIK')
+            ->assertSeeText('Fullname')
+            ->assertSeeText('Department')
+            ->assertSeeText('Email address')
+            ->assertSeeText('Phone number')
+            ->assertSeeText('Work center')
+            ->assertSeeText('Created at')
+            ->assertSeeText('Updated at')
+            ->assertDontSeeText('Email reports')
+            ->assertSeeText('31100162')
+            ->assertSeeText('Hasan Badri')
+            ->assertSeeText('EI2')
+            ->assertSeeText('085711412097')
+            ->assertDontSeeText('Unsubscribe')
+            ->assertDontSeeText('Subscribe');
     }
 }

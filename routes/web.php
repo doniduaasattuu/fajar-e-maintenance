@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FindingController;
 use App\Http\Controllers\FunclocController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IssueController;
 use App\Http\Controllers\MotorController;
 use App\Http\Controllers\PdfController;
+use App\Http\Controllers\PubShareController;
 use App\Http\Controllers\RecordController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TrafoController;
@@ -13,6 +16,7 @@ use App\Http\Controllers\TrendController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use Mpdf\Mpdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +29,14 @@ use Illuminate\Support\Facades\Storage;
 |
 */
 
+Route::get('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
+Route::get('/send-report-email', [EmailController::class, 'sendReportEmail']);
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [App\Http\Controllers\UserController::class, 'login'])->name('login');
     Route::post('/login', [App\Http\Controllers\UserController::class, 'doLogin']);
-    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration'])->name('registration');
-    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register']);
+    Route::get('/registration', [App\Http\Controllers\UserController::class, 'registration']);
+    Route::post('/registration', [App\Http\Controllers\UserController::class, 'register'])->name('register');
 });
 
 Route::middleware('member')->group(function () {
@@ -40,15 +47,15 @@ Route::middleware('member')->group(function () {
     Route::post('/update-profile', [UserController::class, 'updateProfile'])->name('update-profile');
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+    // SUBSCRIBTION
+    Route::post('/subscribe', [EmailController::class, 'subscribe'])->name('subscribe');
+    Route::post('/unsubscribe', [EmailController::class, 'unsubscribe'])->name('unsubscribe');
+
     // SEARCH 
     Route::post('/search', [HomeController::class, 'search'])->name('search');
 
     // MOTOR & TRAFO
     Route::get('/checking-form/{equipment_id}', [RecordController::class, 'checkingForm'])->name('checkingForm');
-
-    // FORMS
-    // Route::get("/populating-forms", [HomeController::class, 'populatingForms']);
-    // Route::post("/populating-forms", [HomeController::class, 'populating']);
 
     // DOCUMENTS
     Route::get('/documents', [DocumentController::class, 'documents']);
@@ -60,8 +67,8 @@ Route::middleware('member')->group(function () {
 
     // TABLES
     Route::get('/funclocs/{page?}/{filter?}', [FunclocController::class, 'funclocs'])->name('funclocs');
-    Route::get('/motors/{page?}/{filter_status?}/{filter?}', [MotorController::class, 'motors'])->name('motors');
-    Route::get('/trafos/{page?}', [TrafoController::class, 'trafos'])->name('trafos');
+    Route::get('/motors', [MotorController::class, 'motors'])->name('motors');
+    Route::get('/trafos', [TrafoController::class, 'trafos'])->name('trafos');
     Route::get('/motor-details/{id}', [MotorController::class, 'motorDetails'])->name('motor-details');
     Route::get('/trafo-details/{id}', [TrafoController::class, 'trafoDetails'])->name('trafo-details');
 
@@ -72,6 +79,9 @@ Route::middleware('member')->group(function () {
     Route::get('/finding-edit/{id}', [FindingController::class, 'findingEdit']);
     Route::post('/finding-update', [FindingController::class, 'findingUpdate']);
     Route::get('/finding-delete/{id}', [FindingController::class, 'findingDelete']);
+
+    // ISSUES
+    Route::get('/issues', [IssueController::class, 'issues'])->name('issues');
 
     // CHECKING FORM
     Route::get('/scanner', [HomeController::class, 'scanner'])->name('scanner');
@@ -86,19 +96,30 @@ Route::middleware('member')->group(function () {
 
     // TREND
     Route::get('/trends', [TrendController::class, 'trends']);
-    Route::post('/trends', [TrendController::class, 'getTrends']);
+    Route::post('/trends', [TrendController::class, 'getTrends'])->name('equipment-trends');
     Route::get('/equipment-trend/{equipment}', [TrendController::class, 'equipmentTrend'])->name('equipment-trend');
 
     // DAILY REPORT
     Route::get('/report', [PdfController::class, 'report']);
-    Route::post('/report', [PdfController::class, 'generateReport'])->name('report');
-    // Route::get('/report/trafo', [PdfController::class, 'reportTrafoHtml']);
-    // Route::get('/report/motor', [PdfController::class, 'reportMotorHtml']);
+    Route::post('/report', [PdfController::class, 'generateDailyReport'])->name('report');
 
     // EQUIPMENT REPORT
     Route::get('/report/{type}/{equipment}/{start_date}/{end_date}', [PdfController::class, 'reportEquipmentPdf']);
 
     Route::middleware('role:admin')->group(function () {
+        // PUB_SHARE
+        Route::get('/pub-share', [PubShareController::class, 'pubShare']);
+        Route::post('/pub-share', [PubShareController::class, 'newFile']);
+        Route::get('/pub-share/delete/{id}', [PubShareController::class, 'deleteFile']);
+        Route::get('/pub-share/{id}/download', [PubShareController::class, 'downloadFile']);
+
+        // ISSUE
+        Route::get('/issue-registration', [IssueController::class, 'issueRegistration']);
+        Route::post('/issue-register', [IssueController::class, 'issueRegister']);
+        Route::get('/issue-edit/{id}', [IssueController::class, 'issueEdit']);
+        Route::post('/issue-update', [IssueController::class, 'issueUpdate']);
+        Route::get('/issue-delete/{id}', [IssueController::class, 'issueDelete']);
+
         // USERS
         Route::get('/users', [UserController::class, 'users'])->name('users');
 
@@ -136,11 +157,17 @@ Route::middleware('member')->group(function () {
     Route::middleware('role:superadmin')->group(function () {
         Route::get('/user-reset/{nik}', [UserController::class, 'userReset'])->name('user-reset');
         Route::get('/user-delete/{nik}', [UserController::class, 'userDelete'])->name('user-delete');
+        Route::get('/user-edit/{nik}', [UserController::class, 'userEditBySuperAdmin'])->name('user-edit');
         // ADMIN
         Route::get('/role-assign/admin/{nik}', [RoleController::class, 'roleAssignAdmin']);
         Route::get('/role-delete/admin/{nik}', [RoleController::class, 'roleDeleteAdmin']);
         // SUPER ADMIN
         Route::get('/role-assign/superadmin/{nik}', [RoleController::class, 'roleAssignSuperAdmin']);
         Route::get('/role-delete/superadmin/{nik}', [RoleController::class, 'roleDeleteSuperAdmin']);
+
+        // EMAIL
+        Route::get('/email-recipients', [EmailController::class, 'emailRecipients']);
     });
+
+    Route::get('/store/{yesterday}', [PdfController::class, 'storeMotorTrafoDailyReport']);
 });

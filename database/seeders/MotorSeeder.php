@@ -988,5 +988,18 @@ class MotorSeeder extends Seeder
         $motor75->created_at = Carbon::now();
         $motor75->updated_at = null;
         $motor75->save();
+
+        $motor76 = new Motor();
+        $motor76->id = 'EMO001693';
+        $motor76->status = 'Installed';
+        $motor76->funcloc = 'FP-01-SP7-OCC-RF03';
+        $motor76->sort_field = 'SP7;REFINER;M.2.36/M';
+        $motor76->description = 'REFINER SP7';
+        $motor76->material_number = null;
+        $motor76->unique_id = '4335';
+        $motor76->qr_code_link = 'id=Fajar-MotorList4335';
+        $motor76->created_at = Carbon::now();
+        $motor76->updated_at = null;
+        $motor76->save();
     }
 }

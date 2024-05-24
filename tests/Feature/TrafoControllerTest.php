@@ -31,7 +31,7 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('Trafos')
             ->assertDontSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries')
             ->assertSeeText('Trend')
             ->assertSeeText('Details');
@@ -50,11 +50,81 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
             ->assertSeeText('ETF001234');
+    }
+
+    public function testGetTrafosAdminFilterSearch()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
+            ->get('/trafos?search=0000')
+            ->assertSeeText('Trafos')
+            ->assertSeeText('New trafo')
+            ->assertSeeText('Filter')
+            ->assertSeeText('Total')
+            ->assertSeeText('entries')
+            ->assertSeeText('Trend')
+            ->assertSeeText('Edit')
+            ->assertSeeText('ETF000006')
+            ->assertSeeText('ETF000026')
+            ->assertSeeText('ETF000027')
+            ->assertDontSeeText('ETF000105')
+            ->assertDontSeeText('ETF001234');
+    }
+
+    public function testGetTrafosAdminFilterStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
+            ->get('/trafos?status=Available')
+            ->assertSeeText('Trafos')
+            ->assertSeeText('New trafo')
+            ->assertSeeText('Filter')
+            ->assertSeeText('Total')
+            ->assertSeeText('entries')
+            ->assertSeeText('Trend')
+            ->assertSeeText('Edit')
+            ->assertSeeText('ETF001234')
+            ->assertDontSeeText('ETF000026')
+            ->assertDontSeeText('ETF000027')
+            ->assertDontSeeText('ETF000105');
+    }
+
+    public function testGetTrafosAdminFilterSearchAndStatus()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class, TrafoSeeder::class, TrafoDetailsSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+        $this
+            ->get('/trafos?search=00&status=Installed')
+            ->assertSeeText('Trafos')
+            ->assertSeeText('New trafo')
+            ->assertSeeText('Filter')
+            ->assertSeeText('Total')
+            ->assertSeeText('entries')
+            ->assertSeeText('Trend')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('ETF001234')
+            ->assertSeeText('ETF000026')
+            ->assertSeeText('ETF000027')
+            ->assertSeeText('ETF000105');
     }
 
     public function testGetTrafosAdminEmptyDb()
@@ -70,7 +140,7 @@ class TrafoControllerTest extends TestCase
             ->assertSeeText('Trafos')
             ->assertSeeText('New trafo')
             ->assertSeeText('Filter')
-            ->assertSeeText('Displays')
+            ->assertSeeText('Total')
             ->assertSeeText('entries')
             ->assertSeeText('Trend')
             ->assertSeeText('Edit')
@@ -206,7 +276,7 @@ class TrafoControllerTest extends TestCase
             ->assertSee('id=Fajar-TrafoList4')
             ->assertSeeText('Created at')
             ->assertSeeText('Updated at')
-            ->assertSee('disabled');
+            ->assertSee('readonly');
     }
 
     public function testGetTrafoDetailsUregisteredAdmin()

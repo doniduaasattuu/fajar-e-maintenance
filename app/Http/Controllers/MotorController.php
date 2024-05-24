@@ -37,24 +37,38 @@ class MotorController extends Controller
     {
         $search = $request->query('search');
         $status = $request->query('status');
+        $cursor = $request->query('cursor');
+        $json = $request->query('json');
 
+        $total = count(Motor::all('id'));
         $paginator = Motor::query()
             ->when($search, function ($query, $search) {
                 $query
-                    ->where('id', 'LIKE', "%{$search}%");
+                    ->orWhere(function ($builder) use ($search) {
+                        $builder
+                            ->orWhere('id', 'LIKE', "%{$search}%")
+                            ->orWhere('funcloc', 'LIKE', "%{$search}%")
+                            ->orWhere('unique_id', 'LIKE', "%{$search}%")
+                            ->orWhere('sort_field', 'LIKE', "%{$search}%");
+                    });
             })
             ->when($status, function ($query, $status) {
                 $query
                     ->where('status', '=', $status);
             })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(800)
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 30, cursor: $cursor)
             ->withQueryString();
 
-        return view('maintenance.motor.motor', [
-            'title' => 'Motors',
-            'paginator' => $paginator,
-        ]);
+        if ($json) {
+            return response()->json($paginator);
+        } else {
+            return view('maintenance.motor.motor', [
+                'title' => 'Motors',
+                'paginator' => $paginator,
+                'total' => $total,
+            ]);
+        }
     }
 
     public function motorEdit(string $id)
@@ -89,13 +103,14 @@ class MotorController extends Controller
 
     public function motorUpdate(Request $request)
     {
+        $request->mergeIfMissing(['motor_detail' => $request->input('id')]);
 
         $rules = [
             'id' => ['required', 'size:9', 'exists:App\Models\Motor,id'],
             'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', 'exists:App\Models\Funcloc,id'],
-            'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
+            'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50'],
+            'description' => ['nullable', 'min:3', 'max:50'],
             'material_number' => ['nullable', 'digits:8', 'numeric'],
             'unique_id' => ['required', 'numeric', 'exists:App\Models\Motor,unique_id'],
             'qr_code_link' => ['required', 'exists:App\Models\Motor,qr_code_link', new SameAsUnique($request->input('unique_id'))],
@@ -134,9 +149,9 @@ class MotorController extends Controller
             'mounting' => ['nullable', Rule::in($this->getEnumValue('motor', 'mounting'))],
         ];
 
-        $validator = Validator($request->all(), $rules);
-        $validated_motor = $validator->safe()->except($this->getColumns('motor_details', ['id']));
-        $validated_motor_details = $validator->safe()->merge(['motor_detail' => $validated_motor['id']])->except($this->getColumns('motors'));
+        $validator = Validator::make($request->all(), $rules);
+        $validated_motor = $validator->safe()->only($this->getColumns('motors'));
+        $validated_motor_details = $validator->safe()->only($this->getColumns('motor_details', ['id']));
 
         DB::beginTransaction();
         try {
@@ -167,8 +182,8 @@ class MotorController extends Controller
             'id' => ['required', 'regex:/^[a-zA-Z\d]+$/u', 'size:9', 'starts_with:EMO,MGM,MGB,MDO,MFB', Rule::notIn($this->motorService->registeredMotors())],
             'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
             'funcloc' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'alpha_dash', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
-            'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\#]+$/u'],
-            'description' => ['nullable', 'min:3', 'max:50', 'regex:/^[a-zA-Z\s\.\d\/\-\;\,\#\=]+$/u'],
+            'sort_field' => ['nullable', 'prohibited_if:status,Available', 'prohibited_if:status,Repaired', 'required_if:status,Installed', 'min:3', 'max:50'],
+            'description' => ['nullable', 'min:3', 'max:50'],
             'material_number' => ['nullable', 'numeric', 'digits:8'],
             'unique_id' => ['required', 'numeric', Rule::notIn($this->motorService->registeredUniqueIds())],
             'qr_code_link' => ['required', 'starts_with:id=Fajar-MotorList', Rule::notIn($this->motorService->registeredQrCodeLinks()), new SameAsUnique($request->input('unique_id'))],

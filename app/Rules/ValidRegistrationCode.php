@@ -15,7 +15,7 @@ class ValidRegistrationCode implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $registration_code = env('REGISTRATION_CODE');
+        $registration_code = env('REGISTRATION_CODE', 'RG9uaSBEYXJtYXdhbg==');
         $attribute = str_replace('_', ' ', $attribute);
 
         if ($value !== $registration_code) {

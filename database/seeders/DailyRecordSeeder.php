@@ -26,6 +26,8 @@ class DailyRecordSeeder extends Seeder
         foreach ($motors as $motor) {
             if ($motor->status == 'Installed') {
 
+                $user = $users[rand(0, sizeof($users) - 1)];
+
                 $record = new MotorRecord();
                 $record->id = uniqid();
                 $record->funcloc = $motor->funcloc;
@@ -54,8 +56,9 @@ class DailyRecordSeeder extends Seeder
                 $record->vibration_nde_frame_value = rand(45, 112) / 100;
                 $record->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
                 $record->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
-                $record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
-                $record->created_at = Carbon::now();
+                $record->department = $user->department;
+                $record->nik = $user->nik;
+                $record->created_at = Carbon::now()->format('d M Y');
                 $record->save();
             }
         }
@@ -86,8 +89,9 @@ class DailyRecordSeeder extends Seeder
                 $record->oil_leakage = array(0 => 'No leaks', 1 => 'Leaks')[rand(0, 1)];
                 $record->oil_level = rand(70, 88);
                 $record->blower_condition = array(0 => 'Good', 1 => 'Not good')[rand(0, 1)];
-                $record->nik = $users[rand(0, sizeof($users) - 1)]->nik;
-                $record->created_at = Carbon::now();
+                $record->department = $user->department;
+                $record->nik = $user->nik;
+                $record->created_at = Carbon::now()->format('d M Y');
                 $record->save();
             }
         }

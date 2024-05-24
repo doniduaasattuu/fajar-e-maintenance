@@ -23,7 +23,8 @@ use Illuminate\Support\Facades\Storage;
 class PdfController extends Controller
 {
     private $motor_selected_columns = [
-        'motor',
+        // 'motor',
+        'sort_field',
         'funcloc',
         'motor_status',
         'number_of_greasing',
@@ -41,11 +42,12 @@ class PdfController extends Controller
         'noise_nde',
         'cleanliness',
         'nik',
-        'created_at'
+        // 'created_at'
     ];
 
     private $trafo_selected_columns = [
-        'trafo',
+        // 'trafo',
+        'sort_field',
         'funcloc',
         'trafo_status',
         'primary_current_phase_r',
@@ -64,7 +66,7 @@ class PdfController extends Controller
         'oil_level',
         'cleanliness',
         'nik',
-        'created_at'
+        // 'created_at'
     ];
 
     // DAILY RECORD PAGE
@@ -75,10 +77,16 @@ class PdfController extends Controller
         ]);
     }
 
-    public function query($model, string $date, string $date_after, $selected_columns)
+    public function query($model, string $date, string $date_after, $selected_columns, $department = null, $nik = null)
     {
         return $model::query()
             ->select($selected_columns)
+            ->when($department, function ($query, $department) {
+                $query->where('department', $department);
+            })
+            ->when($nik, function ($query, $nik) {
+                $query->where('nik', $nik);
+            })
             ->where('created_at', '>=', $date)
             ->where('created_at', '<', $date_after)
             ->get();
@@ -128,8 +136,11 @@ class PdfController extends Controller
         }
     }
 
-    public function generateReport(Request $request)
+    public function generateDailyReport(Request $request)
     {
+
+        $department = $request->input('department');
+        $nik = $request->input('nik');
 
         $data = [
             'table' =>  $request->input('table'),
@@ -158,7 +169,7 @@ class PdfController extends Controller
                     case 'motors':
 
                         $view = 'maintenance.report.motor';
-                        $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns);
+                        $motor_records = $this->query(MotorRecord::class, $date, $date_after, $this->motor_selected_columns, $department, $nik);
                         $title = 'Motor daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $motor_records, $this->motor_selected_columns);
 
@@ -168,7 +179,7 @@ class PdfController extends Controller
                     case 'trafos':
 
                         $view = 'maintenance.report.trafo';
-                        $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns);
+                        $trafo_records = $this->query(TrafoRecord::class, $date, $date_after, $this->trafo_selected_columns, $department, $nik);
                         $title = 'Trafo daily report' . ' - ' . Carbon::create($date)->format('d M Y');
                         $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
 
@@ -215,6 +226,43 @@ class PdfController extends Controller
             $html = $this->html($view, $title, $trafo_records, $this->trafo_selected_columns);
 
             return $this->checkRecordsIsEmpty($trafo_records, $html, $title, $input);
+        }
+    }
+
+    public function saveYesterdaysDailyReport(string $yesterday, array $tables)
+    {
+        $date_after = Carbon::create($yesterday)->addDay()->format('d M Y');
+
+        try {
+            foreach ($tables as $table) {
+                switch ($table) {
+                    case 'Motor':
+                        $title = "$table daily report - $yesterday";
+                        $records = $this->query(MotorRecord::class, $yesterday, $date_after, $this->motor_selected_columns);
+                        $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->motor_selected_columns);
+
+                        $pdf = new Mpdf(config('pdf'));
+                        $pdf->WriteHTML($html);
+                        $file = $pdf->Output($title . '.pdf', 'S');
+
+                        Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+                        break;
+
+                    case 'Trafo':
+                        $title = "$table daily report - $yesterday";
+                        $records = $this->query(TrafoRecord::class, $yesterday, $date_after, $this->trafo_selected_columns);
+                        $html = $this->html("maintenance.report." . strtolower($table), $title, $records, $this->trafo_selected_columns);
+
+                        $pdf = new Mpdf(config('pdf'));
+                        $pdf->WriteHTML($html);
+                        $file = $pdf->Output($title . '.pdf', 'S');
+
+                        Storage::disk('public')->put("daily-report/$yesterday/$title.pdf", $file);
+                        break;
+                }
+            }
+        } catch (Exception $error) {
+            Storage::disk('public')->put("daily-report/error-log.txt", $error->getMessage());
         }
     }
 }

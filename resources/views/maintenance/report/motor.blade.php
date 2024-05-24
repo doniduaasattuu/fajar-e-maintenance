@@ -28,7 +28,7 @@
                     @case('temperature_de')
                     @case('temperature_body')
                     @case('temperature_nde')
-                    <th>{{ strlen(explode('_', $column)[1]) > 3 ? ucfirst(explode('_', $column)[1]) : strtoupper(explode('_', $column)[1]) }} temp</th>
+                    <th>{{ strlen(explode('_', $column)[1]) > 3 ? ucfirst(explode('_', $column)[1]) : strtoupper(explode('_', $column)[1]) }}</th>
                     @break
 
                     {{-- VIBRATION DE --}}

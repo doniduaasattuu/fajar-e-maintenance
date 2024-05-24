@@ -4,7 +4,7 @@
 
     <x-h1>{{ $title }}</x-h1>
 
-    <form action="{{ route('registration') }}" method="POST">
+    <form action="{{ route('register') }}" method="POST">
         @csrf
 
         @if(session("alert"))
@@ -39,11 +39,25 @@
             <x-input-error :message="$errors->first('department')" />
         </div>
 
+        {{-- EMAIL --}}
+        <div class="mb-3">
+            <x-input-label for="email_address" :value="__('Email address')" />
+            <x-input-email id="email_address" name="email_address" :value="old('email_address')" />
+            <x-input-error :message="$errors->first('email_address')" />
+        </div>
+
         {{-- PHONE NUMBER --}}
         <div class="mb-3">
-            <x-input-label for="phone_number" :value="__('Phone number *')" />
+            <x-input-label for="phone_number" :value="__('Phone number')" />
             <x-input-text id="phone_number" type="text" name="phone_number" :value="old('phone_number')" autofocus autocomplete="phone_number" />
             <x-input-error :message="$errors->first('phone_number')" />
+        </div>
+
+        {{-- WORK CENTER --}}
+        <div class="mb-3">
+            <x-input-label for="work_center" :value="__('Work center')" />
+            <x-input-text id="work_center" type="text" name="work_center" :value="old('work_center')" autofocus autocomplete="work_center" onkeypress="return JS.toupper(event)" />
+            <x-input-error :message="$errors->first('work_center')" />
         </div>
 
         {{-- REGISTRATION CODE --}}

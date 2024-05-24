@@ -34,6 +34,7 @@ return new class extends Migration
             $table->enum('oil_leakage', ['No leaks', 'Leaks'])->nullable(true);
             $table->unsignedTinyInteger('oil_level')->nullable(true);
             $table->enum('blower_condition', ['Good', 'Not good'])->nullable(true);
+            $table->string('department', 25)->nullable(true);
             $table->string("nik", 8)->nullable(false);
 
             $table->timestamps();

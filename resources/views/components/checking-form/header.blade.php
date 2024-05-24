@@ -3,7 +3,7 @@
 <div class="mb-4">
     <div class="mb-3">
         @if ($equipment->status != 'Installed')
-        <h5 class="text-break lh-sm mb-0">{{ $equipment->status }}</h5>
+        <h5 class="text-break lh-sm mb-0">{{ $equipment->status }} <span class="fs-6 fw-normal text-secondary">({{ Carbon\Carbon::create($equipment->updated_at)->format("d/m/Y") }})</span></h5>
         @endif
         @if ($record)
         <h5 class="text-break lh-sm mb-0">[ EDIT {{ $equipment->sort_field ?? '' }} RECORD ]</h5>

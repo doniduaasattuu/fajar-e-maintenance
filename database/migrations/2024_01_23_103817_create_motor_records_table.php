@@ -39,6 +39,7 @@ return new class extends Migration
             $table->decimal("vibration_nde_frame_value", 4, 2)->nullable(true)->default(0);
             $table->enum("vibration_nde_frame_desc", ["Good", "Satisfactory", "Unsatisfactory", "Unacceptable"])->nullable(true);
             $table->enum("noise_nde", ["Normal", "Abnormal"])->nullable(true);
+            $table->string('department', 25)->nullable(true);
             $table->string("nik", 8)->nullable(false);
             $table->timestamps();
         });

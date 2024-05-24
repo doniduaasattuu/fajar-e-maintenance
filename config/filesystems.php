@@ -38,7 +38,7 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
+            'root' => public_path('/storage'),
             'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
@@ -56,6 +56,14 @@ return [
             'driver' => 'local',
             'root' => storage_path('app/public/documents'),
             'url' => env('APP_URL') . '/storage/documents',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
+        'pub_share' => [
+            'driver' => 'local',
+            'root' => public_path('/storage/pub_share'),
+            'url' => env('APP_URL') . '/storage/pub_share',
             'visibility' => 'public',
             'throw' => false,
         ],

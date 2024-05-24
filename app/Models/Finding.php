@@ -20,6 +20,7 @@ class Finding extends Model
         'id',
         'area',
         'status',
+        'sort_field',
         'equipment',
         'funcloc',
         'notification',

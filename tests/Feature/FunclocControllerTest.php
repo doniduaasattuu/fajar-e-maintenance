@@ -52,6 +52,28 @@ class FunclocControllerTest extends TestCase
             ->assertSeeText('entries');
     }
 
+    public function testGetFunclocAdminFilterSearch()
+    {
+        $this->seed([UserRoleSeeder::class, FunclocSeeder::class]);
+
+        Auth::attempt([
+            'nik' => '55000153',
+            'password' => 'rahasia',
+        ]);
+
+        $this->get('/funclocs?search=FP-01-PM3')
+            ->assertSeeText('Funcloc')
+            ->assertSeeText('Search')
+            ->assertSeeText('Edit')
+            ->assertDontSeeText('Created at')
+            ->assertSeeText('Displays')
+            ->assertSeeText('entries')
+            ->assertSeeText('FP-01-PM3')
+            ->assertSeeText('FP-01-PM3-BRS-T037-P061')
+            ->assertSeeText('FP-01-PM3-REL-PPRL-PRAR')
+            ->assertDontSeeText('FP-01-PM2');
+    }
+
     // ======================================================
     // ================ FUNCLOC REGISTRATION ================
     // ======================================================

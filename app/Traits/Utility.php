@@ -11,6 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 trait Utility
 {
+    public static function getExistUser()
+    {
+        $users = User::get();
+
+        $users = $users->map(function ($value, $key) {
+            return "$value->nik";
+        });
+        return $users;
+    }
+
     public static function getEnumValue(string $table, string $column)
     {
         switch ($table) {
@@ -79,6 +89,10 @@ trait Utility
     {
         $pluck = DB::table($table)->pluck('unique_id')->sort();
         $unique =  $pluck->values()->all();
+
+        if (count($unique) < 1) {
+            return 1;
+        }
 
         for ($i = 0; $i < count($unique); $i++) {
             if (array_key_exists($i + 1, $unique)) {

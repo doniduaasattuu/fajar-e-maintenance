@@ -43,6 +43,10 @@ class FindingController extends Controller
         $search = $request->query('search');
 
         $paginator = Finding::query()
+            ->when(!Auth::user()->isAdmin(), function ($query) {
+                $query
+                    ->where('department', '=', Auth::user()->department);
+            })
             ->when($dept, function ($query, $dept) {
                 $query
                     ->where('department', '=', $dept);
@@ -79,11 +83,12 @@ class FindingController extends Controller
 
         $validated = $request->validate([
             'id' => ['required', 'size:13'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
-            'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
-            'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
+            'sort_field' => ['nullable', 'min:3', 'max:50'],
+            'equipment' => ['nullable', 'size:9'],
+            'funcloc' => ['nullable', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'notification' => ['nullable', 'numeric', 'digits:8'],
             'reporter' => ['required'],
             'description' => ['required', 'min:15'],
@@ -124,11 +129,12 @@ class FindingController extends Controller
     {
         $validated = $request->validate([
             'id' => ['required', 'exists:App\Models\Finding,id'],
-            'area' => ['required', Rule::in($this->areas())],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'status' => ['required', Rule::in($this->findingService->findingStatusEnum)],
-            'equipment' => ['nullable', Rule::in(array_merge($this->motorService->registeredMotors(), $this->trafoService->registeredTrafos()))],
-            'funcloc' => ['nullable', Rule::in($this->funclocService->registeredFunclocs())],
+            'sort_field' => ['nullable', 'min:3', 'max:50'],
+            'equipment' => ['nullable', 'size:9'],
+            'funcloc' => ['nullable', 'starts_with:FP-01', 'min:9', 'max:50', Rule::in($this->funclocService->registeredFunclocs())],
             'notification' => ['nullable', 'numeric', 'digits:8'],
             'reporter' => ['required'],
             'description' => ['required', 'min:15'],

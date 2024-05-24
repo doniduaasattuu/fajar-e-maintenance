@@ -20,6 +20,8 @@ class MotorRecordSeeder extends Seeder
 
         for ($i = 0; $i < $year; $i++) {
 
+            $user = $users[rand(0, sizeof($users) - 1)];
+
             $record1 = new MotorRecord();
             $record1->id = uniqid();
             $record1->funcloc = "FP-01-PM3-REL-PPRL-PRAR";
@@ -48,7 +50,8 @@ class MotorRecordSeeder extends Seeder
             $record1->vibration_nde_frame_value = rand(45, 112) / 100;
             $record1->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $record1->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
-            $record1->nik = $users[rand(0, sizeof($users) - 1)]->nik;
+            $record1->department = $user->department;
+            $record1->nik = $user->nik;
             $record1->created_at = Carbon::now()->addMonths(- ($year - $i));
             $record1->save();
 
@@ -80,7 +83,8 @@ class MotorRecordSeeder extends Seeder
             $record2->vibration_nde_frame_value = rand(45, 112) / 100;
             $record2->vibration_nde_frame_desc = array(0 => "Good", 1 => "Satisfactory", 2 => "Unsatisfactory", 3 => "Unacceptable")[rand(0, 2)];
             $record2->noise_nde = array(0 => "Normal", 1 => "Abnormal")[rand(0, 1)];
-            $record2->nik = $users[rand(0, sizeof($users) - 1)]->nik;
+            $record2->department = $user->department;
+            $record2->nik = $user->nik;
             $record2->created_at = Carbon::now()->addMonths(- ($year - $i));
             $record2->save();
         }

@@ -88,7 +88,7 @@ class DocumentController extends Controller
         $rules = [
             'id' => ['required', 'size:13'],
             'title' => ['required', 'min:15', 'max:50'],
-            'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],
@@ -147,7 +147,7 @@ class DocumentController extends Controller
         $rules = [
             'id' => ['required', 'size:13', 'exists:App\Models\Document,id'],
             'title' => ['required', 'min:15', 'max:50'],
-            'area' => ['required', Rule::in(array_merge($this->areas(), ['All']))],
+            'area' => ['nullable', 'min:3', 'max:15'],
             'department' => ['required', Rule::in($this->getEnumValue('user', 'department'))],
             'equipment' => ['nullable', 'size:9'],
             'funcloc' => ['nullable', 'max:50'],

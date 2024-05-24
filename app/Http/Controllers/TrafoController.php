@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Alert;
 use App\Data\Modal;
 use App\Models\Trafo;
 use App\Services\FunclocService;
@@ -11,6 +12,7 @@ use App\Traits\Utility;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -31,28 +33,66 @@ class TrafoController extends Controller
         $this->trafoDetailService = $trafoDetailService;
     }
 
+    // public function trafos(Request $request)
+    // {
+    //     $search = $request->query('search');
+    //     $status = $request->query('status');
+
+    //     $paginator = Trafo::query()
+    //         ->when($search, function ($query, $search) {
+    //             $query
+    //                 ->where('id', 'LIKE', "%{$search}%");
+    //         })
+    //         ->when($status, function ($query, $status) {
+    //             $query
+    //                 ->where('status', '=', $status);
+    //         })
+    //         ->orderBy('created_at', 'DESC')
+    //         ->paginate(1000)
+    //         ->withQueryString();
+
+    //     return view('maintenance.trafo.trafo', [
+    //         'title' => 'Trafos',
+    //         'paginator' => $paginator,
+    //     ]);
+    // }
+
     public function trafos(Request $request)
     {
         $search = $request->query('search');
         $status = $request->query('status');
+        $cursor = $request->query('cursor');
+        $json = $request->query('json');
 
+        $total = count(Trafo::all('id'));
         $paginator = Trafo::query()
             ->when($search, function ($query, $search) {
                 $query
-                    ->where('id', 'LIKE', "%{$search}%");
+                    ->orWhere(function ($builder) use ($search) {
+                        $builder
+                            ->orWhere('id', 'LIKE', "%{$search}%")
+                            ->orWhere('funcloc', 'LIKE', "%{$search}%")
+                            ->orWhere('unique_id', 'LIKE', "%{$search}%")
+                            ->orWhere('sort_field', 'LIKE', "%{$search}%");
+                    });
             })
             ->when($status, function ($query, $status) {
                 $query
                     ->where('status', '=', $status);
             })
-            ->orderBy('created_at', 'DESC')
-            ->paginate(1000)
+            ->orderBy('id')
+            ->cursorPaginate(perPage: 30, cursor: $cursor)
             ->withQueryString();
 
-        return view('maintenance.trafo.trafo', [
-            'title' => 'Trafos',
-            'paginator' => $paginator,
-        ]);
+        if ($json) {
+            return response()->json($paginator);
+        } else {
+            return view('maintenance.trafo.trafo', [
+                'title' => 'Trafos',
+                'paginator' => $paginator,
+                'total' => $total,
+            ]);
+        }
     }
 
     public function trafoEdit(string $id)
@@ -77,7 +117,7 @@ class TrafoController extends Controller
         $trafo = Trafo::query()->with(['TrafoDetail'])->find($id);
 
         if (is_null($trafo)) {
-            return redirect()->back()->with('message', ['header' => '[404] Not found.', 'message' => "The trafo $id is unregistered."]);
+            return back()->with('modal', new Modal('[404] Not found', "The trafo $id is unregistered."));
         }
 
         return response()->view('maintenance.trafo.form', [
@@ -89,6 +129,8 @@ class TrafoController extends Controller
 
     public function trafoUpdate(Request $request)
     {
+        $request->mergeIfMissing(['trafo_detail' => $request->input('id')]);
+
         $rules = [
             'id' => ['required', 'size:9', 'exists:App\Models\Trafo,id'],
             'status' => ['required', Rule::in($this->getEnumValue('equipment', 'status'))],
@@ -123,26 +165,46 @@ class TrafoController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+        $validated_trafo = $validator->safe()->only($this->getColumns('trafos'));
+        $validated_trafo_details = $validator->safe()->only($this->getColumns('trafo_details', ['id']));
 
-        if ($validator->passes()) {
-
-            $validated_trafo = $validator->safe()->except($this->getColumns('trafo_details', ['id']));
-            $validated_trafo_details = $validator->safe()->merge(['trafo_detail' => $validated_trafo['id']])->except($this->getColumns('trafos'));
-
-            try {
-
-                $this->trafoService->updateTrafo($validated_trafo);
-                $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
-            } catch (Exception $error) {
-                Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
-            }
-
-            Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
-            return redirect()->back()->with('alert', ['message' => 'The trafo successfully updated.', 'variant' => 'alert-success']);
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+        DB::beginTransaction();
+        try {
+            $this->trafoService->updateTrafo($validated_trafo);
+            $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
+        } catch (Exception $error) {
+            DB::rollBack();
+            Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
+            return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
         }
+
+        DB::commit();
+        Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
+        return back()->with('alert', new Alert('The trafo successfully updated.', 'alert-success'));
+
+        // -----------------------------------------------------------------------------------------
+
+        // $validator = Validator::make($request->all(), $rules);
+
+        // if ($validator->passes()) {
+
+        //     $validated_trafo = $validator->safe()->except($this->getColumns('trafo_details', ['id']));
+        //     $validated_trafo_details = $validator->safe()->merge(['trafo_detail' => $validated_trafo['id']])->except($this->getColumns('trafos'));
+
+        //     try {
+
+        //         $this->trafoService->updateTrafo($validated_trafo);
+        //         $this->trafoDetailService->updateTrafoDetail($validated_trafo_details);
+        //     } catch (Exception $error) {
+        //         Log::error('trafo tries to updated', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
+        //         return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
+        //     }
+
+        //     Log::info('trafo updated success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
+        //     return back()->with('alert', new Alert('The trafo successfully updated.', 'alert-success'));
+        // } else {
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
     }
 
     public function trafoRegistration()
@@ -191,25 +253,45 @@ class TrafoController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
 
-        if ($validator->passes()) {
+        $validated_trafo = $validator->safe()->except($this->getColumns('trafo_details', ['id']));
+        $validated_trafo_details = $validator->safe()->merge(['trafo_detail' => $validated_trafo['id']])->except($this->getColumns('trafos'));
 
-            $validated_trafo = $validator->safe()->except($this->getColumns('trafo_details', ['id']));
-            $validated_trafo_details = $validator->safe()->merge(['trafo_detail' => $validated_trafo['id']])->except($this->getColumns('trafos'));
-
-            try {
-
-                $this->trafoService->register($validated_trafo);
-                $this->trafoDetailService->register($validated_trafo_details);
-            } catch (Exception $error) {
-                Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
-                return redirect()->back()->with('alert', ['message' => $error->getMessage(), 'variant' => 'alert-danger']);
-            }
-
-            Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
-            return redirect()->back()->with('alert', ['message' => 'The trafo successfully registered.', 'variant' => 'alert-success']);
-        } else {
-            return redirect()->back()->withErrors($validator)->withInput();
+        DB::beginTransaction();
+        try {
+            $this->trafoService->register($validated_trafo);
+            $this->trafoDetailService->register($validated_trafo_details);
+        } catch (Exception $error) {
+            DB::rollBack();
+            Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
+            return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'))->withInput();
         }
+
+        DB::commit();
+        return back()->with('alert', new Alert('The trafo successfully registered.', 'alert-success', 'trafo-edit/' .  $validated_trafo['id']));
+
+        // ------------------------------------------------------------------------------
+
+        // $validator = Validator::make($request->all(), $rules);
+
+        // if ($validator->passes()) {
+
+        //     $validated_trafo = $validator->safe()->except($this->getColumns('trafo_details', ['id']));
+        //     $validated_trafo_details = $validator->safe()->merge(['trafo_detail' => $validated_trafo['id']])->except($this->getColumns('trafos'));
+
+        //     try {
+
+        //         $this->trafoService->register($validated_trafo);
+        //         $this->trafoDetailService->register($validated_trafo_details);
+        //     } catch (Exception $error) {
+        //         Log::error('trafo registration error', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname, 'message' => $error->getMessage()]);
+        //         return back()->with('alert', new Alert($error->getMessage(), 'alert-danger'));
+        //     }
+
+        //     Log::info('trafo register success', ['trafo' => $validated_trafo['id'], 'admin' => Auth::user()->fullname]);
+        //     return back()->with('alert', new Alert('The trafo successfully registered.', 'alert-success', 'trafo-edit/' .  $validated_trafo['id']));
+        // } else {
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
     }
 
     public function trafoInstallDismantle()

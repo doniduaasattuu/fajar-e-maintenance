@@ -35,6 +35,7 @@ class TrafoRecord extends Model
         'oil_leakage',
         'oil_level',
         'blower_condition',
+        'department',
         'nik',
     ];
 }
