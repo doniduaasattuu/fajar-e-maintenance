@@ -37,7 +37,7 @@ class IssueController extends Controller
                     ->where('status', $status);
             })
             ->where('department', Auth::user()->department)
-            ->orderBy('target_date', 'DESC')
+            ->orderBy('issued_date', 'DESC')
             ->get();
 
         return view('maintenance.issue.issue', [
@@ -59,7 +59,6 @@ class IssueController extends Controller
 
         $request->merge([
             'id' => uniqid(),
-            'issued_date' => Carbon::now()->toDateTimeString(),
             'remaining_days' => $request->input('target_date'),
             'department' => $user->department,
             'created_by' => $user->fullname,
@@ -83,7 +82,6 @@ class IssueController extends Controller
             'updated_by' => ['nullable'],
         ]);
 
-        // return response()->json($validated);
         $issue = new Issue($validated);
         $issue->save();
 

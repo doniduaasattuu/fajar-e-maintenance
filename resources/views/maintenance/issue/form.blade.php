@@ -35,6 +35,18 @@
                 <x-input-error :message="$errors->first('status')" />
             </div>
 
+            {{-- ISSUED DATE --}}
+            <div class="mb-3">
+                <x-input-label for='issued_date' :value="__('Issued date *')" />
+                <x-input-date id='issued_date' name='issued_date' :value="old(
+                    'issued_date',
+                    isset($issue)
+                        ? Carbon\Carbon::create($issue->issued_date)->toDateString()
+                        : Carbon\Carbon::now()->toDateString(),
+                )" />
+                <x-input-error :message="$errors->first('issued_date')" />
+            </div>
+
             {{-- TARGET DATE --}}
             <div class="mb-3">
                 <x-input-label for='target_date' :value="__('Target date *')" />
